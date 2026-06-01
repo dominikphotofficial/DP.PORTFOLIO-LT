@@ -4,7 +4,12 @@ cbScript.src = 'https://consent.cookiebot.com/uc.js';
 cbScript.setAttribute('data-cbid', '06c15308-ea25-4737-9b50-13705638aa99');
 cbScript.setAttribute('data-blockingmode', 'auto');
 cbScript.type = 'text/javascript';
-document.head.appendChild(cbScript);
+
+if (document.head.firstChild) {
+    document.head.insertBefore(cbScript, document.head.firstChild);
+} else {
+    document.head.appendChild(cbScript);
+}
 
 window.addEventListener("load", () => {
     const preloader = document.getElementById("preloader");
