@@ -4,7 +4,6 @@ cbScript.src = 'https://consent.cookiebot.com/uc.js';
 cbScript.setAttribute('data-cbid', '06c15308-ea25-4737-9b50-13705638aa99');
 cbScript.setAttribute('data-blockingmode', 'auto');
 cbScript.type = 'text/javascript';
-
 if (document.head.firstChild) {
     document.head.insertBefore(cbScript, document.head.firstChild);
 } else {
@@ -17,19 +16,9 @@ window.addEventListener("load", () => {
         preloader.style.opacity = "0";
         setTimeout(() => {
             preloader.style.display = "none";
-        }, 500);
+        }, 300);
     }
 });
-
-setTimeout(() => {
-    const preloader = document.getElementById("preloader");
-    if (preloader && preloader.style.display !== "none") {
-        preloader.style.opacity = "0";
-        setTimeout(() => {
-            preloader.style.display = "none";
-        }, 500);
-    }
-}, 3000);
 
 document.addEventListener("DOMContentLoaded", () => {
     const header = document.querySelector("header");
@@ -79,10 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const closeBtn = document.querySelector(".lightbox-close");
         const prevBtn = document.querySelector(".lightbox-prev");
         const nextBtn = document.querySelector(".lightbox-next");
-
         let currentIndex = 0;
         let imageArray = [];
-
         galleryImages.forEach((img, index) => {
             imageArray.push(img.src);
             img.addEventListener("click", () => {
@@ -93,31 +80,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.body.style.overflow = "hidden";
             });
         });
-
         const updateL = () => {
             if (lightboxImg) lightboxImg.src = imageArray[currentIndex];
             if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${imageArray.length}`;
         };
-
-        if (closeBtn) {
-            closeBtn.addEventListener("click", () => {
-                lightbox.classList.remove("active");
-                document.body.style.overflow = "auto";
-            });
-        }
-        if (nextBtn) {
-            nextBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex + 1) % imageArray.length;
-                updateL();
-            });
-        }
-        if (prevBtn) {
-            prevBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
-                updateL();
-            });
-        }
-
+        if (closeBtn) closeBtn.addEventListener("click", () => {
+            lightbox.classList.remove("active");
+            document.body.style.overflow = "auto";
+        });
+        if (nextBtn) nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % imageArray.length;
+            updateL();
+        });
+        if (prevBtn) prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
+            updateL();
+        });
         document.addEventListener("keydown", (e) => {
             if (!lightbox.classList.contains("active")) return;
             if (e.key === "Escape") {
@@ -143,6 +121,5 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }, { threshold: 0.1 });
-
     document.querySelectorAll(".fade-in-up").forEach(el => observer.observe(el));
 });
