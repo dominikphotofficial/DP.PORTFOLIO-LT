@@ -32,7 +32,7 @@ setTimeout(() => {
 }, 3000);
 
 document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector("header");
+    const header = document.getElementById("main-header") || document.querySelector("header");
     
     window.addEventListener("scroll", () => {
         if (header) {
@@ -44,21 +44,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const burger = document.querySelector(".burger");
-    const navMenu = document.querySelector(".nav-menu");
+    const burger = document.getElementById("burger-menu") || document.querySelector(".burger");
+    const navOverlay = document.getElementById("nav-overlay") || document.querySelector(".nav-menu");
     
-    if (burger && navMenu) {
+    if (burger && navOverlay) {
         burger.addEventListener("click", () => {
             burger.classList.toggle("active");
-            navMenu.classList.toggle("active");
+            navOverlay.classList.toggle("active");
             
-            if (navMenu.classList.contains("active")) {
+            if (navOverlay.classList.contains("active")) {
                 document.body.style.overflow = "hidden";
-                header.classList.add("scrolled");
+                if(header) header.classList.remove("scrolled");
             } else {
-                document.body.style.overflow = "auto";
-                if (window.scrollY <= 50) {
-                    header.classList.remove("scrolled");
+                document.body.style.overflow = "";
+                if (window.scrollY > 50 && header) {
+                    header.classList.add("scrolled");
                 }
             }
         });
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (closeBtn) {
             closeBtn.addEventListener("click", () => {
                 lightbox.classList.remove("active");
-                document.body.style.overflow = "auto";
+                document.body.style.overflow = "";
             });
         }
         
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!lightbox.classList.contains("active")) return;
             if (e.key === "Escape") {
                 lightbox.classList.remove("active");
-                document.body.style.overflow = "auto";
+                document.body.style.overflow = "";
             }
             if (e.key === "ArrowRight") {
                 currentIndex = (currentIndex + 1) % imageArray.length;
