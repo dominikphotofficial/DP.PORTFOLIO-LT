@@ -1,9 +1,9 @@
 :root {
     --bg-color: #080808;
+    --text-color: #e0e0e0;
     --accent-color: #113939;
     --accent-light: #226b6b;
     --accent-rgb: 17, 57, 57;
-    --text-color: #e0e0e0;
     --font-heading: 'Jost', sans-serif;
     --font-body: 'Josefin Sans', sans-serif;
     --cb: cubic-bezier(0.16, 1, 0.3, 1);
@@ -49,7 +49,7 @@ body {
 a {
     text-decoration: none;
     color: inherit;
-    transition: color 0.6s var(--cb);
+    transition: color 0.4s var(--cb);
 }
 
 img {
@@ -109,7 +109,7 @@ header {
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
-    transition: background-color 0.6s var(--cb), padding 0.6s var(--cb), box-shadow 0.6s var(--cb), border-bottom 0.6s var(--cb);
+    transition: background-color 0.4s var(--cb), padding 0.4s var(--cb), box-shadow 0.4s var(--cb), border-bottom 0.4s var(--cb);
     border-bottom: 1px solid transparent;
 }
 
@@ -123,9 +123,10 @@ header.scrolled {
 }
 
 .logo img {
-    height: 22px;
-    filter: invert(1);
-    transition: opacity 0.6s var(--cb), transform 0.6s var(--cb);
+    height: 24px;
+    filter: invert(1) grayscale(1) brightness(2);
+    mix-blend-mode: screen;
+    transition: transform 0.4s var(--cb), opacity 0.4s var(--cb);
 }
 
 .logo img:hover {
@@ -138,7 +139,7 @@ header.scrolled {
     flex-direction: column;
     justify-content: space-between;
     width: 30px;
-    height: 18px;
+    height: 14px;
     cursor: pointer;
     z-index: 1001;
 }
@@ -148,7 +149,7 @@ header.scrolled {
     height: 1px;
     width: 100%;
     background-color: var(--text-color);
-    transition: transform 0.6s var(--cb), opacity 0.6s var(--cb), background-color 0.6s var(--cb);
+    transition: transform 0.4s var(--cb), opacity 0.4s var(--cb), background-color 0.4s var(--cb);
 }
 
 .burger.active span {
@@ -156,7 +157,7 @@ header.scrolled {
 }
 
 .burger.active span:nth-child(1) {
-    transform: translateY(8.5px) rotate(45deg);
+    transform: translateY(6.5px) rotate(45deg);
 }
 
 .burger.active span:nth-child(2) {
@@ -164,7 +165,7 @@ header.scrolled {
 }
 
 .burger.active span:nth-child(3) {
-    transform: translateY(-8.5px) rotate(-45deg);
+    transform: translateY(-6.5px) rotate(-45deg);
 }
 
 .nav-overlay {
@@ -173,14 +174,29 @@ header.scrolled {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, rgba(17, 57, 57, 0.15) 0%, var(--bg-color) 70%);
+    background: rgba(8, 8, 8, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.8s var(--cb);
+    transition: opacity 0.5s var(--cb);
     z-index: 999;
+}
+
+.nav-overlay::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(17, 57, 57, 0.4) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .nav-overlay.active {
@@ -193,6 +209,8 @@ header.scrolled {
     flex-direction: column;
     align-items: center;
     gap: 35px;
+    position: relative;
+    z-index: 10;
 }
 
 .nav-link {
@@ -200,7 +218,7 @@ header.scrolled {
     font-weight: 300;
     letter-spacing: 6px;
     color: var(--text-color);
-    transition: color 0.6s var(--cb), transform 0.6s var(--cb), text-shadow 0.6s var(--cb);
+    transition: color 0.4s var(--cb), transform 0.4s var(--cb), text-shadow 0.4s var(--cb);
 }
 
 .nav-link:hover {
@@ -210,8 +228,20 @@ header.scrolled {
 }
 
 .tfp-link {
-    color: var(--accent-color);
+    font-size: 1.2rem;
     font-weight: 500;
+    color: var(--accent-light);
+    border: 1px solid var(--accent-light);
+    border-radius: 4px;
+    padding: 15px 35px;
+    margin-top: 20px;
+}
+
+.tfp-link:hover {
+    background-color: rgba(34, 107, 107, 0.2);
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(34, 107, 107, 0.4);
+    text-shadow: none;
 }
 
 .hero {
@@ -251,7 +281,7 @@ header.scrolled {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(8,8,8,0.2) 0%, rgba(17,57,57,0.1) 50%, var(--bg-color) 100%);
+    background: linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(17,57,57,0.1) 50%, var(--bg-color) 100%);
     z-index: 2;
 }
 
@@ -283,7 +313,6 @@ header.scrolled {
 }
 
 .hero-content p {
-    font-family: var(--font-body);
     font-size: clamp(0.8rem, 1.5vw, 1rem);
     font-weight: 300;
     letter-spacing: 4px;
@@ -364,6 +393,14 @@ header.scrolled {
     padding: 5px 15px;
 }
 
+.promo-date {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: rgba(224,224,224,0.7);
+}
+
 .promo-content h2 {
     font-size: clamp(2.2rem, 6vw, 3.8rem);
     margin: 25px 0;
@@ -371,7 +408,6 @@ header.scrolled {
 }
 
 .promo-content p {
-    font-family: var(--font-body);
     font-weight: 300;
     margin-bottom: 45px;
     opacity: 0.9;
@@ -387,7 +423,7 @@ header.scrolled {
     text-transform: uppercase;
     letter-spacing: 4px;
     font-size: 0.9rem;
-    transition: all 0.6s var(--cb);
+    transition: all 0.4s var(--cb);
     background: transparent;
 }
 
@@ -428,7 +464,7 @@ header.scrolled {
 .bento-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, rgba(17, 57, 57, 0.6) 50%, transparent 100%);
+    background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, rgba(17, 57, 57, 0.4) 50%, transparent 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -436,10 +472,10 @@ header.scrolled {
     opacity: 0;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-    transition: opacity 0.6s var(--cb);
+    transition: opacity 0.5s var(--cb);
 }
 
-.bento-category {
+.bento-subtitle {
     font-size: 0.7rem;
     letter-spacing: 4px;
     color: var(--accent-light);
@@ -452,7 +488,7 @@ header.scrolled {
     font-weight: 500;
     color: var(--text-color);
     transform: translateY(15px);
-    transition: transform 0.6s var(--cb);
+    transition: transform 0.5s var(--cb);
 }
 
 .bento-item:hover img {
@@ -508,7 +544,7 @@ header.scrolled {
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.6s var(--cb);
+    transition: opacity 0.5s var(--cb);
 }
 
 .lightbox.active {
@@ -542,7 +578,7 @@ header.scrolled {
     color: var(--text-color);
     font-size: 2.5rem;
     cursor: pointer;
-    transition: color 0.6s var(--cb), transform 0.6s var(--cb);
+    transition: color 0.4s var(--cb), transform 0.4s var(--cb);
 }
 
 .lightbox-prev, .lightbox-next {
@@ -553,7 +589,7 @@ header.scrolled {
     font-size: 3rem;
     cursor: pointer;
     padding: 30px;
-    transition: color 0.6s var(--cb), transform 0.6s var(--cb);
+    transition: color 0.4s var(--cb), transform 0.4s var(--cb);
 }
 
 .lightbox-prev:hover, .lightbox-next:hover, .lightbox-close:hover {
@@ -575,18 +611,6 @@ header.scrolled {
     transform: translateY(0);
 }
 
-.form-group input, .form-group textarea, .form-group select {
-    background: transparent;
-    color: var(--text-color);
-    border: 1px solid rgba(224, 224, 224, 0.2);
-    transition: border-color 0.6s var(--cb), box-shadow 0.6s var(--cb);
-}
-
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-    border-color: var(--accent-light);
-    box-shadow: 0 0 10px rgba(17, 57, 57, 0.3);
-}
-
 footer {
     text-align: center;
     padding: 40px 20px;
@@ -601,7 +625,7 @@ footer {
 @media (max-width: 1024px) {
     .bento-grid {
         grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: 300px;
+        grid-auto-rows: 350px;
     }
     .gallery-grid {
         column-count: 2;
@@ -617,19 +641,19 @@ footer {
         grid-column: span 1;
         grid-row: span 1;
     }
-    .nav-link {
-        font-size: 1.8rem;
-    }
     .bento-overlay {
         opacity: 1;
-        transform: translateY(0);
-        background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, rgba(17, 57, 57, 0.8) 50%, transparent 100%);
+        background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, transparent 100%);
     }
     .bento-title {
         transform: translateY(0);
     }
-    .gallery-grid {
-        column-count: 1;
+    .nav-link {
+        font-size: 1.5rem;
+    }
+    .lightbox-prev, .lightbox-next {
+        font-size: 2rem;
+        padding: 10px;
     }
     .film-promo-board {
         flex-direction: column;
@@ -637,5 +661,8 @@ footer {
     .promo-bg {
         width: 100%;
         height: 300px;
+    }
+    .gallery-grid {
+        column-count: 1;
     }
 }
