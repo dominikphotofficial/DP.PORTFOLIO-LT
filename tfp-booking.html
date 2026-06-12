@@ -3,23 +3,30 @@
 <head>
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="06c15308-ea25-4737-9b50-13705638aa99" data-blockingmode="auto" type="text/javascript"></script>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://i.postimg.cc">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO</title>
     <meta name="description" content="Registruokitės nemokamai TFP fotosesijai Kaune. Kurkime vizualų portfolio kartu su Fujifilm X-S20 kokybe. Dominik Šuškevič kūrybiniai mainai ir meninė fotografija.">
-    <meta name="keywords" content="TFP fotosesija, nemokama fotosesija Kaunas, Dominik Šuškevič, Fujifilm X-S20, fotografas Kaune, modelių paieška, vizualinis turinis, portfolio pildymas">
-    <meta name="author" content="Dominik Šuškevič">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
+    <meta property="og:site_name" content="DP.PORTFOLIO">
     <meta property="og:title" content="TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO">
     <meta property="og:description" content="Ieškau naujų veidų portfolio pildymui. Registruokitės kūrybiniam projektui su Fujifilm X-S20.">
+    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
     <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="800">
+    <meta property="og:locale" content="lt_LT">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO">
+    <meta name="twitter:description" content="Ieškau naujų veidų portfolio pildymui. Registruokitės kūrybiniam projektui su Fujifilm X-S20.">
+    <meta name="twitter:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <script type="application/ld+json">
@@ -29,14 +36,18 @@
       "name": "TFP Fotosesijos Registracija",
       "description": "Nemokamų TFP fotosesijų registracijos forma Kaune.",
       "publisher": {
-        "@type": "Person",
-        "name": "Dominik Šuškevič"
+        "@type": "Organization",
+        "name": "DP.PORTFOLIO",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://iili.io/fjNLbs4.png"
+        }
       }
     }
     </script>
     <style>
         .booking-layout {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 160px 20px 100px;
             display: grid;
@@ -45,87 +56,123 @@
             align-items: start;
         }
         .info-column h1 {
-            font-family: 'Jost';
+            font-family: 'Jost', sans-serif;
             text-transform: uppercase;
             letter-spacing: 6px;
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 30px;
-            color: #e0e0e0;
+            color: var(--text-color);
+            font-weight: 300;
         }
         .info-column p {
-            font-family: 'Josefin Sans';
+            font-family: 'Josefin Sans', sans-serif;
             font-size: 1.1rem;
             line-height: 1.8;
-            color: rgba(224, 224, 224, 0.7);
+            color: rgba(26, 43, 43, 0.8);
             margin-bottom: 25px;
             font-weight: 300;
         }
         .info-column strong {
             font-weight: 400;
-            color: #113939;
+            color: var(--accent-light);
         }
         .form-card {
-            background: #111111;
+            background: #ffffff;
             padding: 50px;
-            border: 1px solid rgba(224, 224, 224, 0.1);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(17, 57, 57, 0.05);
+            box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);
+            border-radius: 4px;
         }
         .field-label {
             display: block;
-            font-family: 'Jost';
+            font-family: 'Jost', sans-serif;
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 2px;
             margin-bottom: 10px;
-            color: #e0e0e0;
+            color: rgba(26, 43, 43, 0.6);
         }
         .form-input {
             width: 100%;
             padding: 15px;
             margin-bottom: 25px;
-            border: 1px solid rgba(224, 224, 224, 0.2);
-            font-family: 'Josefin Sans';
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            font-family: 'Josefin Sans', sans-serif;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.3s;
-            border-radius: 0;
+            transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
             background: transparent;
-            color: #e0e0e0;
+            color: var(--text-color);
         }
         .form-input::placeholder {
-            color: rgba(224, 224, 224, 0.3);
+            color: rgba(26, 43, 43, 0.3);
         }
         .form-input:focus {
-            border-color: #113939;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 15px rgba(34, 107, 107, 0.1);
+            background: rgba(17, 57, 57, 0.02);
         }
         .cta-button {
             width: 100%;
             padding: 20px;
-            background: #113939;
-            color: #ffffff;
-            border: none;
-            font-family: 'Jost';
+            background: var(--accent-color);
+            color: #FBF9F6;
+            border: 1px solid var(--accent-color);
+            font-family: 'Jost', sans-serif;
             text-transform: uppercase;
             letter-spacing: 4px;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
         }
         .cta-button:hover {
-            opacity: 0.9;
+            background: transparent;
+            color: var(--accent-color);
+            box-shadow: 0 10px 20px rgba(17, 57, 57, 0.1);
         }
         #success-display {
             display: none;
             text-align: center;
             padding: 60px 20px;
-            border: 1px solid #113939;
-            background: #080808;
+            border: 1px solid var(--accent-light);
+            background: rgba(17, 57, 57, 0.05);
+            border-radius: 4px;
         }
-        .flatpickr-input {
-            background: transparent !important;
-            color: #e0e0e0 !important;
+        .flatpickr-calendar {
+            background: #ffffff !important;
+            border: 1px solid rgba(17, 57, 57, 0.1) !important;
+            box-shadow: 0 10px 30px rgba(17, 57, 57, 0.1) !important;
+            font-family: 'Josefin Sans', sans-serif !important;
         }
-        @media (max-width: 900px) {
+        .flatpickr-day.selected {
+            background: var(--accent-light) !important;
+            border-color: var(--accent-light) !important;
+        }
+        .flatpickr-day {
+            color: var(--text-color) !important;
+        }
+        .flatpickr-day.flatpickr-disabled {
+            color: rgba(26, 43, 43, 0.3) !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            color: var(--text-color) !important;
+            fill: var(--text-color) !important;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: var(--text-color) !important;
+        }
+        .flatpickr-current-month input.cur-year {
+            color: var(--text-color) !important;
+        }
+        .flatpickr-time input {
+            color: var(--text-color) !important;
+        }
+        .flatpickr-time .flatpickr-time-separator, .flatpickr-time .flatpickr-am-pm {
+            color: var(--text-color) !important;
+        }
+        @media (max-width: 1024px) {
             .booking-layout {
                 grid-template-columns: 1fr;
                 padding-top: 120px;
@@ -137,56 +184,76 @@
         }
     </style>
 </head>
-<body>
-    <div id="preloader"><div class="loader"></div></div>
-    <header>
-        <div class="logo">
-            <a href="index.html">
-                <img src="https://iili.io/fjNLbs4.png" alt="DP Logo">
-            </a>
-        </div>
-        <div class="burger">
-            <div></div>
-            <div></div>
-            <div></div>
+<body style="background-color: #FBF9F6; color: #1A2B2B; font-family: 'Josefin Sans', sans-serif; margin: 0; padding: 0; overflow-x: hidden;">
+    <div id="preloader" data-nosnippet style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #FBF9F6; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div class="loader" style="width: 40px; height: 40px; border: 1px solid rgba(17, 57, 57, 0.1); border-top: 1px solid #113939; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+    
+    <header id="main-header" style="position: fixed; top: 0; left: 0; width: 100%; padding: 35px 5vw; display: flex; justify-content: space-between; align-items: center; z-index: 1000; transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid transparent;">
+        <a href="index.html" class="logo">
+            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" style="height: 24px; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        </a>
+        <nav class="desktop-nav" style="display: flex; gap: 30px; align-items: center;">
+            <a href="index.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; position: relative; padding-bottom: 5px; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Darbai</a>
+            <a href="services.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; position: relative; padding-bottom: 5px; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Paslaugos</a>
+            <a href="biography.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; position: relative; padding-bottom: 5px; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Biografija</a>
+            <a href="about.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; position: relative; padding-bottom: 5px; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Apie</a>
+            <a href="contacts.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; position: relative; padding-bottom: 5px; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Kontaktai</a>
+            <a href="tfp-booking.html" class="nav-link tfp-link" style="font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #1A2B2B; text-decoration: none; border: 1px solid #113939; padding: 10px 20px; border-radius: 2px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);">TFP Registracija</a>
+        </nav>
+        <div class="burger" id="burger-menu" style="display: none; flex-direction: column; justify-content: space-between; width: 30px; height: 14px; cursor: pointer; z-index: 1001;">
+            <span style="display: block; height: 1px; width: 100%; background-color: #1A2B2B; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);"></span>
+            <span style="display: block; height: 1px; width: 100%; background-color: #1A2B2B; transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);"></span>
+            <span style="display: block; height: 1px; width: 100%; background-color: #1A2B2B; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);"></span>
         </div>
     </header>
-    <div class="nav-menu">
-        <a href="index.html" class="nav-link">Darbai</a>
-        <a href="tfp-booking.html" class="nav-link">TFP Registracija</a>
-        <a href="services.html" class="nav-link">Paslaugos</a>
-        <a href="biography.html" class="nav-link">Biografija</a>
-        <a href="about.html" class="nav-link">Apie</a>
-        <a href="contacts.html" class="nav-link">Kontaktai</a>
+
+    <div class="nav-overlay" id="nav-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(251, 249, 246, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 999;">
+        <nav class="mobile-nav" style="display: flex; flex-direction: column; align-items: center; gap: 35px;">
+            <a href="index.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 2.5rem; font-weight: 300; text-transform: uppercase; letter-spacing: 6px; color: #1A2B2B; text-decoration: none; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Darbai</a>
+            <a href="services.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 2.5rem; font-weight: 300; text-transform: uppercase; letter-spacing: 6px; color: #1A2B2B; text-decoration: none; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Paslaugos</a>
+            <a href="biography.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 2.5rem; font-weight: 300; text-transform: uppercase; letter-spacing: 6px; color: #1A2B2B; text-decoration: none; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Biografija</a>
+            <a href="about.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 2.5rem; font-weight: 300; text-transform: uppercase; letter-spacing: 6px; color: #1A2B2B; text-decoration: none; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Apie</a>
+            <a href="contacts.html" class="nav-link" style="font-family: 'Jost', sans-serif; font-size: 2.5rem; font-weight: 300; text-transform: uppercase; letter-spacing: 6px; color: #1A2B2B; text-decoration: none; transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">Kontaktai</a>
+            <a href="tfp-booking.html" class="nav-link tfp-link" style="font-family: 'Jost', sans-serif; font-size: 1.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 4px; color: #2A5C5C; text-decoration: none; border: 1px solid #2A5C5C; border-radius: 2px; padding: 15px 35px; margin-top: 20px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);">TFP Registracija</a>
+        </nav>
     </div>
+
     <section class="booking-layout">
         <div class="info-column fade-in-up">
             <h1>TFP Fotosesija</h1>
+            <div class="divider" style="width: 50px; height: 1px; background-color: #113939; margin: 0 auto 30px 0;"></div>
             <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
             <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
             <p>Pasirinkite jums patogią datą kalendoriuje ir aprašykite savo viziją.</p>
         </div>
         <div class="form-card fade-in-up">
             <div id="success-display">
-                <p style="font-family: 'Josefin Sans'; font-size: 1.2rem; line-height: 1.8; color: #e0e0e0;">
+                <p style="font-family: 'Josefin Sans', sans-serif; font-size: 1.2rem; line-height: 1.8; color: #1A2B2B;">
                     Ačiū! Gavau jūsų registraciją. Peržiūrėsiu jūsų idėjas ir paskambinsiu patikslinti detalių bei laiko. Jei turite skubių klausimų, galite man parašyti tiesiogiai.
                 </p>
             </div>
             <form action="https://formspree.io/f/mgvnbvaw" method="POST" id="tfp-booking-form">
                 <label class="field-label">Vardas ir Pavardė *</label>
                 <input type="text" name="name" class="form-input" required>
+                
                 <label class="field-label">Telefono numeris *</label>
                 <input type="tel" name="phone" class="form-input" placeholder="+370" required>
+                
                 <label class="field-label">Pageidaujama data ir laikas *</label>
                 <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite..." required>
+                
                 <label class="field-label">Kurioje Kauno vietoje norėtumėte fotografuotis? *</label>
                 <input type="text" name="location" class="form-input" placeholder="Lokacija Kaune" required>
+                
                 <label class="field-label">Nuorodos į referencus (Pinterest/IG)</label>
                 <textarea name="references" class="form-input" rows="3" placeholder="Moodboard nuorodos..."></textarea>
+                
                 <button type="submit" class="cta-button">Registruotis fotosesijai</button>
             </form>
         </div>
     </section>
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
