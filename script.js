@@ -29,7 +29,7 @@ setTimeout(() => {
             preloader.style.display = "none";
         }, 600);
     }
-}, 2500);
+}, 3000);
 
 document.addEventListener("DOMContentLoaded", () => {
     const header = document.getElementById("main-header") || document.querySelector("header");
@@ -202,4 +202,18 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".fade-in-up, .reveal").forEach(el => {
         observer.observe(el);
     });
+
+    const tfpForm = document.getElementById('tfp-booking-form');
+    if(tfpForm) {
+        tfpForm.addEventListener('submit', function(e) {
+            const submitBtn = tfpForm.querySelector('button');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Siunčiama...';
+            setTimeout(() => {
+                tfpForm.style.display = 'none';
+                document.getElementById('success-display').style.display = 'block';
+                window.scrollTo({ top: 200, behavior: 'smooth' });
+            }, 1000);
+        });
+    }
 });
