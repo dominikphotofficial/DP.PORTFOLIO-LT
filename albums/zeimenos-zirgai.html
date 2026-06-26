@@ -48,11 +48,54 @@
       }
     }
     </script>
+    <style>
+        :root {
+            --bg-color: #F7F4F0 !important;
+            --surface-color: #FFFFFF !important;
+            --secondary-color: #E6E5DF !important;
+            --accent-color: #1E3A6D !important;
+            --text-color: #1B241A !important;
+            --accent-light: #47603B !important;
+        }
+        
+        .lightbox {
+            background: rgba(14, 20, 30, 0.95) !important;
+        }
+        
+        header.scrolled {
+            background-color: rgba(247, 244, 240, 0.9) !important;
+        }
+        
+        .nav-overlay {
+            background: rgba(247, 244, 240, 0.95) !important;
+        }
+        
+        .bento-overlay {
+            background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, rgba(247, 244, 240, 0.4) 50%, transparent 100%) !important;
+        }
+        
+        @media (max-width: 600px) {
+            .bento-overlay {
+                background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, transparent 100%) !important;
+            }
+        }
+    </style>
 </head>
 <body class="theme-zeimenos-zirgai">
+    
     <div id="preloader" data-nosnippet>
         <div class="loader"></div>
     </div>
+
+    <script>
+        setTimeout(function() {
+            var preloader = document.getElementById("preloader");
+            if (preloader && preloader.style.display !== "none") {
+                preloader.style.opacity = "0";
+                setTimeout(function() { preloader.style.display = "none"; }, 400);
+            }
+        }, 1000);
+    </script>
     
     <header id="main-header">
         <a href="../index.html" class="logo">
@@ -90,14 +133,20 @@
                 Žeimenos Žirgai
             </h1>
             
-            <p class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-light); margin-bottom: 35px;">
-                Švenčionėlių g. 10, Švenčionėliai
-            </p>
+            <div class="fade-in-up" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 35px; opacity: 0.8;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span style="font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-light);">
+                    Švenčionėlių g. 10, Švenčionėliai
+                </span>
+            </div>
             
             <div class="divider fade-in-up" style="margin-bottom: 35px;"></div>
             
             <p class="fade-in-up" style="font-family: var(--font-body); color: var(--text-color); max-width: 650px; line-height: 2; font-weight: 300; font-size: 1.15rem; opacity: 0.85; margin-bottom: 45px;">
-                Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Tai erdvė, kurioje susipina gamtos darna, laisvė ir vizualinis pasakojimas. Kviečiame patirti nepamirštamas akimirkas ir kino estetiką natūralioje aplinkoje.
+                Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Tai erdvė, kurioje susipina gamtos darna, laisvė ir vizualinis pasakojimas. Kviečiame patirti nepamirštamas akimirkas ir estetiką natūralioje aplinkoje.
             </p>
 
             <div class="fade-in-up" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
@@ -113,7 +162,7 @@
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Gimtadienių šventės"></div>
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Autorinė fotografija"></div>
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/8PmLjkfL/street_azuolynas_33.jpg" loading="lazy" alt="Žeimenos Žirgai - Jojimo pamokos"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/28SthTZg/noka-car-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Kino estetika"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/28SthTZg/noka-car-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Estetika"></div>
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/Dy2Q1ryc/Flower-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Ryšys ir emocija"></div>
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/KYbYwNkK/bird-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Vizualinis pasakojimas"></div>
             <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/X7gd6GTN/srp-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Jojimas Švenčionėliai"></div>
@@ -124,10 +173,10 @@
         <p>&copy; 2026 DP.PORTFOLIO | Žeimenos Žirgai. Visos teisės saugomos.</p>
         <p style="font-family: var(--font-heading); font-size: 0.7rem; color: rgba(27, 36, 26, 0.4); margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Švenčionėlių g. 10, Švenčionėliai, Lietuva</p>
         <div class="lang-links" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
-            <a href="https://en.dominikphotofficial.lt">EN</a>
-            <a href="https://pl.dominikphotofficial.lt">PL</a>
-            <a href="https://ru.dominikphotofficial.lt">RU</a>
-            <a href="https://kr.dominikphotofficial.lt">KR</a>
+            <a href="https://en.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">EN</a>
+            <a href="https://pl.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">PL</a>
+            <a href="https://ru.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">RU</a>
+            <a href="https://kr.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">KR</a>
         </div>
     </footer>
 
@@ -145,4 +194,10 @@
             <img id="lightbox-img" src="" alt="">
         </div>
         <button class="lightbox-next">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>
