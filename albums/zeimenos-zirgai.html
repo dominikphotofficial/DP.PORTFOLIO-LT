@@ -33,7 +33,7 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Žeimenos Žirgai",
-      "image": "https://iili.io/fjNLbs4.png",
+      "image": "https://i.postimg.cc/L6nLcsGB/Zeimenos-Zirgai.png",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Švenčionėlių g. 10",
@@ -73,10 +73,48 @@
         .bento-overlay {
             background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, rgba(247, 244, 240, 0.4) 50%, transparent 100%) !important;
         }
+
+        /* Papildomas stilius informaciniam blokui */
+        .info-card {
+            background: rgba(30, 58, 109, 0.02); 
+            border: 1px solid rgba(30, 58, 109, 0.1); 
+            padding: 40px; 
+            border-radius: 4px; 
+            max-width: 900px; 
+            width: 100%; 
+            margin: 0 auto 50px auto; 
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            background: rgba(30, 58, 109, 0.04);
+            border-color: rgba(30, 58, 109, 0.2);
+        }
+
+        .info-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 40px;
+        }
+
+        .info-section-title {
+            font-family: var(--font-heading); 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--accent-color); 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid rgba(30, 58, 109, 0.1); 
+            padding-bottom: 10px;
+        }
         
         @media (max-width: 600px) {
             .bento-overlay {
                 background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, transparent 100%) !important;
+            }
+            .info-card {
+                padding: 25px;
             }
         }
     </style>
@@ -129,11 +167,16 @@
     
     <section class="container" style="padding-top: 150px;">
         <div class="text-content" style="margin-bottom: 80px; text-align: center; display: flex; flex-direction: column; align-items: center;">
-            <h1 class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 8px; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 10px; color: var(--text-color); font-weight: 300;">
+            
+            <div class="fade-in-up" style="margin-bottom: 30px;">
+                <img src="https://i.postimg.cc/L6nLcsGB/Zeimenos-Zirgai.png" alt="Žeimenos Žirgai" style="max-width: 180px; height: auto;">
+            </div>
+
+            <h1 class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 15px; font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: 8px; color: var(--text-color); font-weight: 300;">
                 Žeimenos Žirgai
             </h1>
             
-            <div class="fade-in-up" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 35px; opacity: 0.8;">
+            <div class="fade-in-up" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 40px; opacity: 0.8;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
@@ -143,16 +186,51 @@
                 </span>
             </div>
             
-            <div class="divider fade-in-up" style="margin-bottom: 35px;"></div>
-            
-            <p class="fade-in-up" style="font-family: var(--font-body); color: var(--text-color); max-width: 650px; line-height: 2; font-weight: 300; font-size: 1.15rem; opacity: 0.85; margin-bottom: 45px;">
-                Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Tai erdvė, kurioje susipina gamtos darna, laisvė ir vizualinis pasakojimas. Kviečiame patirti nepamirštamas akimirkas ir estetiką natūralioje aplinkoje.
+            <p class="fade-in-up" style="font-family: var(--font-body); color: var(--text-color); max-width: 700px; line-height: 1.9; font-weight: 300; font-size: 1.15rem; opacity: 0.85; margin-bottom: 50px;">
+                Leiskite savo vaikui patirti vasarą, kupiną gamtos, žirgų ir tikrų nuotykių! Čia laukia ne tik jodinėjimas, bet ir naujos draugystės, juokas bei įspūdžiai, kurie išliks ilgam.
             </p>
 
+            <div class="fade-in-up info-card">
+                <div class="info-grid">
+                    
+                    <div>
+                        <h3 class="info-section-title">Vasaros Pamainos</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 2;">
+                            <li>• <strong>Birželio 22–26 d.</strong> <span style="opacity: 0.7;">(7–15 m.)</span></li>
+                            <li>• <strong>Liepos 6–10 d.</strong> <span style="opacity: 0.7;">(7–15 m.)</span></li>
+                            <li>• <strong>Liepos 20–24 d.</strong> <span style="opacity: 0.7;">(7–17 m.)</span></li>
+                            <li>• <strong>Rugpjūčio 3–7 d.</strong> <span style="opacity: 0.7;">(7–17 m.)</span></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="info-section-title">Stovyklos Tipas</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 2;">
+                            <li style="display: flex; justify-content: space-between; max-width: 200px;">
+                                <span>Su nakvyne:</span> <strong>250 €</strong>
+                            </li>
+                            <li style="display: flex; justify-content: space-between; max-width: 200px;">
+                                <span>Be nakvynės:</span> <strong>170 €</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; border-top: 1px solid rgba(30, 58, 109, 0.1); padding-top: 25px;">
+                    <h3 class="info-section-title" style="margin-bottom: 15px;">Registracija ir Kontaktai</h3>
+                    <p style="font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 1.8; margin: 0;">
+                        Vietų skaičius ribotas – paskubėkite registruotis!<br><br>
+                        <strong>Tel. nr.:</strong> 062345327 | +37060984957<br>
+                        <strong>El. paštas:</strong> r.mariadul@gmail.com | liepastanulyte13s@gmail.com<br>
+                        <strong>Asmeninė žinutė:</strong> Liepa Stanulytė
+                    </p>
+                </div>
+            </div>
+
             <div class="fade-in-up" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Vasaros stovyklos</span>
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Jojimo pamokos</span>
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Gimtadienių šventės</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Vaikų stovykla</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Jodinėjimas</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Nuotykiai gamtoje</span>
             </div>
         </div>
         
@@ -170,7 +248,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 DP.PORTFOLIO | Žeimenos Žirgai. Visos teisės saugomos.</p>
+        <p>&copy; 2026 DP Corporation | Žeimenos Žirgai. Visos teisės saugomos.</p>
         <p style="font-family: var(--font-heading); font-size: 0.7rem; color: rgba(27, 36, 26, 0.4); margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Švenčionėlių g. 10, Švenčionėliai, Lietuva</p>
         <div class="lang-links" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
             <a href="https://en.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">EN</a>
