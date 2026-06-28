@@ -7,14 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <title>DP.PORTFOLIO</title>
     <meta name="description" content="Profesionali fotografija Kaunas, Lietuva. Asmeninės fotosesijos, renginiai ir Premium videografija. Aukščiausia kokybė, kainos nuo 20€ už 70 nuotraukų.">
     <meta name="keywords" content="Dominikphotofficial, DP.PORTFOLIO, Dominik Šuškevič, Fotografija Kaunas, Lietuva, Profesionali fotografija, videografas, menas">
     <meta name="author" content="Dominik Šuškevič, DP Corporation">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/">
-    
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DP.PORTFOLIO">
     <meta property="og:title" content="DP.PORTFOLIO">
@@ -24,16 +22,13 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
-    
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DP.PORTFOLIO">
     <meta name="twitter:description" content="Profesionali fotografija Kaunas, Lietuva. Asmeninės fotosesijos, renginiai ir Premium videografija. Aukščiausia kokybė, kainos nuo 20€ už 70 nuotraukų.">
     <meta name="twitter:image" content="https://i.postimg.cc/65bZ2sxk/Frozen-time.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
-    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -75,6 +70,16 @@
     <div id="preloader" data-nosnippet>
         <div class="loader"></div>
     </div>
+    
+    <script>
+        setTimeout(function() {
+            var preloader = document.getElementById("preloader");
+            if (preloader && preloader.style.display !== "none") {
+                preloader.style.opacity = "0";
+                setTimeout(function() { preloader.style.display = "none"; }, 400);
+            }
+        }, 1000);
+    </script>
     
     <header id="main-header">
         <a href="index.html" class="logo">
@@ -291,11 +296,12 @@
 
     <footer>
         <p>&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</p>
-        <div class="lang-links" style="display: flex; justify-content: center; gap: 15px; margin-top: 10px; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 2px;">
-            <a href="https://en.dominikphotofficial.lt" style="transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">EN</a>
-            <a href="https://pl.dominikphotofficial.lt" style="transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">PL</a>
-            <a href="https://ru.dominikphotofficial.lt" style="transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">RU</a>
-            <a href="https://kr.dominikphotofficial.lt" style="transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">KR</a>
+        <div class="lang-switcher">
+            <a href="https://portfolio.dominikphotofficial.lt" class="active">LT</a>
+            <a href="https://en.dominikphotofficial.lt">EN</a>
+            <a href="https://pl.dominikphotofficial.lt">PL</a>
+            <a href="https://ru.dominikphotofficial.lt">RU</a>
+            <a href="https://kr.dominikphotofficial.lt">KR</a>
         </div>
     </footer>
 
