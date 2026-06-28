@@ -341,31 +341,6 @@ header.scrolled {
     color: rgba(26, 43, 43, 0.7);
 }
 
-.manifesto {
-    padding: 150px 5vw;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-}
-
-.manifesto-content {
-    max-width: 900px;
-}
-
-.manifesto-content h3 {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 400;
-    letter-spacing: 4px;
-    margin-bottom: 30px;
-    color: var(--text-color);
-}
-
-.manifesto-content p {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-weight: 300;
-    color: rgba(26, 43, 43, 0.8);
-}
-
 .container {
     max-width: 1600px;
     margin: 0 auto;
@@ -384,7 +359,7 @@ header.scrolled {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    background: var(--surface-color);
+    background: #ffffff;
     border-radius: 2px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(17, 57, 57, 0.04);
@@ -452,7 +427,7 @@ header.scrolled {
 
 .promo-btn:hover {
     background: var(--accent-color);
-    color: var(--surface-color);
+    color: var(--bg-color);
     box-shadow: 0 10px 20px rgba(17, 57, 57, 0.1);
 }
 
@@ -466,7 +441,7 @@ header.scrolled {
 .bento-item {
     position: relative;
     overflow: hidden;
-    background-color: var(--secondary-color);
+    background-color: #eaeaea;
     border-radius: 2px;
     display: block;
     box-shadow: 0 10px 30px rgba(17, 57, 57, 0.04);
@@ -554,7 +529,7 @@ header.scrolled {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(13, 30, 30, 0.95);
+    background: rgba(14, 25, 25, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     z-index: 2000;
@@ -584,7 +559,7 @@ header.scrolled {
     max-width: 100%;
     max-height: 90vh;
     object-fit: contain;
-    box-shadow: 0 20px 60px rgba(17, 57, 57, 0.3);
+    box-shadow: 0 20px 60px rgba(14, 25, 25, 0.3);
     transition: opacity 0.4s var(--cb);
 }
 
@@ -600,7 +575,7 @@ header.scrolled {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--secondary-color);
+    color: #FBF9F6;
     font-family: var(--font-heading);
     letter-spacing: 3px;
     z-index: 2001;
@@ -609,7 +584,7 @@ header.scrolled {
 .lightbox-close {
     background: none;
     border: none;
-    color: var(--secondary-color);
+    color: #FBF9F6;
     width: 40px;
     height: 40px;
     cursor: pointer;
@@ -620,7 +595,7 @@ header.scrolled {
     position: absolute;
     background: none;
     border: none;
-    color: var(--secondary-color);
+    color: #FBF9F6;
     width: 60px;
     height: 60px;
     cursor: pointer;
@@ -630,7 +605,7 @@ header.scrolled {
 }
 
 .lightbox-prev:hover, .lightbox-next:hover, .lightbox-close:hover {
-    color: var(--bg-color);
+    color: var(--accent-light);
     transform: scale(1.1);
 }
 
@@ -683,7 +658,7 @@ header.scrolled {
 }
 
 .form-card {
-    background: var(--surface-color);
+    background: #ffffff;
     padding: 50px;
     border: 1px solid rgba(17, 57, 57, 0.05);
     box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);
@@ -704,7 +679,7 @@ header.scrolled {
     width: 100%;
     padding: 15px;
     margin-bottom: 25px;
-    border: 1px solid rgba(17, 57, 57, 0.1);
+    border: 1px solid rgba(224, 224, 224, 0.1);
     font-family: var(--font-body);
     font-size: 1rem;
     outline: none;
@@ -715,12 +690,12 @@ header.scrolled {
 }
 
 .form-input::placeholder {
-    color: rgba(26, 43, 43, 0.4);
+    color: rgba(26, 43, 43, 0.3);
 }
 
 .form-input:focus {
     border-color: var(--accent-light);
-    box-shadow: 0 0 15px rgba(42, 92, 92, 0.1);
+    box-shadow: 0 0 15px rgba(34, 107, 107, 0.1);
     background: rgba(17, 57, 57, 0.02);
 }
 
@@ -728,7 +703,7 @@ header.scrolled {
     width: 100%;
     padding: 20px;
     background: var(--accent-color);
-    color: var(--surface-color);
+    color: #FBF9F6;
     border: 1px solid var(--accent-color);
     font-family: var(--font-heading);
     text-transform: uppercase;
@@ -762,7 +737,7 @@ header.scrolled {
 }
 
 .flatpickr-calendar {
-    background: var(--surface-color) !important;
+    background: #ffffff !important;
     border: 1px solid rgba(17, 57, 57, 0.1) !important;
     box-shadow: 0 10px 30px rgba(17, 57, 57, 0.1) !important;
     font-family: var(--font-body) !important;
@@ -806,11 +781,39 @@ footer {
     text-align: center;
     padding: 40px 20px;
     border-top: 1px solid rgba(17, 57, 57, 0.05);
+}
+
+footer p {
     font-family: var(--font-heading);
     font-size: 0.7rem;
     letter-spacing: 4px;
     color: rgba(26, 43, 43, 0.5);
     text-transform: uppercase;
+}
+
+.lang-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+}
+
+.lang-switcher a {
+    color: inherit;
+    transition: color 0.3s var(--cb);
+}
+
+.lang-switcher a:hover {
+    color: var(--accent-light);
+}
+
+.lang-switcher a.active {
+    color: var(--accent-light);
+    font-weight: 600;
+    pointer-events: none;
 }
 
 @media (max-width: 1024px) {
