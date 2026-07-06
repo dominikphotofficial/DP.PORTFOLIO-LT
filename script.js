@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 lightboxImg.src = imageArray[currentIndex];
                 if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${imageArray.length}`;
-            }, 400);
+            }, 350);
         };
 
         lightboxImg.addEventListener('load', () => {
