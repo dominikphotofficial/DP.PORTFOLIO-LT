@@ -33,7 +33,7 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Žeimenos Žirgai",
-      "image": "https://i.postimg.cc/L6nLcsGB/Zeimenos-Zirgai.png",
+      "image": "https://iili.io/fjNLbs4.png",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Švenčionėlių g. 10",
@@ -57,65 +57,9 @@
             --text-color: #1B241A !important;
             --accent-light: #47603B !important;
         }
-        
-        .lightbox {
-            background: rgba(14, 20, 30, 0.95) !important;
-        }
-        
-        header.scrolled {
-            background-color: rgba(247, 244, 240, 0.9) !important;
-        }
-        
-        .nav-overlay {
-            background: rgba(247, 244, 240, 0.95) !important;
-        }
-        
-        .bento-overlay {
-            background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, rgba(247, 244, 240, 0.4) 50%, transparent 100%) !important;
-        }
-
-        .info-card {
-            background: rgba(30, 58, 109, 0.02); 
-            border: 1px solid rgba(30, 58, 109, 0.1); 
-            padding: 40px; 
-            border-radius: 4px; 
-            max-width: 900px; 
-            width: 100%; 
-            margin: 0 auto 50px auto; 
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-
-        .info-card:hover {
-            background: rgba(30, 58, 109, 0.04);
-            border-color: rgba(30, 58, 109, 0.2);
-        }
-
-        .info-grid {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 40px;
-        }
-
-        .info-section-title {
-            font-family: var(--font-heading); 
-            font-size: 0.9rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--accent-color); 
-            margin-bottom: 20px; 
-            border-bottom: 1px solid rgba(30, 58, 109, 0.1); 
-            padding-bottom: 10px;
-        }
-        
-        @media (max-width: 600px) {
-            .bento-overlay {
-                background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, transparent 100%) !important;
-            }
-            .info-card {
-                padding: 25px;
-            }
-        }
+        .lightbox { background: rgba(14, 20, 30, 0.95) !important; }
+        header.scrolled { background-color: rgba(247, 244, 240, 0.9) !important; }
+        .nav-overlay { background: rgba(247, 244, 240, 0.95) !important; }
     </style>
 </head>
 <body class="theme-zeimenos-zirgai">
@@ -135,21 +79,23 @@
     </script>
     
     <header id="main-header">
-        <a href="../index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="../index.html" class="nav-link">Darbai</a>
-            <a href="../services.html" class="nav-link">Paslaugos</a>
-            <a href="../biography.html" class="nav-link">Biografija</a>
-            <a href="../about.html" class="nav-link">Apie</a>
-            <a href="../contacts.html" class="nav-link">Kontaktai</a>
-            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
+            </a>
+            <nav class="desktop-nav">
+                <a href="../index.html" class="nav-link">Darbai</a>
+                <a href="../services.html" class="nav-link">Paslaugos</a>
+                <a href="../biography.html" class="nav-link">Biografija</a>
+                <a href="../about.html" class="nav-link">Apie</a>
+                <a href="../contacts.html" class="nav-link">Kontaktai</a>
+                <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
+            </nav>
+            <div class="burger" id="burger-menu">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
     </header>
 
@@ -166,16 +112,11 @@
     
     <section class="container" style="padding-top: 150px;">
         <div class="text-content" style="margin-bottom: 80px; text-align: center; display: flex; flex-direction: column; align-items: center;">
-            
-            <div class="fade-in-up" style="margin-bottom: 30px;">
-                <img src="https://i.postimg.cc/L6nLcsGB/Zeimenos-Zirgai.png" alt="Žeimenos Žirgai" style="max-width: 180px; height: auto;">
-            </div>
-
-            <h1 class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 15px; font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: 8px; color: var(--text-color); font-weight: 300;">
+            <h1 class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 8px; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 10px; color: var(--text-color); font-weight: 300;">
                 Žeimenos Žirgai
             </h1>
             
-            <div class="fade-in-up" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 40px; opacity: 0.8;">
+            <div class="fade-in-up" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 35px; opacity: 0.8;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
@@ -185,75 +126,59 @@
                 </span>
             </div>
             
-            <p class="fade-in-up" style="font-family: var(--font-body); color: var(--text-color); max-width: 700px; line-height: 1.9; font-weight: 300; font-size: 1.15rem; opacity: 0.85; margin-bottom: 50px;">
-                Leiskite savo vaikui patirti vasarą, kupiną gamtos, žirgų ir tikrų nuotykių! Čia laukia ne tik jodinėjimas, bet ir naujos draugystės, juokas bei įspūdžiai, kurie išliks ilgam.
+            <div class="divider fade-in-up" style="margin-bottom: 35px;"></div>
+            
+            <p class="fade-in-up" style="font-family: var(--font-body); color: var(--text-color); max-width: 650px; line-height: 2; font-weight: 300; font-size: 1.15rem; opacity: 0.85; margin-bottom: 45px;">
+                Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Tai erdvė, kurioje susipina gamtos darna, laisvė ir vizualinis pasakojimas. Kviečiame patirti nepamirštamas akimirkas ir estetiką natūralioje aplinkoje.
             </p>
 
-            <div class="fade-in-up info-card">
-                <div class="info-grid">
-                    
-                    <div>
-                        <h3 class="info-section-title">Vasaros Pamainos</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 2;">
-                            <li style="opacity: 0.4; text-decoration: line-through; text-decoration-thickness: 1px;">• <strong>Birželio 22–26 d.</strong> <span>(7–15 m.)</span></li>
-                            <li>• <strong>Liepos 6–10 d.</strong> <span style="opacity: 0.7;">(7–15 m.)</span></li>
-                            <li>• <strong>Liepos 20–24 d.</strong> <span style="opacity: 0.7;">(7–17 m.)</span></li>
-                            <li>• <strong>Rugpjūčio 3–7 d.</strong> <span style="opacity: 0.7;">(7–17 m.)</span></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 class="info-section-title">Stovyklos Tipas</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 2;">
-                            <li style="display: flex; justify-content: space-between; max-width: 200px;">
-                                <span>Su nakvyne:</span> <strong>250 €</strong>
-                            </li>
-                            <li style="display: flex; justify-content: space-between; max-width: 200px;">
-                                <span>Be nakvynės:</span> <strong>170 €</strong>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div style="margin-top: 40px; border-top: 1px solid rgba(30, 58, 109, 0.1); padding-top: 25px;">
-                    <h3 class="info-section-title" style="margin-bottom: 15px;">Registracija ir Kontaktai</h3>
-                    <p style="font-family: var(--font-body); font-size: 1rem; color: var(--text-color); opacity: 0.85; line-height: 1.8; margin: 0;">
-                        Vietų skaičius ribotas – paskubėkite registruotis!<br><br>
-                        <strong>Tel. nr.:</strong> 062345327 | +37060984957<br>
-                        <strong>El. paštas:</strong> r.mariadul@gmail.com | liepastanulyte13s@gmail.com<br>
-                        <strong>Asmeninė žinutė:</strong> Liepa Stanulytė
-                    </p>
-                </div>
-            </div>
-
             <div class="fade-in-up" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Vaikų stovykla</span>
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Jodinėjimas</span>
-                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Nuotykiai gamtoje</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Vasaros stovyklos</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Jojimo pamokos</span>
+                <span style="padding: 10px 24px; border: 1px solid rgba(30, 58, 109, 0.15); font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); border-radius: 2px; background: rgba(30, 58, 109, 0.03);">Gimtadienių šventės</span>
             </div>
         </div>
         
         <div class="gallery-grid">
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/4NqyTsg1/LATVIJA-2025-33.jpg" loading="lazy" alt="Žeimenos Žirgai - Gamtos darna"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/vTpSGtSm/BMWE36-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Vasaros stovyklos Švenčionėliuose"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Gimtadienių šventės"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Autorinė fotografija"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/8PmLjkfL/street_azuolynas_33.jpg" loading="lazy" alt="Žeimenos Žirgai - Jojimo pamokos"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/28SthTZg/noka-car-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Estetika"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/Dy2Q1ryc/Flower-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Ryšys ir emocija"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/KYbYwNkK/bird-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Vizualinis pasakojimas"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/X7gd6GTN/srp-01.jpg" loading="lazy" alt="Žeimenos Žirgai - Jojimas Švenčionėliai"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/bJXC780D/IMG-9138.jpg" loading="lazy" alt="Žeimenos Žirgai 1"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/PfSbZTLR/IMG-9538.jpg" loading="lazy" alt="Žeimenos Žirgai 2"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/kg6yqzgD/IMG-9544.jpg" loading="lazy" alt="Žeimenos Žirgai 3"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/brmRwjnV/IMG-9551.jpg" loading="lazy" alt="Žeimenos Žirgai 4"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/MTbDgBpG/IMG-9556.jpg" loading="lazy" alt="Žeimenos Žirgai 5"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/9Mtps9QC/IMG-9558.jpg" loading="lazy" alt="Žeimenos Žirgai 6"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/GpDzJV0L/IMG-9563.jpg" loading="lazy" alt="Žeimenos Žirgai 7"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/gkMMY3yf/IMG-9570.jpg" loading="lazy" alt="Žeimenos Žirgai 8"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/1zzBbXNR/IMG-9454.jpg" loading="lazy" alt="Žeimenos Žirgai 9"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/6Q6bwzFX/IMG-9460.jpg" loading="lazy" alt="Žeimenos Žirgai 10"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/5NvRmX8h/IMG-9470.jpg" loading="lazy" alt="Žeimenos Žirgai 11"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/FFYq7Wzg/IMG-9472.jpg" loading="lazy" alt="Žeimenos Žirgai 12"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/7hjn2nBm/IMG-9477.jpg" loading="lazy" alt="Žeimenos Žirgai 13"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/dDMG1t1x/IMG-9479.jpg" loading="lazy" alt="Žeimenos Žirgai 14"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/bJCTzhk2/IMG-9484.jpg" loading="lazy" alt="Žeimenos Žirgai 15"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/QNY4Dpqx/IMG-9490.jpg" loading="lazy" alt="Žeimenos Žirgai 16"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/TwwVN4Fn/IMG-9495.jpg" loading="lazy" alt="Žeimenos Žirgai 17"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/zXRj14Bg/IMG-9501.jpg" loading="lazy" alt="Žeimenos Žirgai 18"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/52Ckn6vR/IMG-9502.jpg" loading="lazy" alt="Žeimenos Žirgai 19"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/rFbP1SdH/IMG-9520.jpg" loading="lazy" alt="Žeimenos Žirgai 20"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/JzMPcPrH/IMG-9521.jpg" loading="lazy" alt="Žeimenos Žirgai 21"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/ryfbm6MQ/IMG-9526.jpg" loading="lazy" alt="Žeimenos Žirgai 22"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/65Smrd2s/IMG-9532.jpg" loading="lazy" alt="Žeimenos Žirgai 23"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/7Z2Qmf7t/IMG-9533.jpg" loading="lazy" alt="Žeimenos Žirgai 24"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/W1kfXhrW/IMG-9539.jpg" loading="lazy" alt="Žeimenos Žirgai 25"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/d1vX7w7t/IMG-9560.jpg" loading="lazy" alt="Žeimenos Žirgai 26"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/4xQ2rjLb/IMG-9572.jpg" loading="lazy" alt="Žeimenos Žirgai 27"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/GmCSgbQs/IMG-9577.jpg" loading="lazy" alt="Žeimenos Žirgai 28"></div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 DP Corporation | Žeimenos Žirgai. Visos teisės saugomos.</p>
-        <p style="font-family: var(--font-heading); font-size: 0.7rem; color: rgba(27, 36, 26, 0.4); margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Švenčionėlių g. 10, Švenčionėliai, Lietuva</p>
-        <div class="lang-links" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
-            <a href="https://en.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">EN</a>
-            <a href="https://pl.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">PL</a>
-            <a href="https://ru.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">RU</a>
-            <a href="https://kr.dominikphotofficial.lt" style="color: inherit; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent-light)'" onmouseout="this.style.color='inherit'">KR</a>
+        <p>&copy; 2026 DP.PORTFOLIO | Žeimenos Žirgai. Visos teisės saugomos.</p>
+        <div class="lang-switcher">
+            <a href="https://portfolio.dominikphotofficial.lt/albums/zeimenos-zirgai.html" class="active">LT</a>
+            <a href="https://en.dominikphotofficial.lt/albums/zeimenos-zirgai.html">EN</a>
+            <a href="https://pl.dominikphotofficial.lt/albums/zeimenos-zirgai.html">PL</a>
+            <a href="https://ru.dominikphotofficial.lt/albums/zeimenos-zirgai.html">RU</a>
+            <a href="https://kr.dominikphotofficial.lt/albums/zeimenos-zirgai.html">KR</a>
         </div>
     </footer>
 
