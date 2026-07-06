@@ -69,16 +69,6 @@
         .nav-overlay {
             background: rgba(247, 244, 240, 0.98) !important;
         }
-        
-        .bento-overlay {
-            background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, rgba(247, 244, 240, 0.4) 50%, transparent 100%) !important;
-        }
-        
-        @media (max-width: 600px) {
-            .bento-overlay {
-                background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, transparent 100%) !important;
-            }
-        }
     </style>
 </head>
 <body class="theme-zeimenos-zirgai">
@@ -111,9 +101,9 @@
                 <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
             </nav>
             <div class="burger" id="burger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </header>
@@ -131,6 +121,16 @@
     
     <section class="container" style="padding-top: 150px;">
         <div class="text-content" style="margin-bottom: 80px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <div class="fade-in-up" style="display: flex; justify-content: center; margin-bottom: 25px;">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8v3c0 3.3 2.7 6 6 6s6-2.7 6-6V8"></path>
+                    <path d="M6 8l-2 3"></path>
+                    <path d="M18 8l2 3"></path>
+                    <path d="M12 17v4"></path>
+                    <path d="M9 21h6"></path>
+                </svg>
+            </div>
+            
             <h1 class="fade-in-up" style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 8px; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 10px; color: var(--text-color); font-weight: 300;">
                 Žeimenos Žirgai
             </h1>
