@@ -17,14 +17,14 @@
     <meta property="og:title" content="Žeimenos Žirgai | Gamtos Darna ir Elegancija">
     <meta property="og:description" content="Vasaros stovyklos, jojimo pamokos ir gimtadienių šventės Švenčionėliuose. Vizualinis pasakojimas ir gamtos estetika.">
     <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/albums/zeimenos-zirgai.html">
-    <meta property="og:image" content="https://i.postimg.cc/4NqyTsg1/LATVIJA-2025-33.jpg">
+    <meta property="og:image" content="https://i.postimg.cc/1zzBbXNR/IMG-9454.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Žeimenos Žirgai | DP.PORTFOLIO">
     <meta name="twitter:description" content="Vasaros stovyklos, jojimo pamokos ir gimtadienių šventės Švenčionėliuose. Vizualinis pasakojimas ir gamtos estetika.">
-    <meta name="twitter:image" content="https://i.postimg.cc/4NqyTsg1/LATVIJA-2025-33.jpg">
+    <meta name="twitter:image" content="https://i.postimg.cc/1zzBbXNR/IMG-9454.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
@@ -57,9 +57,28 @@
             --text-color: #1B241A !important;
             --accent-light: #47603B !important;
         }
-        .lightbox { background: rgba(14, 20, 30, 0.95) !important; }
-        header.scrolled { background-color: rgba(247, 244, 240, 0.9) !important; }
-        .nav-overlay { background: rgba(247, 244, 240, 0.95) !important; }
+        
+        .lightbox {
+            background: rgba(14, 20, 30, 0.95) !important;
+        }
+        
+        header.scrolled {
+            background-color: rgba(247, 244, 240, 0.98) !important;
+        }
+        
+        .nav-overlay {
+            background: rgba(247, 244, 240, 0.98) !important;
+        }
+        
+        .bento-overlay {
+            background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, rgba(247, 244, 240, 0.4) 50%, transparent 100%) !important;
+        }
+        
+        @media (max-width: 600px) {
+            .bento-overlay {
+                background: linear-gradient(to top, rgba(247, 244, 240, 0.95) 0%, transparent 100%) !important;
+            }
+        }
     </style>
 </head>
 <body class="theme-zeimenos-zirgai">
@@ -92,9 +111,9 @@
                 <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
             </nav>
             <div class="burger" id="burger-menu">
-                <div></div>
-                <div></div>
-                <div></div>
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </header>
