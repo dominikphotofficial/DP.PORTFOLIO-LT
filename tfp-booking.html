@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -80,41 +79,61 @@
         </nav>
     </div>
 
-    <section class="booking-layout">
-        <div class="info-column fade-in-up">
-            <h1>TFP Fotosesija</h1>
-            <div class="divider" style="margin: 0 auto 30px 0;"></div>
-            <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
-            <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
-            <p>Pasirinkite jums patogią datą kalendoriuje ir aprašykite savo viziją.</p>
-        </div>
-        <div class="form-card fade-in-up">
-            <div id="success-display">
-                <p>Ačiū! Gavau jūsų registraciją. Peržiūrėsiu jūsų idėjas ir paskambinsiu patikslinti detalių bei laiko. Jei turite skubių klausimų, galite man parašyti tiesiogiai.</p>
+    <section class="tfp-section">
+        <div class="booking-layout">
+            <div class="info-column fade-in-up">
+                <h1>TFP Fotosesija</h1>
+                <div class="divider" style="margin: 0 0 30px 0;"></div>
+                <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
+                <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
+                <p>Pasirinkite jums patogią datą kalendoriuje ir aprašykite savo viziją.</p>
             </div>
-            <form action="https://formspree.io/f/mgvnbvaw" method="POST" id="tfp-booking-form">
-                <label class="field-label">Vardas ir Pavardė *</label>
-                <input type="text" name="name" class="form-input" required>
+            
+            <div class="form-card fade-in-up">
+                <div id="success-display">
+                    <h3>Ačiū už registraciją!</h3>
+                    <p>Gavau jūsų užklausą. Peržiūrėsiu jūsų idėjas ir netrukus su jumis susisieksiu patikslinti detalių. Jei turite skubių klausimų, galite man parašyti tiesiogiai į socialinius tinklus.</p>
+                </div>
                 
-                <label class="field-label">Telefono numeris *</label>
-                <input type="tel" name="phone" class="form-input" placeholder="+370" required>
-                
-                <label class="field-label">Pageidaujama data ir laikas *</label>
-                <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite..." required>
-                
-                <label class="field-label">Kurioje Kauno vietoje norėtumėte fotografuotis? *</label>
-                <input type="text" name="location" class="form-input" placeholder="Lokacija Kaune" required>
-                
-                <label class="field-label">Nuorodos į referencus (Pinterest/IG)</label>
-                <textarea name="references" class="form-input" rows="3" placeholder="Moodboard nuorodos..."></textarea>
-                
-                <button type="submit" class="cta-button">Registruotis fotosesijai</button>
-            </form>
+                <form action="https://formspree.io/f/mgvnbvaw" method="POST" id="tfp-booking-form">
+                    <label class="field-label">Vardas ir Pavardė *</label>
+                    <input type="text" name="name" class="form-input" required autocomplete="off">
+                    
+                    <label class="field-label">Telefono numeris *</label>
+                    <input type="tel" name="phone" class="form-input" placeholder="+370" required autocomplete="off">
+                    
+                    <label class="field-label">Pageidaujama data ir laikas *</label>
+                    <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite dieną ir valandą" required autocomplete="off">
+                    
+                    <label class="field-label">Kurioje Kauno vietoje norėtumėte fotografuotis? *</label>
+                    <input type="text" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
+                    
+                    <label class="field-label">Nuorodos į referencus (Pinterest/Instagram)</label>
+                    <textarea name="references" class="form-input" rows="3" placeholder="Įklijuokite nuorodą į savo idėjų moodboard'ą..."></textarea>
+                    
+                    <button type="submit" class="cta-button">Siųsti užklausą</button>
+                </form>
+            </div>
         </div>
     </section>
+
+    <footer>
+        <p>© 2024 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#datetime-picker", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                time_24hr: true,
+                locale: "lt"
+            });
+        });
+    </script>
 </body>
 </html>
