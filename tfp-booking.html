@@ -103,7 +103,7 @@
                     <input type="tel" name="phone" class="form-input" placeholder="+370" required autocomplete="off">
                     
                     <label class="field-label">Pageidaujama data ir laikas *</label>
-                    <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite dieną ir valandą" required autocomplete="off">
+                    <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Paspauskite, kad pasirinkti kalendoriuje..." required autocomplete="off">
                     
                     <label class="field-label">Kurioje Kauno vietoje norėtumėte fotografuotis? *</label>
                     <input type="text" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
@@ -131,6 +131,7 @@
                 dateFormat: "Y-m-d H:i",
                 minDate: "today",
                 time_24hr: true,
+                disableMobile: true, /* Это заставит телефон показывать именно красивый календарь */
                 locale: "lt"
             });
         });
