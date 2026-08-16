@@ -691,6 +691,144 @@ header.scrolled {
     transform: translateY(0);
 }
 
+.tfp-section {
+    max-width: 1400px;
+    margin: 140px auto 80px auto;
+    padding: 0 clamp(20px, 5vw, 60px);
+}
+
+.booking-layout {
+    display: flex;
+    gap: clamp(40px, 8vw, 100px);
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.info-column {
+    flex: 1;
+    min-width: 300px;
+    color: var(--text-color);
+}
+
+.info-column h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: clamp(5px, 2vw, 10px);
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+.info-column p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin-bottom: 25px;
+    opacity: 0.9;
+    line-height: 1.8;
+}
+
+.form-card {
+    flex: 1.2;
+    min-width: 300px;
+    background: #ffffff;
+    padding: clamp(30px, 5vw, 60px);
+    border-radius: 2px;
+    box-shadow: 0 10px 40px rgba(17, 57, 57, 0.04);
+    border: 1px solid rgba(17, 57, 57, 0.05);
+    width: 100%;
+}
+
+.field-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    margin-top: 30px;
+    opacity: 0.8;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(17, 57, 57, 0.2);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--text-color);
+    transition: var(--transition);
+    outline: none;
+    border-radius: 0;
+    resize: vertical;
+}
+
+.form-input:focus {
+    border-bottom-color: var(--accent-color);
+}
+
+.form-input::placeholder {
+    color: rgba(26, 43, 43, 0.3);
+    font-family: var(--font-body);
+}
+
+.cta-button {
+    display: inline-block;
+    width: 100%;
+    margin-top: 50px;
+    padding: 20px;
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.cta-button:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    box-shadow: 0 10px 20px rgba(17, 57, 57, 0.1);
+}
+
+#success-display {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+}
+
+#success-display h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    letter-spacing: 4px;
+    color: var(--accent-color);
+}
+
+#success-display p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.flatpickr-calendar {
+    font-family: var(--font-body) !important;
+    box-shadow: 0 10px 40px rgba(17, 57, 57, 0.1) !important;
+    border: none !important;
+    border-radius: 2px !important;
+}
+
+.flatpickr-day.selected {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+}
+
 footer {
     text-align: center;
     padding: 60px 20px;
@@ -757,6 +895,7 @@ footer p {
     header { padding: 20px 25px; }
     .album-grid-columns { column-count: 1; }
     .nav-link { letter-spacing: 4px; }
+    .tfp-section { margin-top: 100px; }
 }
 
 @media (max-width: 600px) {
