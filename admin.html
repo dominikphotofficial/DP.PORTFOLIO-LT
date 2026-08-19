@@ -1,4 +1,3 @@
-<!-- admin.html (LT) -->
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -18,18 +17,27 @@
         .req-body p { margin-bottom: 12px; line-height: 1.6; }
         .admin-select { padding: 12px; font-family: var(--font-body); border: 1px solid rgba(17, 57, 57, 0.2); outline: none; width: 100%; max-width: 100%; margin-top: 5px; background: transparent; color: var(--text-color); transition: border-color 0.3s; }
         .admin-select:focus { border-color: var(--accent-color); }
-        .req-actions { margin-top: 25px; display: flex; gap: 15px; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 20px; }
+        .req-actions { margin-top: 25px; display: flex; gap: 15px; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 20px; flex-wrap: wrap; }
         .admin-btn { padding: 15px 30px; background: var(--accent-color); color: var(--bg-color); border: 1px solid var(--accent-color); cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .admin-btn:hover { background: transparent; color: var(--accent-color); }
+        .admin-btn-outline { padding: 15px 30px; background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
+        .admin-btn-outline:hover { background: var(--accent-color); color: var(--bg-color); }
         .admin-btn-delete { padding: 15px 30px; background: transparent; color: #d9534f; border: 1px solid #d9534f; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .admin-btn-delete:hover { background: #d9534f; color: #fff; }
         #auth-section { text-align: center; margin-top: 150px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 15, 0.8); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--bg-color); width: 90%; max-width: 800px; padding: 40px; border-radius: 4px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .field-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px; opacity: 0.8; }
+
         @media (max-width: 768px) {
             .req-body { grid-template-columns: 1fr; gap: 15px; }
             .req-actions { flex-direction: column; }
-            .admin-btn, .admin-btn-delete { width: 100%; }
+            .admin-btn, .admin-btn-outline, .admin-btn-delete { width: 100%; }
+            .modal-content { padding: 20px; }
         }
     </style>
 </head>
@@ -61,155 +69,36 @@
         </div>
     </div>
 
+    <div id="email-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="font-family: var(--font-heading); margin-bottom: 10px; font-size: 1.8rem; font-weight: 300; letter-spacing: 3px;">Redaguoti laišką</h2>
+            <p style="font-family: var(--font-body); margin-bottom: 30px; opacity: 0.8;">Čia galite pakeisti tekstą, pridėti nuolaidos kodą ar asmeninę žinutę prieš išsiunčiant laišką klientui.</p>
+            
+            <label class="field-label">Tema (Subject)</label>
+            <input type="text" id="modal-subject" class="admin-select" style="margin-bottom: 25px;">
+            
+            <label class="field-label">Laiško turinys (HTML)</label>
+            <textarea id="modal-html" class="admin-select" style="height: 350px; margin-bottom: 30px; font-family: monospace; font-size: 14px; line-height: 1.5;"></textarea>
+            
+            <div class="req-actions" style="border: none; padding: 0; margin: 0; justify-content: flex-end;">
+                <button class="admin-btn-delete" onclick="closeModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
+                <button class="admin-btn" id="modal-send-btn">Patvirtinti ir Siųsti</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        const templates = {
-            lt: {
-                Confirmed: {
-                    subject: "DP.PORTFOLIO | TFP Fotosesija patvirtinta!",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Puikios naujienos, {{name}}!</h2>
-                            <p>Mums labai patiko jūsų idėja, todėl su džiaugsmu patvirtiname jūsų TFP fotosesiją!</p>
-                            <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                                <p style="margin: 0 0 10px 0;"><b>Susitikimo detalės:</b></p>
-                                <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                                <p style="margin: 0;"><b>Vieta:</b> {{location}}</p>
-                            </div>
-                            <p>Nekantraujame pradėti kurti kartu. Jei turite kokių nors klausimų prieš fotosesiją, būtinai susisiekite.</p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                },
-                Rescheduled: {
-                    subject: "DP.PORTFOLIO | TFP Fotosesijos laikas pakeistas",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}},</h2>
-                            <p>Norime informuoti, kad turėjome šiek tiek pakoreguoti jūsų TFP fotosesijos laiką arba vietą.</p>
-                            <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                                <p style="margin: 0 0 10px 0;"><b>Nauja informacija:</b></p>
-                                <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                                <p style="margin: 0;"><b>Vieta:</b> {{location}}</p>
-                            </div>
-                            <p>Jei šis naujas laikas jums netinka, prašome atsakyti į šį laišką ir nurodyti, kuriomis dienomis esate laisvi – mes būtinai rasime jums patogų variantą.</p>
-                            <p>Nuoširdžiai dėkojame už jūsų supratingumą ir lankstumą!</p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                },
-                Cancelled: {
-                    subject: "DP.PORTFOLIO | TFP Fotosesija atšaukta",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}},</h2>
-                            <p>Apgailestaujame, tačiau dėl nenumatytų aplinkybių turime atšaukti jūsų TFP fotosesiją.</p>
-                            <p>Labai vertiname jūsų norą bendradarbiauti ir tikimės, kad ateityje turėsime progą sukurti kažką gražaus kartu.</p>
-                            <p>Ačiū už jūsų supratingumą.</p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                },
-                Completed: {
-                    subject: "DP.PORTFOLIO | Ačiū už nuostabią fotosesiją!",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}}!</h2>
-                            <p>Didelis ačiū už jūsų laiką, pastangas ir puikią nuotaiką fotosesijos metu. Tikimės, kad procesas jums patiko taip pat, kaip ir mums!</p>
-                            <p>Šiuo metu jau dirbame prie jūsų nuotraukų redagavimo. Kai tik jos bus paruoštos, atsiųsime jums nuorodą.</p>
-                            <p>Labai tikimės, kad galutinis rezultatas jums patiks ir viršys lūkesčius!</p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                },
-                ServiceStatusUpdate: {
-                    subject: "DP.PORTFOLIO | Jūsų užsakymo statusas atnaujintas",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}},</h2>
-                            <p>Norime informuoti, kad jūsų užsakymo (<strong>{{serviceName}}</strong>) statusas pasikeitė.</p>
-                            <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                                <p style="margin: 0; font-size: 1.1em;"><b>Naujas statusas:</b> <span style="color: #2A5C5C; font-weight: bold;">{{status}}</span></p>
-                            </div>
-                            <p>Jei turite klausimų ar norite pasitikslinti informaciją, tiesiog atsakykite į šį laišką.</p>
-                            <p>Ačiū, kad esate su mumis!</p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
+        import { db, auth, googleProvider } from './firebase-config.js';
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { buildEmail } from './email-templates.js';
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
 
         const authSection = document.getElementById('auth-section');
         const dashboardSection = document.getElementById('dashboard-section');
         const logoutBtn = document.getElementById('logout-btn');
+        let pendingEmailData = null;
 
         document.getElementById('admin-login-btn').addEventListener('click', () => {
             signInWithPopup(auth, googleProvider);
@@ -218,7 +107,7 @@
         logoutBtn.addEventListener('click', () => signOut(auth));
 
         onAuthStateChanged(auth, (user) => {
-            if (user && user.email === ADMIN_EMAIL) {
+            if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                 authSection.style.display = 'none';
                 dashboardSection.style.display = 'block';
                 logoutBtn.style.display = 'block';
@@ -282,7 +171,8 @@
                             </div>
                         </div>
                         <div class="req-actions">
-                            <button class="admin-btn" onclick="updateTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Išsaugoti ir Išsiųsti laišką</button>
+                            <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
+                            <button class="admin-btn-outline" onclick="saveOnly('tfp_requests', '${docSnap.id}', '')">Tik Išsaugoti</button>
                             <button class="admin-btn-delete" onclick="deleteDocRecord('tfp_requests', '${docSnap.id}')">Ištrinti</button>
                         </div>
                     `;
@@ -330,7 +220,8 @@
                             </div>
                         </div>
                         <div class="req-actions">
-                            <button class="admin-btn" onclick="updateService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}')">Išsaugoti ir Išsiųsti laišką</button>
+                            <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}')">Peržiūrėti ir Siųsti laišką</button>
+                            <button class="admin-btn-outline" onclick="saveOnly('service_requests', '${docSnap.id}', 'srv-')">Tik Išsaugoti</button>
                             <button class="admin-btn-delete" onclick="deleteDocRecord('service_requests', '${docSnap.id}')">Ištrinti</button>
                         </div>
                     `;
@@ -339,36 +230,92 @@
             });
         }
 
-        window.updateTFP = async (id, lang, email, name, idea) => {
+        window.prepareTFP = async (id, lang, email, name, idea) => {
             const newStatus = document.getElementById(`status-${id}`).value;
             const newDate = document.getElementById(`dt-${id}`).value;
             const newLoc = document.getElementById(`loc-${id}`).value;
 
-            try {
-                await updateDoc(doc(db, "tfp_requests", id), { status: newStatus, date_time: newDate, location: newLoc });
-                if(newStatus !== 'New') {
-                    const emailData = buildEmail(newStatus, lang, { name, date_time: newDate, location: newLoc, idea });
-                    await addDoc(collection(db, "mail"), { to: email, message: { subject: emailData.subject, html: emailData.html } });
-                }
-                alert("TFP atnaujinta!");
-            } catch(e) { console.error(e); alert("Klaida."); }
+            const templateKey = newStatus === 'New' ? 'Confirmed' : newStatus;
+            const emailData = buildEmail(templateKey, lang, { name, date_time: newDate, location: newLoc, idea });
+
+            document.getElementById('modal-subject').value = emailData.subject;
+            document.getElementById('modal-html').value = emailData.html;
+            
+            pendingEmailData = { collection: 'tfp_requests', id, email, newStatus, newDate, newLoc };
+            document.getElementById('email-modal').classList.add('active');
         };
 
-        window.updateService = async (id, lang, email, name, serviceName) => {
+        window.prepareService = async (id, lang, email, name, serviceName) => {
             const newStatus = document.getElementById(`srv-status-${id}`).value;
             const newDate = document.getElementById(`srv-dt-${id}`).value;
             const newLoc = document.getElementById(`srv-loc-${id}`).value;
 
-            try {
-                await updateDoc(doc(db, "service_requests", id), { status: newStatus, preferredDate: newDate, location: newLoc });
-                const emailData = buildEmail('ServiceStatusUpdate', lang, { name, serviceName, status: newStatus });
-                await addDoc(collection(db, "mail"), { to: email, message: { subject: emailData.subject, html: emailData.html } });
-                alert("Paslauga atnaujinta!");
-            } catch(e) { console.error(e); alert("Klaida."); }
+            const emailData = buildEmail('ServiceStatusUpdate', lang, { name, serviceName, status: newStatus });
+
+            document.getElementById('modal-subject').value = emailData.subject;
+            document.getElementById('modal-html').value = emailData.html;
+            
+            pendingEmailData = { collection: 'service_requests', id, email, newStatus, newDate, newLoc };
+            document.getElementById('email-modal').classList.add('active');
         };
 
+        window.saveOnly = async (collectionName, id, prefix) => {
+            const newStatus = document.getElementById(`${prefix}status-${id}`).value;
+            const newDate = document.getElementById(`${prefix}dt-${id}`).value;
+            const newLoc = document.getElementById(`${prefix}loc-${id}`).value;
+            try {
+                if(collectionName === 'tfp_requests') {
+                    await updateDoc(doc(db, collectionName, id), { status: newStatus, date_time: newDate, location: newLoc });
+                } else {
+                    await updateDoc(doc(db, collectionName, id), { status: newStatus, preferredDate: newDate, location: newLoc });
+                }
+                alert("Išsaugota sėkmingai (be laiško siuntimo)!");
+            } catch(e) { console.error(e); alert("Klaida išsaugant."); }
+        };
+
+        window.closeModal = () => {
+            document.getElementById('email-modal').classList.remove('active');
+            pendingEmailData = null;
+        };
+
+        document.getElementById('modal-send-btn').addEventListener('click', async () => {
+            if(!pendingEmailData) return;
+            const btn = document.getElementById('modal-send-btn');
+            btn.disabled = true;
+            btn.innerText = 'Siunčiama...';
+
+            try {
+                const subject = document.getElementById('modal-subject').value;
+                const html = document.getElementById('modal-html').value;
+
+                if(pendingEmailData.collection === 'tfp_requests') {
+                    await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), { 
+                        status: pendingEmailData.newStatus, date_time: pendingEmailData.newDate, location: pendingEmailData.newLoc 
+                    });
+                } else {
+                    await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), { 
+                        status: pendingEmailData.newStatus, preferredDate: pendingEmailData.newDate, location: pendingEmailData.newLoc 
+                    });
+                }
+
+                await addDoc(collection(db, "mail"), { 
+                    to: pendingEmailData.email, 
+                    message: { subject: subject, html: html } 
+                });
+
+                alert("Išsaugota ir laiškas išsiųstas!");
+                closeModal();
+            } catch(e) {
+                console.error(e);
+                alert("Klaida siunčiant.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Patvirtinti ir Siųsti';
+            }
+        });
+
         window.deleteDocRecord = async (collectionName, id) => {
-            if (confirm("Ar tikrai norite ištrinti?")) {
+            if (confirm("Ar tikrai norite ištrinti šią užklausą?")) {
                 try { await deleteDoc(doc(db, collectionName, id)); } 
                 catch(e) { console.error(e); alert("Klaida trinant."); }
             }
