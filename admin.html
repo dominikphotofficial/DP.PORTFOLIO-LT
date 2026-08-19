@@ -1,0 +1,149 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFP Administracija</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { max-width: 1400px; margin: 100px auto; padding: 20px; }
+        .request-card { background: var(--surface-color); padding: 20px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .req-header { display: flex; justify-content: space-between; font-family: var(--font-heading); margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; }
+        .req-body { font-family: var(--font-body); font-size: 1rem; color: var(--text-color); }
+        .req-body p { margin-bottom: 8px; }
+        .admin-select { padding: 10px; font-family: var(--font-body); border: 1px solid var(--accent-color); outline: none; width: 100%; max-width: 300px; margin-top: 5px; }
+        .admin-btn { padding: 15px 25px; background: var(--accent-color); color: var(--bg-color); border: none; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; transition: all 0.3s; }
+        .admin-btn:hover { opacity: 0.9; }
+        #auth-section { text-align: center; margin-top: 150px; }
+    </style>
+</head>
+<body>
+    <header id="main-header" class="scrolled">
+        <div class="header-container">
+            <div class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></div>
+            <nav class="desktop-nav"><a href="#" id="logout-btn" class="nav-link" style="display:none;">Atsijungti</a></nav>
+        </div>
+    </header>
+
+    <div id="auth-section">
+        <h2 style="font-family: var(--font-heading); margin-bottom: 20px;">Administratoriaus Prisijungimas</h2>
+        <button id="admin-login-btn" class="cta-button" style="width: 300px;">Prisijungti su Google</button>
+    </div>
+
+    <div id="dashboard-section" class="admin-container" style="display:none;">
+        <h1 style="font-family: var(--font-heading); margin-bottom: 30px;">TFP Užklausos</h1>
+        <div id="requests-list"></div>
+    </div>
+
+    <script type="module">
+        import { db, auth, googleProvider } from './firebase-config.js';
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { buildEmail } from './email-templates.js';
+
+        const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
+
+        const authSection = document.getElementById('auth-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        document.getElementById('admin-login-btn').addEventListener('click', () => {
+            signInWithPopup(auth, googleProvider);
+        });
+
+        logoutBtn.addEventListener('click', () => signOut(auth));
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === ADMIN_EMAIL) {
+                authSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                loadRequests();
+            } else if (user) {
+                alert("Priėjimas uždraustas.");
+                signOut(auth);
+            } else {
+                authSection.style.display = 'block';
+                dashboardSection.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        });
+
+        function loadRequests() {
+            const q = query(collection(db, "tfp_requests"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('requests-list');
+                list.innerHTML = '';
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const reqDiv = document.createElement('div');
+                    reqDiv.className = 'request-card';
+                    
+                    reqDiv.innerHTML = `
+                        <div class="req-header">
+                            <strong>${data.name} (${data.language.toUpperCase()})</strong>
+                            <span>Statusas: <strong style="color: var(--accent-light);">${data.status}</strong></span>
+                        </div>
+                        <div class="req-body">
+                            <p><b>El. paštas:</b> ${data.email}</p>
+                            <p><b>Instagram:</b> ${data.instagram}</p>
+                            <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
+                            <p><b>Vieta:</b><br><input type="text" id="loc-${docSnap.id}" value="${data.location}" class="admin-select"></p>
+                            <p><b>Idėja:</b> ${data.idea}</p>
+                            <p><b>Papildomai:</b> ${data.extra_info}</p>
+                            <br>
+                            <p><b>Keisti statusą:</b><br>
+                            <select id="status-${docSnap.id}" class="admin-select">
+                                <option value="New" ${data.status === 'New' ? 'selected' : ''}>New</option>
+                                <option value="Confirmed" ${data.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="Rescheduled" ${data.status === 'Rescheduled' ? 'selected' : ''}>Rescheduled</option>
+                                <option value="Cancelled" ${data.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                <option value="Completed" ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select></p>
+                            <button class="admin-btn" onclick="updateRequest('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Išsaugoti ir Išsiųsti laišką</button>
+                        </div>
+                    `;
+                    list.appendChild(reqDiv);
+                });
+            });
+        }
+
+        window.updateRequest = async (id, lang, email, name, idea) => {
+            const newStatus = document.getElementById(`status-${id}`).value;
+            const newDate = document.getElementById(`dt-${id}`).value;
+            const newLoc = document.getElementById(`loc-${id}`).value;
+
+            try {
+                await updateDoc(doc(db, "tfp_requests", id), {
+                    status: newStatus,
+                    date_time: newDate,
+                    location: newLoc
+                });
+
+                if(newStatus !== 'New') {
+                    const emailData = buildEmail(newStatus, lang, {
+                        name: name,
+                        date_time: newDate,
+                        location: newLoc,
+                        idea: idea
+                    });
+
+                    await addDoc(collection(db, "mail"), {
+                        to: email,
+                        message: {
+                            subject: emailData.subject,
+                            html: emailData.html
+                        }
+                    });
+                }
+                alert("Atnaujinta sėkmingai!");
+            } catch(e) {
+                console.error(e);
+                alert("Klaida atnaujinant.");
+            }
+        };
+    </script>
+</body>
+</html>
