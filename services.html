@@ -240,6 +240,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // TELEGRAM NUSTATYMAI
+        const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
+        const chatId = "7040523282";
+
         const templates = {
             lt: {
                 ServiceNew: {
@@ -373,8 +377,10 @@
             };
 
             try {
+                // 1. Išsaugome į Firebase
                 await addDoc(collection(db, "service_requests"), requestData);
                 
+                // 2. Siunčiame el. laišką
                 const emailData = buildEmail('ServiceNew', lang, {
                     name: requestData.clientName,
                     serviceName: requestData.serviceName,
@@ -390,6 +396,14 @@
                     to: requestData.email,
                     message: { subject: emailData.subject, html: emailData.html }
                 });
+
+                // 3. Siunčiame pranešimą į Telegram
+                const tgMessage = `💰 NAUJAS UŽSAKYMAS!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}`;
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: tgMessage })
+                }).catch(err => console.error("Telegram error:", err));
 
                 document.getElementById('service-form').style.display = 'none';
                 document.getElementById('service-success').style.display = 'block';
