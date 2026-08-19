@@ -8,31 +8,38 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Paslaugos | DP.PORTFOLIO</title>
-    <meta name="description" content="DP.PORTFOLIO – profesionalios fotografijos ir Premium videografijos paslaugos. Pasirinkite komercinę fotosesiją arba kūrybinį TFP projektą.">
+    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DP.PORTFOLIO">
     <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
-    <meta property="og:description" content="Pasirinkite bendradarbiavimo formatą: kūrybinė TFP fotosesija arba mokamos profesionalios paslaugos.">
+    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
     <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
     <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
+    <style>
+        .price-calculator { background: rgba(17, 57, 57, 0.03); padding: 20px; border-radius: 4px; margin-top: 20px; border: 1px solid rgba(17, 57, 57, 0.1); }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-family: var(--font-body); font-size: 1.1rem; }
+        .price-row.discount { color: #d9534f; }
+        .price-row.final { font-weight: 600; font-size: 1.2rem; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 10px; margin-top: 10px; }
+        .price-row.deposit { color: var(--accent-light); font-weight: 600; }
+        .payment-info { display: none; background: rgba(17, 57, 57, 0.05); padding: 15px; border-left: 3px solid var(--accent-color); margin-top: 15px; font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; }
+        .payment-info.active { display: block; }
+    </style>
 </head>
 <body>
-    <div id="preloader" data-nosnippet>
-        <div class="loader"></div>
-    </div>
+    <div id="preloader" data-nosnippet><div class="loader"></div></div>
 
     <header id="main-header">
-        <a href="index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
+        <a href="index.html" class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></a>
         <nav class="desktop-nav">
             <a href="index.html" class="nav-link">Darbai</a>
             <a href="services.html" class="nav-link active">Paslaugos</a>
@@ -41,11 +48,7 @@
             <a href="contacts.html" class="nav-link">Kontaktai</a>
             <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
         </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <div class="burger" id="burger-menu"><span></span><span></span><span></span></div>
     </header>
 
     <div class="nav-overlay" id="nav-overlay">
@@ -63,133 +66,287 @@
         <div class="fade-in-up" style="max-width: 800px; margin: 0 auto 60px auto; text-align: center;">
             <h1 style="font-family: var(--font-heading); text-transform: uppercase; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 5px; margin-bottom: 25px; color: var(--text-color); font-weight: 300;">Paslaugos</h1>
             <div class="divider"></div>
-            <p style="font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: rgba(26, 43, 43, 0.8);">
-                DP.PORTFOLIO atviras tiek kūrybiniams mainams, tiek profesionaliems komerciniams užsakymams. Pasirinkite jums tinkamiausią bendradarbiavimo formatą.
+            <p style="font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: rgba(26, 43, 43, 0.8); margin-bottom: 20px;">
+                Kuriu asmenines, kūrybines fotosesijas, portretus, automobilių, gamtos bei architektūros fotografiją. Taip pat kuriu atmosferinius, trumpus kinematografinius vaizdo įrašus.
+            </p>
+            <p style="font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; font-weight: 300; color: rgba(26, 43, 43, 0.6); background: rgba(17, 57, 57, 0.03); padding: 15px; border-radius: 4px;">
+                <strong>Svarbu:</strong> Nefotografuoju vestuvių, krikštynų, didelių renginių ar masinių komercinių projektų. Vaizdo įrašai orientuoti į estetiką ir istoriją, o ne į agresyvią reklamą ar garantuotą "viral" turinį.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto;">
-            
-            <div class="fade-in-up" style="background-color: var(--surface-color); border: 1px solid rgba(17, 57, 57, 0.05); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s var(--cb), box-shadow 0.4s var(--cb); position: relative; box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 50px rgba(17, 57, 57, 0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 15px 40px rgba(17, 57, 57, 0.04)';">
-                <div style="position: absolute; top: 20px; right: 20px; background-color: var(--accent-light); color: var(--bg-color); padding: 6px 18px; font-family: var(--font-heading); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; z-index: 10; border-radius: 2px;">Kūrybiniai mainai</div>
-                <div style="height: 280px; overflow: hidden;">
-                    <img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" alt="TFP Fotosesija" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9) contrast(1.1); transition: transform 0.8s var(--cb);" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div style="padding: 50px 40px; flex-grow: 1; display: flex; flex-direction: column; text-align: center;">
-                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; color: var(--text-color); font-weight: 400; font-size: 1.4rem;">TFP Fotosesija</h3>
-                    <div style="font-size: 1.5rem; font-family: var(--font-heading); color: var(--accent-light); margin-bottom: 30px; font-weight: 300;">Nemokamai</div>
-                    <ul style="list-style: none; padding: 0; margin-bottom: 40px; font-family: var(--font-body); font-weight: 300; line-height: 2.2; color: rgba(26, 43, 43, 0.8); flex-grow: 1;">
-                        <li>• Jūsų unikalių idėjų realizavimas</li>
-                        <li>• Abipusis portfolio pildymas</li>
-                        <li>• Neribota kūrybinė laisvė</li>
-                        <li>• Kinematografiška Fujifilm X-S20 kokybė</li>
-                        <li style="font-size: 0.85rem; color: rgba(26, 43, 43, 0.5); margin-top: 15px; line-height: 1.5;">* TFP formatu atrenku tik man tinkančias idėjas. Kiekis ribotas.</li>
-                    </ul>
-                    <a href="tfp-booking.html" style="display: block; width: 100%; padding: 18px; background-color: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; text-align: center; transition: all 0.4s var(--cb); border-radius: 2px;" onmouseover="this.style.backgroundColor='var(--accent-color)'; this.style.color='var(--surface-color)';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--accent-color)';">Pildyti TFP Anketą</a>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto;">
+            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Fotografija</h3>
+                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Galutinė kaina priklauso nuo trukmės, sudėtingumo, lokacijų skaičiaus ir apdorojimo apimties. Klientas gauna tik atrinktas ir apdorotas nuotraukas.</p>
+                <ul style="list-style: none; padding: 0; font-family: var(--font-body); line-height: 2; opacity: 0.9;">
+                    <li><strong>Basic</strong> (trumpa fotosesija, 1 lokacija) – nuo 10 €</li>
+                    <li><strong>Standard</strong> (ilgesnė trukmė, daugiau kadrų) – nuo 15 €</li>
+                    <li><strong>Creative</strong> (keli įvaizdžiai, sudėtingesnė) – nuo 20 €</li>
+                </ul>
             </div>
 
-            <div class="fade-in-up" style="background-color: var(--surface-color); border: 1px solid rgba(17, 57, 57, 0.05); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s var(--cb), box-shadow 0.4s var(--cb); position: relative; box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 50px rgba(17, 57, 57, 0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 15px 40px rgba(17, 57, 57, 0.04)';">
-                <div style="position: absolute; top: 20px; right: 20px; background-color: var(--accent-color); color: var(--surface-color); padding: 6px 18px; font-family: var(--font-heading); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; z-index: 10; border-radius: 2px;">Profesionalu</div>
-                <div style="height: 280px; overflow: hidden;">
-                    <img src="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg" alt="Mokamos paslaugos" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.95) contrast(1.05); transition: transform 0.8s var(--cb);" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div style="padding: 50px 40px; flex-grow: 1; display: flex; flex-direction: column; text-align: center;">
-                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; color: var(--text-color); font-weight: 400; font-size: 1.4rem;">Fotografija / Video</h3>
-                    <div style="font-size: 1.5rem; font-family: var(--font-heading); color: var(--accent-light); margin-bottom: 30px; font-weight: 300;">Nuo 20 €</div>
-                    <ul style="list-style: none; padding: 0; margin-bottom: 40px; font-family: var(--font-body); font-weight: 300; line-height: 2.2; color: rgba(26, 43, 43, 0.8); flex-grow: 1;">
-                        <li>• Iki 1 val. asmeninė fotosesija</li>
-                        <li>• Garantuotos 70 redaguotų nuotraukų</li>
-                        <li>• Renginių / Automobilių fotografija</li>
-                        <li>• Dinamiškas vaizdo montažas</li>
-                        <li style="font-size: 0.85rem; color: rgba(26, 43, 43, 0.5); margin-top: 15px; line-height: 1.5;">* Papildomas laikas ir video paslaugos aptariamos individualiai.</li>
-                    </ul>
-                    <a href="#paid-order-form" style="display: block; width: 100%; padding: 18px; background-color: var(--accent-color); color: var(--surface-color); border: 1px solid var(--accent-color); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; text-align: center; transition: all 0.4s var(--cb); border-radius: 2px;" onmouseover="this.style.backgroundColor='transparent'; this.style.color='var(--accent-color)';" onmouseout="this.style.backgroundColor='var(--accent-color)'; this.style.color='var(--surface-color)';">Užsakyti paslaugas</a>
-                </div>
+            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Videografija</h3>
+                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Kuriu ramius, kinematografinius vaizdo įrašus (2-3 min. ar ilgiau). Kaina priklauso nuo filmavimo laiko, montažo sudėtingumo ir lokacijų.</p>
+                <ul style="list-style: none; padding: 0; font-family: var(--font-body); line-height: 2; opacity: 0.9;">
+                    <li><strong>Small creative video</strong> – nuo 10 €</li>
+                    <li><strong>Complex project</strong> – nuo 15 €</li>
+                </ul>
+            </div>
+
+            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Lokacija ir Sąlygos</h3>
+                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Pagrindinė darbo vieta – <strong>Kaunas</strong>. Nuosavos studijos neturiu, dirbame lauke arba sutartoje erdvėje.</p>
+                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; opacity: 0.8;">Išvykimas į kitus miestus galimas, tačiau kelionės išlaidos į bazinę kainą neįskaičiuotos.</p>
             </div>
         </div>
     </section>
 
-    <section id="paid-order-form" class="container" style="padding-top: 60px; padding-bottom: 100px;">
+    <section id="service-booking" class="container" style="padding-top: 20px; padding-bottom: 100px;">
         <div class="fade-in-up" style="max-width: 800px; margin: 0 auto; background-color: var(--surface-color); padding: 60px 50px; border: 1px solid rgba(17, 57, 57, 0.05); border-radius: 4px; box-shadow: 0 20px 60px rgba(17, 57, 57, 0.03);">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Užsakymo forma</h2>
-                <p style="font-family: var(--font-body); font-weight: 300; color: rgba(26, 43, 43, 0.6); font-size: 1.1rem;">Užpildykite formą ir aš su jumis susisieksiu aptarti detalių.</p>
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Paslaugos Užsakymas</h2>
+                <p style="font-family: var(--font-body); font-weight: 300; color: rgba(26, 43, 43, 0.6); font-size: 1.1rem;">Užpildykite formą. Rezervacija patvirtinama gavus 50% avansą.</p>
             </div>
             
-            <form action="https://formspree.io/f/mgvnbvaw" method="POST" style="display: grid; grid-template-columns: 1fr; gap: 30px;">
-                <input type="hidden" name="Užklausos_tipas" value="Mokamos Paslaugos">
-                
-                <div>
-                    <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Vardas, pavardė *</label>
-                    <input type="text" name="name" required style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; color: var(--text-color); transition: border-color 0.4s var(--cb);" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';">
+            <div id="service-success" style="display:none; text-align: center; padding: 30px 0;">
+                <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; margin-bottom: 15px;">Užklausa sėkmingai išsiųsta!</h3>
+                <p style="font-family: var(--font-body); font-size: 1.1rem;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
+            </div>
+
+            <form id="service-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                    <div>
+                        <label class="field-label" style="margin-top: 0;">Vardas, pavardė *</label>
+                        <input type="text" id="srv-name" class="form-input" required autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="field-label" style="margin-top: 0;">El. paštas *</label>
+                        <input type="email" id="srv-email" class="form-input" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                    <div>
+                        <label class="field-label" style="margin-top: 0;">Telefonas (neprivaloma)</label>
+                        <input type="tel" id="srv-phone" class="form-input" autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis (neprivaloma)</label>
+                        <input type="text" id="srv-social" class="form-input" autocomplete="off">
+                    </div>
                 </div>
 
                 <div>
-                    <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Ko jums reikia? *</label>
-                    <select name="service_type" required style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; color: var(--text-color); transition: border-color 0.4s var(--cb); appearance: none; cursor: pointer;" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';">
-                        <option value="Fotosesija (nuo 20€)">Fotosesija (nuo 20€)</option>
-                        <option value="Filmavimas">Filmavimas</option>
-                        <option value="Fotografija + Video">Fotografija + Video</option>
-                        <option value="Kita">Kita</option>
+                    <label class="field-label" style="margin-top: 0;">Pasirinkite paslaugą *</label>
+                    <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer;">
+                        <option value="" disabled selected>Pasirinkite...</option>
+                        <option value="photo_basic" data-price="10">Fotografija - Basic (nuo 10 €)</option>
+                        <option value="photo_standard" data-price="15">Fotografija - Standard (nuo 15 €)</option>
+                        <option value="photo_extended" data-price="20">Fotografija - Extended / Creative (nuo 20 €)</option>
+                        <option value="video_basic" data-price="10">Videografija - Small creative (nuo 10 €)</option>
+                        <option value="video_complex" data-price="15">Videografija - Complex project (nuo 15 €)</option>
                     </select>
                 </div>
 
-                <div>
-                    <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Data ir vieta *</label>
-                    <input type="text" name="date_location" required placeholder="Pvz: 2026-06-15, Kaunas" style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; color: var(--text-color); transition: border-color 0.4s var(--cb);" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';">
+                <div class="price-calculator" id="price-calc" style="display: none;">
+                    <div class="price-row"><span>Orientacinė kaina:</span> <span id="calc-original">0.00 €</span></div>
+                    <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (<span id="calc-discount-desc"></span>):</span> <span id="calc-discount-val">-0.00 €</span></div>
+                    <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
+                    <div class="price-row deposit"><span>Avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
+                    <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
                 </div>
 
-                <div>
-                    <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Trumpas aprašymas / Idėja *</label>
-                    <textarea name="idea" rows="4" required placeholder="Ką fotografuosime ar filmuosime?" style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; resize: vertical; color: var(--text-color); transition: border-color 0.4s var(--cb);" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';"></textarea>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
                     <div>
-                        <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Kontaktas *</label>
-                        <select name="contact_method" required style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; color: var(--text-color); transition: border-color 0.4s var(--cb); appearance: none; cursor: pointer;" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';">
-                            <option value="El. paštas">El. paštas</option>
-                            <option value="Instagram">Instagram</option>
-                            <option value="Telegram">Telegram</option>
-                            <option value="Telefonas">Telefonas (Skambutis/SMS)</option>
-                        </select>
+                        <label class="field-label" style="margin-top: 0;">Pageidaujama data *</label>
+                        <input type="text" id="srv-date" class="form-input" placeholder="Pasirinkite datą..." required autocomplete="off">
                     </div>
                     <div>
-                        <label style="display: block; font-family: var(--font-heading); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; color: rgba(26, 43, 43, 0.6);">Adresas / Numeris *</label>
-                        <input type="text" name="contact_detail" required style="width: 100%; padding: 18px; border: 1px solid rgba(17, 57, 57, 0.1); background-color: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; border-radius: 2px; color: var(--text-color); transition: border-color 0.4s var(--cb);" onfocus="this.style.borderColor='var(--accent-light)';" onblur="this.style.borderColor='rgba(17, 57, 57, 0.1)';">
+                        <label class="field-label" style="margin-top: 0;">Pageidaujamas laikas *</label>
+                        <input type="time" id="srv-time" class="form-input" required autocomplete="off">
                     </div>
                 </div>
 
-                <button type="submit" style="width: 100%; padding: 22px; background-color: var(--accent-color); color: var(--surface-color); border: none; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; font-size: 0.95rem; cursor: pointer; transition: all 0.4s var(--cb); margin-top: 20px; border-radius: 2px;" onmouseover="this.style.backgroundColor='var(--accent-light)';" onmouseout="this.style.backgroundColor='var(--accent-color)';">Siųsti užklausą</button>
+                <div>
+                    <label class="field-label" style="margin-top: 0;">Lokacija *</label>
+                    <input type="text" id="srv-location" class="form-input" placeholder="Miestas, vieta..." required autocomplete="off">
+                </div>
+
+                <div>
+                    <label class="field-label" style="margin-top: 0;">Papildoma informacija / Idėja *</label>
+                    <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required></textarea>
+                </div>
+
+                <div>
+                    <label class="field-label" style="margin-top: 0;">Apmokėjimo būdas *</label>
+                    <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer;">
+                        <option value="" disabled selected>Pasirinkite...</option>
+                        <option value="Bank Transfer">Bankinis pavedimas</option>
+                        <option value="PayPal">PayPal</option>
+                    </select>
+                    
+                    <div id="info-bank" class="payment-info">
+                        <strong>Banko rekvizitai:</strong><br>
+                        Gavėjas: DOMINIK ŠUŠKEVIČ<br>
+                        Sąskaita: LT867300010171188764<br>
+                        Paskirtis: Avansas už paslaugas (Jūsų vardas)
+                    </div>
+                    <div id="info-paypal" class="payment-info">
+                        <strong>PayPal informacija:</strong><br>
+                        El. paštas: Dominikphotofficial.lt@gmail.com<br>
+                        <em>Pastaba: PayPal automatinis apmokėjimas šiuo metu ruošiamas. Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
+                    </div>
+                </div>
+
+                <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px;">Siųsti užklausą</button>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</p>
+        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
         <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/services.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/services.html">EN</a>
-            <a href="https://pl.dominikphotofficial.lt/services.html">PL</a>
             <a href="https://ru.dominikphotofficial.lt/services.html">RU</a>
-            <a href="https://kr.dominikphotofficial.lt/services.html">KR</a>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
-    <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+    
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { buildEmail } from './email-templates.js';
+
+        const lang = document.documentElement.lang || 'lt';
+
+        const config = {
+            discountEnabled: false,
+            discountType: 'percentage', 
+            discountValue: 10,
+            discountDescription: 'Special offer: 10% off',
+            bankDetails: 'DOMINIK ŠUŠKEVIČ LT867300010171188764',
+            paypalEmail: 'Dominikphotofficial.lt@gmail.com'
+        };
+
+        let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
+
+        flatpickr("#srv-date", { dateFormat: "Y-m-d", minDate: "today", locale: "lt" });
+
+        const srvType = document.getElementById('srv-type');
+        const srvPayment = document.getElementById('srv-payment');
+        const priceCalc = document.getElementById('price-calc');
+
+        srvType.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const basePrice = parseFloat(selectedOption.getAttribute('data-price'));
+            
+            if(basePrice) {
+                let original = basePrice;
+                let discount = 0;
+
+                if(config.discountEnabled) {
+                    if(config.discountType === 'percentage') {
+                        discount = original * (config.discountValue / 100);
+                    } else {
+                        discount = config.discountValue;
+                    }
+                    document.getElementById('row-discount').style.display = 'flex';
+                    document.getElementById('calc-discount-desc').innerText = config.discountDescription;
+                } else {
+                    document.getElementById('row-discount').style.display = 'none';
                 }
-            });
+
+                let finalPrice = original - discount;
+                if(finalPrice < 0) finalPrice = 0;
+                
+                let deposit = finalPrice / 2;
+                let remaining = finalPrice - deposit;
+
+                currentCalculation = { original, discount, final: finalPrice, deposit, remaining };
+
+                document.getElementById('calc-original').innerText = original.toFixed(2) + ' €';
+                document.getElementById('calc-discount-val').innerText = '-' + discount.toFixed(2) + ' €';
+                document.getElementById('calc-final').innerText = finalPrice.toFixed(2) + ' €';
+                document.getElementById('calc-deposit').innerText = deposit.toFixed(2) + ' €';
+                document.getElementById('calc-remaining').innerText = remaining.toFixed(2) + ' €';
+
+                priceCalc.style.display = 'block';
+            }
+        });
+
+        srvPayment.addEventListener('change', function() {
+            document.getElementById('info-bank').classList.remove('active');
+            document.getElementById('info-paypal').classList.remove('active');
+            if(this.value === 'Bank Transfer') document.getElementById('info-bank').classList.add('active');
+            if(this.value === 'PayPal') document.getElementById('info-paypal').classList.add('active');
+        });
+
+        document.getElementById('service-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('srv-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Siunčiama...';
+
+            const selectedOption = srvType.options[srvType.selectedIndex];
+
+            const requestData = {
+                clientName: document.getElementById('srv-name').value,
+                email: document.getElementById('srv-email').value,
+                phone: document.getElementById('srv-phone').value || '',
+                socialProfile: document.getElementById('srv-social').value || '',
+                serviceId: srvType.value,
+                serviceName: selectedOption.text,
+                originalPrice: currentCalculation.original,
+                discount: currentCalculation.discount,
+                finalPrice: currentCalculation.final,
+                depositPercentage: 50,
+                depositAmount: currentCalculation.deposit,
+                remainingAmount: currentCalculation.remaining,
+                paymentMethod: srvPayment.value,
+                preferredDate: document.getElementById('srv-date').value,
+                preferredTime: document.getElementById('srv-time').value,
+                location: document.getElementById('srv-location').value,
+                additionalInformation: document.getElementById('srv-info').value,
+                language: lang,
+                status: 'Pending',
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "service_requests"), requestData);
+                
+                const emailData = buildEmail('ServiceNew', lang, {
+                    name: requestData.clientName,
+                    serviceName: requestData.serviceName,
+                    finalPrice: requestData.finalPrice.toFixed(2),
+                    depositAmount: requestData.depositAmount.toFixed(2),
+                    remainingAmount: requestData.remainingAmount.toFixed(2),
+                    paymentMethod: requestData.paymentMethod,
+                    bankDetails: config.bankDetails,
+                    paypalEmail: config.paypalEmail
+                });
+
+                await addDoc(collection(db, "mail"), {
+                    to: requestData.email,
+                    message: {
+                        subject: emailData.subject,
+                        html: emailData.html
+                    }
+                });
+
+                document.getElementById('service-form').style.display = 'none';
+                document.getElementById('service-success').style.display = 'block';
+                window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
+            } catch (error) {
+                console.error("Klaida:", error);
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Klaida. Bandyti dar kartą';
+            }
         });
     </script>
 </body>
