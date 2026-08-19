@@ -29,22 +29,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ContactPage",
-      "name": "TFP Fotosesijos Registracija",
-      "description": "Nemokamų TFP fotosesijų registracijos forma Kaune.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "DP.PORTFOLIO",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://iili.io/fjNLbs4.png"
-        }
-      }
-    }
-    </script>
 </head>
 <body>
     <div id="preloader" data-nosnippet><div class="loader"></div></div>
@@ -95,24 +79,36 @@
                     <p>Gavau jūsų užklausą. Peržiūrėsiu jūsų idėjas ir netrukus su jumis susisieksiu patikslinti detalių. Jei turite skubių klausimų, galite man parašyti tiesiogiai į socialinius tinklus.</p>
                 </div>
                 
-                <form action="https://formspree.io/f/mgvnbvaw" method="POST" id="tfp-booking-form">
-                    <label class="field-label">Vardas ir Pavardė *</label>
-                    <input type="text" name="name" class="form-input" required autocomplete="off">
-                    
-                    <label class="field-label">Telefono numeris *</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="+370" required autocomplete="off">
-                    
-                    <label class="field-label">Pageidaujama data ir laikas *</label>
-                    <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Paspauskite, kad pasirinkti kalendoriuje..." required autocomplete="off">
-                    
-                    <label class="field-label">Kurioje Kauno vietoje norėtumėte fotografuotis? *</label>
-                    <input type="text" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
-                    
-                    <label class="field-label">Nuorodos į referencus (Pinterest/Instagram)</label>
-                    <textarea name="references" class="form-input" rows="3" placeholder="Įklijuokite nuorodą į savo idėjų moodboard'ą..."></textarea>
-                    
-                    <button type="submit" class="cta-button">Siųsti užklausą</button>
-                </form>
+                <div id="form-container">
+                    <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1);">
+                        Prisijungti su Google (Auto-užpildymas)
+                    </button>
+
+                    <form id="tfp-firebase-form">
+                        <label class="field-label">Vardas ir Pavardė *</label>
+                        <input type="text" id="tfp-name" name="name" class="form-input" required autocomplete="off">
+                        
+                        <label class="field-label">El. paštas *</label>
+                        <input type="email" id="tfp-email" name="email" class="form-input" required autocomplete="off">
+
+                        <label class="field-label">Instagram / Socialinis tinklas *</label>
+                        <input type="text" id="tfp-instagram" name="instagram" class="form-input" placeholder="@jusu_profilis" required autocomplete="off">
+                        
+                        <label class="field-label">Pageidaujama data ir laikas *</label>
+                        <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Paspauskite, kad pasirinkti kalendoriuje..." required autocomplete="off">
+                        
+                        <label class="field-label">Pageidaujama vieta (Kur fotografuosimės?) *</label>
+                        <input type="text" id="tfp-location" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
+                        
+                        <label class="field-label">Fotosesijos idėja *</label>
+                        <textarea id="tfp-idea" name="idea" class="form-input" rows="3" placeholder="Aprašykite savo viziją..." required></textarea>
+
+                        <label class="field-label">Papildoma informacija / Nuorodos į referencus</label>
+                        <textarea id="tfp-extra" name="extra_info" class="form-input" rows="2" placeholder="Pinterest/Instagram nuorodos arba kita svarbi informacija..."></textarea>
+                        
+                        <button type="submit" id="submit-btn" class="cta-button">Siųsti užklausą</button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -129,6 +125,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             flatpickr("#datetime-picker", {
@@ -139,6 +136,66 @@
                 disableMobile: true,
                 locale: "lt"
             });
+        });
+    </script>
+
+    <script type="module">
+        import { db, auth, googleProvider } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { buildEmail } from './email-templates.js';
+
+        const lang = document.documentElement.lang || 'lt';
+
+        document.getElementById('google-login-btn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                if(result.user.displayName) document.getElementById('tfp-name').value = result.user.displayName;
+                if(result.user.email) document.getElementById('tfp-email').value = result.user.email;
+            } catch (error) {
+                console.error("Prisijungimo klaida:", error);
+            }
+        });
+
+        document.getElementById('tfp-firebase-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Siunčiama...';
+
+            const requestData = {
+                name: document.getElementById('tfp-name').value,
+                email: document.getElementById('tfp-email').value,
+                instagram: document.getElementById('tfp-instagram').value,
+                date_time: document.getElementById('datetime-picker').value,
+                location: document.getElementById('tfp-location').value,
+                idea: document.getElementById('tfp-idea').value,
+                extra_info: document.getElementById('tfp-extra').value,
+                language: lang,
+                status: 'New',
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "tfp_requests"), requestData);
+                
+                const emailData = buildEmail('New', lang, requestData);
+                await addDoc(collection(db, "mail"), {
+                    to: requestData.email,
+                    message: {
+                        subject: emailData.subject,
+                        html: emailData.html
+                    }
+                });
+
+                document.getElementById('form-container').style.display = 'none';
+                document.getElementById('success-display').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error("Klaida siunčiant užklausą: ", error);
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Įvyko klaida. Bandyti dar kartą';
+            }
         });
     </script>
 </body>
