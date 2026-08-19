@@ -125,7 +125,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -141,6 +141,10 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // TELEGRAM NUSTATYMAI
+        const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
+        const chatId = "7040523282";
 
         const templates = {
             lt: {
@@ -186,14 +190,16 @@
 
         const lang = document.documentElement.lang || 'lt';
 
-        document.getElementById('google-login-btn').addEventListener('click', async () => {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
+        // Pakeista į signInWithRedirect
+        getRedirectResult(auth).then((result) => {
+            if (result && result.user) {
                 if(result.user.displayName) document.getElementById('tfp-name').value = result.user.displayName;
                 if(result.user.email) document.getElementById('tfp-email').value = result.user.email;
-            } catch (error) {
-                console.error(error);
             }
+        }).catch((error) => console.error(error));
+
+        document.getElementById('google-login-btn').addEventListener('click', () => {
+            signInWithRedirect(auth, googleProvider);
         });
 
         document.getElementById('tfp-firebase-form').addEventListener('submit', async (e) => {
@@ -216,12 +222,23 @@
             };
 
             try {
+                // 1. Išsaugome į Firebase
                 await addDoc(collection(db, "tfp_requests"), requestData);
+                
+                // 2. Siunčiame el. laišką
                 const emailData = buildEmail('New', lang, requestData);
                 await addDoc(collection(db, "mail"), {
                     to: requestData.email,
                     message: { subject: emailData.subject, html: emailData.html }
                 });
+
+                // 3. Siunčiame pranešimą į Telegram
+                const tgMessage = `🔥 NAUJA TFP UŽKLAUSA!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${requestData.instagram}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}`;
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: tgMessage })
+                }).catch(err => console.error("Telegram error:", err));
 
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-display').style.display = 'block';
