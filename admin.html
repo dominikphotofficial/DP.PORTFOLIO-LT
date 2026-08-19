@@ -1,4 +1,3 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -9,14 +8,23 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .admin-container { max-width: 1400px; margin: 100px auto; padding: 20px; }
-        .request-card { background: var(--surface-color); padding: 20px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .req-header { display: flex; justify-content: space-between; font-family: var(--font-heading); margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; }
-        .req-body { font-family: var(--font-body); font-size: 1rem; color: var(--text-color); }
-        .req-body p { margin-bottom: 8px; }
-        .admin-select { padding: 10px; font-family: var(--font-body); border: 1px solid var(--accent-color); outline: none; width: 100%; max-width: 300px; margin-top: 5px; }
-        .admin-btn { padding: 15px 25px; background: var(--accent-color); color: var(--bg-color); border: none; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; transition: all 0.3s; }
-        .admin-btn:hover { opacity: 0.9; }
+        .request-card { background: var(--surface-color); padding: 30px; margin-bottom: 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(17, 57, 57, 0.05); border: 1px solid rgba(17, 57, 57, 0.05); }
+        .req-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-heading); margin-bottom: 20px; border-bottom: 1px solid rgba(17, 57, 57, 0.1); padding-bottom: 15px; font-size: 1.2rem; }
+        .req-body { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); }
+        .req-body p { margin-bottom: 12px; line-height: 1.6; }
+        .admin-select { padding: 12px; font-family: var(--font-body); border: 1px solid rgba(17, 57, 57, 0.2); outline: none; width: 100%; max-width: 100%; margin-top: 5px; background: transparent; color: var(--text-color); transition: border-color 0.3s; }
+        .admin-select:focus { border-color: var(--accent-color); }
+        .req-actions { margin-top: 25px; display: flex; gap: 15px; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 20px; }
+        .admin-btn { padding: 15px 30px; background: var(--accent-color); color: var(--bg-color); border: 1px solid var(--accent-color); cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
+        .admin-btn:hover { background: transparent; color: var(--accent-color); }
+        .admin-btn-delete { padding: 15px 30px; background: transparent; color: #d9534f; border: 1px solid #d9534f; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
+        .admin-btn-delete:hover { background: #d9534f; color: #fff; }
         #auth-section { text-align: center; margin-top: 150px; }
+        @media (max-width: 768px) {
+            .req-body { grid-template-columns: 1fr; gap: 15px; }
+            .req-actions { flex-direction: column; }
+            .admin-btn, .admin-btn-delete { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -33,17 +41,17 @@
     </div>
 
     <div id="dashboard-section" class="admin-container" style="display:none;">
-        <h1 style="font-family: var(--font-heading); margin-bottom: 30px;">TFP Užklausos</h1>
+        <h1 style="font-family: var(--font-heading); margin-bottom: 40px; font-size: 2.5rem; font-weight: 300; letter-spacing: 4px;">TFP Užklausos</h1>
         <div id="requests-list"></div>
     </div>
 
     <script type="module">
         import { db, auth, googleProvider } from './firebase-config.js';
-        import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { buildEmail } from './email-templates.js';
 
-        const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
+        const ADMIN_EMAIL = "dominikphotofficial@gmail.com"; 
 
         const authSection = document.getElementById('auth-section');
         const dashboardSection = document.getElementById('dashboard-section');
@@ -83,26 +91,32 @@
                     
                     reqDiv.innerHTML = `
                         <div class="req-header">
-                            <strong>${data.name} (${data.language.toUpperCase()})</strong>
-                            <span>Statusas: <strong style="color: var(--accent-light);">${data.status}</strong></span>
+                            <strong>${data.name} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
+                            <span>Statusas: <strong style="color: var(--accent-light); letter-spacing: 1px;">${data.status}</strong></span>
                         </div>
                         <div class="req-body">
-                            <p><b>El. paštas:</b> ${data.email}</p>
-                            <p><b>Instagram:</b> ${data.instagram}</p>
-                            <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
-                            <p><b>Vieta:</b><br><input type="text" id="loc-${docSnap.id}" value="${data.location}" class="admin-select"></p>
-                            <p><b>Idėja:</b> ${data.idea}</p>
-                            <p><b>Papildomai:</b> ${data.extra_info}</p>
-                            <br>
-                            <p><b>Keisti statusą:</b><br>
-                            <select id="status-${docSnap.id}" class="admin-select">
-                                <option value="New" ${data.status === 'New' ? 'selected' : ''}>New</option>
-                                <option value="Confirmed" ${data.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                <option value="Rescheduled" ${data.status === 'Rescheduled' ? 'selected' : ''}>Rescheduled</option>
-                                <option value="Cancelled" ${data.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                <option value="Completed" ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                            </select></p>
+                            <div>
+                                <p><b>El. paštas:</b><br>${data.email}</p>
+                                <p><b>Instagram:</b><br>${data.instagram}</p>
+                                <p><b>Idėja:</b><br>${data.idea}</p>
+                                <p><b>Papildomai:</b><br>${data.extra_info || '-'}</p>
+                            </div>
+                            <div>
+                                <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
+                                <p><b>Vieta:</b><br><input type="text" id="loc-${docSnap.id}" value="${data.location}" class="admin-select"></p>
+                                <p><b>Keisti statusą:</b><br>
+                                <select id="status-${docSnap.id}" class="admin-select">
+                                    <option value="New" ${data.status === 'New' ? 'selected' : ''}>New</option>
+                                    <option value="Confirmed" ${data.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                                    <option value="Rescheduled" ${data.status === 'Rescheduled' ? 'selected' : ''}>Rescheduled</option>
+                                    <option value="Cancelled" ${data.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                    <option value="Completed" ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                </select></p>
+                            </div>
+                        </div>
+                        <div class="req-actions">
                             <button class="admin-btn" onclick="updateRequest('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Išsaugoti ir Išsiųsti laišką</button>
+                            <button class="admin-btn-delete" onclick="deleteRequest('${docSnap.id}')">Ištrinti užklausą</button>
                         </div>
                     `;
                     list.appendChild(reqDiv);
@@ -142,6 +156,17 @@
             } catch(e) {
                 console.error(e);
                 alert("Klaida atnaujinant.");
+            }
+        };
+
+        window.deleteRequest = async (id) => {
+            if (confirm("Ar tikrai norite ištrinti šią užklausą? Šio veiksmo atšaukti negalima.")) {
+                try {
+                    await deleteDoc(doc(db, "tfp_requests", id));
+                } catch(e) {
+                    console.error(e);
+                    alert("Klaida trinant užklausą.");
+                }
             }
         };
     </script>
