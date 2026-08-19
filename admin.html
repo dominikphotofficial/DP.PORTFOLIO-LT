@@ -61,11 +61,11 @@
         </div>
 
         <div id="tfp-tab" class="tab-content active">
-            <div id="tfp-list"></div>
+            <div id="tfp-list">Kraunama...</div>
         </div>
 
         <div id="services-tab" class="tab-content">
-            <div id="services-list"></div>
+            <div id="services-list">Kraunama...</div>
         </div>
     </div>
 
@@ -88,20 +88,79 @@
     </div>
 
     <script type="module">
-        import { db, auth, googleProvider } from './firebase-config.js';
-        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+
+        // FIREBASE NUSTATYMAI
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
+
+        // ŠABLONAI
+        const templates = {
+            lt: {
+                Confirmed: {
+                    subject: "DP.PORTFOLIO | TFP Fotosesija Patvirtinta",
+                    html: `<div style="font-family: sans-serif; color: #1A2B2B;"><h2>Sveiki, {{name}}!</h2><p>Jūsų TFP fotosesija patvirtinta.</p><p>Data: {{date_time}}</p><p>Vieta: {{location}}</p></div>`
+                },
+                Rescheduled: {
+                    subject: "DP.PORTFOLIO | TFP Fotosesijos laikas pakeistas",
+                    html: `<div style="font-family: sans-serif; color: #1A2B2B;"><h2>Sveiki, {{name}}!</h2><p>Siūlome naują laiką fotosesijai.</p><p>Nauja data: {{date_time}}</p></div>`
+                },
+                Cancelled: {
+                    subject: "DP.PORTFOLIO | TFP Fotosesija Atšaukta",
+                    html: `<div style="font-family: sans-serif; color: #1A2B2B;"><h2>Sveiki, {{name}}!</h2><p>Apgailestaujame, bet jūsų fotosesija atšaukta.</p></div>`
+                },
+                Completed: {
+                    subject: "DP.PORTFOLIO | TFP Fotosesija Baigta",
+                    html: `<div style="font-family: sans-serif; color: #1A2B2B;"><h2>Sveiki, {{name}}!</h2><p>Ačiū už puikią fotosesiją!</p></div>`
+                },
+                ServiceStatusUpdate: {
+                    subject: "DP.PORTFOLIO | Paslaugos užsakymo atnaujinimas",
+                    html: `<div style="font-family: sans-serif; color: #1A2B2B;"><h2>Sveiki, {{name}}!</h2><p>Jūsų užsakymo ({{serviceName}}) statusas pasikeitė į: <b>{{status}}</b>.</p></div>`
+                }
+            }
+        };
+
+        function buildEmail(templateType, lang, data) {
+            const safeLang = templates[lang] ? lang : 'lt';
+            let subject = templates[safeLang][templateType]?.subject || "DP.PORTFOLIO Pranešimas";
+            let html = templates[safeLang][templateType]?.html || "<p>Sveiki, turime atnaujinimų dėl jūsų užklausos.</p>";
+            for (const key in data) {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                html = html.replace(regex, data[key] || '');
+                subject = subject.replace(regex, data[key] || '');
+            }
+            return { subject, html };
+        }
 
         const authSection = document.getElementById('auth-section');
         const dashboardSection = document.getElementById('dashboard-section');
         const logoutBtn = document.getElementById('logout-btn');
         let pendingEmailData = null;
 
+        // Apdorojame grįžimą po Google prisijungimo
+        getRedirectResult(auth).catch((error) => {
+            console.error("Prisijungimo klaida:", error);
+            alert("Klaida prisijungiant: " + error.message);
+        });
+
         document.getElementById('admin-login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, googleProvider);
+            signInWithRedirect(auth, googleProvider);
         });
 
         logoutBtn.addEventListener('click', () => signOut(auth));
@@ -114,7 +173,7 @@
                 loadTFPRequests();
                 loadServiceRequests();
             } else if (user) {
-                alert("Priėjimas uždraustas.");
+                alert("Priėjimas uždraustas. Jūs nesate administratorius.");
                 signOut(auth);
             } else {
                 authSection.style.display = 'block';
@@ -141,13 +200,17 @@
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('tfp-list');
                 list.innerHTML = '';
+                if(snapshot.empty) {
+                    list.innerHTML = '<p style="padding: 20px; opacity: 0.7;">TFP užklausų kol kas nėra.</p>';
+                    return;
+                }
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     const reqDiv = document.createElement('div');
                     reqDiv.className = 'request-card';
                     reqDiv.innerHTML = `
                         <div class="req-header">
-                            <strong>${data.name} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
+                            <strong>${data.name} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language ? data.language.toUpperCase() : 'LT'})</span></strong>
                             <span>Statusas: <strong style="color: var(--accent-light); letter-spacing: 1px;">${data.status}</strong></span>
                         </div>
                         <div class="req-body">
@@ -171,13 +234,16 @@
                             </div>
                         </div>
                         <div class="req-actions">
-                            <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
+                            <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language || 'lt'}', '${data.email}', '${data.name}', '${(data.idea || '').replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('tfp_requests', '${docSnap.id}', '')">Tik Išsaugoti</button>
                             <button class="admin-btn-delete" onclick="deleteDocRecord('tfp_requests', '${docSnap.id}')">Ištrinti</button>
                         </div>
                     `;
                     list.appendChild(reqDiv);
                 });
+            }, (error) => {
+                console.error("Klaida gaunant TFP:", error);
+                document.getElementById('tfp-list').innerHTML = `<p style="color: red;">Klaida kraunant duomenis: ${error.message}</p>`;
             });
         }
 
@@ -186,13 +252,17 @@
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('services-list');
                 list.innerHTML = '';
+                if(snapshot.empty) {
+                    list.innerHTML = '<p style="padding: 20px; opacity: 0.7;">Paslaugų užklausų kol kas nėra.</p>';
+                    return;
+                }
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     const reqDiv = document.createElement('div');
                     reqDiv.className = 'request-card';
                     reqDiv.innerHTML = `
                         <div class="req-header">
-                            <strong>${data.clientName} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
+                            <strong>${data.clientName} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language ? data.language.toUpperCase() : 'LT'})</span></strong>
                             <span>Statusas: <strong style="color: var(--accent-light); letter-spacing: 1px;">${data.status}</strong></span>
                         </div>
                         <div class="req-body">
@@ -205,7 +275,7 @@
                             </div>
                             <div>
                                 <p><b>Kaina:</b> ${data.finalPrice} € (Avansas: ${data.depositAmount} €)</p>
-                                <p><b>Data:</b><br><input type="text" id="srv-dt-${docSnap.id}" value="${data.preferredDate} ${data.preferredTime}" class="admin-select"></p>
+                                <p><b>Data:</b><br><input type="text" id="srv-dt-${docSnap.id}" value="${data.preferredDate} ${data.preferredTime || ''}" class="admin-select"></p>
                                 <p><b>Vieta:</b><br><input type="text" id="srv-loc-${docSnap.id}" value="${data.location}" class="admin-select"></p>
                                 <p><b>Keisti statusą:</b><br>
                                 <select id="srv-status-${docSnap.id}" class="admin-select">
@@ -220,13 +290,16 @@
                             </div>
                         </div>
                         <div class="req-actions">
-                            <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}')">Peržiūrėti ir Siųsti laišką</button>
+                            <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language || 'lt'}', '${data.email}', '${data.clientName}', '${data.serviceName}')">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('service_requests', '${docSnap.id}', 'srv-')">Tik Išsaugoti</button>
                             <button class="admin-btn-delete" onclick="deleteDocRecord('service_requests', '${docSnap.id}')">Ištrinti</button>
                         </div>
                     `;
                     list.appendChild(reqDiv);
                 });
+            }, (error) => {
+                console.error("Klaida gaunant Paslaugas:", error);
+                document.getElementById('services-list').innerHTML = `<p style="color: red;">Klaida kraunant duomenis: ${error.message}</p>`;
             });
         }
 
