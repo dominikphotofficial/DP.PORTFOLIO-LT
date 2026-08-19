@@ -2,111 +2,51 @@ export const templates = {
     lt: {
         New: {
             subject: "DP.PORTFOLIO | TFP Užklausa gauta",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}}!</h2>
-                    <p>Ačiū, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų TFP fotosesijos užklausą!</p>
-                    <p>Artimiausiu metu atidžiai peržiūrėsime jūsų idėją ir susisieksime su jumis, kad aptartume detales.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Jūsų pateikta informacija:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                        <p style="margin: 0 0 5px 0;"><b>Vieta:</b> {{location}}</p>
-                        <p style="margin: 0;"><b>Idėja:</b> {{idea}}</p>
-                    </div>
-                    <p>Jei turite papildomų klausimų ar norite kažką patikslinti, drąsiai rašykite mums.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Sveiki, {{name}},</p><p>Gavome jūsų TFP fotosesijos užklausą. Artimiausiu metu ją peržiūrėsime ir susisieksime su jumis.</p><p><b>Detalės:</b><br>Data ir laikas: {{date_time}}<br>Vieta: {{location}}<br>Idėja: {{idea}}</p><p>Pagarbiai,<br>Dominik Šuškevič</p>"
         },
         Confirmed: {
             subject: "DP.PORTFOLIO | TFP Fotosesija patvirtinta!",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Puikios naujienos, {{name}}!</h2>
-                    <p>Mums labai patiko jūsų idėja, todėl su džiaugsmu patvirtiname jūsų TFP fotosesiją!</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Susitikimo detalės:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Vieta:</b> {{location}}</p>
-                    </div>
-                    <p>Nekantraujame pradėti kurti kartu. Jei turite kokių nors klausimų prieš fotosesiją, būtinai susisiekite.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Sveiki, {{name}},</p><p>Puikios naujienos! Jūsų TFP fotosesijos idėja patvirtinta.</p><p><b>Susitinkame:</b><br>Data ir laikas: {{date_time}}<br>Vieta: {{location}}</p><p>Iki greito!</p>"
         },
         Rescheduled: {
             subject: "DP.PORTFOLIO | TFP Fotosesijos laikas pakeistas",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}},</h2>
-                    <p>Norime informuoti, kad turėjome šiek tiek pakoreguoti jūsų TFP fotosesijos laiką arba vietą.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Nauja informacija:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Vieta:</b> {{location}}</p>
-                    </div>
-                    <p>Jei šis naujas laikas jums netinka, prašome atsakyti į šį laišką ir nurodyti, kuriomis dienomis esate laisvi – mes būtinai rasime jums patogų variantą.</p>
-                    <p>Nuoširdžiai dėkojame už jūsų supratingumą ir lankstumą!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Sveiki, {{name}},</p><p>Jūsų TFP fotosesijos laikas arba vieta buvo atnaujinta.</p><p><b>Nauja informacija:</b><br>Data ir laikas: {{date_time}}<br>Vieta: {{location}}</p><p>Jei turite klausimų, susisiekite.</p>"
         },
         Cancelled: {
             subject: "DP.PORTFOLIO | TFP Fotosesija atšaukta",
+            html: "<p>Sveiki, {{name}},</p><p>Atsiprašome, bet šiuo metu jūsų TFP fotosesija yra atšaukta. Susisieksime su jumis, jei atsiras laisvų vietų ateityje.</p><p>Ačiū už jūsų supratingumą.</p>"
+        },
+        Completed: {
+            subject: "DP.PORTFOLIO | Ačiū už fotosesiją!",
+            html: "<p>Sveiki, {{name}},</p><p>Ačiū už puikią TFP fotosesiją! Nuotraukas atsiųsime, kai tik jos bus paruoštos.</p><p>Iki kitų kartų!</p>"
+        },
+        ServiceNew: {
+            subject: "DP.PORTFOLIO | Paslaugos užklausa gauta",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}},</h2>
-                    <p>Apgailestaujame, tačiau dėl nenumatytų aplinkybių turime atšaukti jūsų TFP fotosesiją.</p>
-                    <p>Labai vertiname jūsų norą bendradarbiauti ir tikimės, kad ateityje turėsime progą sukurti kažką gražaus kartu.</p>
-                    <p>Ačiū už jūsų supratingumą.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Sveiki, {{name}},</h2>
+                    <p>Gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
+                    <div style="background: #FBF9F6; padding: 15px; border-left: 3px solid #113939; margin: 20px 0;">
+                        <p><b>Bendra kaina:</b> {{finalPrice}} €</p>
+                        <p><b>Avansas (50%):</b> {{depositAmount}} €</p>
+                        <p><b>Likutis po atlikimo:</b> {{remainingAmount}} €</p>
+                        <p><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
+                    </div>
+                    <p>Jei pasirinkote bankinį pavedimą, rekvizitai: {{bankDetails}}</p>
+                    <p>Jei pasirinkote PayPal: {{paypalEmail}}</p>
+                    <p>Susisieksime su jumis netrukus, kad patvirtintume detales. Avansą prašome pervesti tik po galutinio patvirtinimo.</p>
+                    <p>Pagarbiai,<br>DP.PORTFOLIO</p>
                 </div>
             `
         },
-        Completed: {
-            subject: "DP.PORTFOLIO | Ačiū už nuostabią fotosesiją!",
+        ServiceStatusUpdate: {
+            subject: "DP.PORTFOLIO | Jūsų užsakymo statusas atnaujintas",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}}!</h2>
-                    <p>Didelis ačiū už jūsų laiką, pastangas ir puikią nuotaiką fotosesijos metu. Tikimės, kad procesas jums patiko taip pat, kaip ir mums!</p>
-                    <p>Šiuo metu jau dirbame prie jūsų nuotraukų redagavimo. Kai tik jos bus paruoštos, atsiųsime jums nuorodą.</p>
-                    <p>Labai tikimės, kad galutinis rezultatas jums patiks ir viršys lūkesčius!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Sveiki, {{name}},</h2>
+                    <p>Jūsų užsakymo ({{serviceName}}) statusas pasikeitė į: <strong>{{status}}</strong>.</p>
+                    <p>Jei turite klausimų, susisiekite su mumis atsakydami į šį laišką.</p>
+                    <p>Pagarbiai,<br>DP.PORTFOLIO</p>
                 </div>
             `
         }
@@ -114,111 +54,51 @@ export const templates = {
     en: {
         New: {
             subject: "DP.PORTFOLIO | TFP Request Received",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Hello, {{name}}!</h2>
-                    <p>Thank you for reaching out and sharing your creative vision with us. We have successfully received your TFP photoshoot request!</p>
-                    <p>We will carefully review your idea and get back to you shortly to discuss the details.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Your Request Details:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Date & Time:</b> {{date_time}}</p>
-                        <p style="margin: 0 0 5px 0;"><b>Location:</b> {{location}}</p>
-                        <p style="margin: 0;"><b>Idea:</b> {{idea}}</p>
-                    </div>
-                    <p>If you have any additional questions or want to clarify anything, feel free to reply to this email.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://en.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">en.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Hello {{name}},</p><p>We have received your TFP photoshoot request. We will review it and get back to you shortly.</p><p><b>Details:</b><br>Date & Time: {{date_time}}<br>Location: {{location}}<br>Idea: {{idea}}</p><p>Best regards,<br>Dominik Šuškevič</p>"
         },
         Confirmed: {
             subject: "DP.PORTFOLIO | TFP Photoshoot Confirmed!",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Great news, {{name}}!</h2>
-                    <p>We absolutely loved your idea and are thrilled to confirm your TFP photoshoot!</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Meeting Details:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Date & Time:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Location:</b> {{location}}</p>
-                    </div>
-                    <p>We can't wait to start creating together. If you have any questions before the shoot, just let us know.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://en.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">en.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Hello {{name}},</p><p>Great news! Your TFP photoshoot idea has been confirmed.</p><p><b>Meeting details:</b><br>Date & Time: {{date_time}}<br>Location: {{location}}</p><p>See you soon!</p>"
         },
         Rescheduled: {
             subject: "DP.PORTFOLIO | TFP Photoshoot Rescheduled",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Hello, {{name}},</h2>
-                    <p>We wanted to let you know that we had to make a slight adjustment to the time or location of your TFP photoshoot.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>New Details:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Date & Time:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Location:</b> {{location}}</p>
-                    </div>
-                    <p>If this new time doesn't work for you, please reply to this email and let us know what days you are free. We will do our best to find the perfect time for you.</p>
-                    <p>Thank you so much for your understanding and flexibility!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://en.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">en.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Hello {{name}},</p><p>Your TFP photoshoot time or location has been updated.</p><p><b>New details:</b><br>Date & Time: {{date_time}}<br>Location: {{location}}</p><p>If you have any questions, feel free to contact me.</p>"
         },
         Cancelled: {
             subject: "DP.PORTFOLIO | TFP Photoshoot Cancelled",
+            html: "<p>Hello {{name}},</p><p>We apologize, but your TFP photoshoot has been cancelled at this time. We will let you know if any spots open up in the future.</p><p>Thank you for understanding.</p>"
+        },
+        Completed: {
+            subject: "DP.PORTFOLIO | Thank you for the photoshoot!",
+            html: "<p>Hello {{name}},</p><p>Thank you for a great TFP photoshoot! The photos will be sent to you as soon as they are ready.</p><p>Until next time!</p>"
+        },
+        ServiceNew: {
+            subject: "DP.PORTFOLIO | Service Request Received",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Hello, {{name}},</h2>
-                    <p>We sincerely apologize, but due to unforeseen circumstances, we have to cancel your TFP photoshoot at this time.</p>
-                    <p>We truly appreciate your interest in collaborating with us and hope we will have the opportunity to create something beautiful together in the future.</p>
-                    <p>Thank you for your understanding.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://en.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">en.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Hello {{name}},</h2>
+                    <p>We have received your request for: <strong>{{serviceName}}</strong>.</p>
+                    <div style="background: #FBF9F6; padding: 15px; border-left: 3px solid #113939; margin: 20px 0;">
+                        <p><b>Total Price:</b> €{{finalPrice}}</p>
+                        <p><b>Deposit (50%):</b> €{{depositAmount}}</p>
+                        <p><b>Remaining Balance:</b> €{{remainingAmount}}</p>
+                        <p><b>Selected Payment Method:</b> {{paymentMethod}}</p>
+                    </div>
+                    <p>If Bank Transfer: {{bankDetails}}</p>
+                    <p>If PayPal: {{paypalEmail}}</p>
+                    <p>We will contact you shortly to confirm the details. Please transfer the deposit only after final confirmation.</p>
+                    <p>Best regards,<br>DP.PORTFOLIO</p>
                 </div>
             `
         },
-        Completed: {
-            subject: "DP.PORTFOLIO | Thank you for the amazing photoshoot!",
+        ServiceStatusUpdate: {
+            subject: "DP.PORTFOLIO | Order Status Updated",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Hello, {{name}}!</h2>
-                    <p>A huge thank you for your time, effort, and great energy during the photoshoot. We hope you enjoyed the process as much as we did!</p>
-                    <p>We are currently working on editing your photos. As soon as they are ready, we will send you a link to download them.</p>
-                    <p>We really hope you will love the final result!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://en.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">en.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Hello {{name}},</h2>
+                    <p>Your order ({{serviceName}}) status has been updated to: <strong>{{status}}</strong>.</p>
+                    <p>If you have any questions, please reply to this email.</p>
+                    <p>Best regards,<br>DP.PORTFOLIO</p>
                 </div>
             `
         }
@@ -226,111 +106,51 @@ export const templates = {
     ru: {
         New: {
             subject: "DP.PORTFOLIO | Заявка TFP получена",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Здравствуйте, {{name}}!</h2>
-                    <p>Спасибо, что поделились своей творческой идеей. Мы успешно получили вашу заявку на TFP фотосессию!</p>
-                    <p>В ближайшее время мы внимательно изучим вашу идею и свяжемся с вами для обсуждения деталей.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Детали вашей заявки:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Дата и время:</b> {{date_time}}</p>
-                        <p style="margin: 0 0 5px 0;"><b>Место:</b> {{location}}</p>
-                        <p style="margin: 0;"><b>Идея:</b> {{idea}}</p>
-                    </div>
-                    <p>Если у вас есть дополнительные вопросы или вы хотите что-то уточнить, смело пишите нам в ответ на это письмо.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://ru.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">ru.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Здравствуйте, {{name}},</p><p>Мы получили вашу заявку на TFP фотосессию. В ближайшее время мы её рассмотрим и свяжемся с вами.</p><p><b>Детали:</b><br>Дата и время: {{date_time}}<br>Место: {{location}}<br>Идея: {{idea}}</p><p>С уважением,<br>Dominik Šuškevič</p>"
         },
         Confirmed: {
             subject: "DP.PORTFOLIO | TFP Фотосессия подтверждена!",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Отличные новости, {{name}}!</h2>
-                    <p>Нам безумно понравилась ваша идея, и мы с радостью подтверждаем вашу TFP фотосессию!</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Детали встречи:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Дата и время:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Место:</b> {{location}}</p>
-                    </div>
-                    <p>С нетерпением ждем начала совместного творчества. Если у вас возникнут вопросы до съемки, обязательно дайте знать.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://ru.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">ru.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Здравствуйте, {{name}},</p><p>Отличные новости! Ваша идея для TFP фотосессии подтверждена.</p><p><b>Встречаемся:</b><br>Дата и время: {{date_time}}<br>Место: {{location}}</p><p>До скорой встречи!</p>"
         },
         Rescheduled: {
             subject: "DP.PORTFOLIO | Время TFP фотосессии изменено",
-            html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Здравствуйте, {{name}},</h2>
-                    <p>Хотим сообщить, что нам пришлось немного скорректировать время или место вашей TFP фотосессии.</p>
-                    <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                        <p style="margin: 0 0 10px 0;"><b>Новая информация:</b></p>
-                        <p style="margin: 0 0 5px 0;"><b>Дата и время:</b> {{date_time}}</p>
-                        <p style="margin: 0;"><b>Место:</b> {{location}}</p>
-                    </div>
-                    <p>Если это новое время вам не подходит, пожалуйста, ответьте на это письмо и напишите, в какие дни вы свободны. Мы обязательно подберем идеальный для вас вариант.</p>
-                    <p>Огромное спасибо за ваше понимание и гибкость!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://ru.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">ru.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            `
+            html: "<p>Здравствуйте, {{name}},</p><p>Время или место вашей TFP фотосессии было обновлено.</p><p><b>Новая информация:</b><br>Дата и время: {{date_time}}<br>Место: {{location}}</p><p>Если у вас есть вопросы, свяжитесь со мной.</p>"
         },
         Cancelled: {
             subject: "DP.PORTFOLIO | TFP Фотосессия отменена",
+            html: "<p>Здравствуйте, {{name}},</p><p>Сожалеем, но ваша TFP фотосессия на данный момент отменена. Мы свяжемся с вами, если появятся свободные места в будущем.</p><p>Спасибо за понимание.</p>"
+        },
+        Completed: {
+            subject: "DP.PORTFOLIO | Спасибо за фотосессию!",
+            html: "<p>Здравствуйте, {{name}},</p><p>Спасибо за отличную TFP фотосессию! Фотографии будут отправлены вам, как только они будут готовы.</p><p>До новых встреч!</p>"
+        },
+        ServiceNew: {
+            subject: "DP.PORTFOLIO | Заявка на услуги получена",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Здравствуйте, {{name}},</h2>
-                    <p>Приносим свои извинения, но из-за непредвиденных обстоятельств мы вынуждены отменить вашу TFP фотосессию на данный момент.</p>
-                    <p>Мы очень ценим ваше желание сотрудничать и надеемся, что в будущем у нас появится возможность создать что-то красивое вместе.</p>
-                    <p>Спасибо за ваше понимание.</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://ru.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">ru.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Здравствуйте, {{name}},</h2>
+                    <p>Мы получили вашу заявку на услугу: <strong>{{serviceName}}</strong>.</p>
+                    <div style="background: #FBF9F6; padding: 15px; border-left: 3px solid #113939; margin: 20px 0;">
+                        <p><b>Общая стоимость:</b> €{{finalPrice}}</p>
+                        <p><b>Аванс (50%):</b> €{{depositAmount}}</p>
+                        <p><b>Остаток:</b> €{{remainingAmount}}</p>
+                        <p><b>Способ оплаты:</b> {{paymentMethod}}</p>
+                    </div>
+                    <p>Реквизиты банка: {{bankDetails}}</p>
+                    <p>PayPal: {{paypalEmail}}</p>
+                    <p>Мы свяжемся с вами в ближайшее время для подтверждения. Пожалуйста, вносите аванс только после окончательного подтверждения.</p>
+                    <p>С уважением,<br>DP.PORTFOLIO</p>
                 </div>
             `
         },
-        Completed: {
-            subject: "DP.PORTFOLIO | Спасибо за потрясающую фотосессию!",
+        ServiceStatusUpdate: {
+            subject: "DP.PORTFOLIO | Статус заказа обновлен",
             html: `
-                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Здравствуйте, {{name}}!</h2>
-                    <p>Огромное спасибо за ваше время, старания и отличную атмосферу во время фотосессии. Надеемся, вам понравился процесс так же сильно, как и нам!</p>
-                    <p>Сейчас мы уже работаем над обработкой ваших фотографий. Как только они будут готовы, мы пришлем вам ссылку для скачивания.</p>
-                    <p>Очень надеемся, что финальный результат вам понравится и превзойдет ожидания!</p>
-                    <br>
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://ru.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">ru.dominikphotofficial.lt</a>
-                    </p>
+                <div style="font-family: sans-serif; color: #1A2B2B; line-height: 1.6;">
+                    <h2>Здравствуйте, {{name}},</h2>
+                    <p>Статус вашего заказа ({{serviceName}}) изменен на: <strong>{{status}}</strong>.</p>
+                    <p>Если у вас есть вопросы, ответьте на это письмо.</p>
+                    <p>С уважением,<br>DP.PORTFOLIO</p>
                 </div>
             `
         }
