@@ -1,3 +1,4 @@
+<!-- services.html (LT) -->
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -216,14 +217,76 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#srv-date", { dateFormat: "Y-m-d", minDate: "today", locale: "lt", disableMobile: true });
+        });
+    </script>
+
     <script type="module">
-        import { db } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const templates = {
+            lt: {
+                ServiceNew: {
+                    subject: "DP.PORTFOLIO | Paslaugos užklausa gauta",
+                    html: `
+                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}}!</h2>
+                            <p>Ačiū, kad pasirinkote DP.PORTFOLIO. Sėkmingai gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
+                            <p>Artimiausiu metu peržiūrėsime jūsų informaciją ir susisieksime, kad patvirtintume detales.</p>
+                            <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
+                                <p style="margin: 0 0 10px 0;"><b>Užsakymo informacija:</b></p>
+                                <p style="margin: 0 0 5px 0;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
+                                <p style="margin: 0 0 5px 0;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
+                                <p style="margin: 0 0 5px 0;"><b>Likutis po atlikimo:</b> {{remainingAmount}} €</p>
+                                <p style="margin: 0;"><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
+                            </div>
+                            <p><strong>Apmokėjimo instrukcijos:</strong></p>
+                            <p>Jei pasirinkote bankinį pavedimą, rekvizitai: <br><b>{{bankDetails}}</b></p>
+                            <p>Jei pasirinkote PayPal: <br><b>{{paypalEmail}}</b></p>
+                            <p style="color: #d9534f;"><em>Svarbu: Avansą prašome pervesti tik po to, kai galutinai patvirtinsime jūsų užsakymą ir datą.</em></p>
+                            <br>
+                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
+                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
+                                <b>DP.PORTFOLIO</b><br>
+                                Dominik Šuškevič<br>
+                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
+                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
+                            </p>
+                        </div>
+                    `
+                }
+            }
+        };
+
+        function buildEmail(templateType, lang, data) {
+            const safeLang = templates[lang] ? lang : 'lt';
+            let subject = templates[safeLang][templateType].subject;
+            let html = templates[safeLang][templateType].html;
+            for (const key in data) {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                html = html.replace(regex, data[key] || '');
+                subject = subject.replace(regex, data[key] || '');
+            }
+            return { subject, html };
+        }
 
         const lang = document.documentElement.lang || 'lt';
-
         const config = {
             discountEnabled: false,
             discountType: 'percentage', 
@@ -234,8 +297,6 @@
         };
 
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
-
-        flatpickr("#srv-date", { dateFormat: "Y-m-d", minDate: "today", locale: "lt" });
 
         const srvType = document.getElementById('srv-type');
         const srvPayment = document.getElementById('srv-payment');
@@ -250,20 +311,14 @@
                 let discount = 0;
 
                 if(config.discountEnabled) {
-                    if(config.discountType === 'percentage') {
-                        discount = original * (config.discountValue / 100);
-                    } else {
-                        discount = config.discountValue;
-                    }
+                    discount = config.discountType === 'percentage' ? original * (config.discountValue / 100) : config.discountValue;
                     document.getElementById('row-discount').style.display = 'flex';
                     document.getElementById('calc-discount-desc').innerText = config.discountDescription;
                 } else {
                     document.getElementById('row-discount').style.display = 'none';
                 }
 
-                let finalPrice = original - discount;
-                if(finalPrice < 0) finalPrice = 0;
-                
+                let finalPrice = Math.max(0, original - discount);
                 let deposit = finalPrice / 2;
                 let remaining = finalPrice - deposit;
 
@@ -333,17 +388,14 @@
 
                 await addDoc(collection(db, "mail"), {
                     to: requestData.email,
-                    message: {
-                        subject: emailData.subject,
-                        html: emailData.html
-                    }
+                    message: { subject: emailData.subject, html: emailData.html }
                 });
 
                 document.getElementById('service-form').style.display = 'none';
                 document.getElementById('service-success').style.display = 'block';
                 window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
             } catch (error) {
-                console.error("Klaida:", error);
+                console.error(error);
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Klaida. Bandyti dar kartą';
             }
