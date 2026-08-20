@@ -123,73 +123,14 @@
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
+        import { db, auth, googleProvider } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { buildEmail } from './email-templates.js';
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
-        const lang = document.documentElement.lang || 'lt';
-
-        const baseStyle = `font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;`;
-        const boxStyle = `background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0; border-radius: 0 4px 4px 0;`;
-        const footerHtml = `
-            <br>
-            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0; line-height: 1.5;">
-                <b>DP.PORTFOLIO</b><br>
-                Dominik Šuškevič<br>
-                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-            </p>
-        </div>`;
-
-        const templates = {
-            lt: {
-                New: {
-                    subject: "DP.PORTFOLIO | Nauja užklausa: TFP Fotosesija",
-                    html: `<div style="${baseStyle}">
-                        <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: #113939;">Sveiki, {{name}}!</h2>
-                        <p>Ačiū, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų <b>TFP fotosesijos</b> užklausą.</p>
-                        <p>Artimiausiu metu atidžiai peržiūrėsime jūsų idėją ir susisieksime su jumis.</p>
-                        <div style="${boxStyle}">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užklausos detalės:</b></p>
-                            <p style="margin: 0 0 5px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0 0 5px 0;"><b>Vieta:</b> {{location}}</p>
-                            <p style="margin: 0;"><b>Idėja:</b> {{idea}}</p>
-                        </div>
-                        <p>Jei turite papildomų klausimų, drąsiai atsakykite į šį laišką.</p>
-                        ${footerHtml}`
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
+        const lang = 'lt';
 
         getRedirectResult(auth).then((result) => {
             if (result && result.user) {
@@ -230,7 +171,7 @@
                     message: { subject: emailData.subject, html: emailData.html }
                 });
 
-                const tgMessage = `🔥 NAUJA TFP UŽKLAUSA!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${requestData.instagram}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}`;
+                const tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${requestData.instagram}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}`;
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
