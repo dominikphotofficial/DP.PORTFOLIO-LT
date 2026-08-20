@@ -67,7 +67,7 @@
 
     <div id="dashboard-section" class="admin-container" style="display:none;">
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('tfp')">TFP Užklausos</button>
+            <button class="tab-btn active" onclick="switchTab('tfp')">DP.PORTFOLIO — TFP</button>
             <button class="tab-btn" onclick="switchTab('services')">Mokamos Paslaugos</button>
         </div>
 
@@ -99,165 +99,12 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
+        import { db, auth, googleProvider } from './firebase-config.js';
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { buildEmail } from './email-templates.js';
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
-
-        const emailWrapperStart = `
-            <div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        `;
-        const emailWrapperEnd = `
-                    <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 30px 0;">
-                    <p style="font-size: 0.9em; color: #2A5C5C; margin: 0; line-height: 1.6;">
-                        <b>DP.PORTFOLIO</b><br>
-                        Dominik Šuškevič<br>
-                        Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                        Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                    </p>
-                </div>
-            </div>
-        `;
-
-        const templates = {
-            lt: {
-                TFPConfirmed: {
-                    subject: "DP.PORTFOLIO | Patvirtinta: TFP Fotosesija",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Puikios naujienos, {{name}}!</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Mums labai patiko jūsų idėja, todėl su džiaugsmu <b>patvirtiname</b> jūsų TFP fotosesiją.</p>
-                        <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 25px 0;">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Susitikimo informacija:</b></p>
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Vieta:</b> {{location}}</p>
-                        </div>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Nekantraujame pradėti kurti kartu! Iki greito.</p>
-                    ${emailWrapperEnd}`
-                },
-                TFPRescheduled: {
-                    subject: "DP.PORTFOLIO | Atnaujinta: TFP Fotosesija",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Norime informuoti, kad jūsų TFP fotosesijos detalės buvo atnaujintos.</p>
-                        <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 25px 0;">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Nauja informacija:</b></p>
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Vieta:</b> {{location}}</p>
-                        </div>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jei šis laikas jums netinka, prašome atsakyti į šį laišką. Ačiū už jūsų lankstumą!</p>
-                    ${emailWrapperEnd}`
-                },
-                TFPCancelled: {
-                    subject: "DP.PORTFOLIO | Atšaukta: TFP Fotosesija",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Apgailestaujame, tačiau dėl nenumatytų aplinkybių turime <b>atšaukti</b> jūsų TFP fotosesiją.</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Labai vertiname jūsų norą bendradarbiauti ir tikimės, kad ateityje turėsime progą sukurti kažką gražaus kartu.</p>
-                    ${emailWrapperEnd}`
-                },
-                TFPCompleted: {
-                    subject: "DP.PORTFOLIO | Ačiū už fotosesiją!",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Didelis ačiū už jūsų laiką, pastangas ir puikią nuotaiką fotosesijos metu!</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Šiuo metu jau dirbame prie jūsų nuotraukų redagavimo. Kai tik jos bus paruoštos, atsiųsime jums nuorodą.</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Tikimės, kad rezultatas jums patiks!</p>
-                    ${emailWrapperEnd}`
-                },
-                ServiceConfirmed: {
-                    subject: "DP.PORTFOLIO | Užsakymas patvirtintas",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jūsų užsakymas (<strong>{{serviceName}}</strong>) yra <b>patvirtintas</b>!</p>
-                        <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 25px 0;">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užsakymo detalės:</b></p>
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Vieta:</b> {{location}}</p>
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
-                        </div>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Prašome atlikti avansinį mokėjimą, kad galutinai rezervuotume laiką. Apmokėjimo instrukcijas rasite ankstesniame laiške.</p>
-                    ${emailWrapperEnd}`
-                },
-                ServiceDepositPaid: {
-                    subject: "DP.PORTFOLIO | Avansas gautas. Ačiū!",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Sėkmingai gavome jūsų avansinį mokėjimą ({{depositAmount}} €) už paslaugą <strong>{{serviceName}}</strong>.</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jūsų rezervacija yra pilnai patvirtinta. Susitiksime sutartu laiku!</p>
-                        <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 25px 0;">
-                            <p style="margin: 0 0 5px 0; color: #1A2B2B;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Vieta:</b> {{location}}</p>
-                        </div>
-                    ${emailWrapperEnd}`
-                },
-                ServiceFullyPaid: {
-                    subject: "DP.PORTFOLIO | Pilnas apmokėjimas gautas",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Informuojame, kad sėkmingai gavome pilną apmokėjimą už paslaugą <strong>{{serviceName}}</strong>.</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Nuoširdžiai dėkojame už bendradarbiavimą!</p>
-                    ${emailWrapperEnd}`
-                },
-                ServiceCompleted: {
-                    subject: "DP.PORTFOLIO | Paslauga atlikta. Ačiū!",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jūsų užsakymas (<strong>{{serviceName}}</strong>) yra sėkmingai atliktas!</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Ačiū, kad pasirinkote DP.PORTFOLIO. Tikimės, kad rezultatas jums patiko ir lauksime sugrįžtant ateityje.</p>
-                    ${emailWrapperEnd}`
-                },
-                ServiceCancelled: {
-                    subject: "DP.PORTFOLIO | Užsakymas atšauktas",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Informuojame, kad jūsų užsakymas (<strong>{{serviceName}}</strong>) buvo atšauktas.</p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jei tai įvyko per klaidą arba turite klausimų, prašome susisiekti su mumis.</p>
-                    ${emailWrapperEnd}`
-                },
-                ServiceStatusUpdate: {
-                    subject: "DP.PORTFOLIO | Užsakymo statusas: {{status}}",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}},</h2>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Informuojame, kad jūsų užsakymo (<strong>{{serviceName}}</strong>) statusas buvo atnaujintas.</p>
-                        <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 25px 0;">
-                            <p style="margin: 0; font-size: 1.1em; color: #1A2B2B;"><b>Naujas statusas:</b> <span style="color: #2A5C5C; font-weight: bold; text-transform: uppercase;">{{status}}</span></p>
-                        </div>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Jei turite klausimų, tiesiog atsakykite į šį laišką.</p>
-                    ${emailWrapperEnd}`
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType] ? templates[safeLang][templateType].subject : templates[safeLang]['ServiceStatusUpdate'].subject;
-            let html = templates[safeLang][templateType] ? templates[safeLang][templateType].html : templates[safeLang]['ServiceStatusUpdate'].html;
-            
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
 
         const authSection = document.getElementById('auth-section');
         const dashboardSection = document.getElementById('dashboard-section');
@@ -320,6 +167,16 @@
                     const data = docSnap.data();
                     const reqDiv = document.createElement('div');
                     reqDiv.className = 'request-card';
+                    
+                    let photosHtml = '';
+                    if (data.reference_photos && data.reference_photos.length > 0) {
+                        photosHtml = '<p><b>Referencijos:</b><br><div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:5px;">';
+                        data.reference_photos.forEach(url => {
+                            photosHtml += `<a href="${url}" target="_blank"><img src="${url}" style="width:60px; height:60px; object-fit:cover; border-radius:4px; border:1px solid #ccc;"></a>`;
+                        });
+                        photosHtml += '</div></p>';
+                    }
+
                     reqDiv.innerHTML = `
                         <div class="req-header">
                             <strong>${data.name} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
@@ -331,6 +188,7 @@
                                 <p><b>Instagram:</b><br>${data.instagram}</p>
                                 <p><b>Idėja:</b><br>${data.idea}</p>
                                 <p><b>Papildomai:</b><br>${data.extra_info || '-'}</p>
+                                ${photosHtml}
                             </div>
                             <div>
                                 <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
