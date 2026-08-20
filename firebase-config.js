@@ -3,13 +3,13 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.11.1/firebas
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-    authDomain: "tfp-form.firebaseapp.com",
-    projectId: "tfp-form",
-    storageBucket: "tfp-form.firebasestorage.app",
-    messagingSenderId: "542082314917",
-    appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-    measurementId: "G-4VRZRBDHY2"
+  apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+  authDomain: "tfp-form.firebaseapp.com",
+  projectId: "tfp-form",
+  storageBucket: "tfp-form.firebasestorage.app",
+  messagingSenderId: "542082314917",
+  appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+  measurementId: "G-4VRZRBDHY2"
 };
 
 const app = initializeApp(firebaseConfig);
