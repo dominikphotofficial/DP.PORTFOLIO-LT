@@ -18,7 +18,7 @@ const emailWrapperEnd = `
 export const templates = {
     lt: {
         New: {
-            subject: "DP.PORTFOLIO | Nauja užklausa: TFP Fotosesija",
+            subject: "DP.PORTFOLIO | Nauja TFP užklausa",
             html: `${emailWrapperStart}
                 <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
                 <p style="font-size: 16px;">Nuoširdžiai dėkojame, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų <b>TFP fotosesijos</b> užklausą.</p>
@@ -164,7 +164,7 @@ export const templates = {
     },
     en: {
         New: {
-            subject: "DP.PORTFOLIO | New Request: TFP Photoshoot",
+            subject: "DP.PORTFOLIO | New TFP Request",
             html: `${emailWrapperStart}
                 <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Hello, {{name}}!</h2>
                 <p style="font-size: 16px;">Thank you for sharing your creative vision. We have successfully received your <b>TFP photoshoot</b> request.</p>
@@ -311,7 +311,7 @@ export const templates = {
     },
     ru: {
         New: {
-            subject: "DP.PORTFOLIO | Новая заявка: TFP Фотосессия",
+            subject: "DP.PORTFOLIO | Новая TFP заявка",
             html: `${emailWrapperStart}
                 <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Здравствуйте, {{name}}!</h2>
                 <p style="font-size: 16px;">Спасибо, что поделились своей творческой идеей. Мы успешно получили вашу заявку на <b>TFP фотосессию</b>.</p>
