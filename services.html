@@ -1,4 +1,3 @@
-<!-- services.html (LT) -->
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -219,78 +218,19 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#srv-date", { dateFormat: "Y-m-d", minDate: "today", locale: "lt", disableMobile: true });
+            flatpickr("#srv-date", { dateFormat: "Y-m-d", minDate: "today", disableMobile: true, locale: "lt" });
         });
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { db } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { buildEmail } from './email-templates.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // TELEGRAM NUSTATYMAI
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
-
-        const templates = {
-            lt: {
-                ServiceNew: {
-                    subject: "DP.PORTFOLIO | Paslaugos užklausa gauta",
-                    html: `
-                        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto;">
-                            <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Sveiki, {{name}}!</h2>
-                            <p>Ačiū, kad pasirinkote DP.PORTFOLIO. Sėkmingai gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
-                            <p>Artimiausiu metu peržiūrėsime jūsų informaciją ir susisieksime, kad patvirtintume detales.</p>
-                            <div style="background: #FBF9F6; padding: 20px; border-left: 3px solid #113939; margin: 20px 0;">
-                                <p style="margin: 0 0 10px 0;"><b>Užsakymo informacija:</b></p>
-                                <p style="margin: 0 0 5px 0;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
-                                <p style="margin: 0 0 5px 0;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
-                                <p style="margin: 0 0 5px 0;"><b>Likutis po atlikimo:</b> {{remainingAmount}} €</p>
-                                <p style="margin: 0;"><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
-                            </div>
-                            <p><strong>Apmokėjimo instrukcijos:</strong></p>
-                            <p>Jei pasirinkote bankinį pavedimą, rekvizitai: <br><b>{{bankDetails}}</b></p>
-                            <p>Jei pasirinkote PayPal: <br><b>{{paypalEmail}}</b></p>
-                            <p style="color: #d9534f;"><em>Svarbu: Avansą prašome pervesti tik po to, kai galutinai patvirtinsime jūsų užsakymą ir datą.</em></p>
-                            <br>
-                            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 20px 0;">
-                            <p style="font-size: 0.9em; color: #2A5C5C; margin: 0;">
-                                <b>DP.PORTFOLIO</b><br>
-                                Dominik Šuškevič<br>
-                                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                            </p>
-                        </div>
-                    `
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
-
-        const lang = document.documentElement.lang || 'lt';
+        const lang = 'lt';
+        
         const config = {
             discountEnabled: false,
             discountType: 'percentage', 
@@ -377,10 +317,8 @@
             };
 
             try {
-                // 1. Išsaugome į Firebase
                 await addDoc(collection(db, "service_requests"), requestData);
                 
-                // 2. Siunčiame el. laišką
                 const emailData = buildEmail('ServiceNew', lang, {
                     name: requestData.clientName,
                     serviceName: requestData.serviceName,
@@ -397,13 +335,12 @@
                     message: { subject: emailData.subject, html: emailData.html }
                 });
 
-                // 3. Siunčiame pranešimą į Telegram
-                const tgMessage = `💰 NAUJAS UŽSAKYMAS!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}`;
+                const tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}`;
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ chat_id: chatId, text: tgMessage })
-                }).catch(err => console.error("Telegram error:", err));
+                }).catch(err => console.error(err));
 
                 document.getElementById('service-form').style.display = 'none';
                 document.getElementById('service-success').style.display = 'block';
