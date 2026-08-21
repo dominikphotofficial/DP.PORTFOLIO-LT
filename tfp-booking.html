@@ -1,3 +1,4 @@
+<!-- tfp-booking.html (LT) -->
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -61,7 +62,7 @@
     <section class="tfp-section">
         <div class="booking-layout">
             <div class="info-column fade-in-up">
-                <h1>TFP Fotosesija</h1>
+                <h1>DP.PORTFOLIO — TFP</h1>
                 <div class="divider" style="margin: 0 0 30px 0;"></div>
                 <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
                 <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
@@ -130,10 +131,9 @@
         </div>
     </section>
 
-    <footer style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); margin-top: 60px;">
-        <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">DP.PORTFOLIO Kontaktai</h3>
-        <p style="font-family: var(--font-body); color: rgba(26, 43, 43, 0.6); font-size: 0.9rem;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com</p>
-        <div class="lang-switcher" style="margin-top: 20px;">
+    <footer>
+        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+        <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
             <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
@@ -150,27 +150,11 @@
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
-        const googleProvider = new GoogleAuthProvider();
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
