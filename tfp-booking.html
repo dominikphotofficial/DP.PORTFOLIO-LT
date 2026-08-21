@@ -20,7 +20,7 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
@@ -61,7 +61,7 @@
     <section class="tfp-section">
         <div class="booking-layout">
             <div class="info-column fade-in-up">
-                <h1>DP.PORTFOLIO — TFP</h1>
+                <h1>TFP Fotosesija</h1>
                 <div class="divider" style="margin: 0 0 30px 0;"></div>
                 <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
                 <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
@@ -69,52 +69,71 @@
             </div>
             
             <div class="form-card fade-in-up">
-                <div id="success-display" style="display:none;">
-                    <h3>Ačiū už registraciją!</h3>
-                    <p>Gavau jūsų užklausą. Peržiūrėsiu jūsų idėjas ir netrukus su jumis susisieksiu patikslinti detalių.</p>
+                <div id="success-display" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
+                    <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Ačiū už registraciją!</h3>
+                    <p style="font-family: var(--font-body); font-size: 1.1rem; color: #1b5e20;">Gavau jūsų užklausą. Peržiūrėsiu jūsų idėjas ir netrukus su jumis susisieksiu patikslinti detalių.</p>
                 </div>
                 
                 <div id="form-container">
-                    <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1);">
+                    <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1); border-radius: 4px;">
                         Prisijungti su Google (Auto-užpildymas)
                     </button>
 
-                    <form id="tfp-firebase-form">
-                        <label class="field-label">Vardas ir Pavardė *</label>
-                        <input type="text" id="tfp-name" name="name" class="form-input" required autocomplete="off">
-                        
-                        <label class="field-label">El. paštas *</label>
-                        <input type="email" id="tfp-email" name="email" class="form-input" required autocomplete="off">
+                    <form id="tfp-firebase-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                            <div>
+                                <label class="field-label" style="margin-top: 0;">Vardas ir Pavardė *</label>
+                                <input type="text" id="tfp-name" name="name" class="form-input" required autocomplete="off">
+                            </div>
+                            <div>
+                                <label class="field-label" style="margin-top: 0;">El. paštas *</label>
+                                <input type="email" id="tfp-email" name="email" class="form-input" required autocomplete="off">
+                            </div>
+                        </div>
 
-                        <label class="field-label">Instagram / Socialinis tinklas *</label>
-                        <input type="text" id="tfp-instagram" name="instagram" class="form-input" placeholder="@jusu_profilis" required autocomplete="off">
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Instagram / Socialinis tinklas *</label>
+                            <input type="text" id="tfp-instagram" name="instagram" class="form-input" placeholder="@jusu_profilis" required autocomplete="off">
+                        </div>
                         
-                        <label class="field-label">Pageidaujama data ir laikas *</label>
-                        <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Paspauskite, kad pasirinkti kalendoriuje..." required autocomplete="off">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                            <div>
+                                <label class="field-label" style="margin-top: 0;">Pageidaujama data ir laikas *</label>
+                                <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite..." required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
+                            </div>
+                            <div>
+                                <label class="field-label" style="margin-top: 0;">Pageidaujama vieta *</label>
+                                <input type="text" id="tfp-location" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
+                            </div>
+                        </div>
                         
-                        <label class="field-label">Pageidaujama vieta *</label>
-                        <input type="text" id="tfp-location" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
-                        
-                        <label class="field-label">Fotosesijos idėja *</label>
-                        <textarea id="tfp-idea" name="idea" class="form-input" rows="3" placeholder="Aprašykite savo viziją..." required></textarea>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Fotosesijos idėja *</label>
+                            <textarea id="tfp-idea" name="idea" class="form-input" rows="3" placeholder="Aprašykite savo viziją..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
+                        </div>
 
-                        <label class="field-label">Nuotraukos-referencijos (neprivaloma)</label>
-                        <input type="file" id="tfp-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
-                        <div id="photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Nuotraukos-referencijos (neprivaloma)</label>
+                            <input type="file" id="tfp-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
+                            <div id="photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+                        </div>
 
-                        <label class="field-label" style="margin-top: 20px;">Papildoma informacija / Nuorodos</label>
-                        <textarea id="tfp-extra" name="extra_info" class="form-input" rows="2" placeholder="Pinterest/Instagram nuorodos arba kita svarbi informacija..."></textarea>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Papildoma informacija / Nuorodos</label>
+                            <textarea id="tfp-extra" name="extra_info" class="form-input" rows="2" placeholder="Pinterest/Instagram nuorodos arba kita svarbi informacija..." style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
+                        </div>
                         
-                        <button type="submit" id="submit-btn" class="cta-button">Siųsti užklausą</button>
+                        <button type="submit" id="submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
-        <div class="lang-switcher">
+    <footer style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); margin-top: 60px;">
+        <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">DP.PORTFOLIO Kontaktai</h3>
+        <p style="font-family: var(--font-body); color: rgba(26, 43, 43, 0.6); font-size: 0.9rem;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com</p>
+        <div class="lang-switcher" style="margin-top: 20px;">
             <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
             <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
@@ -135,6 +154,7 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { buildEmail } from './email-templates.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -155,50 +175,6 @@
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
         const lang = 'lt';
-
-        const baseStyle = `font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 30px 20px; background-color: #ffffff;`;
-        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
-        const footerHtml = `
-            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 40px 0 20px 0;">
-            <p style="font-size: 0.85em; color: #888888; margin: 0; line-height: 1.6;">
-                <b>DP.PORTFOLIO</b><br>
-                Dominik Šuškevič<br>
-                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-            </p>
-        </div>`;
-
-        const templates = {
-            lt: {
-                New: {
-                    subject: "DP.PORTFOLIO | Nauja TFP užklausa",
-                    html: `<div style="${baseStyle}">
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
-                        <p style="font-size: 16px;">Nuoširdžiai dėkojame, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų <b>TFP fotosesijos</b> užklausą.</p>
-                        <p style="font-size: 16px;">Artimiausiu metu atidžiai peržiūrėsime jūsų idėją ir susisieksime su jumis.</p>
-                        <div style="${boxStyle}">
-                            <p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užklausos detalės:</b></p>
-                            <p style="margin: 0 0 8px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
-                            <p style="margin: 0 0 8px 0;"><b>Vieta:</b> {{location}}</p>
-                            <p style="margin: 0;"><b>Idėja:</b> {{idea}}</p>
-                        </div>
-                        <p style="font-size: 16px;">Jei turite papildomų klausimų, drąsiai atsakykite į šį laišką. Gražios dienos!</p>
-                    ${footerHtml}`
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
 
         let selectedFiles = [];
         const photoInput = document.getElementById('tfp-photos');
