@@ -25,6 +25,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
+    <style>
+        .thumb-container { position: relative; display: inline-block; margin-right: 10px; margin-bottom: 10px; }
+        .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(17,57,57,0.1); }
+        .thumb-remove { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; line-height: 1; display: flex; justify-content: center; align-items: center; }
+    </style>
 </head>
 <body>
     <div id="preloader" data-nosnippet><div class="loader"></div></div>
@@ -56,7 +61,7 @@
     <section class="tfp-section">
         <div class="booking-layout">
             <div class="info-column fade-in-up">
-                <h1>TFP Fotosesija</h1>
+                <h1>DP.PORTFOLIO — TFP</h1>
                 <div class="divider" style="margin: 0 0 30px 0;"></div>
                 <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
                 <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
@@ -93,7 +98,11 @@
                         <label class="field-label">Fotosesijos idėja *</label>
                         <textarea id="tfp-idea" name="idea" class="form-input" rows="3" placeholder="Aprašykite savo viziją..." required></textarea>
 
-                        <label class="field-label">Papildoma informacija / Nuorodos</label>
+                        <label class="field-label">Nuotraukos-referencijos (neprivaloma)</label>
+                        <input type="file" id="tfp-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
+                        <div id="photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+
+                        <label class="field-label" style="margin-top: 20px;">Papildoma informacija / Nuorodos</label>
                         <textarea id="tfp-extra" name="extra_info" class="form-input" rows="2" placeholder="Pinterest/Instagram nuorodos arba kita svarbi informacija..."></textarea>
                         
                         <button type="submit" id="submit-btn" class="cta-button">Siųsti užklausą</button>
@@ -122,14 +131,101 @@
     </script>
 
     <script type="module">
-        import { db, auth, googleProvider } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
         const lang = 'lt';
+
+        const baseStyle = `font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 30px 20px; background-color: #ffffff;`;
+        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
+        const footerHtml = `
+            <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 40px 0 20px 0;">
+            <p style="font-size: 0.85em; color: #888888; margin: 0; line-height: 1.6;">
+                <b>DP.PORTFOLIO</b><br>
+                Dominik Šuškevič<br>
+                Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
+                Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
+            </p>
+        </div>`;
+
+        const templates = {
+            lt: {
+                New: {
+                    subject: "DP.PORTFOLIO | Nauja TFP užklausa",
+                    html: `<div style="${baseStyle}">
+                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
+                        <p style="font-size: 16px;">Nuoširdžiai dėkojame, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų <b>TFP fotosesijos</b> užklausą.</p>
+                        <p style="font-size: 16px;">Artimiausiu metu atidžiai peržiūrėsime jūsų idėją ir susisieksime su jumis.</p>
+                        <div style="${boxStyle}">
+                            <p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užklausos detalės:</b></p>
+                            <p style="margin: 0 0 8px 0;"><b>Data ir laikas:</b> {{date_time}}</p>
+                            <p style="margin: 0 0 8px 0;"><b>Vieta:</b> {{location}}</p>
+                            <p style="margin: 0;"><b>Idėja:</b> {{idea}}</p>
+                        </div>
+                        <p style="font-size: 16px;">Jei turite papildomų klausimų, drąsiai atsakykite į šį laišką. Gražios dienos!</p>
+                    ${footerHtml}`
+                }
+            }
+        };
+
+        function buildEmail(templateType, lang, data) {
+            const safeLang = templates[lang] ? lang : 'lt';
+            let subject = templates[safeLang][templateType].subject;
+            let html = templates[safeLang][templateType].html;
+            for (const key in data) {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                html = html.replace(regex, data[key] || '');
+                subject = subject.replace(regex, data[key] || '');
+            }
+            return { subject, html };
+        }
+
+        let selectedFiles = [];
+        const photoInput = document.getElementById('tfp-photos');
+        const previewContainer = document.getElementById('photo-preview-container');
+
+        photoInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                selectedFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const div = document.createElement('div');
+                    div.className = 'thumb-container';
+                    div.innerHTML = `
+                        <img src="${ev.target.result}" class="thumb-img">
+                        <button type="button" class="thumb-remove">&times;</button>
+                    `;
+                    div.querySelector('.thumb-remove').addEventListener('click', () => {
+                        selectedFiles = selectedFiles.filter(f => f !== file);
+                        div.remove();
+                    });
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+            photoInput.value = ''; 
+        });
 
         getRedirectResult(auth).then((result) => {
             if (result && result.user) {
@@ -148,20 +244,34 @@
             submitBtn.disabled = true;
             submitBtn.innerText = 'Siunčiama...';
 
-            const requestData = {
-                name: document.getElementById('tfp-name').value,
-                email: document.getElementById('tfp-email').value,
-                instagram: document.getElementById('tfp-instagram').value,
-                date_time: document.getElementById('datetime-picker').value,
-                location: document.getElementById('tfp-location').value,
-                idea: document.getElementById('tfp-idea').value,
-                extra_info: document.getElementById('tfp-extra').value,
-                language: lang,
-                status: 'New',
-                createdAt: serverTimestamp()
-            };
-
+            let uploadedUrls = [];
             try {
+                if (selectedFiles.length > 0) {
+                    submitBtn.innerText = 'Įkeliamos nuotraukos...';
+                    for (const file of selectedFiles) {
+                        const storageRef = ref(storage, `tfp_references/${Date.now()}_${file.name}`);
+                        await uploadBytes(storageRef, file);
+                        const url = await getDownloadURL(storageRef);
+                        uploadedUrls.push(url);
+                    }
+                }
+
+                submitBtn.innerText = 'Išsaugoma užklausa...';
+
+                const requestData = {
+                    name: document.getElementById('tfp-name').value,
+                    email: document.getElementById('tfp-email').value,
+                    instagram: document.getElementById('tfp-instagram').value,
+                    date_time: document.getElementById('datetime-picker').value,
+                    location: document.getElementById('tfp-location').value,
+                    idea: document.getElementById('tfp-idea').value,
+                    extra_info: document.getElementById('tfp-extra').value,
+                    reference_photos: uploadedUrls,
+                    language: lang,
+                    status: 'New',
+                    createdAt: serverTimestamp()
+                };
+
                 await addDoc(collection(db, "tfp_requests"), requestData);
                 
                 const emailData = buildEmail('New', lang, requestData);
@@ -170,7 +280,7 @@
                     message: { subject: emailData.subject, html: emailData.html }
                 });
 
-                const tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${requestData.instagram}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}`;
+                const tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${requestData.instagram}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}\n🖼 Nuotraukos: ${uploadedUrls.length} vnt.`;
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -188,4 +298,4 @@
         });
     </script>
 </body>
-</html>vv
+</html>
