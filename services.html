@@ -201,7 +201,7 @@
 
                 <div class="price-calculator" id="price-calc" style="display: none;">
                     <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
-                    <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (25-30 d.):</span> <span id="calc-discount-val">-5.00 €</span></div>
+                    <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (25-30 d.):</span> <span id="calc-discount-val">-0.00 €</span></div>
                     <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
                     <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
                     <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
@@ -249,10 +249,9 @@
         </div>
     </section>
 
-    <footer style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); margin-top: 60px;">
-        <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">DP.PORTFOLIO Kontaktai</h3>
-        <p style="font-family: var(--font-body); color: rgba(26, 43, 43, 0.6); font-size: 0.9rem;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com</p>
-        <div class="lang-switcher" style="margin-top: 20px;">
+    <footer>
+        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+        <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/services.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/services.html">EN</a>
             <a href="https://ru.dominikphotofficial.lt/services.html">RU</a>
@@ -264,24 +263,10 @@
     <script src="script.js"></script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { db, storage } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
