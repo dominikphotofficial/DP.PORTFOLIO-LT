@@ -9,30 +9,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Paslaugos | DP.PORTFOLIO</title>
     <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="DP.PORTFOLIO">
-    <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
-    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
-    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
-    <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="800">
-    <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <style>
-        .price-calculator { background: rgba(17, 57, 57, 0.03); padding: 20px; border-radius: 4px; margin-top: 20px; border: 1px solid rgba(17, 57, 57, 0.1); }
-        .price-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-family: var(--font-body); font-size: 1.1rem; }
-        .price-row.discount { color: #d9534f; }
-        .price-row.final { font-weight: 600; font-size: 1.2rem; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 10px; margin-top: 10px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto; }
+        .service-card { background-color: var(--surface-color); border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.05); overflow: hidden; transition: transform 0.4s ease, box-shadow 0.4s ease; display: flex; flex-direction: column; }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(17, 57, 57, 0.08); }
+        .service-header { background: var(--accent-color); color: var(--bg-color); padding: 30px 20px; text-align: center; position: relative; }
+        .service-badge { position: absolute; top: 15px; right: 15px; background: #d9534f; color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-family: var(--font-heading); letter-spacing: 1px; text-transform: uppercase; }
+        .service-title { font-family: var(--font-heading); font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
+        .service-price { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 300; }
+        .service-price span { font-size: 1rem; opacity: 0.7; }
+        .service-body { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
+        .service-list { list-style: none; padding: 0; margin: 0 0 30px 0; font-family: var(--font-body); font-size: 1.05rem; line-height: 2; color: var(--text-color); flex-grow: 1; }
+        .service-list li { position: relative; padding-left: 25px; margin-bottom: 10px; }
+        .service-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-light); font-weight: bold; }
+        
+        .price-calculator { background: rgba(17, 57, 57, 0.03); padding: 25px; border-radius: 8px; margin-top: 20px; border: 1px solid rgba(17, 57, 57, 0.1); }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-family: var(--font-body); font-size: 1.1rem; }
+        .price-row.discount { color: #d9534f; font-weight: 600; }
+        .price-row.final { font-weight: 600; font-size: 1.3rem; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 15px; margin-top: 10px; color: var(--accent-color); }
         .price-row.deposit { color: var(--accent-light); font-weight: 600; }
-        .payment-info { display: none; background: rgba(17, 57, 57, 0.05); padding: 15px; border-left: 3px solid var(--accent-color); margin-top: 15px; font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; }
+        .payment-info { display: none; background: rgba(17, 57, 57, 0.05); padding: 20px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-family: var(--font-body); font-size: 1rem; line-height: 1.6; border-radius: 0 4px 4px 0; }
         .payment-info.active { display: block; }
+        
+        .thumb-container { position: relative; display: inline-block; margin-right: 10px; margin-bottom: 10px; }
+        .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(17,57,57,0.1); }
+        .thumb-remove { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; line-height: 1; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -62,56 +68,82 @@
         </nav>
     </div>
 
-    <section class="container" style="padding-top: 160px; padding-bottom: 80px;">
-        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto 60px auto; text-align: center;">
+    <section class="container" style="padding-top: 160px; padding-bottom: 60px;">
+        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto 50px auto; text-align: center;">
             <h1 style="font-family: var(--font-heading); text-transform: uppercase; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 5px; margin-bottom: 25px; color: var(--text-color); font-weight: 300;">Paslaugos</h1>
             <div class="divider"></div>
             <p style="font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: rgba(26, 43, 43, 0.8); margin-bottom: 20px;">
-                Kuriu asmenines, kūrybines fotosesijas, portretus, automobilių, gamtos bei architektūros fotografiją. Taip pat kuriu atmosferinius, trumpus kinematografinius vaizdo įrašus.
-            </p>
-            <p style="font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; font-weight: 300; color: rgba(26, 43, 43, 0.6); background: rgba(17, 57, 57, 0.03); padding: 15px; border-radius: 4px;">
-                <strong>Svarbu:</strong> Nefotografuoju vestuvių, krikštynų, didelių renginių ar masinių komercinių projektų. Vaizdo įrašai orientuoti į estetiką ir istoriją, o ne į agresyvią reklamą ar garantuotą "viral" turinį.
+                Profesionalios fotografijos ir videografijos paslaugos. Pasirinkite jums tinkamiausią paketą – nuo greitos fotosesijos iki didelės apimties projektų.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto;">
-            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Fotografija</h3>
-                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Galutinė kaina priklauso nuo trukmės, sudėtingumo, lokacijų skaičiaus ir apdorojimo apimties. Klientas gauna tik atrinktas ir apdorotas nuotraukas.</p>
-                <ul style="list-style: none; padding: 0; font-family: var(--font-body); line-height: 2; opacity: 0.9;">
-                    <li><strong>Basic</strong> (trumpa fotosesija, 1 lokacija) – nuo 10 €</li>
-                    <li><strong>Standard</strong> (ilgesnė trukmė, daugiau kadrų) – nuo 15 €</li>
-                    <li><strong>Creative</strong> (keli įvaizdžiai, sudėtingesnė) – nuo 20 €</li>
-                </ul>
+        <div class="services-grid">
+            <!-- Mini Paketas -->
+            <div class="service-card fade-in-up">
+                <div class="service-header">
+                    <h3 class="service-title">Mini Fotosesija</h3>
+                    <div class="service-price">15 €</div>
+                </div>
+                <div class="service-body">
+                    <ul class="service-list">
+                        <li>Greita fotosesija (iki 30 min.)</li>
+                        <li>1 pasirinkta lokacija</li>
+                        <li>Iki 15 apdorotų nuotraukų</li>
+                        <li>Puikiai tinka socialiniams tinklams</li>
+                    </ul>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;">Užsakyti</a>
+                </div>
             </div>
 
-            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Videografija</h3>
-                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Kuriu ramius, kinematografinius vaizdo įrašus (2-3 min. ar ilgiau). Kaina priklauso nuo filmavimo laiko, montažo sudėtingumo ir lokacijų.</p>
-                <ul style="list-style: none; padding: 0; font-family: var(--font-body); line-height: 2; opacity: 0.9;">
-                    <li><strong>Small creative video</strong> – nuo 10 €</li>
-                    <li><strong>Complex project</strong> – nuo 15 €</li>
-                </ul>
+            <!-- Standartinis Paketas -->
+            <div class="service-card fade-in-up">
+                <div class="service-header">
+                    <div class="service-badge">Populiariausias</div>
+                    <h3 class="service-title">Standartinė</h3>
+                    <div class="service-price">25 € <span>/ bazinė</span></div>
+                </div>
+                <div class="service-body">
+                    <ul class="service-list">
+                        <li>Pilna fotosesija (1-1.5 val.)</li>
+                        <li>Keli įvaizdžiai ir lokacijos</li>
+                        <li>Apie 50 apdorotų nuotraukų</li>
+                        <li>Asmeninėms, porų ar auto fotosesijoms</li>
+                        <li>Galima pritaikyti nuolaidą</li>
+                    </ul>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px; background: var(--accent-color); color: var(--bg-color);">Užsakyti</a>
+                </div>
             </div>
 
-            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 40px; border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.05);">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 1.3rem;">Lokacija ir Sąlygos</h3>
-                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; margin-bottom: 15px; opacity: 0.8;">Pagrindinė darbo vieta – <strong>Kaunas</strong>. Nuosavos studijos neturiu, dirbame lauke arba sutartoje erdvėje.</p>
-                <p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.6; opacity: 0.8;">Išvykimas į kitus miestus galimas, tačiau kelionės išlaidos į bazinę kainą neįskaičiuotos.</p>
+            <!-- Maksi Paketas -->
+            <div class="service-card fade-in-up">
+                <div class="service-header">
+                    <div class="service-badge">-15 € Nuolaida</div>
+                    <h3 class="service-title">Maksi (100+ Foto)</h3>
+                    <div class="service-price">40 € <span>/ pradinė</span></div>
+                </div>
+                <div class="service-body">
+                    <ul class="service-list">
+                        <li>Ilga fotosesija (2+ val.)</li>
+                        <li>Neribotas lokacijų skaičius</li>
+                        <li>100 ir daugiau apdorotų nuotraukų</li>
+                        <li><strong>Suteikiama 15 € nuolaida</strong></li>
+                    </ul>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;">Užsakyti</a>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="service-booking" class="container" style="padding-top: 20px; padding-bottom: 100px;">
-        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto; background-color: var(--surface-color); padding: 60px 50px; border: 1px solid rgba(17, 57, 57, 0.05); border-radius: 4px; box-shadow: 0 20px 60px rgba(17, 57, 57, 0.03);">
+        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto; background-color: var(--surface-color); padding: 50px; border-radius: 8px; box-shadow: 0 20px 60px rgba(17, 57, 57, 0.05);">
             <div style="text-align: center; margin-bottom: 40px;">
-                <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Paslaugos Užsakymas</h2>
+                <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Užsakymo Forma</h2>
                 <p style="font-family: var(--font-body); font-weight: 300; color: rgba(26, 43, 43, 0.6); font-size: 1.1rem;">Užpildykite formą. Rezervacija patvirtinama gavus 50% avansą.</p>
             </div>
             
-            <div id="service-success" style="display:none; text-align: center; padding: 30px 0;">
-                <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; margin-bottom: 15px;">Užklausa sėkmingai išsiųsta!</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
+            <div id="service-success" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
+                <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Užklausa sėkmingai išsiųsta!</h3>
+                <p style="font-family: var(--font-body); font-size: 1.1rem; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
             </div>
 
             <form id="service-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
@@ -132,39 +164,38 @@
                         <input type="tel" id="srv-phone" class="form-input" autocomplete="off">
                     </div>
                     <div>
-                        <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis (neprivaloma)</label>
+                        <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis</label>
                         <input type="text" id="srv-social" class="form-input" autocomplete="off">
                     </div>
                 </div>
 
                 <div>
                     <label class="field-label" style="margin-top: 0;">Pasirinkite paslaugą *</label>
-                    <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer;">
-                        <option value="" disabled selected>Pasirinkite...</option>
-                        <option value="photo_basic" data-price="10">Fotografija - Basic (nuo 10 €)</option>
-                        <option value="photo_standard" data-price="15">Fotografija - Standard (nuo 15 €)</option>
-                        <option value="photo_extended" data-price="20">Fotografija - Extended / Creative (nuo 20 €)</option>
-                        <option value="video_basic" data-price="10">Videografija - Small creative (nuo 10 €)</option>
-                        <option value="video_complex" data-price="15">Videografija - Complex project (nuo 15 €)</option>
+                    <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
+                        <option value="" disabled selected>Pasirinkite paketą...</option>
+                        <option value="photo_mini" data-price="15" data-discount="0">Mini Fotosesija (15 €)</option>
+                        <option value="photo_standard" data-price="25" data-discount="0">Standartinė Fotosesija (25 €)</option>
+                        <option value="photo_maxi" data-price="40" data-discount="15">Maksi Fotosesija 100+ foto (40 € - 15 € nuolaida)</option>
+                        <option value="video_basic" data-price="30" data-discount="0">Videografija (nuo 30 €)</option>
                     </select>
                 </div>
 
-                <div class="price-calculator" id="price-calc" style="display: none;">
-                    <div class="price-row"><span>Orientacinė kaina:</span> <span id="calc-original">0.00 €</span></div>
-                    <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (<span id="calc-discount-desc"></span>):</span> <span id="calc-discount-val">-0.00 €</span></div>
+                <div class="price-calculator" id="price-calc">
+                    <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
+                    <div class="price-row discount" id="row-discount"><span>Pritaikyta nuolaida:</span> <span id="calc-discount-val">-0.00 €</span></div>
                     <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
-                    <div class="price-row deposit"><span>Avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
+                    <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
                     <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
                     <div>
                         <label class="field-label" style="margin-top: 0;">Pageidaujama data *</label>
-                        <input type="text" id="srv-date" class="form-input" placeholder="Pasirinkite datą..." required autocomplete="off">
+                        <input type="text" id="srv-date" class="form-input" placeholder="Pasirinkite datą..." required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
                     </div>
                     <div>
                         <label class="field-label" style="margin-top: 0;">Pageidaujamas laikas *</label>
-                        <input type="time" id="srv-time" class="form-input" required autocomplete="off">
+                        <input type="time" id="srv-time" class="form-input" required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
                     </div>
                 </div>
 
@@ -175,12 +206,18 @@
 
                 <div>
                     <label class="field-label" style="margin-top: 0;">Papildoma informacija / Idėja *</label>
-                    <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required></textarea>
+                    <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
+                </div>
+
+                <div>
+                    <label class="field-label" style="margin-top: 0;">Prisegti nuotraukas / Pavyzdžius (neprivaloma)</label>
+                    <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
+                    <div id="srv-photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
                 </div>
 
                 <div>
                     <label class="field-label" style="margin-top: 0;">Apmokėjimo būdas *</label>
-                    <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer;">
+                    <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
                         <option value="" disabled selected>Pasirinkite...</option>
                         <option value="Bank Transfer">Bankinis pavedimas</option>
                         <option value="PayPal">PayPal</option>
@@ -195,11 +232,11 @@
                     <div id="info-paypal" class="payment-info">
                         <strong>PayPal informacija:</strong><br>
                         El. paštas: Dominikphotofficial.lt@gmail.com<br>
-                        <em>Pastaba: PayPal automatinis apmokėjimas šiuo metu ruošiamas. Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
+                        <em>Pastaba: Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
                     </div>
                 </div>
 
-                <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px;">Siųsti užklausą</button>
+                <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
             </form>
         </div>
     </section>
@@ -223,41 +260,109 @@
     </script>
 
     <script type="module">
-        import { db } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
         const lang = 'lt';
-        
+
+        const emailWrapperStart = `<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 30px 20px; background-color: #ffffff;">`;
+        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
+        const emailWrapperEnd = `<hr style="border: none; border-top: 1px solid #E5ECE9; margin: 40px 0 20px 0;"><p style="font-size: 0.85em; color: #888888; margin: 0; line-height: 1.6;"><b>DP.PORTFOLIO</b><br>Dominik Šuškevič<br>Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a></p></div>`;
+
+        const templates = {
+            lt: {
+                ServiceNew: {
+                    subject: "DP.PORTFOLIO | Užklausa gauta: {{serviceName}}",
+                    html: `${emailWrapperStart}
+                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
+                        <p style="font-size: 16px;">Šis laiškas patvirtina, kad sėkmingai gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
+                        <p style="font-size: 16px;">Artimiausiu metu peržiūrėsime jūsų pageidavimus ir susisieksime dėl detalių patvirtinimo.</p>
+                        <div style="${boxStyle}">
+                            <p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Preliminari informacija:</b></p>
+                            <p style="margin: 0 0 8px 0;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
+                            <p style="margin: 0 0 8px 0;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
+                            <p style="margin: 0;"><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
+                        </div>
+                        <p style="font-size: 16px; color: #d9534f;"><b>Svarbu:</b> Kol kas jokių mokėjimų atlikti nereikia. Laukite kito laiško su galutiniu patvirtinimu.</p>
+                    ${emailWrapperEnd}`
+                }
+            }
+        };
+
+        function buildEmail(templateType, lang, data) {
+            const safeLang = templates[lang] ? lang : 'lt';
+            let subject = templates[safeLang][templateType].subject;
+            let html = templates[safeLang][templateType].html;
+            for (const key in data) {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                html = html.replace(regex, data[key] || '');
+                subject = subject.replace(regex, data[key] || '');
+            }
+            return { subject, html };
+        }
+
         const config = {
-            discountEnabled: false,
-            discountType: 'percentage', 
-            discountValue: 10,
-            discountDescription: 'Special offer: 10% off',
             bankDetails: 'DOMINIK ŠUŠKEVIČ LT867300010171188764',
             paypalEmail: 'Dominikphotofficial.lt@gmail.com'
         };
 
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
+        let selectedFiles = [];
 
         const srvType = document.getElementById('srv-type');
         const srvPayment = document.getElementById('srv-payment');
         const priceCalc = document.getElementById('price-calc');
+        const photoInput = document.getElementById('srv-photos');
+        const previewContainer = document.getElementById('srv-photo-preview-container');
+
+        photoInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                selectedFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const div = document.createElement('div');
+                    div.className = 'thumb-container';
+                    div.innerHTML = `<img src="${ev.target.result}" class="thumb-img"><button type="button" class="thumb-remove">&times;</button>`;
+                    div.querySelector('.thumb-remove').addEventListener('click', () => {
+                        selectedFiles = selectedFiles.filter(f => f !== file);
+                        div.remove();
+                    });
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+            photoInput.value = ''; 
+        });
 
         srvType.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const basePrice = parseFloat(selectedOption.getAttribute('data-price'));
+            const discountVal = parseFloat(selectedOption.getAttribute('data-discount'));
             
             if(basePrice) {
                 let original = basePrice;
-                let discount = 0;
+                let discount = discountVal || 0;
 
-                if(config.discountEnabled) {
-                    discount = config.discountType === 'percentage' ? original * (config.discountValue / 100) : config.discountValue;
+                if(discount > 0) {
                     document.getElementById('row-discount').style.display = 'flex';
-                    document.getElementById('calc-discount-desc').innerText = config.discountDescription;
                 } else {
                     document.getElementById('row-discount').style.display = 'none';
                 }
@@ -291,32 +396,45 @@
             submitBtn.disabled = true;
             submitBtn.innerText = 'Siunčiama...';
 
-            const selectedOption = srvType.options[srvType.selectedIndex];
-
-            const requestData = {
-                clientName: document.getElementById('srv-name').value,
-                email: document.getElementById('srv-email').value,
-                phone: document.getElementById('srv-phone').value || '',
-                socialProfile: document.getElementById('srv-social').value || '',
-                serviceId: srvType.value,
-                serviceName: selectedOption.text,
-                originalPrice: currentCalculation.original,
-                discount: currentCalculation.discount,
-                finalPrice: currentCalculation.final,
-                depositPercentage: 50,
-                depositAmount: currentCalculation.deposit,
-                remainingAmount: currentCalculation.remaining,
-                paymentMethod: srvPayment.value,
-                preferredDate: document.getElementById('srv-date').value,
-                preferredTime: document.getElementById('srv-time').value,
-                location: document.getElementById('srv-location').value,
-                additionalInformation: document.getElementById('srv-info').value,
-                language: lang,
-                status: 'Pending',
-                createdAt: serverTimestamp()
-            };
-
+            let uploadedUrls = [];
             try {
+                if (selectedFiles.length > 0) {
+                    submitBtn.innerText = 'Įkeliamos nuotraukos...';
+                    for (const file of selectedFiles) {
+                        const storageRef = ref(storage, `service_references/${Date.now()}_${file.name}`);
+                        await uploadBytes(storageRef, file);
+                        const url = await getDownloadURL(storageRef);
+                        uploadedUrls.push(url);
+                    }
+                }
+
+                submitBtn.innerText = 'Išsaugoma užklausa...';
+                const selectedOption = srvType.options[srvType.selectedIndex];
+
+                const requestData = {
+                    clientName: document.getElementById('srv-name').value,
+                    email: document.getElementById('srv-email').value,
+                    phone: document.getElementById('srv-phone').value || '',
+                    socialProfile: document.getElementById('srv-social').value || '',
+                    serviceId: srvType.value,
+                    serviceName: selectedOption.text,
+                    originalPrice: currentCalculation.original,
+                    discount: currentCalculation.discount,
+                    finalPrice: currentCalculation.final,
+                    depositPercentage: 50,
+                    depositAmount: currentCalculation.deposit,
+                    remainingAmount: currentCalculation.remaining,
+                    paymentMethod: srvPayment.value,
+                    preferredDate: document.getElementById('srv-date').value,
+                    preferredTime: document.getElementById('srv-time').value,
+                    location: document.getElementById('srv-location').value,
+                    additionalInformation: document.getElementById('srv-info').value,
+                    reference_photos: uploadedUrls,
+                    language: lang,
+                    status: 'Pending',
+                    createdAt: serverTimestamp()
+                };
+
                 await addDoc(collection(db, "service_requests"), requestData);
                 
                 const emailData = buildEmail('ServiceNew', lang, {
@@ -335,7 +453,7 @@
                     message: { subject: emailData.subject, html: emailData.html }
                 });
 
-                const tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}`;
+                const tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}\n🖼 Nuotraukos: ${uploadedUrls.length} vnt.`;
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
