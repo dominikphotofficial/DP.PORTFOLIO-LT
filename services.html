@@ -36,6 +36,9 @@
         .thumb-container { position: relative; display: inline-block; margin-right: 10px; margin-bottom: 10px; }
         .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(17,57,57,0.1); }
         .thumb-remove { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; line-height: 1; display: flex; justify-content: center; align-items: center; }
+        .form-input { width: 100%; padding: 12px 0; background: transparent; border: none; border-bottom: 1px solid rgba(17, 57, 57, 0.2); font-family: var(--font-body); font-size: 16px; color: var(--text-color); transition: var(--transition); outline: none; border-radius: 0; resize: vertical; }
+        .form-input:focus { border-bottom-color: var(--accent-color); }
+        .form-input::placeholder { color: rgba(26, 43, 43, 0.3); font-family: var(--font-body); }
     </style>
 </head>
 <body>
@@ -151,101 +154,107 @@
             
             <div id="service-success" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
                 <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Užklausa sėkmingai išsiųsta!</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
+                <p style="font-family: var(--font-body); font-size: 16px; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
             </div>
 
-            <form id="service-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+            <div id="form-container">
+                <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1); border-radius: 4px;">
+                    Prisijungti su Google (Auto-užpildymas)
+                </button>
+
+                <form id="service-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Vardas, pavardė *</label>
+                            <input type="text" id="srv-name" class="form-input" required autocomplete="off">
+                        </div>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">El. paštas *</label>
+                            <input type="email" id="srv-email" class="form-input" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Telefonas (neprivaloma)</label>
+                            <input type="tel" id="srv-phone" class="form-input" autocomplete="off">
+                        </div>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis</label>
+                            <input type="text" id="srv-social" class="form-input" autocomplete="off">
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="field-label" style="margin-top: 0;">Vardas, pavardė *</label>
-                        <input type="text" id="srv-name" class="form-input" required autocomplete="off">
+                        <label class="field-label" style="margin-top: 0;">Pasirinkite paslaugą *</label>
+                        <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
+                            <option value="" disabled selected>Pasirinkite paketą...</option>
+                            <option value="photo_mini" data-price="5">Mini Fotosesija (nuo 5 €)</option>
+                            <option value="photo_standard" data-price="15">Standartinė Fotosesija (nuo 15 €)</option>
+                            <option value="photo_maxi" data-price="20">Maksi Fotosesija 100+ foto (maks. 20 €)</option>
+                            <option value="video_basic" data-price="30">Videografija (nuo 30 €)</option>
+                        </select>
                     </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Pageidaujama data *</label>
+                            <input type="text" id="srv-date" class="form-input" placeholder="Pasirinkite datą..." required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
+                        </div>
+                        <div>
+                            <label class="field-label" style="margin-top: 0;">Pageidaujamas laikas *</label>
+                            <input type="time" id="srv-time" class="form-input" required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
+                        </div>
+                    </div>
+
+                    <div class="price-calculator" id="price-calc" style="display: none;">
+                        <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
+                        <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (25-30 d.):</span> <span id="calc-discount-val">-0.00 €</span></div>
+                        <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
+                        <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
+                        <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
+                    </div>
+
                     <div>
-                        <label class="field-label" style="margin-top: 0;">El. paštas *</label>
-                        <input type="email" id="srv-email" class="form-input" required autocomplete="off">
+                        <label class="field-label" style="margin-top: 0;">Lokacija *</label>
+                        <input type="text" id="srv-location" class="form-input" placeholder="Miestas, vieta..." required autocomplete="off">
                     </div>
-                </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
                     <div>
-                        <label class="field-label" style="margin-top: 0;">Telefonas (neprivaloma)</label>
-                        <input type="tel" id="srv-phone" class="form-input" autocomplete="off">
+                        <label class="field-label" style="margin-top: 0;">Papildoma informacija / Idėja *</label>
+                        <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
                     </div>
+
                     <div>
-                        <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis</label>
-                        <input type="text" id="srv-social" class="form-input" autocomplete="off">
+                        <label class="field-label" style="margin-top: 0;">Prisegti nuotraukas / Pavyzdžius (neprivaloma)</label>
+                        <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
+                        <div id="srv-photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
                     </div>
-                </div>
 
-                <div>
-                    <label class="field-label" style="margin-top: 0;">Pasirinkite paslaugą *</label>
-                    <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
-                        <option value="" disabled selected>Pasirinkite paketą...</option>
-                        <option value="photo_mini" data-price="5">Mini Fotosesija (nuo 5 €)</option>
-                        <option value="photo_standard" data-price="15">Standartinė Fotosesija (nuo 15 €)</option>
-                        <option value="photo_maxi" data-price="20">Maksi Fotosesija 100+ foto (maks. 20 €)</option>
-                        <option value="video_basic" data-price="30">Videografija (nuo 30 €)</option>
-                    </select>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
                     <div>
-                        <label class="field-label" style="margin-top: 0;">Pageidaujama data *</label>
-                        <input type="text" id="srv-date" class="form-input" placeholder="Pasirinkite datą..." required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
+                        <label class="field-label" style="margin-top: 0;">Apmokėjimo būdas *</label>
+                        <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
+                            <option value="" disabled selected>Pasirinkite...</option>
+                            <option value="Bank Transfer">Bankinis pavedimas</option>
+                            <option value="PayPal">PayPal</option>
+                        </select>
+                        
+                        <div id="info-bank" class="payment-info">
+                            <strong>Banko rekvizitai:</strong><br>
+                            Gavėjas: DOMINIK ŠUŠKEVIČ<br>
+                            Sąskaita: LT867300010171188764<br>
+                            Paskirtis: Avansas už paslaugas (Jūsų vardas)
+                        </div>
+                        <div id="info-paypal" class="payment-info">
+                            <strong>PayPal informacija:</strong><br>
+                            El. paštas: Dominikphotofficial.lt@gmail.com<br>
+                            <em>Pastaba: Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
+                        </div>
                     </div>
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Pageidaujamas laikas *</label>
-                        <input type="time" id="srv-time" class="form-input" required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
-                    </div>
-                </div>
 
-                <div class="price-calculator" id="price-calc" style="display: none;">
-                    <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
-                    <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (25-30 d.):</span> <span id="calc-discount-val">-0.00 €</span></div>
-                    <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
-                    <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
-                    <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
-                </div>
-
-                <div>
-                    <label class="field-label" style="margin-top: 0;">Lokacija *</label>
-                    <input type="text" id="srv-location" class="form-input" placeholder="Miestas, vieta..." required autocomplete="off">
-                </div>
-
-                <div>
-                    <label class="field-label" style="margin-top: 0;">Papildoma informacija / Idėja *</label>
-                    <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
-                </div>
-
-                <div>
-                    <label class="field-label" style="margin-top: 0;">Prisegti nuotraukas / Pavyzdžius (neprivaloma)</label>
-                    <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
-                    <div id="srv-photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
-                </div>
-
-                <div>
-                    <label class="field-label" style="margin-top: 0;">Apmokėjimo būdas *</label>
-                    <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
-                        <option value="" disabled selected>Pasirinkite...</option>
-                        <option value="Bank Transfer">Bankinis pavedimas</option>
-                        <option value="PayPal">PayPal</option>
-                    </select>
-                    
-                    <div id="info-bank" class="payment-info">
-                        <strong>Banko rekvizitai:</strong><br>
-                        Gavėjas: DOMINIK ŠUŠKEVIČ<br>
-                        Sąskaita: LT867300010171188764<br>
-                        Paskirtis: Avansas už paslaugas (Jūsų vardas)
-                    </div>
-                    <div id="info-paypal" class="payment-info">
-                        <strong>PayPal informacija:</strong><br>
-                        El. paštas: Dominikphotofficial.lt@gmail.com<br>
-                        <em>Pastaba: Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
-                    </div>
-                </div>
-
-                <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
-            </form>
+                    <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -263,10 +272,27 @@
     <script src="script.js"></script>
 
     <script type="module">
-        import { db, storage } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
@@ -356,6 +382,16 @@
             if(this.value === 'PayPal') document.getElementById('info-paypal').classList.add('active');
         });
 
+        document.getElementById('google-login-btn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
+                if(result.user.email) document.getElementById('srv-email').value = result.user.email;
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
         document.getElementById('service-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('srv-submit-btn');
@@ -376,6 +412,10 @@
 
                 submitBtn.innerText = 'Išsaugoma užklausa...';
                 const selectedOption = srvType.options[srvType.selectedIndex];
+
+                let socialVal = document.getElementById('srv-social').value || '';
+                let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
+                let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
 
                 const requestData = {
                     clientName: document.getElementById('srv-name').value,
@@ -419,14 +459,18 @@
                     message: { subject: emailData.subject, html: emailData.html }
                 });
 
-                const tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${requestData.socialProfile}\n📍 Vieta: ${requestData.location}\n🖼 Nuotraukos: ${uploadedUrls.length} vnt.`;
+                let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${socialLink}\n📍 Vieta: ${requestData.location}`;
+                if (uploadedUrls.length > 0) {
+                    tgMessage += `\n\n🖼 Nuotraukos:\n${uploadedUrls.join('\n')}`;
+                }
+
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ chat_id: chatId, text: tgMessage })
                 }).catch(err => console.error(err));
 
-                document.getElementById('service-form').style.display = 'none';
+                document.getElementById('form-container').style.display = 'none';
                 document.getElementById('service-success').style.display = 'block';
                 window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
             } catch (error) {
