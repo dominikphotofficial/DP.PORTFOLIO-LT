@@ -64,7 +64,7 @@
     <section class="tfp-section">
         <div class="booking-layout">
             <div class="info-column fade-in-up">
-                <h1>DP.PORTFOLIO — TFP</h1>
+                <h1>TFP Fotosesija</h1>
                 <div class="divider" style="margin: 0 0 30px 0;"></div>
                 <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
                 <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
@@ -133,10 +133,9 @@
         </div>
     </section>
 
-    <footer style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); margin-top: 60px;">
-        <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">DP.PORTFOLIO Kontaktai</h3>
-        <p style="font-family: var(--font-body); color: rgba(26, 43, 43, 0.6); font-size: 16px;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com</p>
-        <div class="lang-switcher" style="margin-top: 20px;">
+    <footer>
+        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+        <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
             <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
@@ -155,8 +154,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { buildEmail } from './email-templates.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -177,31 +177,6 @@
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
         const lang = 'lt';
-
-        const baseStyle = `font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1A2B2B; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 30px 20px; background-color: #ffffff;`;
-        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
-        const footerHtml = `<hr style="border: none; border-top: 1px solid #E5ECE9; margin: 40px 0 20px 0;"><p style="font-size: 0.85em; color: #888888; margin: 0; line-height: 1.6;"><b>DP.PORTFOLIO</b><br>Dominik Šuškevič<br>Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a></p></div>`;
-
-        const templates = {
-            lt: {
-                New: {
-                    subject: "DP.PORTFOLIO | Nauja TFP užklausa",
-                    html: `<div style="${baseStyle}"><h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2><p style="font-size: 16px;">Nuoširdžiai dėkojame, kad pasidalinote savo kūrybine vizija. Sėkmingai gavome jūsų <b>TFP fotosesijos</b> užklausą.</p><p style="font-size: 16px;">Artimiausiu metu atidžiai peržiūrėsime jūsų idėją ir susisieksime su jumis.</p><div style="${boxStyle}"><p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užklausos detalės:</b></p><p style="margin: 0 0 8px 0;"><b>Data ir laikas:</b> {{date_time}}</p><p style="margin: 0 0 8px 0;"><b>Vieta:</b> {{location}}</p><p style="margin: 0;"><b>Idėja:</b> {{idea}}</p></div><p style="font-size: 16px;">Jei turite papildomų klausimų, drąsiai atsakykite į šį laišką. Gražios dienos!</p>${footerHtml}`
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
 
         let selectedFiles = [];
         const photoInput = document.getElementById('tfp-photos');
@@ -227,15 +202,14 @@
             photoInput.value = ''; 
         });
 
-        getRedirectResult(auth).then((result) => {
-            if (result && result.user) {
+        document.getElementById('google-login-btn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
                 if(result.user.displayName) document.getElementById('tfp-name').value = result.user.displayName;
                 if(result.user.email) document.getElementById('tfp-email').value = result.user.email;
+            } catch (error) {
+                console.error(error);
             }
-        }).catch((error) => console.error(error));
-
-        document.getElementById('google-login-btn').addEventListener('click', () => {
-            signInWithRedirect(auth, googleProvider);
         });
 
         document.getElementById('tfp-firebase-form').addEventListener('submit', async (e) => {
