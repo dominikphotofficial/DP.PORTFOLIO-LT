@@ -47,6 +47,8 @@
         .logout-btn-header { background: #d9534f; color: white; padding: 8px 20px; border-radius: 4px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; border: none; cursor: pointer; transition: 0.3s; }
         .logout-btn-header:hover { background: #c9302c; }
 
+        .field-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px; opacity: 0.8; }
+
         @media (max-width: 768px) {
             .req-body { grid-template-columns: 1fr; gap: 15px; }
             .req-actions { flex-direction: column; }
@@ -96,11 +98,22 @@
     <div id="email-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 style="font-family: var(--font-heading); margin-bottom: 10px; font-size: 1.8rem; font-weight: 300; letter-spacing: 3px;">Redaguoti laišką</h2>
-            <p style="font-family: var(--font-body); margin-bottom: 30px; opacity: 0.8;">Čia galite pakeisti tekstą prieš išsiunčiant laišką klientui. Jei statusas "Completed", žemiau matysite sugeneruotą PIN kodą.</p>
-            <label style="display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px;">Tema (Subject)</label>
-            <input type="text" id="modal-subject" class="admin-select" style="margin-bottom: 25px; background: #fff;">
-            <label style="display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px;">Laiško turinys (HTML)</label>
-            <textarea id="modal-html" class="admin-select" style="height: 350px; margin-bottom: 30px; font-family: monospace; font-size: 14px; line-height: 1.5; background: #fff;"></textarea>
+            <p style="font-family: var(--font-body); margin-bottom: 30px; opacity: 0.8;">Pakeiskite tekstą prieš išsiunčiant. Jei statusas "Completed", galite nurodyti galerijos PIN kodą.</p>
+            
+            <label class="field-label">Tema (Subject)</label>
+            <input type="text" id="modal-subject" class="admin-select" style="margin-bottom: 20px;">
+            
+            <label class="field-label">Pasisveikinimas</label>
+            <input type="text" id="modal-greeting" class="admin-select" style="margin-bottom: 20px;">
+            
+            <label class="field-label">Pagrindinis tekstas</label>
+            <textarea id="modal-text" class="admin-select" style="height: 150px; margin-bottom: 20px;"></textarea>
+            
+            <div id="modal-pin-container" style="display: none;">
+                <label class="field-label">Galerijos PIN kodas</label>
+                <input type="text" id="modal-pin" class="admin-select" style="margin-bottom: 20px; font-weight: bold; letter-spacing: 2px;">
+            </div>
+            
             <div class="req-actions" style="border: none; padding: 0; margin: 0; justify-content: flex-end;">
                 <button class="admin-btn-delete" onclick="closeModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
                 <button class="admin-btn" id="modal-send-btn">Patvirtinti ir Siųsti</button>
@@ -108,15 +121,11 @@
         </div>
     </div>
 
-    <footer>
-        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
-    </footer>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { buildEmail } from './email-templates.js';
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getDefaultContent, getGalleryHtml, buildFinalHtml } from './email-templates.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -140,12 +149,10 @@
         const logoutBtn = document.getElementById('logout-btn');
         let pendingEmailData = null;
 
-        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-            } catch (error) {
-                console.error(error);
-            }
+        getRedirectResult(auth).catch((error) => console.error("Auth Error:", error));
+
+        document.getElementById('admin-login-google-btn').addEventListener('click', () => {
+            signInWithRedirect(auth, googleProvider);
         });
 
         document.getElementById('admin-login-email-btn').addEventListener('click', () => {
@@ -346,15 +353,21 @@
             else if (newStatus === 'Cancelled') templateKey = 'TFPCancelled';
             else if (newStatus === 'Completed') templateKey = 'TFPCompleted';
 
-            const galleryUrl = "https://client.dominikphotofficial.lt/gallery.html";
-            const galleryPin = Math.floor(1000 + Math.random() * 9000).toString();
+            const dataObj = { name, date_time: newDate, location: newLoc, idea, status: newStatus };
+            const content = getDefaultContent(templateKey, lang, dataObj);
 
-            const emailData = buildEmail(templateKey, lang, { name, date_time: newDate, location: newLoc, idea, status: newStatus, galleryUrl, galleryPin });
+            document.getElementById('modal-subject').value = content.subject;
+            document.getElementById('modal-greeting').value = content.greeting;
+            document.getElementById('modal-text').value = content.text;
 
-            document.getElementById('modal-subject').value = emailData.subject;
-            document.getElementById('modal-html').value = emailData.html;
+            if (newStatus === 'Completed') {
+                document.getElementById('modal-pin-container').style.display = 'block';
+                document.getElementById('modal-pin').value = Math.floor(1000 + Math.random() * 9000).toString();
+            } else {
+                document.getElementById('modal-pin-container').style.display = 'none';
+            }
             
-            pendingEmailData = { collection: 'tfp_requests', id, email, newStatus, newDate, newLoc, galleryPin };
+            pendingEmailData = { collection: 'tfp_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml };
             document.getElementById('email-modal').classList.add('active');
         };
 
@@ -370,17 +383,21 @@
             else if (newStatus === 'Completed') templateKey = 'ServiceCompleted';
             else if (newStatus === 'Cancelled') templateKey = 'ServiceCancelled';
 
-            const galleryUrl = "https://client.dominikphotofficial.lt/gallery.html";
-            const galleryPin = Math.floor(1000 + Math.random() * 9000).toString();
+            const dataObj = { name, serviceName, status: newStatus, date_time: newDate, location: newLoc, finalPrice, depositAmount };
+            const content = getDefaultContent(templateKey, lang, dataObj);
 
-            const emailData = buildEmail(templateKey, lang, { 
-                name, serviceName, status: newStatus, date_time: newDate, location: newLoc, finalPrice, depositAmount, galleryUrl, galleryPin 
-            });
+            document.getElementById('modal-subject').value = content.subject;
+            document.getElementById('modal-greeting').value = content.greeting;
+            document.getElementById('modal-text').value = content.text;
 
-            document.getElementById('modal-subject').value = emailData.subject;
-            document.getElementById('modal-html').value = emailData.html;
+            if (newStatus === 'Completed') {
+                document.getElementById('modal-pin-container').style.display = 'block';
+                document.getElementById('modal-pin').value = Math.floor(1000 + Math.random() * 9000).toString();
+            } else {
+                document.getElementById('modal-pin-container').style.display = 'none';
+            }
             
-            pendingEmailData = { collection: 'service_requests', id, email, newStatus, newDate, newLoc, galleryPin };
+            pendingEmailData = { collection: 'service_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml };
             document.getElementById('email-modal').classList.add('active');
         };
 
@@ -411,7 +428,17 @@
 
             try {
                 const subject = document.getElementById('modal-subject').value;
-                const html = document.getElementById('modal-html').value;
+                const greeting = document.getElementById('modal-greeting').value;
+                const text = document.getElementById('modal-text').value;
+
+                let galleryHtml = '';
+                let pin = '';
+                if (pendingEmailData.newStatus === 'Completed') {
+                    pin = document.getElementById('modal-pin').value;
+                    galleryHtml = getGalleryHtml('lt', "https://client.dominikphotofficial.lt/gallery.html", pin);
+                }
+
+                const finalHtml = buildFinalHtml(greeting, text, pendingEmailData.boxHtml, galleryHtml);
 
                 let updatePayload = {};
                 if(pendingEmailData.collection === 'tfp_requests') {
@@ -421,14 +448,14 @@
                 }
 
                 if (pendingEmailData.newStatus === 'Completed') {
-                    updatePayload.galleryPin = pendingEmailData.galleryPin;
+                    updatePayload.galleryPin = pin;
                 }
 
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
                 await addDoc(collection(db, "mail"), { 
                     to: pendingEmailData.email, 
-                    message: { subject: subject, html: html } 
+                    message: { subject: subject, html: finalHtml } 
                 });
 
                 alert("Išsaugota ir laiškas išsiųstas!");
