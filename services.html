@@ -8,32 +8,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Paslaugos | DP.PORTFOLIO</title>
-    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="DP.PORTFOLIO">
-    <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
-    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
-    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
-    <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="800">
-    <meta property="og:locale" content="lt_LT">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <style>
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto; }
         .service-card { background-color: var(--surface-color); border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.05); overflow: hidden; transition: transform 0.4s ease, box-shadow 0.4s ease; display: flex; flex-direction: column; }
         .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(17, 57, 57, 0.08); }
-        .service-header { background: var(--accent-color); color: var(--bg-color); padding: 30px 20px; text-align: center; position: relative; }
+        .service-img { width: 100%; height: 220px; object-fit: cover; }
+        .service-header { background: var(--accent-color); color: var(--bg-color); padding: 25px 20px; text-align: center; position: relative; }
         .service-badge { position: absolute; top: 15px; right: 15px; background: #d9534f; color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-family: var(--font-heading); letter-spacing: 1px; text-transform: uppercase; }
-        .service-title { font-family: var(--font-heading); font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
-        .service-price { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 300; }
-        .service-price span { font-size: 1rem; opacity: 0.7; }
+        .service-title { font-family: var(--font-heading); font-size: 1.3rem; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
+        .service-price { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 300; }
+        .service-price span { font-size: 0.9rem; opacity: 0.7; }
         .service-body { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
         .service-list { list-style: none; padding: 0; margin: 0 0 30px 0; font-family: var(--font-body); font-size: 1.05rem; line-height: 2; color: var(--text-color); flex-grow: 1; }
         .service-list li { position: relative; padding-left: 25px; margin-bottom: 10px; }
@@ -51,8 +40,9 @@
         .form-input { width: 100%; padding: 12px 0; background: transparent; border: none; border-bottom: 1px solid rgba(17, 57, 57, 0.2); font-family: var(--font-body); font-size: 16px; color: var(--text-color); transition: var(--transition); outline: none; border-radius: 0; resize: vertical; }
         .form-input:focus { border-bottom-color: var(--accent-color); }
         .form-input::placeholder { color: rgba(26, 43, 43, 0.3); font-family: var(--font-body); }
-        .discount-dot { position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background-color: #d9534f; border-radius: 50%; }
-        .has-discount { font-weight: bold; color: #d9534f !important; }
+        .gallery-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 60px; }
+        .gallery-preview-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; transition: transform 0.4s ease; }
+        .gallery-preview-grid img:hover { transform: scale(1.03); }
     </style>
 </head>
 <body>
@@ -82,7 +72,7 @@
         </nav>
     </div>
 
-    <section class="container" style="padding-top: 160px; padding-bottom: 60px;">
+    <section class="container" style="padding-top: 160px; padding-bottom: 20px;">
         <div class="fade-in-up" style="max-width: 800px; margin: 0 auto 50px auto; text-align: center;">
             <h1 style="font-family: var(--font-heading); text-transform: uppercase; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 5px; margin-bottom: 25px; color: var(--text-color); font-weight: 300;">Paslaugos</h1>
             <div class="divider"></div>
@@ -93,6 +83,7 @@
 
         <div class="services-grid">
             <div class="service-card fade-in-up">
+                <img src="https://i.postimg.cc/tgDGWFNT/paslaugos-fotosesijos-01.jpg" class="service-img" alt="Mini Fotosesija">
                 <div class="service-header">
                     <h3 class="service-title">Mini Fotosesija</h3>
                     <div class="service-price">5 € <span>/ nuo</span></div>
@@ -104,11 +95,12 @@
                         <li>Nedidelis nuotraukų kiekis</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('photo_mini')">Užsakyti</a>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('photo_mini')">Užsakyti</button>
                 </div>
             </div>
 
             <div class="service-card fade-in-up">
+                <img src="https://i.postimg.cc/Dz7KSxL3/paslaugos-fotosesijos-02.jpg" class="service-img" alt="Standartinė Fotosesija">
                 <div class="service-header">
                     <div class="service-badge">Populiariausias</div>
                     <h3 class="service-title">Standartinė</h3>
@@ -121,11 +113,12 @@
                         <li>Optimalus nuotraukų kiekis</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="selectService('photo_standard')">Užsakyti</a>
+                    <button class="cta-button" style="width: 100%; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="selectService('photo_standard')">Užsakyti</button>
                 </div>
             </div>
 
             <div class="service-card fade-in-up">
+                <img src="https://i.postimg.cc/3w3Hktmw/paslaugos-fotosesijos-03.jpg" class="service-img" alt="Maksi Fotosesija">
                 <div class="service-header">
                     <h3 class="service-title">Maksi (100+ Foto)</h3>
                     <div class="service-price">20 € <span>/ maks.</span></div>
@@ -138,11 +131,12 @@
                         <li>Kaina mažėja, jei nuotraukų mažiau</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('photo_maxi')">Užsakyti</a>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('photo_maxi')">Užsakyti</button>
                 </div>
             </div>
 
             <div class="service-card fade-in-up">
+                <img src="https://i.postimg.cc/DZsSRbfJ/paslaugos-fotosesijos-06.jpg" class="service-img" alt="Videografija">
                 <div class="service-header">
                     <h3 class="service-title">Videografija</h3>
                     <div class="service-price">30 € <span>/ nuo</span></div>
@@ -153,8 +147,19 @@
                         <li>Profesionalus montažas</li>
                         <li>Be nuolaidų</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('video_basic')">Užsakyti</a>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('video_basic')">Užsakyti</button>
                 </div>
+            </div>
+        </div>
+
+        <div class="fade-in-up" style="max-width: 1200px; margin: 0 auto 60px auto; text-align: center;">
+            <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 30px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Darbų Pavyzdžiai</h2>
+            <div class="gallery-preview-grid">
+                <img src="https://i.postimg.cc/tgn0qRHR/zirgai-zeimenos-01.jpg" alt="Pavyzdys 1">
+                <img src="https://i.postimg.cc/PqvGXfk5/zirgai-zeimenos-02.jpg" alt="Pavyzdys 2">
+                <img src="https://i.postimg.cc/nLyyC8HF/zirgai-zeimenos-03.jpg" alt="Pavyzdys 3">
+                <img src="https://i.postimg.cc/8Cf8pkVg/zirgai-zeimenos-04.jpg" alt="Pavyzdys 4">
+                <img src="https://i.postimg.cc/vmxRY8wk/zirgai-zeimenos-05.jpg" alt="Pavyzdys 5">
             </div>
         </div>
     </section>
@@ -290,6 +295,7 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { buildEmail } from './email-templates.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -311,42 +317,6 @@
         const chatId = "7040523282";
         const lang = 'lt';
 
-        const emailWrapperStart = `<div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px 4px 0 0; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">`;
-        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
-        const emailWrapperEnd = `</div><div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px 40px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); border-radius: 0 0 4px 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);"><h3 style="color: #113939; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 10px 0; font-size: 1em; font-weight: 600;">DP.PORTFOLIO Kontaktai</h3><p style="font-size: 0.9em; color: #555555; margin: 0; line-height: 1.6;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com<br>Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a></p></div></div>`;
-
-        const templates = {
-            lt: {
-                ServiceNew: {
-                    subject: "DP.PORTFOLIO | Užklausa gauta: {{serviceName}}",
-                    html: `${emailWrapperStart}
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
-                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Šis laiškas patvirtina, kad sėkmingai gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
-                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Artimiausiu metu peržiūrėsime jūsų pageidavimus ir susisieksime dėl detalių patvirtinimo.</p>
-                        <div style="${boxStyle}">
-                            <p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Preliminari informacija:</b></p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
-                        </div>
-                        <p style="font-size: 16px; color: #d9534f; line-height: 1.6;"><b>Svarbu:</b> Kol kas jokių mokėjimų atlikti nereikia. Laukite kito laiško su galutiniu patvirtinimu.</p>
-                    ${emailWrapperEnd}`
-                }
-            }
-        };
-
-        function buildEmail(templateType, lang, data) {
-            const safeLang = templates[lang] ? lang : 'lt';
-            let subject = templates[safeLang][templateType].subject;
-            let html = templates[safeLang][templateType].html;
-            for (const key in data) {
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                html = html.replace(regex, data[key] || '');
-                subject = subject.replace(regex, data[key] || '');
-            }
-            return { subject, html };
-        }
-
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
         let selectedDateMonth = -1;
@@ -356,6 +326,7 @@
             const select = document.getElementById('srv-type');
             select.value = val;
             select.dispatchEvent(new Event('change'));
+            document.getElementById('service-booking').scrollIntoView({ behavior: 'smooth' });
         };
 
         const srvType = document.getElementById('srv-type');
@@ -372,8 +343,9 @@
             onDayCreate: function(dObj, dStr, fp, dayElem) {
                 const date = dayElem.dateObj;
                 if (date.getMonth() === 8 && date.getDate() >= 2 && date.getDate() <= 27) {
-                    dayElem.innerHTML += '<span class="discount-dot"></span>';
-                    dayElem.classList.add('has-discount');
+                    dayElem.innerHTML += '<span class="discount-dot" style="position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; background-color:#d9534f; border-radius:50%;"></span>';
+                    dayElem.style.fontWeight = 'bold';
+                    dayElem.style.color = '#d9534f';
                 }
             },
             onChange: function(selectedDates) {
