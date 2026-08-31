@@ -128,7 +128,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getDefaultContent, getGalleryHtml, buildFinalHtml } from './email-templates.js';
 
         const firebaseConfig = {
@@ -153,10 +153,12 @@
         const logoutBtn = document.getElementById('logout-btn');
         let pendingEmailData = null;
 
-        getRedirectResult(auth).catch((error) => console.error("Auth Error:", error));
-
-        document.getElementById('admin-login-google-btn').addEventListener('click', () => {
-            signInWithRedirect(auth, googleProvider);
+        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) {
+                console.error(error);
+            }
         });
 
         document.getElementById('admin-login-email-btn').addEventListener('click', () => {
@@ -226,11 +228,11 @@
                     
                     let photosHtml = '';
                     if (data.reference_photos && data.reference_photos.length > 0) {
-                        photosHtml = '<p><b>Referencijos:</b><br><div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:5px;">';
+                        photosHtml = '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(17,57,57,0.1);"><p style="margin-bottom: 10px;"><b>Prisegtos nuotraukos (Referencijos):</b></p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
                         data.reference_photos.forEach(url => {
-                            photosHtml += `<a href="${url}" target="_blank"><img src="${url}" style="width:60px; height:60px; object-fit:cover; border-radius:4px; border:1px solid #ccc;"></a>`;
+                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
                         });
-                        photosHtml += '</div></p>';
+                        photosHtml += '</div></div>';
                     }
 
                     reqDiv.innerHTML = `
@@ -244,7 +246,6 @@
                                 <p><b>Instagram:</b><br>${data.instagram}</p>
                                 <p><b>Idėja:</b><br>${data.idea}</p>
                                 <p><b>Papildomai:</b><br>${data.extra_info || '-'}</p>
-                                ${photosHtml}
                             </div>
                             <div>
                                 <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
@@ -259,6 +260,7 @@
                                 </select></p>
                             </div>
                         </div>
+                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('tfp_requests', '${docSnap.id}', '')">Tik Išsaugoti</button>
@@ -294,11 +296,11 @@
                     
                     let photosHtml = '';
                     if (data.reference_photos && data.reference_photos.length > 0) {
-                        photosHtml = '<p><b>Referencijos:</b><br><div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:5px;">';
+                        photosHtml = '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(17,57,57,0.1);"><p style="margin-bottom: 10px;"><b>Prisegtos nuotraukos (Referencijos):</b></p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
                         data.reference_photos.forEach(url => {
-                            photosHtml += `<a href="${url}" target="_blank"><img src="${url}" style="width:60px; height:60px; object-fit:cover; border-radius:4px; border:1px solid #ccc;"></a>`;
+                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
                         });
-                        photosHtml += '</div></p>';
+                        photosHtml += '</div></div>';
                     }
 
                     reqDiv.innerHTML = `
@@ -313,7 +315,6 @@
                                 <p><b>Telefonas / Social:</b><br>${data.phone} / ${data.socialProfile}</p>
                                 <p><b>Apmokėjimas:</b><br>${data.paymentMethod}</p>
                                 <p><b>Idėja / Info:</b><br>${data.additionalInformation}</p>
-                                ${photosHtml}
                             </div>
                             <div>
                                 <p><b>Kaina:</b> ${data.finalPrice} € (Avansas: ${data.depositAmount} €)</p>
@@ -331,6 +332,7 @@
                                 </select></p>
                             </div>
                         </div>
+                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}', ${data.finalPrice}, ${data.depositAmount})">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('service_requests', '${docSnap.id}', 'srv-')">Tik Išsaugoti</button>
