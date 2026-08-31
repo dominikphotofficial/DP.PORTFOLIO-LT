@@ -16,7 +16,7 @@ const texts = {
         ServiceCancelled: { sub: "DP.PORTFOLIO | Užsakymas atšauktas", txt: "Informuojame, kad jūsų užsakymas buvo atšauktas.\n\nJei tai įvyko per klaidą arba turite klausimų, prašome susisiekti su mumis." },
         ServiceStatusUpdate: { sub: "DP.PORTFOLIO | Užsakymo statusas atnaujintas", txt: "Informuojame, kad jūsų užsakymo statusas buvo atnaujintas.\n\nJei turite klausimų, tiesiog atsakykite į šį laišką." },
         labels: { date: "Data ir laikas:", loc: "Vieta:", price: "Bendra kaina:", dep: "Avansas (50%):", srv: "Paslauga:", status: "Naujas statusas:" },
-        gallery: { title: "Jūsų nuotraukos paruoštos!", btn: "Atidaryti galeriją", pinText: "Jūsų asmeninis PIN kodas:" }
+        gallery: { title: "Jūsų nuotraukos paruoštos!", btn: "Atidaryti galeriją" }
     },
     en: {
         greeting: "Hello, {{name}}!",
@@ -31,7 +31,7 @@ const texts = {
         ServiceCancelled: { sub: "DP.PORTFOLIO | Order Cancelled", txt: "We would like to inform you that your order has been cancelled.\n\nIf this was a mistake or if you have any questions, please contact us." },
         ServiceStatusUpdate: { sub: "DP.PORTFOLIO | Order Status Updated", txt: "We would like to inform you that the status of your order has been updated.\n\nIf you have any questions, simply reply to this email." },
         labels: { date: "Date & Time:", loc: "Location:", price: "Total Price:", dep: "Deposit (50%):", srv: "Service:", status: "New Status:" },
-        gallery: { title: "Your photos are ready!", btn: "Open Gallery", pinText: "Your personal PIN code:" }
+        gallery: { title: "Your photos are ready!", btn: "Open Gallery" }
     },
     ru: {
         greeting: "Здравствуйте, {{name}}!",
@@ -46,7 +46,7 @@ const texts = {
         ServiceCancelled: { sub: "DP.PORTFOLIO | Заказ отменен", txt: "Сообщаем, что ваш заказ был отменен.\n\nЕсли это произошло по ошибке или у вас есть вопросы, пожалуйста, свяжитесь с нами." },
         ServiceStatusUpdate: { sub: "DP.PORTFOLIO | Статус заказа обновлен", txt: "Хотим сообщить, что статус вашего заказа был обновлен.\n\nЕсли у вас есть вопросы, просто ответьте на это письмо." },
         labels: { date: "Дата и время:", loc: "Место:", price: "Общая стоимость:", dep: "Аванс (50%):", srv: "Услуга:", status: "Новый статус:" },
-        gallery: { title: "Ваши фотографии готовы!", btn: "Открыть галерею", pinText: "Ваш персональный PIN-код:" }
+        gallery: { title: "Ваши фотографии готовы!", btn: "Открыть галерею" }
     }
 };
 
@@ -80,15 +80,13 @@ export function getDefaultContent(templateType, lang, data) {
     return { subject, greeting, text, boxHtml };
 }
 
-export function getGalleryHtml(lang, url, pin) {
+export function getGalleryHtml(lang, url) {
     const safeLang = texts[lang] ? lang : 'en';
     const t = texts[safeLang].gallery;
     return `
         <div style="background: #FBF9F6; padding: 30px 20px; border-radius: 4px; text-align: center; margin: 25px 0; border: 1px solid #E5ECE9;">
             <p style="margin: 0 0 20px 0; color: #1A2B2B; font-size: 18px; font-weight: bold;">${t.title}</p>
-            <a href="${url}" style="display: inline-block; background-color: #113939; color: #ffffff; padding: 15px 30px; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 14px; border-radius: 4px; margin-bottom: 20px;">${t.btn}</a>
-            <p style="margin: 0; color: #1A2B2B; font-size: 16px;">${t.pinText}</p>
-            <p style="margin: 5px 0 0 0; color: #113939; font-size: 24px; font-weight: bold; letter-spacing: 4px;">${pin}</p>
+            <a href="${url}" style="display: inline-block; background-color: #113939; color: #ffffff; padding: 15px 30px; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 14px; border-radius: 4px;">${t.btn}</a>
         </div>
     `;
 }
