@@ -8,6 +8,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Paslaugos | DP.PORTFOLIO</title>
+    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DP.PORTFOLIO">
+    <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
+    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
+    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
+    <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="800">
+    <meta property="og:locale" content="lt_LT">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
@@ -39,6 +51,8 @@
         .form-input { width: 100%; padding: 12px 0; background: transparent; border: none; border-bottom: 1px solid rgba(17, 57, 57, 0.2); font-family: var(--font-body); font-size: 16px; color: var(--text-color); transition: var(--transition); outline: none; border-radius: 0; resize: vertical; }
         .form-input:focus { border-bottom-color: var(--accent-color); }
         .form-input::placeholder { color: rgba(26, 43, 43, 0.3); font-family: var(--font-body); }
+        .discount-dot { position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background-color: #d9534f; border-radius: 50%; }
+        .has-discount { font-weight: bold; color: #d9534f !important; }
     </style>
 </head>
 <body>
@@ -88,9 +102,9 @@
                         <li>Greita fotosesija</li>
                         <li>1 pasirinkta lokacija</li>
                         <li>Nedidelis nuotraukų kiekis</li>
-                        <li>Taikoma 5€ nuolaida (25-30 d.)</li>
+                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;">Užsakyti</a>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('photo_mini')">Užsakyti</a>
                 </div>
             </div>
 
@@ -105,9 +119,9 @@
                         <li>Pilna fotosesija</li>
                         <li>Keli įvaizdžiai ir lokacijos</li>
                         <li>Optimalus nuotraukų kiekis</li>
-                        <li>Taikoma 5€ nuolaida (25-30 d.)</li>
+                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px; background: var(--accent-color); color: var(--bg-color);">Užsakyti</a>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="selectService('photo_standard')">Užsakyti</a>
                 </div>
             </div>
 
@@ -122,9 +136,9 @@
                         <li>Neribotas lokacijų skaičius</li>
                         <li>Iki 100 apdorotų nuotraukų</li>
                         <li>Kaina mažėja, jei nuotraukų mažiau</li>
-                        <li>Taikoma 5€ nuolaida (25-30 d.)</li>
+                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;">Užsakyti</a>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('photo_maxi')">Užsakyti</a>
                 </div>
             </div>
 
@@ -139,7 +153,7 @@
                         <li>Profesionalus montažas</li>
                         <li>Be nuolaidų</li>
                     </ul>
-                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;">Užsakyti</a>
+                    <a href="#service-booking" class="cta-button" style="text-align: center; margin-top: 0; padding: 15px;" onclick="selectService('video_basic')">Užsakyti</a>
                 </div>
             </div>
         </div>
@@ -154,7 +168,7 @@
             
             <div id="service-success" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
                 <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Užklausa sėkmingai išsiųsta!</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
+                <p style="font-family: var(--font-body); font-size: 16px; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
             </div>
 
             <div id="form-container">
@@ -209,7 +223,7 @@
 
                     <div class="price-calculator" id="price-calc" style="display: none;">
                         <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
-                        <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (25-30 d.):</span> <span id="calc-discount-val">-0.00 €</span></div>
+                        <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (Rugsėjo 2-27 d.):</span> <span id="calc-discount-val">-0.00 €</span></div>
                         <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
                         <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
                         <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
@@ -272,19 +286,77 @@
     <script src="script.js"></script>
 
     <script type="module">
-        import { db, auth, storage, googleProvider } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
         const lang = 'lt';
 
+        const emailWrapperStart = `<div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"><div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px 4px 0 0; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">`;
+        const boxStyle = `border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px;`;
+        const emailWrapperEnd = `</div><div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px 40px; text-align: center; border-top: 1px solid rgba(17, 57, 57, 0.1); border-radius: 0 0 4px 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);"><h3 style="color: #113939; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 10px 0; font-size: 1em; font-weight: 600;">DP.PORTFOLIO Kontaktai</h3><p style="font-size: 0.9em; color: #555555; margin: 0; line-height: 1.6;">Dominik Šuškevič | dominikphotofficial.lt@gmail.com<br>Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a></p></div></div>`;
+
+        const templates = {
+            lt: {
+                ServiceNew: {
+                    subject: "DP.PORTFOLIO | Užklausa gauta: {{serviceName}}",
+                    html: `${emailWrapperStart}
+                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, {{name}}!</h2>
+                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Šis laiškas patvirtina, kad sėkmingai gavome jūsų užklausą paslaugai: <strong>{{serviceName}}</strong>.</p>
+                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Artimiausiu metu peržiūrėsime jūsų pageidavimus ir susisieksime dėl detalių patvirtinimo.</p>
+                        <div style="${boxStyle}">
+                            <p style="margin: 0 0 15px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Preliminari informacija:</b></p>
+                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Bendra kaina:</b> {{finalPrice}} €</p>
+                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Avansas (50%):</b> {{depositAmount}} €</p>
+                            <p style="margin: 0; color: #1A2B2B;"><b>Pasirinktas apmokėjimo būdas:</b> {{paymentMethod}}</p>
+                        </div>
+                        <p style="font-size: 16px; color: #d9534f; line-height: 1.6;"><b>Svarbu:</b> Kol kas jokių mokėjimų atlikti nereikia. Laukite kito laiško su galutiniu patvirtinimu.</p>
+                    ${emailWrapperEnd}`
+                }
+            }
+        };
+
+        function buildEmail(templateType, lang, data) {
+            const safeLang = templates[lang] ? lang : 'lt';
+            let subject = templates[safeLang][templateType].subject;
+            let html = templates[safeLang][templateType].html;
+            for (const key in data) {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                html = html.replace(regex, data[key] || '');
+                subject = subject.replace(regex, data[key] || '');
+            }
+            return { subject, html };
+        }
+
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
+        let selectedDateMonth = -1;
         let selectedDateDay = 0;
+
+        window.selectService = function(val) {
+            const select = document.getElementById('srv-type');
+            select.value = val;
+            select.dispatchEvent(new Event('change'));
+        };
 
         const srvType = document.getElementById('srv-type');
         const srvPayment = document.getElementById('srv-payment');
@@ -297,9 +369,18 @@
             minDate: "today", 
             disableMobile: true, 
             locale: "lt",
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const date = dayElem.dateObj;
+                if (date.getMonth() === 8 && date.getDate() >= 2 && date.getDate() <= 27) {
+                    dayElem.innerHTML += '<span class="discount-dot"></span>';
+                    dayElem.classList.add('has-discount');
+                }
+            },
             onChange: function(selectedDates) {
                 if(selectedDates.length > 0) {
-                    selectedDateDay = selectedDates[0].getDate();
+                    const d = selectedDates[0];
+                    selectedDateMonth = d.getMonth();
+                    selectedDateDay = d.getDate();
                     calculatePrice();
                 }
             }
@@ -335,7 +416,7 @@
             let original = basePrice;
             let discount = 0;
 
-            if (!isVideo && selectedDateDay >= 25 && selectedDateDay <= 30) {
+            if (!isVideo && selectedDateMonth === 8 && selectedDateDay >= 2 && selectedDateDay <= 27) {
                 discount = 5;
                 document.getElementById('row-discount').style.display = 'flex';
             } else {
