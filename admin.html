@@ -12,19 +12,15 @@
         .stat-box { background: var(--surface-color); padding: 20px; border-radius: 8px; flex: 1; min-width: 200px; border: 1px solid rgba(17, 57, 57, 0.05); text-align: center; }
         .stat-box h3 { font-family: var(--font-heading); font-size: 1rem; color: rgba(26, 43, 43, 0.6); margin-bottom: 10px; }
         .stat-box p { font-family: var(--font-heading); font-size: 2.5rem; color: var(--accent-color); font-weight: 300; }
-        
         .tabs { display: flex; gap: 20px; margin-bottom: 40px; border-bottom: 1px solid rgba(17, 57, 57, 0.1); padding-bottom: 10px; }
         .tab-btn { background: transparent; border: none; font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; color: rgba(26, 43, 43, 0.5); transition: color 0.3s; }
         .tab-btn.active { color: var(--accent-color); font-weight: 500; }
-        
         .request-card { background: var(--surface-color); padding: 30px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(17, 57, 57, 0.05); border: 1px solid rgba(17, 57, 57, 0.05); }
         .req-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-heading); margin-bottom: 20px; border-bottom: 1px solid rgba(17, 57, 57, 0.1); padding-bottom: 15px; font-size: 1.2rem; }
         .req-body { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; font-family: var(--font-body); font-size: 1rem; color: var(--text-color); }
         .req-body p { margin-bottom: 12px; line-height: 1.6; }
-        
         .admin-select { padding: 12px; font-family: var(--font-body); border: 1px solid rgba(17, 57, 57, 0.2); outline: none; width: 100%; max-width: 100%; margin-top: 5px; background: #fff; color: var(--text-color); transition: border-color 0.3s; border-radius: 4px; font-size: 16px; }
         .admin-select:focus { border-color: var(--accent-color); }
-        
         .req-actions { margin-top: 25px; display: flex; gap: 15px; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 20px; flex-wrap: wrap; }
         .admin-btn { padding: 15px 30px; background: var(--accent-color); color: var(--bg-color); border: 1px solid var(--accent-color); cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; border-radius: 4px; }
         .admin-btn:hover { background: transparent; color: var(--accent-color); }
@@ -32,23 +28,17 @@
         .admin-btn-outline:hover { background: var(--accent-color); color: var(--bg-color); }
         .admin-btn-delete { padding: 15px 30px; background: transparent; color: #d9534f; border: 1px solid #d9534f; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; border-radius: 4px; }
         .admin-btn-delete:hover { background: #d9534f; color: #fff; }
-        
         #auth-section { max-width: 400px; margin: 150px auto; text-align: center; background: var(--surface-color); padding: 40px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .auth-divider { margin: 20px 0; font-family: var(--font-heading); color: rgba(26, 43, 43, 0.5); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; display: flex; align-items: center; }
         .auth-divider::before, .auth-divider::after { content: ""; flex: 1; border-bottom: 1px solid rgba(17, 57, 57, 0.1); margin: 0 10px; }
-        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 15, 0.8); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--bg-color); width: 90%; max-width: 800px; padding: 40px; border-radius: 8px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        
         .logout-btn-header { background: #d9534f; color: white; padding: 8px 20px; border-radius: 4px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; border: none; cursor: pointer; transition: 0.3s; }
         .logout-btn-header:hover { background: #c9302c; }
-
         .field-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px; opacity: 0.8; }
-
         @media (max-width: 768px) {
             .req-body { grid-template-columns: 1fr; gap: 15px; }
             .req-actions { flex-direction: column; }
@@ -121,14 +111,10 @@
         </div>
     </div>
 
-    <footer>
-        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
-    </footer>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getDefaultContent, getGalleryHtml, buildFinalHtml } from './email-templates.js';
 
         const firebaseConfig = {
@@ -153,12 +139,10 @@
         const logoutBtn = document.getElementById('logout-btn');
         let pendingEmailData = null;
 
-        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-            } catch (error) {
-                console.error(error);
-            }
+        getRedirectResult(auth).catch((error) => console.error(error));
+
+        document.getElementById('admin-login-google-btn').addEventListener('click', () => {
+            signInWithRedirect(auth, googleProvider);
         });
 
         document.getElementById('admin-login-email-btn').addEventListener('click', () => {
@@ -246,6 +230,7 @@
                                 <p><b>Instagram:</b><br>${data.instagram}</p>
                                 <p><b>Idėja:</b><br>${data.idea}</p>
                                 <p><b>Papildomai:</b><br>${data.extra_info || '-'}</p>
+                                ${photosHtml}
                             </div>
                             <div>
                                 <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
@@ -260,7 +245,6 @@
                                 </select></p>
                             </div>
                         </div>
-                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('tfp_requests', '${docSnap.id}', '')">Tik Išsaugoti</button>
@@ -298,7 +282,7 @@
                     if (data.reference_photos && data.reference_photos.length > 0) {
                         photosHtml = '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(17,57,57,0.1);"><p style="margin-bottom: 10px;"><b>Prisegtos nuotraukos (Referencijos):</b></p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
                         data.reference_photos.forEach(url => {
-                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
+                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:60px; height:60px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
                         });
                         photosHtml += '</div></div>';
                     }
@@ -315,6 +299,7 @@
                                 <p><b>Telefonas / Social:</b><br>${data.phone} / ${data.socialProfile}</p>
                                 <p><b>Apmokėjimas:</b><br>${data.paymentMethod}</p>
                                 <p><b>Idėja / Info:</b><br>${data.additionalInformation}</p>
+                                ${photosHtml}
                             </div>
                             <div>
                                 <p><b>Kaina:</b> ${data.finalPrice} € (Avansas: ${data.depositAmount} €)</p>
@@ -332,7 +317,6 @@
                                 </select></p>
                             </div>
                         </div>
-                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}', ${data.finalPrice}, ${data.depositAmount})">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('service_requests', '${docSnap.id}', 'srv-')">Tik Išsaugoti</button>
@@ -442,7 +426,7 @@
                 if (pendingEmailData.newStatus === 'Completed') {
                     galleryUrl = document.getElementById('modal-gallery-link').value;
                     if(!galleryUrl) {
-                        alert("Įveskite albumo nuorodą!");
+                        alert("Įveskite Wfolio albumo nuorodą!");
                         btn.disabled = false;
                         btn.innerText = 'Patvirtinti ir Siųsti';
                         return;
