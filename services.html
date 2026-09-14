@@ -8,6 +8,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Paslaugos | DP.PORTFOLIO</title>
+    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DP.PORTFOLIO">
+    <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
+    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
+    <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
+    <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="800">
+    <meta property="og:locale" content="lt_LT">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
@@ -43,8 +55,6 @@
         .gallery-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 60px; }
         .gallery-preview-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; transition: transform 0.4s ease; }
         .gallery-preview-grid img:hover { transform: scale(1.03); }
-        .discount-dot { position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background-color: #d9534f; border-radius: 50%; }
-        .has-discount { font-weight: bold; color: #d9534f !important; }
     </style>
 </head>
 <body>
@@ -97,7 +107,7 @@
                         <li>Nedidelis nuotraukų kiekis</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('photo_mini')">Užsakyti</button>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('photo_mini')">Užsakyti</button>
                 </div>
             </div>
 
@@ -115,7 +125,7 @@
                         <li>Optimalus nuotraukų kiekis</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <button class="cta-button" style="width: 100%; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="selectService('photo_standard')">Užsakyti</button>
+                    <button class="cta-button" style="width: 100%; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="window.selectService('photo_standard')">Užsakyti</button>
                 </div>
             </div>
 
@@ -133,7 +143,7 @@
                         <li>Kaina mažėja, jei nuotraukų mažiau</li>
                         <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
                     </ul>
-                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('photo_maxi')">Užsakyti</button>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('photo_maxi')">Užsakyti</button>
                 </div>
             </div>
 
@@ -149,7 +159,7 @@
                         <li>Profesionalus montažas</li>
                         <li>Be nuolaidų</li>
                     </ul>
-                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="selectService('video_basic')">Užsakyti</button>
+                    <button class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('video_basic')">Užsakyti</button>
                 </div>
             </div>
         </div>
@@ -295,7 +305,7 @@
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
         import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
 
@@ -303,10 +313,10 @@
         const chatId = "7040523282";
         const lang = 'lt';
 
+        window.selectedDateMonth = -1;
+        window.selectedDateDay = 0;
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
-        let selectedDateMonth = -1;
-        let selectedDateDay = 0;
 
         window.selectService = function(val) {
             const select = document.getElementById('srv-type');
@@ -315,56 +325,8 @@
             document.getElementById('service-booking').scrollIntoView({ behavior: 'smooth' });
         };
 
-        const srvType = document.getElementById('srv-type');
-        const srvPayment = document.getElementById('srv-payment');
-        const priceCalc = document.getElementById('price-calc');
-        const photoInput = document.getElementById('srv-photos');
-        const previewContainer = document.getElementById('srv-photo-preview-container');
-
-        flatpickr("#srv-date", { 
-            dateFormat: "Y-m-d", 
-            minDate: "today", 
-            disableMobile: true, 
-            locale: "lt",
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                const date = dayElem.dateObj;
-                if (date.getMonth() === 8 && date.getDate() >= 2 && date.getDate() <= 27) {
-                    dayElem.innerHTML += '<span class="discount-dot" style="position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; background-color:#d9534f; border-radius:50%;"></span>';
-                    dayElem.style.fontWeight = 'bold';
-                    dayElem.style.color = '#d9534f';
-                }
-            },
-            onChange: function(selectedDates) {
-                if(selectedDates.length > 0) {
-                    const d = selectedDates[0];
-                    selectedDateMonth = d.getMonth();
-                    selectedDateDay = d.getDate();
-                    calculatePrice();
-                }
-            }
-        });
-
-        photoInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                selectedFiles.push(file);
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const div = document.createElement('div');
-                    div.className = 'thumb-container';
-                    div.innerHTML = `<img src="${ev.target.result}" class="thumb-img"><button type="button" class="thumb-remove">&times;</button>`;
-                    div.querySelector('.thumb-remove').addEventListener('click', () => {
-                        selectedFiles = selectedFiles.filter(f => f !== file);
-                        div.remove();
-                    });
-                    previewContainer.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-            photoInput.value = ''; 
-        });
-
-        function calculatePrice() {
+        window.calculatePrice = function() {
+            const srvType = document.getElementById('srv-type');
             const selectedOption = srvType.options[srvType.selectedIndex];
             if(!selectedOption || !selectedOption.value) return;
 
@@ -374,7 +336,7 @@
             let original = basePrice;
             let discount = 0;
 
-            if (!isVideo && selectedDateMonth === 8 && selectedDateDay >= 2 && selectedDateDay <= 27) {
+            if (!isVideo && window.selectedDateMonth === 8 && window.selectedDateDay >= 2 && window.selectedDateDay <= 27) {
                 discount = 5;
                 document.getElementById('row-discount').style.display = 'flex';
             } else {
@@ -393,115 +355,165 @@
             document.getElementById('calc-deposit').innerText = deposit.toFixed(2) + ' €';
             document.getElementById('calc-remaining').innerText = remaining.toFixed(2) + ' €';
 
-            priceCalc.style.display = 'block';
-        }
+            document.getElementById('price-calc').style.display = 'block';
+        };
 
-        srvType.addEventListener('change', calculatePrice);
-
-        srvPayment.addEventListener('change', function() {
-            document.getElementById('info-bank').classList.remove('active');
-            document.getElementById('info-paypal').classList.remove('active');
-            if(this.value === 'Bank Transfer') document.getElementById('info-bank').classList.add('active');
-            if(this.value === 'PayPal') document.getElementById('info-paypal').classList.add('active');
-        });
-
-        document.getElementById('google-login-btn').addEventListener('click', async () => {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
-                if(result.user.email) document.getElementById('srv-email').value = result.user.email;
-            } catch (error) {
-                console.error(error);
-            }
-        });
-
-        document.getElementById('service-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = document.getElementById('srv-submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Siunčiama...';
-
-            let uploadedUrls = [];
-            try {
-                if (selectedFiles.length > 0) {
-                    submitBtn.innerText = 'Įkeliamos nuotraukos...';
-                    for (const file of selectedFiles) {
-                        const storageRef = ref(storage, `service_references/${Date.now()}_${file.name}`);
-                        await uploadBytes(storageRef, file);
-                        const url = await getDownloadURL(storageRef);
-                        uploadedUrls.push(url);
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#srv-date", { 
+                dateFormat: "Y-m-d", 
+                minDate: "today", 
+                disableMobile: true, 
+                locale: "lt",
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj;
+                    if (date.getMonth() === 8 && date.getDate() >= 2 && date.getDate() <= 27) {
+                        dayElem.innerHTML += '<span class="discount-dot" style="position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; background-color:#d9534f; border-radius:50%;"></span>';
+                        dayElem.style.fontWeight = 'bold';
+                        dayElem.style.color = '#d9534f';
+                    }
+                },
+                onChange: function(selectedDates) {
+                    if(selectedDates.length > 0) {
+                        window.selectedDateMonth = selectedDates[0].getMonth();
+                        window.selectedDateDay = selectedDates[0].getDate();
+                        window.calculatePrice();
                     }
                 }
+            });
 
-                submitBtn.innerText = 'Išsaugoma užklausa...';
-                const selectedOption = srvType.options[srvType.selectedIndex];
+            const srvType = document.getElementById('srv-type');
+            const srvPayment = document.getElementById('srv-payment');
+            const photoInput = document.getElementById('srv-photos');
+            const previewContainer = document.getElementById('srv-photo-preview-container');
 
-                let socialVal = document.getElementById('srv-social').value || '';
-                let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
-                let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
+            srvType.addEventListener('change', window.calculatePrice);
 
-                const requestData = {
-                    clientName: document.getElementById('srv-name').value,
-                    email: document.getElementById('srv-email').value,
-                    phone: document.getElementById('srv-phone').value || '',
-                    socialProfile: document.getElementById('srv-social').value || '',
-                    serviceId: srvType.value,
-                    serviceName: selectedOption.text,
-                    originalPrice: currentCalculation.original,
-                    discount: currentCalculation.discount,
-                    finalPrice: currentCalculation.final,
-                    depositPercentage: 50,
-                    depositAmount: currentCalculation.deposit,
-                    remainingAmount: currentCalculation.remaining,
-                    paymentMethod: srvPayment.value,
-                    preferredDate: document.getElementById('srv-date').value,
-                    preferredTime: document.getElementById('srv-time').value,
-                    location: document.getElementById('srv-location').value,
-                    additionalInformation: document.getElementById('srv-info').value,
-                    reference_photos: uploadedUrls,
-                    language: lang,
-                    status: 'Pending',
-                    createdAt: serverTimestamp()
-                };
+            srvPayment.addEventListener('change', function() {
+                document.getElementById('info-bank').classList.remove('active');
+                document.getElementById('info-paypal').classList.remove('active');
+                if(this.value === 'Bank Transfer') document.getElementById('info-bank').classList.add('active');
+                if(this.value === 'PayPal') document.getElementById('info-paypal').classList.add('active');
+            });
 
-                await addDoc(collection(db, "service_requests"), requestData);
-                
-                const emailData = buildEmail('ServiceNew', lang, {
-                    name: requestData.clientName,
-                    serviceName: requestData.serviceName,
-                    finalPrice: requestData.finalPrice.toFixed(2),
-                    depositAmount: requestData.depositAmount.toFixed(2),
-                    remainingAmount: requestData.remainingAmount.toFixed(2),
-                    paymentMethod: requestData.paymentMethod,
-                    bankDetails: 'DOMINIK ŠUŠKEVIČ LT867300010171188764',
-                    paypalEmail: 'Dominikphotofficial.lt@gmail.com'
+            photoInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    selectedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const div = document.createElement('div');
+                        div.className = 'thumb-container';
+                        div.innerHTML = `<img src="${ev.target.result}" class="thumb-img"><button type="button" class="thumb-remove">&times;</button>`;
+                        div.querySelector('.thumb-remove').addEventListener('click', () => {
+                            selectedFiles = selectedFiles.filter(f => f !== file);
+                            div.remove();
+                        });
+                        previewContainer.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
                 });
+                photoInput.value = ''; 
+            });
 
-                await addDoc(collection(db, "mail"), {
-                    to: requestData.email,
-                    message: { subject: emailData.subject, html: emailData.html }
-                });
+            document.getElementById('google-login-btn').addEventListener('click', () => {
+                signInWithRedirect(auth, googleProvider);
+            });
 
-                let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${socialLink}\n📍 Vieta: ${requestData.location}`;
-                if (uploadedUrls.length > 0) {
-                    tgMessage += `\n\n🖼 Nuotraukos:\n${uploadedUrls.join('\n')}`;
+            document.getElementById('service-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = document.getElementById('srv-submit-btn');
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Siunčiama...';
+
+                let uploadedUrls = [];
+                try {
+                    if (selectedFiles.length > 0) {
+                        submitBtn.innerText = 'Įkeliamos nuotraukos...';
+                        for (const file of selectedFiles) {
+                            const storageRef = ref(storage, `service_references/${Date.now()}_${file.name}`);
+                            await uploadBytes(storageRef, file);
+                            const url = await getDownloadURL(storageRef);
+                            uploadedUrls.push(url);
+                        }
+                    }
+
+                    submitBtn.innerText = 'Išsaugoma užklausa...';
+                    const selectedOption = srvType.options[srvType.selectedIndex];
+
+                    let socialVal = document.getElementById('srv-social').value || '';
+                    let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
+                    let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
+
+                    const requestData = {
+                        clientName: document.getElementById('srv-name').value,
+                        email: document.getElementById('srv-email').value,
+                        phone: document.getElementById('srv-phone').value || '',
+                        socialProfile: document.getElementById('srv-social').value || '',
+                        serviceId: srvType.value,
+                        serviceName: selectedOption.text,
+                        originalPrice: currentCalculation.original,
+                        discount: currentCalculation.discount,
+                        finalPrice: currentCalculation.final,
+                        depositPercentage: 50,
+                        depositAmount: currentCalculation.deposit,
+                        remainingAmount: currentCalculation.remaining,
+                        paymentMethod: srvPayment.value,
+                        preferredDate: document.getElementById('srv-date').value,
+                        preferredTime: document.getElementById('srv-time').value,
+                        location: document.getElementById('srv-location').value,
+                        additionalInformation: document.getElementById('srv-info').value,
+                        reference_photos: uploadedUrls,
+                        language: lang,
+                        status: 'Pending',
+                        createdAt: serverTimestamp()
+                    };
+
+                    await addDoc(collection(db, "service_requests"), requestData);
+                    
+                    const emailData = buildEmail('ServiceNew', lang, {
+                        name: requestData.clientName,
+                        serviceName: requestData.serviceName,
+                        finalPrice: requestData.finalPrice.toFixed(2),
+                        depositAmount: requestData.depositAmount.toFixed(2),
+                        remainingAmount: requestData.remainingAmount.toFixed(2),
+                        paymentMethod: requestData.paymentMethod,
+                        bankDetails: 'DOMINIK ŠUŠKEVIČ LT867300010171188764',
+                        paypalEmail: 'Dominikphotofficial.lt@gmail.com'
+                    });
+
+                    await addDoc(collection(db, "mail"), {
+                        to: requestData.email,
+                        message: { subject: emailData.subject, html: emailData.html }
+                    });
+
+                    let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Kaina: ${requestData.finalPrice} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel/Social: ${requestData.phone} / ${socialLink}\n📍 Vieta: ${requestData.location}`;
+                    if (uploadedUrls.length > 0) {
+                        tgMessage += `\n\n🖼 Nuotraukos:\n${uploadedUrls.join('\n')}`;
+                    }
+
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: chatId, text: tgMessage })
+                    }).catch(err => console.error(err));
+
+                    document.getElementById('form-container').style.display = 'none';
+                    document.getElementById('service-success').style.display = 'block';
+                    window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
+                } catch (error) {
+                    console.error(error);
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Klaida. Bandyti dar kartą';
                 }
-
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: tgMessage })
-                }).catch(err => console.error(err));
-
-                document.getElementById('service-form').style.display = 'none';
-                document.getElementById('service-success').style.display = 'block';
-                window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
-            } catch (error) {
-                console.error(error);
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Klaida. Bandyti dar kartą';
-            }
+            });
         });
+
+        getRedirectResult(auth).then((result) => {
+            if (result && result.user) {
+                if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
+                if(result.user.email) document.getElementById('srv-email').value = result.user.email;
+            }
+        }).catch((error) => console.error(error));
     </script>
 </body>
 </html>
