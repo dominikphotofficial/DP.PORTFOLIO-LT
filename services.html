@@ -187,9 +187,10 @@
                 <p style="font-family: var(--font-body); font-weight: 300; color: rgba(26, 43, 43, 0.6); font-size: 1.1rem;">Užpildykite formą. Rezervacija patvirtinama gavus 50% avansą.</p>
             </div>
             
-            <div id="service-success" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
-                <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Užklausa sėkmingai išsiųsta!</h3>
-                <p style="font-family: var(--font-body); font-size: 16px; color: #1b5e20;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu.</p>
+            <div id="service-success" style="display:none; text-align: center; padding: 50px 30px; background: var(--surface-color); border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.1); box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);">
+                <span style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--accent-light); display: block; margin-bottom: 15px;">Užklausa gauta</span>
+                <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 3px; margin-bottom: 15px; font-size: 1.8rem; font-weight: 300; text-transform: uppercase;">Ačiū už registraciją!</h3>
+                <p style="font-family: var(--font-body); font-size: 1.1rem; color: var(--text-color); opacity: 0.85; line-height: 1.8; max-width: 500px; margin: 0 auto;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu. Netrukus susisieksime su jumis aptarti detalių.</p>
             </div>
 
             <div id="form-container">
@@ -263,6 +264,14 @@
                     </div>
 
                     <div>
+                        <label class="field-label" style="margin-top: 0;">Ar reikalingas kvitas / sąskaita faktūra? *</label>
+                        <select id="srv-receipt" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
+                            <option value="Ne" selected>Ne, nereikia</option>
+                            <option value="Taip">Taip, reikalingas kvitas / sąskaita</option>
+                        </select>
+                    </div>
+
+                    <div>
                         <label class="field-label" style="margin-top: 0;">Prisegti nuotraukas / Pavyzdžius (neprivaloma)</label>
                         <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
                         <div id="srv-photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
@@ -309,66 +318,32 @@
     <script src="script.js"></script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
-        const googleProvider = new GoogleAuthProvider();
+        import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { buildEmail } from './email-templates.js';
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
+        const lang = 'lt';
 
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
         let selectedDateMonth = -1;
         let selectedDateDay = 0;
 
-        function buildServiceEmail(data) {
-            const subject = "DP.PORTFOLIO | Naujas užsakymas: " + (data.serviceName || '');
-            const html = `
-                <div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, ${data.name || ''}!</h2>
-                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Labai ačiū, kad pasirinkote DP.PORTFOLIO. Sėkmingai gavome jūsų užklausą paslaugai: <strong>${data.serviceName || ''}</strong>.</p>
-                        <div style="border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px; background-color: #FBF9F6;">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užsakymo informacija:</b></p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Bendra kaina:</b> ${data.finalPrice} €</p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Avansas (50%):</b> ${data.depositAmount} €</p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Likutis po atlikimo:</b> ${data.remainingAmount} €</p>
-                            <p style="margin: 0; color: #1A2B2B;"><b>Apmokėjimo būdas:</b> ${data.paymentMethod}</p>
-                        </div>
-                        <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Apmokėjimo instrukcijos:</b></p>
-                        <p style="margin: 0 0 5px 0; color: #1A2B2B;">Bankinis pavedimas: <b>DOMINIK ŠUŠKEVIČ LT867300010171188764</b></p>
-                        <p style="margin: 0 0 15px 0; color: #1A2B2B;">PayPal: <b>Dominikphotofficial.lt@gmail.com</b></p>
-                        <p style="color: #d9534f; font-size: 0.9em;"><em>Svarbu: Avansą prašome pervesti tik po to, kai galutinai patvirtinsime jūsų užsakymą ir datą.</em></p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Susisieksime su jumis netrukus!</p>
-                        <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 30px 0;">
-                        <p style="font-size: 0.9em; color: #2A5C5C; margin: 0; line-height: 1.6;">
-                            <b>DP.PORTFOLIO</b><br>
-                            Dominik Šuškevič<br>
-                            Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                            Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                        </p>
-                    </div>
-                </div>
-            `;
-            return { subject, html };
-        }
+        window.selectService = function(val) {
+            const select = document.getElementById('srv-type');
+            if (select) {
+                select.value = val;
+                window.calculatePrice();
+            }
+            const target = document.getElementById('service-booking');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
 
         window.calculatePrice = function() {
             const srvType = document.getElementById('srv-type');
@@ -401,18 +376,6 @@
             document.getElementById('calc-remaining').innerText = remaining.toFixed(2) + ' €';
 
             document.getElementById('price-calc').style.display = 'block';
-        };
-
-        window.selectService = function(val) {
-            const select = document.getElementById('srv-type');
-            if (select) {
-                select.value = val;
-                window.calculatePrice();
-            }
-            const target = document.getElementById('service-booking');
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
         };
 
         flatpickr("#srv-date", { 
@@ -538,6 +501,7 @@
                 depositAmount: Number(currentCalculation.deposit) || 0,
                 remainingAmount: Number(currentCalculation.remaining) || 0,
                 paymentMethod: document.getElementById('srv-payment')?.value || 'Nenurodyta',
+                receiptNeeded: document.getElementById('srv-receipt')?.value || 'Ne',
                 preferredDate: srvDateVal,
                 preferredTime: document.getElementById('srv-time')?.value || '',
                 location: document.getElementById('srv-location')?.value || '',
@@ -552,7 +516,7 @@
                 await addDoc(collection(db, "service_requests"), requestData);
 
                 try {
-                    const emailData = buildServiceEmail({
+                    const emailData = buildEmail('ServiceNew', lang, {
                         name: requestData.clientName,
                         serviceName: requestData.serviceName,
                         finalPrice: requestData.finalPrice.toFixed(2),
@@ -572,7 +536,7 @@
                 }
 
                 try {
-                    let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Bendra kaina: ${requestData.finalPrice} €\n💳 Avansas (50%): ${requestData.depositAmount} €\n💵 Likutis: ${requestData.remainingAmount} €\n✉️ El. paštas: ${requestData.email}\n📱 Tel: ${requestData.phone || 'Nenurodyta'}\n🔗 Social: ${requestData.socialProfile || 'Nenurodyta'}\n📅 Data: ${requestData.preferredDate} ${requestData.preferredTime}\n📍 Vieta: ${requestData.location}\n📝 Idėja: ${requestData.additionalInformation}`;
+                    let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Bendra kaina: ${requestData.finalPrice} €\n💳 Avansas (50%): ${requestData.depositAmount} €\n💵 Likutis: ${requestData.remainingAmount} €\n🧾 Kvitas: ${requestData.receiptNeeded}\n✉️ El. paštas: ${requestData.email}\n📱 Tel: ${requestData.phone || 'Nenurodyta'}\n🔗 Social: ${requestData.socialProfile || 'Nenurodyta'}\n📅 Data: ${requestData.preferredDate} ${requestData.preferredTime}\n📍 Vieta: ${requestData.location}\n📝 Idėja: ${requestData.additionalInformation}`;
                     if (uploadedUrls.length > 0) {
                         tgMessage += `\n\n🖼 Nuotraukos (${uploadedUrls.length} vnt.):\n` + uploadedUrls.join('\n');
                     }
