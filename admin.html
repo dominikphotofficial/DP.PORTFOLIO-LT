@@ -50,7 +50,7 @@
 <body>
     <header id="main-header" class="scrolled">
         <div class="header-container">
-            <div class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></div>
+            <a href="index.html" class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></a>
             <nav class="desktop-nav"><button id="logout-btn" class="logout-btn-header" style="display:none;">Atsijungti</button></nav>
         </div>
     </header>
@@ -88,7 +88,7 @@
     <div id="email-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 style="font-family: var(--font-heading); margin-bottom: 10px; font-size: 1.8rem; font-weight: 300; letter-spacing: 3px;">Redaguoti laišką</h2>
-            <p style="font-family: var(--font-body); margin-bottom: 30px; opacity: 0.8;">Pakeiskite tekstą prieš išsiunčiant. Jei statusas "Completed", galite nurodyti Wfolio albumo nuorodą.</p>
+            <p style="font-family: var(--font-body); margin-bottom: 30px; opacity: 0.8;">Pakeiskite tekstą prieš išsiunčiant. Galite pridėti Wfolio nuorodą arba prisegti kvitą.</p>
             
             <label class="field-label">Tema (Subject)</label>
             <input type="text" id="modal-subject" class="admin-select" style="margin-bottom: 20px;">
@@ -99,9 +99,14 @@
             <label class="field-label">Pagrindinis tekstas</label>
             <textarea id="modal-text" class="admin-select" style="height: 150px; margin-bottom: 20px;"></textarea>
             
-            <div id="modal-link-container" style="display: none;">
+            <div id="modal-link-container" style="display: none; margin-bottom: 20px;">
                 <label class="field-label">Wfolio albumo nuoroda (Link)</label>
-                <input type="url" id="modal-gallery-link" class="admin-select" placeholder="https://..." style="margin-bottom: 20px;">
+                <input type="url" id="modal-gallery-link" class="admin-select" placeholder="https://...">
+            </div>
+
+            <div id="modal-receipt-container" style="display: none; margin-bottom: 20px;">
+                <label class="field-label">Prisegti kvitą / sąskaitą faktūrą (PDF arba nuotrauką)</label>
+                <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 10px; border: none;">
             </div>
             
             <div class="req-actions" style="border: none; padding: 0; margin: 0; justify-content: flex-end;">
@@ -112,25 +117,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getDefaultContent, getGalleryHtml, buildFinalHtml } from './email-templates.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
+        import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
 
@@ -139,10 +130,12 @@
         const logoutBtn = document.getElementById('logout-btn');
         let pendingEmailData = null;
 
-        getRedirectResult(auth).catch((error) => console.error(error));
-
-        document.getElementById('admin-login-google-btn').addEventListener('click', () => {
-            signInWithRedirect(auth, googleProvider);
+        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) {
+                console.error(error);
+            }
         });
 
         document.getElementById('admin-login-email-btn').addEventListener('click', () => {
@@ -192,6 +185,14 @@
 
         let tfpNew = 0, srvNew = 0, totalConfirmed = 0;
 
+        function formatLinks(text) {
+            if(!text) return '-';
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" style="color: var(--accent-light); font-weight: 500; text-decoration: underline;">${url}</a>`;
+            });
+        }
+
         function loadTFPRequests() {
             const q = query(collection(db, "tfp_requests"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -214,7 +215,7 @@
                     if (data.reference_photos && data.reference_photos.length > 0) {
                         photosHtml = '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(17,57,57,0.1);"><p style="margin-bottom: 10px;"><b>Prisegtos nuotraukos (Referencijos):</b></p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
                         data.reference_photos.forEach(url => {
-                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
+                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2);"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"></a>`;
                         });
                         photosHtml += '</div></div>';
                     }
@@ -227,10 +228,9 @@
                         <div class="req-body">
                             <div>
                                 <p><b>El. paštas:</b><br>${data.email}</p>
-                                <p><b>Instagram:</b><br>${data.instagram}</p>
+                                <p><b>Instagram / Social:</b><br>${formatLinks(data.instagram)}</p>
                                 <p><b>Idėja:</b><br>${data.idea}</p>
-                                <p><b>Papildomai:</b><br>${data.extra_info || '-'}</p>
-                                ${photosHtml}
+                                <p><b>Papildomai / Nuorodos:</b><br>${formatLinks(data.extra_info)}</p>
                             </div>
                             <div>
                                 <p><b>Data ir laikas:</b><br><input type="text" id="dt-${docSnap.id}" value="${data.date_time}" class="admin-select"></p>
@@ -245,6 +245,7 @@
                                 </select></p>
                             </div>
                         </div>
+                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareTFP('${docSnap.id}', '${data.language}', '${data.email}', '${data.name}', '${data.idea.replace(/'/g, "\\'")}')">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('tfp_requests', '${docSnap.id}', '')">Tik Išsaugoti</button>
@@ -282,24 +283,30 @@
                     if (data.reference_photos && data.reference_photos.length > 0) {
                         photosHtml = '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(17,57,57,0.1);"><p style="margin-bottom: 10px;"><b>Prisegtos nuotraukos (Referencijos):</b></p><div style="display:flex; gap:10px; flex-wrap:wrap;">';
                         data.reference_photos.forEach(url => {
-                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2); transition: transform 0.3s;"><img src="${url}" style="width:60px; height:60px; object-fit:cover; display:block;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></a>`;
+                            photosHtml += `<a href="${url}" target="_blank" style="display:block; overflow:hidden; border-radius:4px; border:1px solid rgba(17,57,57,0.2);"><img src="${url}" style="width:80px; height:80px; object-fit:cover; display:block; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"></a>`;
                         });
                         photosHtml += '</div></div>';
                     }
 
+                    const receiptBadge = data.receiptNeeded === 'Taip' 
+                        ? `<span style="background: #113939; color: #fff; padding: 3px 8px; border-radius: 3px; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; margin-left: 10px;">🧾 Kvitas reikalingas</span>`
+                        : '';
+
                     reqDiv.innerHTML = `
                         <div class="req-header">
-                            <strong>${data.clientName} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
+                            <div>
+                                <strong>${data.clientName} <span style="color: var(--accent-light); font-size: 0.9rem;">(${data.language.toUpperCase()})</span></strong>
+                                ${receiptBadge}
+                            </div>
                             <span>Statusas: <strong style="color: var(--accent-light); letter-spacing: 1px;">${data.status}</strong></span>
                         </div>
                         <div class="req-body">
                             <div>
                                 <p><b>Paslauga:</b><br>${data.serviceName}</p>
                                 <p><b>El. paštas:</b><br>${data.email}</p>
-                                <p><b>Telefonas / Social:</b><br>${data.phone} / ${data.socialProfile}</p>
+                                <p><b>Telefonas / Social:</b><br>${data.phone} / ${formatLinks(data.socialProfile)}</p>
                                 <p><b>Apmokėjimas:</b><br>${data.paymentMethod}</p>
-                                <p><b>Idėja / Info:</b><br>${data.additionalInformation}</p>
-                                ${photosHtml}
+                                <p><b>Idėja / Info / Nuorodos:</b><br>${formatLinks(data.additionalInformation)}</p>
                             </div>
                             <div>
                                 <p><b>Kaina:</b> ${data.finalPrice} € (Avansas: ${data.depositAmount} €)</p>
@@ -317,6 +324,7 @@
                                 </select></p>
                             </div>
                         </div>
+                        ${photosHtml}
                         <div class="req-actions">
                             <button class="admin-btn" onclick="prepareService('${docSnap.id}', '${data.language}', '${data.email}', '${data.clientName}', '${data.serviceName}', ${data.finalPrice}, ${data.depositAmount})">Peržiūrėti ir Siųsti laišką</button>
                             <button class="admin-btn-outline" onclick="saveOnly('service_requests', '${docSnap.id}', 'srv-')">Tik Išsaugoti</button>
@@ -356,6 +364,7 @@
             } else {
                 document.getElementById('modal-link-container').style.display = 'none';
             }
+            document.getElementById('modal-receipt-container').style.display = 'none';
             
             pendingEmailData = { collection: 'tfp_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
             document.getElementById('email-modal').classList.add('active');
@@ -385,6 +394,13 @@
                 document.getElementById('modal-gallery-link').value = '';
             } else {
                 document.getElementById('modal-link-container').style.display = 'none';
+            }
+
+            if (newStatus === 'Deposit Paid' || newStatus === 'Fully Paid' || newStatus === 'Completed') {
+                document.getElementById('modal-receipt-container').style.display = 'block';
+                document.getElementById('modal-receipt-file').value = '';
+            } else {
+                document.getElementById('modal-receipt-container').style.display = 'none';
             }
             
             pendingEmailData = { collection: 'service_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
@@ -425,16 +441,25 @@
                 let galleryUrl = '';
                 if (pendingEmailData.newStatus === 'Completed') {
                     galleryUrl = document.getElementById('modal-gallery-link').value;
-                    if(!galleryUrl) {
-                        alert("Įveskite Wfolio albumo nuorodą!");
-                        btn.disabled = false;
-                        btn.innerText = 'Patvirtinti ir Siųsti';
-                        return;
+                    if(galleryUrl) {
+                        galleryHtml = getGalleryHtml(pendingEmailData.lang, galleryUrl);
                     }
-                    galleryHtml = getGalleryHtml(pendingEmailData.lang, galleryUrl);
                 }
 
-                const finalHtml = buildFinalHtml(greeting, text, pendingEmailData.boxHtml, galleryHtml);
+                let receiptHtml = '';
+                let receiptUrl = '';
+                const receiptFileInput = document.getElementById('modal-receipt-file');
+                if (receiptFileInput && receiptFileInput.files && receiptFileInput.files[0]) {
+                    btn.innerText = 'Įkeliamas kvitas...';
+                    const file = receiptFileInput.files[0];
+                    const storageRef = ref(storage, `receipts/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    receiptUrl = await getDownloadURL(storageRef);
+                    receiptHtml = getReceiptHtml(pendingEmailData.lang, receiptUrl);
+                }
+
+                btn.innerText = 'Siunčiama...';
+                const finalHtml = buildFinalHtml(greeting, text, pendingEmailData.boxHtml, galleryHtml, receiptHtml);
 
                 let updatePayload = {};
                 if(pendingEmailData.collection === 'tfp_requests') {
@@ -443,9 +468,8 @@
                     updatePayload = { status: pendingEmailData.newStatus, preferredDate: pendingEmailData.newDate, location: pendingEmailData.newLoc };
                 }
 
-                if (pendingEmailData.newStatus === 'Completed') {
-                    updatePayload.galleryUrl = galleryUrl;
-                }
+                if (galleryUrl) updatePayload.galleryUrl = galleryUrl;
+                if (receiptUrl) updatePayload.receiptUrl = receiptUrl;
 
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
