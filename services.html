@@ -55,9 +55,10 @@
         .gallery-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 60px; }
         .gallery-preview-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; transition: transform 0.4s ease; }
         .gallery-preview-grid img:hover { transform: scale(1.03); }
-        .flatpickr-calendar.inline { margin: 15px auto 0 auto !important; box-shadow: 0 10px 30px rgba(17, 57, 57, 0.06) !important; border: 1px solid rgba(17, 57, 57, 0.1) !important; border-radius: 8px !important; width: 100% !important; max-width: 320px !important; }
-        .flatpickr-day.discount-day { background-color: rgba(217, 83, 79, 0.12) !important; border: 1px solid #d9534f !important; color: #d9534f !important; font-weight: 600 !important; }
-        .flatpickr-day.discount-day:hover { background-color: rgba(217, 83, 79, 0.25) !important; }
+        .calendar-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 10px; }
+        .flatpickr-calendar.inline { margin: 0 auto !important; box-shadow: 0 10px 30px rgba(17, 57, 57, 0.06) !important; border: 1px solid rgba(17, 57, 57, 0.1) !important; border-radius: 8px !important; width: 100% !important; max-width: 320px !important; }
+        .flatpickr-day.discount-day { background-color: rgba(217, 83, 79, 0.15) !important; border: 1px solid #d9534f !important; color: #d9534f !important; font-weight: 600 !important; }
+        .flatpickr-day.discount-day:hover { background-color: rgba(217, 83, 79, 0.3) !important; }
         .flatpickr-day.discount-day.selected { background-color: #d9534f !important; border-color: #d9534f !important; color: #ffffff !important; }
     </style>
 </head>
@@ -234,9 +235,12 @@
 
                     <div>
                         <label class="field-label" style="margin-top: 0; text-align: center; display: block;">Pasirinkite fotosesijos datą *</label>
-                        <input type="text" id="srv-date" style="display: none;" required>
-                        <div style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #d9534f; font-family: var(--font-body); font-weight: 600;">
-                            <span style="display:inline-block; width:8px; height:8px; background:#d9534f; border-radius:50%; margin-right:6px;"></span>Rugsėjo 2–27 d. taikoma 5 € nuolaida fotosesijoms!
+                        <div class="calendar-wrapper">
+                            <div id="srv-calendar-inline"></div>
+                            <input type="hidden" id="srv-date">
+                        </div>
+                        <div style="text-align: center; margin-top: 15px; font-size: 0.95rem; color: #d9534f; font-family: var(--font-body); font-weight: 600;">
+                            <span style="display:inline-block; width:10px; height:10px; background:#d9534f; border-radius:50%; margin-right:6px;"></span>Rugsėjo 2–27 d. taikoma 5 € nuolaida fotosesijoms!
                         </div>
                     </div>
 
@@ -318,32 +322,66 @@
     <script src="script.js"></script>
 
     <script type="module">
-        import { db, auth, storage, googleProvider } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-        import { buildEmail } from './email-templates.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
+            authDomain: "tfp-form.firebaseapp.com",
+            projectId: "tfp-form",
+            storageBucket: "tfp-form.firebasestorage.app",
+            messagingSenderId: "542082314917",
+            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
+            measurementId: "G-4VRZRBDHY2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
-        const lang = 'lt';
 
         let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
         let selectedDateMonth = -1;
         let selectedDateDay = 0;
 
-        window.selectService = function(val) {
-            const select = document.getElementById('srv-type');
-            if (select) {
-                select.value = val;
-                window.calculatePrice();
-            }
-            const target = document.getElementById('service-booking');
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        };
+        function buildServiceEmail(data) {
+            const subject = "DP.PORTFOLIO | Naujas užsakymas: " + (data.serviceName || '');
+            const html = `
+                <div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, ${data.name || ''}!</h2>
+                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Labai ačiū, kad pasirinkote DP.PORTFOLIO. Sėkmingai gavome jūsų užklausą paslaugai: <strong>${data.serviceName || ''}</strong>.</p>
+                        <div style="border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px; background-color: #FBF9F6;">
+                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užsakymo informacija:</b></p>
+                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Bendra kaina:</b> ${data.finalPrice} €</p>
+                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Avansas (50%):</b> ${data.depositAmount} €</p>
+                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Likutis po atlikimo:</b> ${data.remainingAmount} €</p>
+                            <p style="margin: 0;"><b>Apmokėjimo būdas:</b> ${data.paymentMethod}</p>
+                        </div>
+                        <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Apmokėjimo instrukcijos:</b></p>
+                        <p style="margin: 0 0 5px 0; color: #1A2B2B;">Bankinis pavedimas: <b>DOMINIK ŠUŠKEVIČ LT867300010171188764</b></p>
+                        <p style="margin: 0 0 15px 0; color: #1A2B2B;">PayPal: <b>Dominikphotofficial.lt@gmail.com</b></p>
+                        <p style="color: #d9534f; font-size: 0.9em;"><em>Svarbu: Avansą prašome pervesti tik po to, kai galutinai patvirtinsime jūsų užsakymą ir datą.</em></p>
+                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Susisieksime su jumis netrukus!</p>
+                        <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 30px 0;">
+                        <p style="font-size: 0.9em; color: #2A5C5C; margin: 0; line-height: 1.6;">
+                            <b>DP.PORTFOLIO</b><br>
+                            Dominik Šuškevič<br>
+                            Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
+                            Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+            return { subject, html };
+        }
 
         window.calculatePrice = function() {
             const srvType = document.getElementById('srv-type');
@@ -378,7 +416,19 @@
             document.getElementById('price-calc').style.display = 'block';
         };
 
-        flatpickr("#srv-date", { 
+        window.selectService = function(val) {
+            const select = document.getElementById('srv-type');
+            if (select) {
+                select.value = val;
+                window.calculatePrice();
+            }
+            const target = document.getElementById('service-booking');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        flatpickr("#srv-calendar-inline", { 
             inline: true,
             dateFormat: "Y-m-d", 
             minDate: "today", 
@@ -389,7 +439,8 @@
                     dayElem.classList.add('discount-day');
                 }
             },
-            onChange: function(selectedDates) {
+            onChange: function(selectedDates, dateStr) {
+                document.getElementById('srv-date').value = dateStr;
                 if(selectedDates.length > 0) {
                     const d = selectedDates[0];
                     selectedDateMonth = d.getMonth();
@@ -433,11 +484,24 @@
             photoInput.value = ''; 
         });
 
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                if (user.displayName && !document.getElementById('srv-name').value) {
+                    document.getElementById('srv-name').value = user.displayName;
+                }
+                if (user.email && !document.getElementById('srv-email').value) {
+                    document.getElementById('srv-email').value = user.email;
+                }
+            }
+        });
+
         document.getElementById('google-login-btn').addEventListener('click', async () => {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
-                if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
-                if(result.user.email) document.getElementById('srv-email').value = result.user.email;
+                if (result && result.user) {
+                    if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
+                    if(result.user.email) document.getElementById('srv-email').value = result.user.email;
+                }
             } catch (error) {
                 alert("Google prisijungimo klaida: " + (error.message || error));
             }
@@ -470,12 +534,13 @@
                 submitBtn.innerText = 'Įkeliamos nuotraukos...';
                 for (const file of selectedFiles) {
                     try {
-                        const storageRef = ref(storage, `service_references/${Date.now()}_${file.name}`);
+                        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                        const storageRef = ref(storage, `service_references/${Date.now()}_${safeName}`);
                         await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         uploadedUrls.push(url);
                     } catch (fileErr) {
-                        console.warn(fileErr);
+                        console.warn("Storage error:", fileErr);
                     }
                 }
             }
@@ -516,7 +581,7 @@
                 await addDoc(collection(db, "service_requests"), requestData);
 
                 try {
-                    const emailData = buildEmail('ServiceNew', lang, {
+                    const emailData = buildServiceEmail({
                         name: requestData.clientName,
                         serviceName: requestData.serviceName,
                         finalPrice: requestData.finalPrice.toFixed(2),
