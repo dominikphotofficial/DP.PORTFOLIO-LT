@@ -26,15 +26,11 @@
         .form-group label { display: block; font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 8px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(17, 57, 57, 0.15); font-family: var(--font-body); font-size: 16px; outline: none; transition: border-color 0.3s; background: #ffffff; border-radius: 4px; box-sizing: border-box; color: var(--text-color); }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.08); }
-        .quick-nav-boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 60px auto 0 auto; }
-        .nav-box-card { background: #ffffff; padding: 35px 30px; border-radius: 6px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 10px 30px rgba(17, 57, 57, 0.03); text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .nav-box-title { font-family: var(--font-heading); font-size: 1.25rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 12px; }
-        .nav-box-desc { font-family: var(--font-body); font-size: 1rem; color: rgba(26, 43, 43, 0.75); line-height: 1.7; margin-bottom: 25px; flex-grow: 1; }
-        .nav-box-btn { display: inline-block; padding: 16px 30px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; text-decoration: none; border-radius: 4px; transition: all 0.3s; box-sizing: border-box; }
-        .btn-services { border: 1px solid var(--accent-color); color: var(--accent-color); background: transparent; }
-        .btn-services:hover { background: var(--accent-color); color: #ffffff; }
-        .btn-tfp { border: 1px solid var(--accent-color); background: var(--accent-color); color: #ffffff; }
-        .btn-tfp:hover { background: transparent; color: var(--accent-color); }
+        .contact-cta-btn { display: block; width: 100%; padding: 16px 20px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; text-align: center; text-decoration: none; border-radius: 4px; transition: all 0.3s; box-sizing: border-box; }
+        .btn-paid { background: var(--accent-color); color: #ffffff; border: 1px solid var(--accent-color); }
+        .btn-paid:hover { background: transparent; color: var(--accent-color); }
+        .btn-free { background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); }
+        .btn-free:hover { background: var(--accent-color); color: #ffffff; }
         @media (max-width: 900px) {
             .contact-grid { grid-template-columns: 1fr; gap: 30px; }
             .form-card, .info-card { padding: 30px 22px; }
@@ -79,7 +75,7 @@
             <h1 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; letter-spacing: 5px; margin-bottom: 20px;">Susisiekime</h1>
             <div class="divider"></div>
             <p style="font-family: var(--font-body); font-size: 1.1rem; color: rgba(26, 43, 43, 0.8); max-width: 650px; margin: 0 auto; line-height: 1.8;">
-                Turite viziją fotosesijai ar norite sukurti išskirtinį video projektą? Užpildykite užklausą arba susisiekite tiesiogiai.
+                Užsakymams ir registracijai naudokite žemiau pateiktus mygtukus arba parašykite bendrą žinutę formoje.
             </p>
         </div>
 
@@ -100,14 +96,22 @@
                     <a href="https://instagram.com/dominikphotofficial" target="_blank" class="info-value">@dominikphotofficial</a>
                 </div>
                 <div class="divider" style="margin: 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.08);"></div>
-                <div class="info-group" style="margin-bottom: 0;">
+                <div class="info-group" style="margin-bottom: 30px;">
                     <span class="info-label">Veiklos vieta</span>
                     <span class="info-value">Kaunas / Švenčionėliai (Lietuva)</span>
+                </div>
+                
+                <div class="divider" style="margin: 25px 0 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.12);"></div>
+                
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <span class="info-label">Tiesioginis užsakymas:</span>
+                    <a href="services.html" class="contact-cta-btn btn-paid">Mokamos Paslaugos & Kainos</a>
+                    <a href="tfp-booking.html" class="contact-cta-btn btn-free">TFP Registracija (Nemokamai)</a>
                 </div>
             </div>
 
             <div class="form-card">
-                <h3 class="form-title">Tiesioginė Žinutė</h3>
+                <h3 class="form-title">Bendra Užklausa</h3>
                 <form action="https://formspree.io/f/mgvnbvaw" method="POST">
                     <div class="form-group">
                         <label for="name">Jūsų vardas *</label>
@@ -118,42 +122,20 @@
                         <input type="email" id="email" name="email" required placeholder="vardas@pavyzdys.lt" autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="style">Dominanti sritis</label>
+                        <label for="style">Tema</label>
                         <select id="style" name="style" style="appearance: none; cursor: pointer;">
                             <option value="Mokama fotosesija">Mokama fotosesija</option>
-                            <option value="TFP fotosesija">Kūrybinis bendradarbiavimas (TFP)</option>
+                            <option value="TFP fotosesija">TFP bendradarbiavimas</option>
                             <option value="Videografija">Videografijos projektas</option>
-                            <option value="Kita">Kitas klausimas / pasiūlymas</option>
+                            <option value="Kita">Kitas klausimas</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="message">Žinutė ar idėjos aprašymas *</label>
-                        <textarea id="message" name="message" rows="5" required placeholder="Parašykite savo klausimą ar idėją..."></textarea>
+                        <label for="message">Žinutė *</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Jūsų žinutė arba klausimas..."></textarea>
                     </div>
                     <button type="submit" class="submit-btn" style="width: 100%; padding: 18px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; border-radius: 4px;">Siųsti žinutę</button>
                 </form>
-            </div>
-        </div>
-
-        <div class="quick-nav-boxes fade-in-up">
-            <div class="nav-box-card">
-                <div>
-                    <h4 class="nav-box-title">Mokamos Paslaugos</h4>
-                    <p class="nav-box-desc">
-                        Atraskite individualius fotografijos ir videografijos paketus, kainas bei papildomas nuolaidas su integruotu 50% avanso skaičiuotuvu.
-                    </p>
-                </div>
-                <a href="services.html" class="nav-box-btn btn-services">Žiūrėti Paslaugas</a>
-            </div>
-
-            <div class="nav-box-card">
-                <div>
-                    <h4 class="nav-box-title">TFP Registracija</h4>
-                    <p class="nav-box-desc">
-                        Nemokami kūrybiniai mainai bendram portfolio kūrimui su Fujifilm X-S20 kokybe. Užpildykite anketą ir prisekite referencijas.
-                    </p>
-                </div>
-                <a href="tfp-booking.html" class="nav-box-btn btn-tfp">Registruotis TFP</a>
             </div>
         </div>
     </section>
