@@ -1,0 +1,35 @@
+[
+  {
+    "id": "rev-1",
+    "clientName": "Karolina V.",
+    "type": "service",
+    "sessionTag": "Standartinė fotosesija Kaune",
+    "rating": 5,
+    "reviewLink": "https://instagram.com/dominikphotofficial",
+    "comment": "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes neturiu patirties prieš objektyvą, bet Dominik sukūrė ramią ir jaukią atmosferą. Nuotraukų spalvos ir retušas – aukščiausio lygio!",
+    "visible": true,
+    "createdAt": "2026-09-20T12:00:00.000Z"
+  },
+  {
+    "id": "rev-2",
+    "clientName": "Lukas & Sandra",
+    "type": "service",
+    "sessionTag": "Poros fotosesija Kauno senamiestyje",
+    "rating": 5,
+    "reviewLink": "https://portfolio.dominikphotofficial.lt",
+    "comment": "Nuostabi patirtis. Fotosesija praėjo be jokio streso, viskas vyko labai natūraliai ir laisvai. Gauta privati galerija sužavėjo – kadrai atrodo kaip iš kino filmo.",
+    "visible": true,
+    "createdAt": "2026-09-18T15:30:00.000Z"
+  },
+  {
+    "id": "rev-3",
+    "clientName": "Gabija R.",
+    "type": "tfp",
+    "sessionTag": "Gatvės mada & portretas (TFP)",
+    "rating": 5,
+    "reviewLink": "https://instagram.com/dominikphotofficial",
+    "comment": "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Rekomenduoju visiems, norintiems išbandyti save!",
+    "visible": true,
+    "createdAt": "2026-09-15T18:00:00.000Z"
+  }
+]

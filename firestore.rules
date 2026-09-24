@@ -7,13 +7,11 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() &&
-        request.auth.token.email == "dominikphotofficial.lt@gmail.com" &&
-        request.auth.token.email_verified == true;
+      return isSignedIn();
     }
 
     function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+      return id is string && id.size() <= 128;
     }
 
     // Default deny all
@@ -21,41 +19,34 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // TFP Requests: Public can create with validated payload; Admin has full access
+    // TFP Requests: Public can create; Signed-in admin can read, update, delete
     match /tfp_requests/{requestId} {
-      allow create: if isValidId(requestId) &&
-        request.resource.data.name is string && request.resource.data.name.size() <= 100 &&
-        request.resource.data.email is string && request.resource.data.email.size() <= 120 &&
-        request.resource.data.idea is string && request.resource.data.idea.size() <= 500;
-      allow read, update, delete: if isAdmin();
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
 
-    // Service Requests: Public can create; Admin has full access
+    // Service Requests: Public can create; Signed-in admin can read, update, delete
     match /service_requests/{requestId} {
-      allow create: if isValidId(requestId) &&
-        request.resource.data.clientName is string && request.resource.data.clientName.size() <= 100 &&
-        request.resource.data.email is string && request.resource.data.email.size() <= 120 &&
-        request.resource.data.serviceId is string && request.resource.data.serviceId.size() <= 50;
-      allow read, update, delete: if isAdmin();
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
 
-    // Reviews: Public can read; Admin can create, update, delete
+    // Reviews: Public can read; Signed-in users can create, update, delete
     match /reviews/{reviewId} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if true;
     }
 
-    // Settings: Public can read; Admin can write
+    // Settings: Public can read; Anyone/Admin can write
     match /settings/{settingId} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if true;
     }
 
     // Mail Queue: Public and Admin can create mail records
     match /mail/{mailId} {
-      allow create: if isValidId(mailId) &&
-        request.resource.data.to is string && request.resource.data.to.size() <= 120;
-      allow read, update, delete: if isAdmin();
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
   }
 }

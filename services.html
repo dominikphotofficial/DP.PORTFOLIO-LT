@@ -1470,6 +1470,7 @@
 
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
         import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
@@ -1543,22 +1544,20 @@
             });
         }
 
-        // Reviews Section Visibility Setting Sync
-        try {
-            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
-                const section = document.getElementById('reviews');
-                if (!section) return;
-                if (docSnap.exists() && docSnap.data().visible === false) {
-                    section.style.display = 'none';
-                } else {
-                    section.style.display = '';
-                }
-            }, (err) => {
-                console.warn("Reviews settings sync error:", err);
-            });
-        } catch(e) {
-            console.warn("Reviews settings init error:", e);
-        }
+        // Reviews Section Visibility Setting Sync (Dual-sync: File + Firestore)
+        subscribeReviewsVisibility((visible) => {
+            const section = document.getElementById('reviews');
+            if (section) {
+                section.style.display = visible ? '' : 'none';
+            }
+        });
+
+        // Reviews loader (Dual-sync: File + Firestore)
+        fetchReviewsList().then(list => {
+            if (list && list.length > 0) {
+                renderReviews(list.filter(r => r.visible !== false));
+            }
+        });
 
         // Real-time Firestore sync
         try {
@@ -1578,14 +1577,14 @@
                         return;
                     }
                 }
-                renderReviews(initialReviews);
+                fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
             }, (err) => {
-                console.warn("Firestore reviews fallback:", err);
-                renderReviews(initialReviews);
+                console.warn("Firestore reviews fallback to file:", err);
+                fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
             });
         } catch (e) {
             console.warn("Reviews init error:", e);
-            renderReviews(initialReviews);
+            fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
         }
 
         // Reviews filter tab handling

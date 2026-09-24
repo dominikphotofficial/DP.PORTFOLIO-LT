@@ -705,6 +705,7 @@
 
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
         import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
@@ -763,23 +764,23 @@
             });
         }
 
-        // Reviews Section Visibility Setting Sync
-        try {
-            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
-                const section = document.getElementById('tfp-reviews-section');
-                if (!section) return;
-                if (docSnap.exists() && docSnap.data().visible === false) {
-                    section.style.display = 'none';
-                } else {
-                    section.style.display = '';
-                }
-            }, (err) => {
-                console.warn("Reviews settings sync error:", err);
-            });
-        } catch(e) {
-            console.warn("Reviews settings init error:", e);
-        }
+        // Reviews Section Visibility Setting Sync (Dual-sync: File + Firestore)
+        subscribeReviewsVisibility((visible) => {
+            const section = document.getElementById('tfp-reviews-section');
+            if (section) {
+                section.style.display = visible ? '' : 'none';
+            }
+        });
 
+        // Load reviews from file initially
+        fetchReviewsList().then(list => {
+            if (list && list.length > 0) {
+                const tfpOnly = list.filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
+                renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+            }
+        });
+
+        // Real-time Firestore sync
         try {
             const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -796,12 +797,23 @@
                         return;
                     }
                 }
-                renderTfpReviews(defaultTfpReviews);
+                fetchReviewsList().then(list => {
+                    const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
+                    renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+                });
             }, (err) => {
-                renderTfpReviews(defaultTfpReviews);
+                console.warn("Firestore reviews fallback to file:", err);
+                fetchReviewsList().then(list => {
+                    const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
+                    renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+                });
             });
         } catch(e) {
-            renderTfpReviews(defaultTfpReviews);
+            console.warn("Reviews init error:", e);
+            fetchReviewsList().then(list => {
+                const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
+                renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+            });
         }
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";

@@ -266,6 +266,7 @@
 
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
@@ -755,33 +756,20 @@
             }
         }
 
-        try {
-            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    updateSectionVisibilityUI(data.visible !== false);
-                } else {
-                    updateSectionVisibilityUI(true);
-                }
-            }, (err) => {
-                console.warn("Reviews settings listener error:", err);
-            });
-        } catch(e) {
-            console.warn("Reviews settings init error:", e);
-        }
+        // Subscribe to visibility with dual-sync (file + firestore)
+        subscribeReviewsVisibility((visible) => {
+            updateSectionVisibilityUI(visible);
+        });
 
         if (toggleSectionBtn) {
             toggleSectionBtn.addEventListener('click', async () => {
                 toggleSectionBtn.disabled = true;
                 const nextState = !isReviewsSectionVisible;
+                updateSectionVisibilityUI(nextState);
                 try {
-                    await setDoc(doc(db, "settings", "reviews"), {
-                        visible: nextState,
-                        updatedAt: serverTimestamp()
-                    }, { merge: true });
+                    await setReviewsVisibility(nextState);
                 } catch(e) {
                     console.error("Error setting review section visibility:", e);
-                    alert("Klaida keičiant nustatymą: " + (e.message || e));
                 } finally {
                     toggleSectionBtn.disabled = false;
                 }
@@ -789,79 +777,103 @@
         }
 
         // Reviews Management for Admin
-        function loadReviews() {
-            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('reviews-list');
-                list.innerHTML = '';
-                const count = snapshot.size;
-                const statEl = document.getElementById('stat-reviews-count');
-                if (statEl) statEl.innerText = count;
+        function renderReviewsListInAdmin(reviewsArray) {
+            const list = document.getElementById('reviews-list');
+            if (!list) return;
+            list.innerHTML = '';
+            const statEl = document.getElementById('stat-reviews-count');
+            if (statEl) statEl.innerText = reviewsArray.length;
 
-                if (snapshot.empty) {
-                    list.innerHTML = '<p style="padding: 20px; color: #888;">Atsiliepimų duomenų bazėje kol kas nėra. Galite įrašyti naują viršuje arba paspausti mygtuką „Įkelti 3 pradines rekomendacijas“.</p>';
-                    return;
+            if (reviewsArray.length === 0) {
+                list.innerHTML = '<p style="padding: 20px; color: #888;">Atsiliepimų kol kas nėra. Galite įrašyti naują viršuje arba paspausti mygtuką „Įkelti 3 pradines rekomendacijas“.</p>';
+                return;
+            }
+
+            reviewsArray.forEach((data) => {
+                const card = document.createElement('div');
+                card.className = 'request-card';
+                const isTfp = (data.type === 'tfp');
+                const badgeClass = isTfp ? 'review-badge-tfp' : 'review-badge-service';
+                const badgeText = isTfp ? 'TFP Projektas' : 'Mokama Paslauga';
+                const isVisible = data.visible !== false;
+                const starsCount = Math.max(1, Math.min(5, data.rating || 5));
+                const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+                let linkHtml = '<span style="color:#999;">Nuoroda nenurodyta</span>';
+                if (data.reviewLink && data.reviewLink.trim()) {
+                    const safeUrl = data.reviewLink.trim();
+                    linkHtml = `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-light); font-weight: 600; text-decoration: underline;">${safeUrl} ↗</a>`;
                 }
 
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const card = document.createElement('div');
-                    card.className = 'request-card';
-                    const isTfp = (data.type === 'tfp');
-                    const badgeClass = isTfp ? 'review-badge-tfp' : 'review-badge-service';
-                    const badgeText = isTfp ? 'TFP Projektas' : 'Mokama Paslauga';
-                    const isVisible = data.visible !== false;
-                    const starsCount = Math.max(1, Math.min(5, data.rating || 5));
-                    const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
-
-                    let linkHtml = '<span style="color:#999;">Nuoroda nenurodyta</span>';
-                    if (data.reviewLink && data.reviewLink.trim()) {
-                        const safeUrl = data.reviewLink.trim();
-                        linkHtml = `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-light); font-weight: 600; text-decoration: underline;">${safeUrl} ↗</a>`;
-                    }
-
-                    card.innerHTML = `
-                        <div class="req-header">
-                            <div class="req-client-title">
-                                <strong>${data.clientName || 'Be vardo'}</strong>
-                                <span class="review-badge ${badgeClass}" style="margin-left: 8px;">${badgeText}</span>
-                                <span style="color: #C5A880; font-size: 1.15rem; letter-spacing: 2px; margin-left: 8px;">${starsHtml}</span>
-                            </div>
-                            <span class="status-badge ${isVisible ? 'status-Confirmed' : 'status-Cancelled'}">
-                                ${isVisible ? '✓ Rodomas svetainėje' : '✕ Paslėptas'}
-                            </span>
+                card.innerHTML = `
+                    <div class="req-header">
+                        <div class="req-client-title">
+                            <strong>${data.clientName || 'Be vardo'}</strong>
+                            <span class="review-badge ${badgeClass}" style="margin-left: 8px;">${badgeText}</span>
+                            <span style="color: #C5A880; font-size: 1.15rem; letter-spacing: 2px; margin-left: 8px;">${starsHtml}</span>
                         </div>
-                        <div class="req-body" style="grid-template-columns: 1fr;">
-                            <div class="req-info-block">
-                                <p><b>Fotosesijos tema / aprašas:</b> ${data.sessionTag || '-'}</p>
-                                <p><b>Nuoroda į atsiliepimą / profilį (Link):</b> ${linkHtml}</p>
-                                <p style="margin-top: 12px; font-style: italic; background: #FAFBFB; padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--accent-color); font-size: 1.05rem; line-height: 1.7;">
-                                    „${data.comment || data.reviewText || ''}“
-                                </p>
-                            </div>
+                        <span class="status-badge ${isVisible ? 'status-Confirmed' : 'status-Cancelled'}">
+                            ${isVisible ? '✓ Rodomas svetainėje' : '✕ Paslėptas'}
+                        </span>
+                    </div>
+                    <div class="req-body" style="grid-template-columns: 1fr;">
+                        <div class="req-info-block">
+                            <p><b>Fotosesijos tema / aprašas:</b> ${data.sessionTag || '-'}</p>
+                            <p><b>Nuoroda į atsiliepimą / profilį (Link):</b> ${linkHtml}</p>
+                            <p style="margin-top: 12px; font-style: italic; background: #FAFBFB; padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--accent-color); font-size: 1.05rem; line-height: 1.7;">
+                                „${data.comment || data.reviewText || ''}“
+                            </p>
                         </div>
-                        <div class="req-actions">
-                            <button class="admin-btn-outline" onclick="toggleReviewVisibility('${docSnap.id}', ${isVisible})">
-                                ${isVisible ? 'Paslėpti svetainėje' : 'Rodyti svetainėje'}
-                            </button>
-                            <button class="admin-btn-delete" onclick="deleteDocRecord('reviews', '${docSnap.id}')">Ištrinti</button>
-                        </div>
-                    `;
-                    list.appendChild(card);
-                });
-            }, (err) => {
-                console.error("Error loading reviews:", err);
-                const list = document.getElementById('reviews-list');
-                if (list) list.innerHTML = `<p style="color:red;">Klaida kraunant atsiliepimus: ${err.message}</p>`;
+                    </div>
+                    <div class="req-actions">
+                        <button class="admin-btn-outline" onclick="toggleReviewVisibility('${data.id}', ${isVisible})">
+                            ${isVisible ? 'Paslėpti svetainėje' : 'Rodyti svetainėje'}
+                        </button>
+                        <button class="admin-btn-delete" onclick="handleDeleteReview('${data.id}')">Ištrinti</button>
+                    </div>
+                `;
+                list.appendChild(card);
             });
         }
 
-        window.toggleReviewVisibility = async (id, currentVisible) => {
+        async function loadReviews() {
+            // First load from local server file for immediate display
+            const fileReviews = await fetchReviewsList();
+            if (fileReviews && fileReviews.length > 0) {
+                renderReviewsListInAdmin(fileReviews);
+            }
+
             try {
-                await updateDoc(doc(db, "reviews", id), { visible: !currentVisible });
-            } catch(e) {
-                console.error(e);
-                alert("Klaida keičiant matomumą: " + (e.message || e));
+                const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    if (!snapshot.empty) {
+                        const loaded = [];
+                        snapshot.forEach((docSnap) => {
+                            loaded.push({ id: docSnap.id, ...docSnap.data() });
+                        });
+                        renderReviewsListInAdmin(loaded);
+                    } else if (!fileReviews || fileReviews.length === 0) {
+                        renderReviewsListInAdmin([]);
+                    }
+                }, (err) => {
+                    console.warn("Firestore reviews fallback to file:", err);
+                    fetchReviewsList().then(renderReviewsListInAdmin);
+                });
+            } catch (e) {
+                console.warn("Firestore reviews listener error:", e);
+                fetchReviewsList().then(renderReviewsListInAdmin);
+            }
+        }
+
+        window.toggleReviewVisibility = async (id, currentVisible) => {
+            await toggleReviewItem(id, !currentVisible);
+            loadReviews();
+        };
+
+        window.handleDeleteReview = async (id) => {
+            if (confirm("Ar tikrai norite visam laikui ištrinti šį atsiliepimą?")) {
+                await deleteReviewItem(id);
+                loadReviews();
             }
         };
 
@@ -885,21 +897,21 @@
                 saveRevBtn.innerText = 'Saugoma...';
 
                 try {
-                    await addDoc(collection(db, "reviews"), {
+                    await createNewReview({
                         clientName: name,
                         type: type,
                         sessionTag: tag || (type === 'tfp' ? 'TFP fotosesija' : 'Individuali fotosesija'),
                         rating: rating,
                         reviewLink: link,
                         comment: text,
-                        visible: visible,
-                        createdAt: serverTimestamp()
+                        visible: visible
                     });
                     alert("Atsiliepimas sėkmingai pridėtas! Jis jau matomas svetainėje.");
                     document.getElementById('new-rev-name').value = '';
                     document.getElementById('new-rev-tag').value = '';
                     document.getElementById('new-rev-link').value = '';
                     document.getElementById('new-rev-text').value = '';
+                    loadReviews();
                 } catch (err) {
                     console.error(err);
                     alert("Klaida išsaugant atsiliepimą: " + (err.message || err));
