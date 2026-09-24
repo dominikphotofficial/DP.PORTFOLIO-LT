@@ -19,57 +19,82 @@
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
 </head>
 <body>
-    <div id="preloader"><div class="loader"></div></div>
-    <header>
-        <div class="logo">
-            <a href="../index.html"><img src="https://iili.io/fjNLbs4.png" alt="DP Logo"></a>
-        </div>
-        <div class="burger">
-            <div></div>
-            <div></div>
-            <div></div>
+    <div id="preloader" data-nosnippet><div class="loader"></div></div>
+        <header id="main-header">
+        <a href="../index.html" class="logo">
+            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
+        </a>
+        <nav class="desktop-nav">
+            <a href="../index.html" class="nav-link">Darbai</a>
+            <a href="../services.html" class="nav-link">Paslaugos</a>
+            <a href="../biography.html" class="nav-link">Biografija</a>
+            <a href="../about.html" class="nav-link">Apie</a>
+            <a href="../contacts.html" class="nav-link">Kontaktai</a>
+            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
+        </nav>
+        <div class="burger" id="burger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </header>
-    <div class="nav-menu">
-        <a href="../index.html" class="nav-link">Darbai</a>
-        <a href="../services.html" class="nav-link">Paslaugos</a>
-        <a href="../about.html" class="nav-link">Apie</a>
-        <a href="../contacts.html" class="nav-link">Kontaktai</a>
+
+    <div class="nav-overlay" id="nav-overlay">
+        <nav class="mobile-nav">
+            <a href="../index.html" class="nav-link">Darbai</a>
+            <a href="../services.html" class="nav-link">Paslaugos</a>
+            <a href="../biography.html" class="nav-link">Biografija</a>
+            <a href="../about.html" class="nav-link">Apie</a>
+            <a href="../contacts.html" class="nav-link">Kontaktai</a>
+            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
+        </nav>
     </div>
     <section class="container" style="padding-top: 140px;">
-        <div class="text-content" style="margin-bottom: 60px; text-align: center;">
+        <div class="fade-in-up" style="margin-bottom: 60px; text-align: center;">
             <h1 style="font-family: 'Jost'; text-transform: uppercase; margin-bottom: 20px; font-size: 2.5rem; letter-spacing: 2px;">
                 Valdovų Rūmai
             </h1>
-            <div style="width: 50px; height: 2px; background-color: #113939; margin: 0 auto 25px auto;"></div>
+            <div class="divider"></div>
             <p style="color: #444; max-width: 650px; margin: 0 auto; line-height: 1.8;">
                 Lietuvos didžiųjų kunigaikščių rezidencija Vilniaus Žemutinėje pilyje – tai atkurtas valstybingumo simbolis. Šimtmečius čia plakė Lietuvos Didžiosios Kunigaikštystės politinė ir kultūrinė širdis. Šiame albume užfiksuotos autentiškos mūro liekanos, turtingos archeologinės ekspozicijos bei atkurtos menės, alsuojančios renesanso ir ankstyvojo baroko dvasia.
             </p>
         </div>
         <div class="gallery-grid">
-            <div class="gallery-item"><img src="https://i.postimg.cc/C5XjhNy7/Vilniaus-muziejus.png" alt="Valdovų Rūmai 1" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/Xqpf6PPr/Vilniaus-muziejus-01.png" alt="Valdovų Rūmai 2" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/85CWL3Nc/Vilniaus-muziejus-02.png" alt="Valdovų Rūmai 3" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/bJvb1Mpt/Vilniaus-muziejus-03.png" alt="Valdovų Rūmai 4" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/pdRKLrSQ/Vilniaus-muziejus-04.png" alt="Valdovų Rūmai 5" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/TwPmnSfF/Vilniaus-muziejus-05.png" alt="Valdovų Rūmai 6" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/xCdHL7nM/Vilniaus-muziejus-06.png" alt="Valdovų Rūmai 7" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/PrvW6BZ4/Vilniaus-muziejus-07.png" alt="Valdovų Rūmai 8" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/y8qF2vy4/Vilniaus-muziejus-08.png" alt="Valdovų Rūmai 9" loading="lazy"></div>
-            <div class="gallery-item"><img src="https://i.postimg.cc/66mVf97f/Vilniaus-muziejus-09.png" alt="Valdovų Rūmai 10" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/C5XjhNy7/Vilniaus-muziejus.png" alt="Valdovų Rūmai 1" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/Xqpf6PPr/Vilniaus-muziejus-01.png" alt="Valdovų Rūmai 2" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/85CWL3Nc/Vilniaus-muziejus-02.png" alt="Valdovų Rūmai 3" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/bJvb1Mpt/Vilniaus-muziejus-03.png" alt="Valdovų Rūmai 4" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/pdRKLrSQ/Vilniaus-muziejus-04.png" alt="Valdovų Rūmai 5" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/TwPmnSfF/Vilniaus-muziejus-05.png" alt="Valdovų Rūmai 6" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/xCdHL7nM/Vilniaus-muziejus-06.png" alt="Valdovų Rūmai 7" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/PrvW6BZ4/Vilniaus-muziejus-07.png" alt="Valdovų Rūmai 8" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/y8qF2vy4/Vilniaus-muziejus-08.png" alt="Valdovų Rūmai 9" loading="lazy"></div>
+            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/66mVf97f/Vilniaus-muziejus-09.png" alt="Valdovų Rūmai 10" loading="lazy"></div>
         </div>
     </section>
 
+    <footer>
+        <p>&copy; 2026 DP Corporation. Dominik Šuškevič.</p>
+    </footer>
+
     <div id="lightbox" class="lightbox">
         <div class="lightbox-top">
-            <span id="lightbox-counter">1 / 1</span>
-            <button class="lightbox-close">&times;</button>
+            <span id="lightbox-counter"></span>
+            <button class="lightbox-close" aria-label="Uždaryti">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
         </div>
-        <button class="lightbox-prev">&lsaquo;</button>
-        <img id="lightbox-img" src="" alt="Fullscreen">
-        <button class="lightbox-next">&rsaquo;</button>
+        <button class="lightbox-prev" aria-label="Ankstesnė">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="lightbox-image-wrapper">
+            <img id="lightbox-img" src="" alt="Nuotrauka">
+        </div>
+        <button class="lightbox-next" aria-label="Kita">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
     </div>
 
     <script src="../script.js"></script>
 </body>
-</html>```
+</html>

@@ -6,59 +6,700 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Paslaugos | DP.PORTFOLIO</title>
-    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir trumpi filmai.">
+    <title>Paslaugos ir Kainos | DP.PORTFOLIO</title>
+    <meta name="description" content="Profesionalios fotografijos ir videografijos paslaugos Kaune. Asmeninės, kūrybinės fotosesijos, automobilių fotografija ir 4K video projektai.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/services.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DP.PORTFOLIO">
-    <meta property="og:title" content="Paslaugos | DP.PORTFOLIO">
-    <meta property="og:description" content="Asmeninės fotosesijos, automobilių fotografija, kūrybiniai video projektai.">
+    <meta property="og:title" content="Paslaugos ir Kainos | DP.PORTFOLIO">
+    <meta property="og:description" content="Aukščiausios kokybės asmeninės fotosesijos, automobilių fotografija ir kinematografiniai video projektai.">
     <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/services.html">
     <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
+    
     <style>
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 60px auto; }
-        .service-card { background-color: var(--surface-color); border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.05); overflow: hidden; transition: transform 0.4s ease, box-shadow 0.4s ease; display: flex; flex-direction: column; }
-        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(17, 57, 57, 0.08); }
-        .service-img { width: 100%; height: 220px; object-fit: cover; }
-        .service-header { background: var(--accent-color); color: var(--bg-color); padding: 25px 20px; text-align: center; position: relative; }
-        .service-badge { position: absolute; top: 15px; right: 15px; background: #d9534f; color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-family: var(--font-heading); letter-spacing: 1px; text-transform: uppercase; }
-        .service-title { font-family: var(--font-heading); font-size: 1.3rem; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
-        .service-price { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 300; }
-        .service-price span { font-size: 0.9rem; opacity: 0.7; }
-        .service-body { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
-        .service-list { list-style: none; padding: 0; margin: 0 0 30px 0; font-family: var(--font-body); font-size: 1.05rem; line-height: 2; color: var(--text-color); flex-grow: 1; }
-        .service-list li { position: relative; padding-left: 25px; margin-bottom: 10px; }
-        .service-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-light); font-weight: bold; }
-        .price-calculator { background: rgba(17, 57, 57, 0.03); padding: 25px; border-radius: 8px; margin-top: 20px; border: 1px solid rgba(17, 57, 57, 0.1); }
-        .price-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-family: var(--font-body); font-size: 1.1rem; }
-        .price-row.discount { color: #d9534f; font-weight: 600; }
-        .price-row.final { font-weight: 600; font-size: 1.3rem; border-top: 1px solid rgba(17, 57, 57, 0.1); padding-top: 15px; margin-top: 10px; color: var(--accent-color); }
-        .price-row.deposit { color: var(--accent-light); font-weight: 600; }
-        .payment-info { display: none; background: rgba(17, 57, 57, 0.05); padding: 20px; border-left: 4px solid var(--accent-color); margin-top: 15px; font-family: var(--font-body); font-size: 1rem; line-height: 1.6; border-radius: 0 4px 4px 0; }
-        .payment-info.active { display: block; }
-        .thumb-container { position: relative; display: inline-block; margin-right: 10px; margin-bottom: 10px; }
-        .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(17,57,57,0.1); }
-        .thumb-remove { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; line-height: 1; display: flex; justify-content: center; align-items: center; }
-        .form-input { width: 100%; padding: 12px 0; background: transparent; border: none; border-bottom: 1px solid rgba(17, 57, 57, 0.2); font-family: var(--font-body); font-size: 16px; color: var(--text-color); transition: var(--transition); outline: none; border-radius: 0; resize: vertical; }
-        .form-input:focus { border-bottom-color: var(--accent-color); }
-        .form-input::placeholder { color: rgba(26, 43, 43, 0.3); font-family: var(--font-body); }
-        .gallery-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 60px; }
-        .gallery-preview-grid img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; transition: transform 0.4s ease; }
-        .gallery-preview-grid img:hover { transform: scale(1.03); }
-        .calendar-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 10px; }
-        .flatpickr-calendar.inline { margin: 0 auto !important; box-shadow: 0 10px 30px rgba(17, 57, 57, 0.06) !important; border: 1px solid rgba(17, 57, 57, 0.1) !important; border-radius: 8px !important; width: 100% !important; max-width: 320px !important; }
-        .flatpickr-day.discount-day { background-color: rgba(217, 83, 79, 0.15) !important; border: 1px solid #d9534f !important; color: #d9534f !important; font-weight: 600 !important; }
-        .flatpickr-day.discount-day:hover { background-color: rgba(217, 83, 79, 0.3) !important; }
-        .flatpickr-day.discount-day.selected { background-color: #d9534f !important; border-color: #d9534f !important; color: #ffffff !important; }
+        .services-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 140px clamp(20px, 5vw, 60px) 60px clamp(20px, 5vw, 60px);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 70px auto;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .section-header h1 {
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            letter-spacing: clamp(4px, 1.5vw, 8px);
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            font-weight: 300;
+            color: rgba(26, 43, 43, 0.8);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Package Cards Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .service-card {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s var(--cb), box-shadow 0.4s var(--cb), border-color 0.4s var(--cb);
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(17, 57, 57, 0.09);
+            border-color: rgba(17, 57, 57, 0.25);
+        }
+
+        .service-card.featured {
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 20px 45px rgba(17, 57, 57, 0.08);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 2px;
+            z-index: 2;
+        }
+
+        .service-img-wrapper {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background: var(--surface-color);
+        }
+
+        .service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--cb);
+        }
+
+        .service-card:hover .service-img {
+            transform: scale(1.06);
+        }
+
+        .service-content {
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .service-title {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            font-weight: 400;
+            color: var(--text-color);
+        }
+
+        .service-price-block {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(17, 57, 57, 0.08);
+        }
+
+        .service-price {
+            font-family: var(--font-heading);
+            font-size: 2.6rem;
+            font-weight: 300;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+
+        .service-price-sub {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: rgba(26, 43, 43, 0.6);
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 35px 0;
+            flex-grow: 1;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 2.2;
+            color: rgba(26, 43, 43, 0.85);
+        }
+
+        .service-features li {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .service-features li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .select-service-btn {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--accent-color);
+            background: transparent;
+            color: var(--accent-color);
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s var(--cb);
+        }
+
+        .select-service-btn:hover, .service-card.featured .select-service-btn {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .service-card.featured .select-service-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+        }
+
+        /* Process Steps */
+        .process-section {
+            background: var(--surface-color);
+            border-radius: 4px;
+            padding: clamp(40px, 6vw, 80px) clamp(20px, 5vw, 60px);
+            margin-bottom: 100px;
+        }
+
+        .process-title {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            letter-spacing: 4px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .process-subtitle {
+            text-align: center;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: rgba(26, 43, 43, 0.7);
+            max-width: 600px;
+            margin: 0 auto 50px auto;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 35px;
+        }
+
+        .process-card {
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 2px;
+            border: 1px solid rgba(17, 57, 57, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .process-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .process-num {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--accent-color);
+            opacity: 0.5;
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+
+        .process-card h4 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .process-card p {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: rgba(26, 43, 43, 0.75);
+            margin: 0;
+        }
+
+        /* Portfolio Preview Grid */
+        .samples-section {
+            margin-bottom: 100px;
+        }
+
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .sample-item {
+            height: 280px;
+            overflow: hidden;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .sample-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s var(--cb);
+        }
+
+        .sample-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .sample-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(17, 57, 57, 0.35);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-family: var(--font-heading);
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .sample-item:hover .sample-overlay {
+            opacity: 1;
+        }
+
+        /* Booking Form Section */
+        .booking-card {
+            background: #ffffff;
+            border-radius: 4px;
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            box-shadow: 0 25px 60px rgba(17, 57, 57, 0.06);
+            padding: clamp(35px, 6vw, 70px);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-title-group {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .form-title-group h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            letter-spacing: 4px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .form-title-group p {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: rgba(26, 43, 43, 0.7);
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Google Sign-in button */
+        .google-auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 20px;
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            color: var(--text-color);
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-bottom: 35px;
+            transition: all 0.3s ease;
+        }
+
+        .google-auth-btn:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(17, 57, 57, 0.08);
+            background: rgba(17, 57, 57, 0.02);
+        }
+
+        .google-auth-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Form Inputs */
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-label {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-color);
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            border-radius: 2px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.08);
+        }
+
+        .form-control::placeholder {
+            color: rgba(26, 43, 43, 0.35);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23113939' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 14px;
+            padding-right: 38px;
+            cursor: pointer;
+        }
+
+        /* Live Calculator */
+        .calculator-box {
+            background: var(--surface-color);
+            border-radius: 4px;
+            padding: 25px 30px;
+            margin: 25px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .calc-row.total {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 500;
+            color: var(--accent-color);
+            border-top: 1px solid rgba(17, 57, 57, 0.12);
+            padding-top: 14px;
+            margin-top: 14px;
+            margin-bottom: 12px;
+        }
+
+        .calc-row.deposit-row {
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+
+        .calc-row.remaining-row {
+            font-size: 0.95rem;
+            opacity: 0.75;
+            margin-bottom: 0;
+        }
+
+        /* Payment Tabs & Instructions */
+        .payment-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-tab-btn {
+            padding: 14px;
+            text-align: center;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            background: var(--bg-color);
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .payment-tab-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+        }
+
+        .payment-instruction-box {
+            display: none;
+            background: var(--surface-color);
+            padding: 24px;
+            border-radius: 2px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .payment-instruction-box.active {
+            display: block;
+        }
+
+        .copy-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            border-radius: 2px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            margin: 6px 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .copy-pill:hover {
+            background: rgba(17, 57, 57, 0.05);
+        }
+
+        /* Photo attachment thumbnails */
+        .thumbs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .thumb-item {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+        }
+
+        .thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumb-del-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: rgba(17, 57, 57, 0.85);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .thumb-del-btn:hover {
+            background: #d9534f;
+        }
+
+        /* Submit Button */
+        .submit-service-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: 1px solid var(--accent-color);
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.4s var(--cb);
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .submit-service-btn:hover:not(:disabled) {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+            box-shadow: 0 10px 25px rgba(17, 57, 57, 0.15);
+        }
+
+        .submit-service-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Success Card */
+        .success-card {
+            display: none;
+            text-align: center;
+            padding: 60px 30px;
+            background: #ffffff;
+            border-radius: 4px;
+            border: 1px solid rgba(17, 57, 57, 0.1);
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 25px auto;
+            border-radius: 50%;
+            background: var(--surface-color);
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .success-card h3 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .success-card p {
+            font-family: var(--font-body);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: rgba(26, 43, 43, 0.85);
+            max-width: 540px;
+            margin: 0 auto 35px auto;
+        }
+
+        /* Calendar customization */
+        .flatpickr-calendar {
+            box-shadow: 0 15px 40px rgba(17, 57, 57, 0.08) !important;
+            border: 1px solid rgba(17, 57, 57, 0.1) !important;
+            border-radius: 4px !important;
+            font-family: var(--font-body) !important;
+        }
+
+        .flatpickr-day.selected {
+            background: var(--accent-color) !important;
+            border-color: var(--accent-color) !important;
+        }
     </style>
 </head>
 <body>
@@ -88,233 +729,329 @@
         </nav>
     </div>
 
-    <section class="container" style="padding-top: 160px; padding-bottom: 20px;">
-        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto 50px auto; text-align: center;">
-            <h1 style="font-family: var(--font-heading); text-transform: uppercase; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 5px; margin-bottom: 25px; color: var(--text-color); font-weight: 300;">Paslaugos</h1>
+    <main class="services-section">
+        <!-- Hero Section -->
+        <div class="section-header fade-in-up">
+            <span class="section-tag">DP.PORTFOLIO Paslaugos</span>
+            <h1>Fotografija & Videografija</h1>
             <div class="divider"></div>
-            <p style="font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: rgba(26, 43, 43, 0.8); margin-bottom: 20px;">
-                Profesionalios fotografijos ir videografijos paslaugos. Pasirinkite jums tinkamiausią paketą.
+            <p>
+                Aukščiausios kokybės asmeninės, kūrybinės ir automobilių fotosesijos bei kinematografiniai video reportažai.
+                Kiekvienas projektas kuriamas su išskirtiniu dėmesiu šviesai, kompozicijai ir jūsų asmenybei.
             </p>
         </div>
 
+        <!-- Pricing Packages -->
         <div class="services-grid">
+            <!-- Mini -->
             <div class="service-card fade-in-up">
-                <img src="https://i.postimg.cc/tgDGWFNT/paslaugos-fotosesijos-01.jpg" class="service-img" alt="Mini Fotosesija">
-                <div class="service-header">
+                <div class="service-img-wrapper">
+                    <img src="https://i.postimg.cc/tgDGWFNT/paslaugos-fotosesijos-01.jpg" class="service-img" alt="Mini Fotosesija">
+                </div>
+                <div class="service-content">
                     <h3 class="service-title">Mini Fotosesija</h3>
-                    <div class="service-price">5 € <span>/ nuo</span></div>
-                </div>
-                <div class="service-body">
-                    <ul class="service-list">
-                        <li>Greita fotosesija</li>
-                        <li>1 pasirinkta lokacija</li>
-                        <li>Nedidelis nuotraukų kiekis</li>
-                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
+                    <div class="service-price-block">
+                        <span class="service-price">15 €</span>
+                        <span class="service-price-sub">/ pradinis paketas</span>
+                    </div>
+                    <ul class="service-features">
+                        <li>30–45 min. trukmės fotosesija</li>
+                        <li>1 pasirinkta lokacija Kaune</li>
+                        <li>15 autorinių retušuotų nuotraukų</li>
+                        <li>Pilnas spalvų ir šviesos balansas</li>
+                        <li>Greitas paruošimas per 5 d.d.</li>
                     </ul>
-                    <button type="button" class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('photo_mini')">Užsakyti</button>
+                    <button type="button" class="select-service-btn" onclick="window.selectService('photo_mini', 15)">Pasirinkti Paketą</button>
                 </div>
             </div>
 
-            <div class="service-card fade-in-up">
-                <img src="https://i.postimg.cc/Dz7KSxL3/paslaugos-fotosesijos-02.jpg" class="service-img" alt="Standartinė Fotosesija">
-                <div class="service-header">
-                    <div class="service-badge">Populiariausias</div>
+            <!-- Standard (Featured) -->
+            <div class="service-card featured fade-in-up">
+                <span class="featured-badge">Populiariausias</span>
+                <div class="service-img-wrapper">
+                    <img src="https://i.postimg.cc/Dz7KSxL3/paslaugos-fotosesijos-02.jpg" class="service-img" alt="Standartinė Fotosesija">
+                </div>
+                <div class="service-content">
                     <h3 class="service-title">Standartinė</h3>
-                    <div class="service-price">15 € <span>/ nuo</span></div>
-                </div>
-                <div class="service-body">
-                    <ul class="service-list">
-                        <li>Pilna fotosesija</li>
-                        <li>Keli įvaizdžiai ir lokacijos</li>
-                        <li>Optimalus nuotraukų kiekis</li>
-                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
+                    <div class="service-price-block">
+                        <span class="service-price">30 €</span>
+                        <span class="service-price-sub">/ optimalus pasirinkimas</span>
+                    </div>
+                    <ul class="service-features">
+                        <li>60–90 min. fotosesija</li>
+                        <li>2–3 lokacijos arba įvaizdžių kaita</li>
+                        <li>40+ profesionaliai retušuotų nuotraukų</li>
+                        <li>Asmeninė Wfolio galerija be glaudinimo</li>
+                        <li>Pagalba pozavimui ir idėjos vystymui</li>
                     </ul>
-                    <button type="button" class="cta-button" style="width: 100%; padding: 15px; background: var(--accent-color); color: var(--bg-color);" onclick="window.selectService('photo_standard')">Užsakyti</button>
+                    <button type="button" class="select-service-btn" onclick="window.selectService('photo_standard', 30)">Pasirinkti Paketą</button>
                 </div>
             </div>
 
+            <!-- Maxi -->
             <div class="service-card fade-in-up">
-                <img src="https://i.postimg.cc/3w3Hktmw/paslaugos-fotosesijos-03.jpg" class="service-img" alt="Maksi Fotosesija">
-                <div class="service-header">
+                <div class="service-img-wrapper">
+                    <img src="https://i.postimg.cc/3w3Hktmw/paslaugos-fotosesijos-03.jpg" class="service-img" alt="Maksi Fotosesija">
+                </div>
+                <div class="service-content">
                     <h3 class="service-title">Maksi (100+ Foto)</h3>
-                    <div class="service-price">20 € <span>/ maks.</span></div>
-                </div>
-                <div class="service-body">
-                    <ul class="service-list">
-                        <li>Ilga fotosesija</li>
-                        <li>Neribotas lokacijų skaičius</li>
-                        <li>Iki 100 apdorotų nuotraukų</li>
-                        <li>Kaina mažėja, jei nuotraukų mažiau</li>
-                        <li>Taikoma 5€ nuolaida (Rugsėjo 2-27 d.)</li>
+                    <div class="service-price-block">
+                        <span class="service-price">45 €</span>
+                        <span class="service-price-sub">/ pilna serija</span>
+                    </div>
+                    <ul class="service-features">
+                        <li>2–3 val. kūrybinė fotosesija</li>
+                        <li>Neribotas lokacijų ir drabužių skaičius</li>
+                        <li>100+ paruoštų kadrų aukščiausia raiška</li>
+                        <li>Spaudai ir spaudos leidiniams tinkami failai</li>
+                        <li>Prioritetinis retušavimas</li>
                     </ul>
-                    <button type="button" class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('photo_maxi')">Užsakyti</button>
+                    <button type="button" class="select-service-btn" onclick="window.selectService('photo_maxi', 45)">Pasirinkti Paketą</button>
                 </div>
             </div>
 
+            <!-- Video -->
             <div class="service-card fade-in-up">
-                <img src="https://i.postimg.cc/DZsSRbfJ/paslaugos-fotosesijos-06.jpg" class="service-img" alt="Videografija">
-                <div class="service-header">
+                <div class="service-img-wrapper">
+                    <img src="https://i.postimg.cc/DZsSRbfJ/paslaugos-fotosesijos-06.jpg" class="service-img" alt="Videografija">
+                </div>
+                <div class="service-content">
                     <h3 class="service-title">Videografija</h3>
-                    <div class="service-price">30 € <span>/ nuo</span></div>
-                </div>
-                <div class="service-body">
-                    <ul class="service-list">
-                        <li>Kinematografiniai vaizdo įrašai</li>
-                        <li>Profesionalus montažas</li>
-                        <li>Be nuolaidų</li>
+                    <div class="service-price-block">
+                        <span class="service-price">60 €</span>
+                        <span class="service-price-sub">/ video projektas</span>
+                    </div>
+                    <ul class="service-features">
+                        <li>4K Ultra HD kinematografinis filmavimas</li>
+                        <li>Profesionalus kameros stabilizavimas</li>
+                        <li>Spalvų gradacija (Cinematic LUTs) ir garso dizainas</li>
+                        <li>Reels / TikTok vertikalus klipas + horizontalus video</li>
+                        <li>Licencijuotas muzikinis takelis</li>
                     </ul>
-                    <button type="button" class="cta-button" style="width: 100%; padding: 15px;" onclick="window.selectService('video_basic')">Užsakyti</button>
+                    <button type="button" class="select-service-btn" onclick="window.selectService('video_basic', 60)">Pasirinkti Paketą</button>
                 </div>
             </div>
         </div>
 
-        <div class="fade-in-up" style="max-width: 1200px; margin: 0 auto 60px auto; text-align: center;">
-            <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 30px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Darbų Pavyzdžiai</h2>
-            <div class="gallery-preview-grid">
-                <img src="https://i.postimg.cc/tgn0qRHR/zirgai-zeimenos-01.jpg" alt="Pavyzdys 1">
-                <img src="https://i.postimg.cc/PqvGXfk5/zirgai-zeimenos-02.jpg" alt="Pavyzdys 2">
-                <img src="https://i.postimg.cc/nLyyC8HF/zirgai-zeimenos-03.jpg" alt="Pavyzdys 3">
-                <img src="https://i.postimg.cc/8Cf8pkVg/zirgai-zeimenos-04.jpg" alt="Pavyzdys 4">
-                <img src="https://i.postimg.cc/vmxRY8wk/zirgai-zeimenos-05.jpg" alt="Pavyzdys 5">
+        <!-- How It Works Section -->
+        <div class="process-section fade-in-up">
+            <h3 class="process-title">Kaip Vyksta Bendradarbiavimas</h3>
+            <p class="process-subtitle">Skaidrus ir sklandus kūrybinis kelias nuo pirmosios idėjos iki galutinės nuotraukų galerijos.</p>
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-num">01</div>
+                    <h4>Rezervacija & Vizija</h4>
+                    <p>Užpildote formą, pasirenkate datą ir aprašote savo lūkesčius. Kartu suderiname aprangą, stilių ir lokaciją.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-num">02</div>
+                    <h4>Fotosesija</h4>
+                    <p>Draugiška, neįpareigojanti atmosfera. Padedame atsipalaiduoti prieš Fujifilm kamerą ir surasti geriausius kampus.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-num">03</div>
+                    <h4>Autorinis Retušas</h4>
+                    <p>Kruopščiai atrenkami geriausi kadrai, atliekamas natūralus odos retušas ir individuali spalvų korekcija.</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-num">04</div>
+                    <h4>Privati Galerija</h4>
+                    <p>Nuotraukos patalpinamos jūsų asmeninėje Wfolio galerijoje, kurias galite peržiūrėti ir atsisiųsti pilna kokybe.</p>
+                </div>
             </div>
         </div>
-    </section>
 
-    <section id="service-booking" class="container" style="padding-top: 20px; padding-bottom: 100px;">
-        <div class="fade-in-up" style="max-width: 800px; margin: 0 auto; background-color: var(--surface-color); padding: 50px; border-radius: 8px; box-shadow: 0 20px 60px rgba(17, 57, 57, 0.05);">
+        <!-- Work Samples / Portfolio Preview -->
+        <div class="samples-section fade-in-up">
             <div style="text-align: center; margin-bottom: 40px;">
-                <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; color: var(--text-color); font-weight: 300; font-size: 2rem;">Užsakymo Forma</h2>
-                <p style="font-family: var(--font-body); font-weight: 300; color: rgba(26, 43, 43, 0.6); font-size: 1.1rem;">Užpildykite formą. Rezervacija patvirtinama gavus 50% avansą.</p>
+                <h3 style="font-family: var(--font-heading); font-size: 2rem; letter-spacing: 4px; font-weight: 300; text-transform: uppercase;">Naujausi Darbų Pavyzdžiai</h3>
+                <p style="font-family: var(--font-body); font-size: 1.05rem; opacity: 0.75;">Spustelėkite nuotrauką, norėdami ją padidinti</p>
             </div>
-            
-            <div id="service-success" style="display:none; text-align: center; padding: 50px 30px; background: var(--surface-color); border-radius: 4px; border: 1px solid rgba(17, 57, 57, 0.1); box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04);">
-                <span style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--accent-light); display: block; margin-bottom: 15px;">Užklausa gauta</span>
-                <h3 style="font-family: var(--font-heading); color: var(--accent-color); letter-spacing: 3px; margin-bottom: 15px; font-size: 1.8rem; font-weight: 300; text-transform: uppercase;">Ačiū už registraciją!</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem; color: var(--text-color); opacity: 0.85; line-height: 1.8; max-width: 500px; margin: 0 auto;">Informaciją ir tolimesnius žingsnius išsiuntėme jūsų nurodytu el. paštu. Netrukus susisieksime su jumis aptarti detalių.</p>
+            <div class="samples-grid gallery-grid">
+                <div class="sample-item gallery-item"><img src="https://i.postimg.cc/tgn0qRHR/zirgai-zeimenos-01.jpg" loading="lazy" alt="Žeimenos Žirgai"><div class="sample-overlay">Peržiūrėti</div></div>
+                <div class="sample-item gallery-item"><img src="https://i.postimg.cc/PqvGXfk5/zirgai-zeimenos-02.jpg" loading="lazy" alt="Žeimenos Žirgai 2"><div class="sample-overlay">Peržiūrėti</div></div>
+                <div class="sample-item gallery-item"><img src="https://i.postimg.cc/90JLjs3J/IMG-7652.jpg" loading="lazy" alt="Car Meet Kaunas"><div class="sample-overlay">Peržiūrėti</div></div>
+                <div class="sample-item gallery-item"><img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" loading="lazy" alt="Ąžuolynas Street"><div class="sample-overlay">Peržiūrėti</div></div>
+                <div class="sample-item gallery-item"><img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" loading="lazy" alt="Cirkliškis"><div class="sample-overlay">Peržiūrėti</div></div>
+            </div>
+        </div>
+
+        <!-- Booking Form Card -->
+        <div id="service-booking" class="booking-card fade-in-up">
+            <div class="form-title-group">
+                <span class="section-tag">Rezervacija</span>
+                <h2>Užsakymo Forma</h2>
+                <div class="divider"></div>
+                <p>Užpildykite žemiau esančią informaciją. Rezervacija galutinai patvirtinama atlikus 50% avanso mokėjimą.</p>
             </div>
 
+            <!-- Success message -->
+            <div id="service-success" class="success-card">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h3>Užklausa Priimta!</h3>
+                <p>Nuoširdžiai ačiū už jūsų užsakymą. Patvirtinimo el. laiškas su visais rekvizitais ir tolimesniais žingsniais jau išsiųstas jūsų nurodytu adresu. Netrukus susisieksime su jumis aptarti detalių.</p>
+                <a href="index.html" class="select-service-btn" style="display: inline-block; width: auto; padding: 15px 40px; text-decoration: none;">Grįžti į Pradžią</a>
+            </div>
+
+            <!-- Booking Form -->
             <div id="form-container">
-                <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1); border-radius: 4px;">
+                <button type="button" id="google-login-btn" class="google-auth-btn">
+                    <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
                     Prisijungti su Google (Auto-užpildymas)
                 </button>
 
-                <form id="service-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Vardas, pavardė *</label>
-                            <input type="text" id="srv-name" class="form-input" required autocomplete="off">
+                <form id="service-form">
+                    <div class="form-row-2">
+                        <div class="input-group">
+                            <label class="input-label" for="srv-name">Vardas, Pavardė *</label>
+                            <input type="text" id="srv-name" class="form-control" placeholder="Jūsų vardas ir pavardė" required autocomplete="name">
                         </div>
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">El. paštas *</label>
-                            <input type="email" id="srv-email" class="form-input" required autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Telefonas (neprivaloma)</label>
-                            <input type="tel" id="srv-phone" class="form-input" autocomplete="off">
-                        </div>
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Instagram / Socialinis profilis</label>
-                            <input type="text" id="srv-social" class="form-input" autocomplete="off">
+                        <div class="input-group">
+                            <label class="input-label" for="srv-email">El. Paštas *</label>
+                            <input type="email" id="srv-email" class="form-control" placeholder="vardas@pavyzdys.lt" required autocomplete="email">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Pasirinkite paslaugą *</label>
-                        <select id="srv-type" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
-                            <option value="" disabled selected>Pasirinkite paketą...</option>
-                            <option value="photo_mini" data-price="10">Mini Fotosesija (nuo 5 € su nuolaida)</option>
-                            <option value="photo_standard" data-price="20">Standartinė Fotosesija (nuo 15 € su nuolaida)</option>
-                            <option value="photo_maxi" data-price="25">Maksi Fotosesija 100+ foto (nuo 20 € su nuolaida)</option>
-                            <option value="video_basic" data-price="30">Videografija (nuo 30 €)</option>
+                    <div class="form-row-2">
+                        <div class="input-group">
+                            <label class="input-label" for="srv-phone">Telefono numeris (neprivaloma)</label>
+                            <input type="tel" id="srv-phone" class="form-control" placeholder="+370 600 00000" autocomplete="tel">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="srv-social">Instagram / Telegram profilis</label>
+                            <input type="text" id="srv-social" class="form-control" placeholder="@jusu_profilis arba t.me/...">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="srv-type">Pasirinkite Paslaugos Paketą *</label>
+                        <select id="srv-type" class="form-control" required>
+                            <option value="" disabled selected>Pasirinkite paketą iš sąrašo...</option>
+                            <option value="photo_mini" data-price="15">Mini Fotosesija (15 € | 30–45 min, 15 foto)</option>
+                            <option value="photo_standard" data-price="30">Standartinė Fotosesija (30 € | 60–90 min, 40+ foto)</option>
+                            <option value="photo_maxi" data-price="45">Maksi Fotosesija 100+ Foto (45 € | 2–3 val.)</option>
+                            <option value="video_basic" data-price="60">Videografija (60 € | 4K Cinematic klipas)</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0; text-align: center; display: block;">Pasirinkite fotosesijos datą *</label>
-                        <div class="calendar-wrapper">
-                            <div id="srv-calendar-inline"></div>
-                            <input type="hidden" id="srv-date">
+                    <div class="form-row-2">
+                        <div class="input-group">
+                            <label class="input-label" for="srv-date">Pageidaujama data *</label>
+                            <input type="text" id="srv-date" class="form-control" placeholder="Pasirinkite kalendoriuje..." required readonly style="cursor: pointer; background-color: #fff;">
                         </div>
-                        <div style="text-align: center; margin-top: 15px; font-size: 0.95rem; color: #d9534f; font-family: var(--font-body); font-weight: 600;">
-                            <span style="display:inline-block; width:10px; height:10px; background:#d9534f; border-radius:50%; margin-right:6px;"></span>Rugsėjo 2–27 d. taikoma 5 € nuolaida fotosesijoms!
+                        <div class="input-group">
+                            <label class="input-label" for="srv-time">Pageidaujamas laikas *</label>
+                            <input type="text" id="srv-time" class="form-control" placeholder="Pvz. 14:00 arba 18:30" required>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Pageidaujamas laikas *</label>
-                        <input type="time" id="srv-time" class="form-input" required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
+                    <!-- Dynamic Price Calculator -->
+                    <div id="price-calc" class="calculator-box" style="display: none;">
+                        <div class="calc-row">
+                            <span>Paslaugos bazinė kaina:</span>
+                            <strong id="calc-original">0.00 €</strong>
+                        </div>
+                        <div class="calc-row total">
+                            <span>Galutinė suma:</span>
+                            <span id="calc-final">0.00 €</span>
+                        </div>
+                        <div class="calc-row deposit-row">
+                            <span>Mokėtinas avansas (50%):</span>
+                            <span id="calc-deposit">0.00 €</span>
+                        </div>
+                        <div class="calc-row remaining-row">
+                            <span>Likutis po atlikimo:</span>
+                            <span id="calc-remaining">0.00 €</span>
+                        </div>
                     </div>
 
-                    <div class="price-calculator" id="price-calc" style="display: none;">
-                        <div class="price-row"><span>Bazinė kaina:</span> <span id="calc-original">0.00 €</span></div>
-                        <div class="price-row discount" id="row-discount" style="display: none;"><span>Nuolaida (Rugsėjo 2-27 d.):</span> <span id="calc-discount-val">-5.00 €</span></div>
-                        <div class="price-row final"><span>Galutinė kaina:</span> <span id="calc-final">0.00 €</span></div>
-                        <div class="price-row deposit"><span>Mokėtinas avansas (50%):</span> <span id="calc-deposit">0.00 €</span></div>
-                        <div class="price-row" style="font-size: 0.95rem; opacity: 0.7; margin-top: 5px;"><span>Likutis po atlikimo:</span> <span id="calc-remaining">0.00 €</span></div>
+                    <div class="input-group">
+                        <label class="input-label" for="srv-location">Pageidaujama Lokacija *</label>
+                        <input type="text" id="srv-location" class="form-control" placeholder="Miestas, vieta (pvz. Kaunas, Senamiestis arba Studija)" required>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Lokacija *</label>
-                        <input type="text" id="srv-location" class="form-input" placeholder="Miestas, vieta..." required autocomplete="off">
+                    <div class="input-group">
+                        <label class="input-label" for="srv-info">Fotosesijos idėja ar pageidavimai *</label>
+                        <textarea id="srv-info" class="form-control" rows="3" placeholder="Aprašykite savo viziją, stilių, tematiką ar klausimus..." required></textarea>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Papildoma informacija / Idėja *</label>
-                        <textarea id="srv-info" class="form-input" rows="3" placeholder="Aprašykite savo lūkesčius..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Ar reikalingas kvitas / sąskaita faktūra? *</label>
-                        <select id="srv-receipt" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
+                    <div class="input-group">
+                        <label class="input-label" for="srv-receipt">Ar reikalinga sąskaita / kvitas? *</label>
+                        <select id="srv-receipt" class="form-control" required>
                             <option value="Ne" selected>Ne, nereikia</option>
-                            <option value="Taip">Taip, reikalingas kvitas / sąskaita</option>
+                            <option value="Taip">Taip, reikalingas oficialus kvitas / sąskaita</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Prisegti nuotraukas / Pavyzdžius (neprivaloma)</label>
-                        <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
-                        <div id="srv-photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+                    <div class="input-group">
+                        <label class="input-label">Pavyzdžiai ar referencijos (neprivaloma)</label>
+                        <input type="file" id="srv-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-control" style="padding: 10px;">
+                        <div id="srv-photo-preview-container" class="thumbs-grid"></div>
                     </div>
 
-                    <div>
-                        <label class="field-label" style="margin-top: 0;">Apmokėjimo būdas *</label>
-                        <select id="srv-payment" class="form-input" required style="appearance: none; cursor: pointer; background-color: #fff; border-radius: 4px; padding: 15px;">
-                            <option value="" disabled selected>Pasirinkite...</option>
-                            <option value="Bank Transfer">Bankinis pavedimas</option>
-                            <option value="PayPal">PayPal</option>
-                        </select>
-                        
-                        <div id="info-bank" class="payment-info">
-                            <strong>Banko rekvizitai:</strong><br>
-                            Gavėjas: DOMINIK ŠUŠKEVIČ<br>
-                            Sąskaita: LT867300010171188764<br>
-                            Paskirtis: Avansas už paslaugas (Jūsų vardas)
+                    <div class="input-group">
+                        <label class="input-label">Pasirinkite Apmokėjimo Būdą *</label>
+                        <div class="payment-tabs">
+                            <button type="button" class="payment-tab-btn active" id="tab-bank" onclick="window.setPaymentMethod('Bank Transfer')">Bankinis Pavedimas</button>
+                            <button type="button" class="payment-tab-btn" id="tab-paypal" onclick="window.setPaymentMethod('PayPal')">PayPal</button>
                         </div>
-                        <div id="info-paypal" class="payment-info">
-                            <strong>PayPal informacija:</strong><br>
-                            El. paštas: Dominikphotofficial.lt@gmail.com<br>
-                            <em>Pastaba: Prašome atlikti pavedimą rankiniu būdu nurodytu el. paštu.</em>
+                        <input type="hidden" id="srv-payment" value="Bank Transfer">
+
+                        <!-- Bank instruction -->
+                        <div id="info-bank" class="payment-instruction-box active">
+                            <p style="margin: 0 0 8px 0; font-weight: 500; color: var(--accent-color);">Banko rekvizitai avansui pervesti:</p>
+                            <div>Gavėjas: <strong>DOMINIK ŠUŠKEVIČ</strong></div>
+                            <div>IBAN Sąskaita: <span class="copy-pill" onclick="window.copyText('LT867300010171188764', this)">LT867300010171188764 (Kopijuoti)</span></div>
+                            <div>Paskirtis: <em>Avansas už fotosesiją (Jūsų vardas)</em></div>
+                            <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 6px;">* Avansas pervedamas tik patvirtinus jūsų registraciją.</div>
+                        </div>
+
+                        <!-- PayPal instruction -->
+                        <div id="info-paypal" class="payment-instruction-box">
+                            <p style="margin: 0 0 8px 0; font-weight: 500; color: var(--accent-color);">PayPal rekvizitai:</p>
+                            <div>El. paštas: <span class="copy-pill" onclick="window.copyText('Dominikphotofficial.lt@gmail.com', this)">Dominikphotofficial.lt@gmail.com (Kopijuoti)</span></div>
+                            <div>Gavėjas: <strong>Dominik Šuškevič</strong></div>
+                            <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 6px;">* Prašome nurodyti savo vardą ir pasirinktą paslaugą mokėjimo pastaboje.</div>
                         </div>
                     </div>
 
-                    <button type="submit" id="srv-submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
+                    <button type="submit" id="srv-submit-btn" class="submit-service-btn">
+                        <span>Pateikti Užsakymą</span>
+                    </button>
                 </form>
             </div>
         </div>
-    </section>
+    </main>
 
     <footer>
-        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+        <p>© 2026 DP Corporation. Dominik Šuškevič. Visos teisės saugomos.</p>
         <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/services.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/services.html">EN</a>
             <a href="https://ru.dominikphotofficial.lt/services.html">RU</a>
         </div>
     </footer>
+
+    <!-- Full Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-top">
+            <span id="lightbox-counter"></span>
+            <button class="lightbox-close" aria-label="Uždaryti">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <button class="lightbox-prev" aria-label="Ankstesnė">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="lightbox-image-wrapper">
+            <img id="lightbox-img" src="" alt="Darbų pavyzdys">
+        </div>
+        <button class="lightbox-next" aria-label="Kita">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>
@@ -325,6 +1062,7 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { buildEmail } from './email-templates.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
@@ -345,69 +1083,58 @@
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
 
-        let currentCalculation = { original: 0, discount: 0, final: 0, deposit: 0, remaining: 0 };
+        let currentCalculation = { original: 0, final: 0, deposit: 0, remaining: 0 };
         let selectedFiles = [];
-        let selectedDateMonth = -1;
-        let selectedDateDay = 0;
 
-        function buildServiceEmail(data) {
-            const subject = "DP.PORTFOLIO | Naujas užsakymas: " + (data.serviceName || '');
-            const html = `
-                <div style="background-color: #FBF9F6; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 4px; border-top: 4px solid #113939; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                        <h2 style="color: #113939; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0;">Sveiki, ${data.name || ''}!</h2>
-                        <p style="font-size: 16px; color: #1A2B2B; line-height: 1.6;">Labai ačiū, kad pasirinkote DP.PORTFOLIO. Sėkmingai gavome jūsų užklausą paslaugai: <strong>${data.serviceName || ''}</strong>.</p>
-                        <div style="border: 1px solid #E5ECE9; padding: 25px; margin: 25px 0; border-radius: 4px; background-color: #FBF9F6;">
-                            <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Užsakymo informacija:</b></p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Bendra kaina:</b> ${data.finalPrice} €</p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Avansas (50%):</b> ${data.depositAmount} €</p>
-                            <p style="margin: 0 0 8px 0; color: #1A2B2B;"><b>Likutis po atlikimo:</b> ${data.remainingAmount} €</p>
-                            <p style="margin: 0;"><b>Apmokėjimo būdas:</b> ${data.paymentMethod}</p>
-                        </div>
-                        <p style="margin: 0 0 10px 0; color: #113939; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px;"><b>Apmokėjimo instrukcijos:</b></p>
-                        <p style="margin: 0 0 5px 0; color: #1A2B2B;">Bankinis pavedimas: <b>DOMINIK ŠUŠKEVIČ LT867300010171188764</b></p>
-                        <p style="margin: 0 0 15px 0; color: #1A2B2B;">PayPal: <b>Dominikphotofficial.lt@gmail.com</b></p>
-                        <p style="color: #d9534f; font-size: 0.9em;"><em>Svarbu: Avansą prašome pervesti tik po to, kai galutinai patvirtinsime jūsų užsakymą ir datą.</em></p>
-                        <p style="color: #1A2B2B; font-size: 16px; line-height: 1.6;">Susisieksime su jumis netrukus!</p>
-                        <hr style="border: none; border-top: 1px solid #E5ECE9; margin: 30px 0;">
-                        <p style="font-size: 0.9em; color: #2A5C5C; margin: 0; line-height: 1.6;">
-                            <b>DP.PORTFOLIO</b><br>
-                            Dominik Šuškevič<br>
-                            Instagram: <a href="https://instagram.com/dominikphotofficial" style="color: #113939; text-decoration: none;">@dominikphotofficial</a><br>
-                            Web: <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: none;">portfolio.dominikphotofficial.lt</a>
-                        </p>
-                    </div>
-                </div>
-            `;
-            return { subject, html };
-        }
+        // Single click text copier
+        window.copyText = function(text, el) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = el.innerText;
+                el.innerText = 'Nukopijuota! ✓';
+                setTimeout(() => { el.innerText = originalText; }, 2000);
+            }).catch(() => {
+                alert("Nukopijuota: " + text);
+            });
+        };
 
+        // Payment method selector tabs
+        window.setPaymentMethod = function(method) {
+            document.getElementById('srv-payment').value = method;
+            const tabBank = document.getElementById('tab-bank');
+            const tabPaypal = document.getElementById('tab-paypal');
+            const infoBank = document.getElementById('info-bank');
+            const infoPaypal = document.getElementById('info-paypal');
+
+            if (method === 'Bank Transfer') {
+                tabBank.classList.add('active');
+                tabPaypal.classList.remove('active');
+                infoBank.classList.add('active');
+                infoPaypal.classList.remove('active');
+            } else {
+                tabPaypal.classList.add('active');
+                tabBank.classList.remove('active');
+                infoPaypal.classList.add('active');
+                infoBank.classList.remove('active');
+            }
+        };
+
+        // Price calculator
         window.calculatePrice = function() {
             const srvType = document.getElementById('srv-type');
-            if (!srvType || !srvType.value) return;
+            if (!srvType || !srvType.value) {
+                document.getElementById('price-calc').style.display = 'none';
+                return;
+            }
 
             const selectedOption = srvType.options[srvType.selectedIndex];
             const basePrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
-            const isVideo = srvType.value.startsWith('video');
-            
-            let original = basePrice;
-            let discount = 0;
+            const finalPrice = basePrice;
+            const deposit = finalPrice / 2;
+            const remaining = finalPrice - deposit;
 
-            if (!isVideo && selectedDateMonth === 8 && selectedDateDay >= 2 && selectedDateDay <= 27) {
-                discount = 5;
-                document.getElementById('row-discount').style.display = 'flex';
-            } else {
-                document.getElementById('row-discount').style.display = 'none';
-            }
+            currentCalculation = { original: basePrice, final: finalPrice, deposit, remaining };
 
-            let finalPrice = Math.max(0, original - discount);
-            let deposit = finalPrice / 2;
-            let remaining = finalPrice - deposit;
-
-            currentCalculation = { original, discount, final: finalPrice, deposit, remaining };
-
-            document.getElementById('calc-original').innerText = original.toFixed(2) + ' €';
-            document.getElementById('calc-discount-val').innerText = '-' + discount.toFixed(2) + ' €';
+            document.getElementById('calc-original').innerText = basePrice.toFixed(2) + ' €';
             document.getElementById('calc-final').innerText = finalPrice.toFixed(2) + ' €';
             document.getElementById('calc-deposit').innerText = deposit.toFixed(2) + ' €';
             document.getElementById('calc-remaining').innerText = remaining.toFixed(2) + ' €';
@@ -415,6 +1142,7 @@
             document.getElementById('price-calc').style.display = 'block';
         };
 
+        // Quick select from package cards
         window.selectService = function(val) {
             const select = document.getElementById('srv-type');
             if (select) {
@@ -427,52 +1155,38 @@
             }
         };
 
-        flatpickr("#srv-calendar-inline", { 
-            inline: true,
+        // Initialize Flatpickr
+        flatpickr("#srv-date", { 
             dateFormat: "Y-m-d", 
             minDate: "today", 
             locale: "lt",
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                const date = dayElem.dateObj;
-                if (date.getMonth() === 8 && date.getDate() >= 2 && date.getDate() <= 27) {
-                    dayElem.classList.add('discount-day');
-                }
-            },
-            onChange: function(selectedDates, dateStr) {
-                document.getElementById('srv-date').value = dateStr;
-                if(selectedDates.length > 0) {
-                    const d = selectedDates[0];
-                    selectedDateMonth = d.getMonth();
-                    selectedDateDay = d.getDate();
-                    window.calculatePrice();
-                }
-            }
+            disableMobile: true
         });
 
         const srvType = document.getElementById('srv-type');
-        const srvPayment = document.getElementById('srv-payment');
         const photoInput = document.getElementById('srv-photos');
         const previewContainer = document.getElementById('srv-photo-preview-container');
 
         srvType.addEventListener('change', window.calculatePrice);
 
-        srvPayment.addEventListener('change', function() {
-            document.getElementById('info-bank').classList.remove('active');
-            document.getElementById('info-paypal').classList.remove('active');
-            if(this.value === 'Bank Transfer') document.getElementById('info-bank').classList.add('active');
-            if(this.value === 'PayPal') document.getElementById('info-paypal').classList.add('active');
-        });
-
+        // Photo file attachments with preview and removal
         photoInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
             files.forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`Failas ${file.name} viršija 10MB limitą.`);
+                    return;
+                }
                 selectedFiles.push(file);
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                     const div = document.createElement('div');
-                    div.className = 'thumb-container';
-                    div.innerHTML = `<img src="${ev.target.result}" class="thumb-img"><button type="button" class="thumb-remove">&times;</button>`;
-                    div.querySelector('.thumb-remove').addEventListener('click', () => {
+                    div.className = 'thumb-item';
+                    div.innerHTML = `
+                        <img src="${ev.target.result}" alt="Preview">
+                        <button type="button" class="thumb-del-btn" title="Pašalinti">&times;</button>
+                    `;
+                    div.querySelector('.thumb-del-btn').addEventListener('click', () => {
                         selectedFiles = selectedFiles.filter(f => f !== file);
                         div.remove();
                     });
@@ -483,6 +1197,7 @@
             photoInput.value = ''; 
         });
 
+        // Google sign-in auto-fill
         auth.onAuthStateChanged((user) => {
             if (user) {
                 if (user.displayName && !document.getElementById('srv-name').value) {
@@ -498,39 +1213,40 @@
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 if (result && result.user) {
-                    if(result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
-                    if(result.user.email) document.getElementById('srv-email').value = result.user.email;
+                    if (result.user.displayName) document.getElementById('srv-name').value = result.user.displayName;
+                    if (result.user.email) document.getElementById('srv-email').value = result.user.email;
                 }
             } catch (error) {
-                alert("Google prisijungimo klaida: " + (error.message || error));
+                console.warn("Google auth error:", error);
             }
         });
 
+        // Form Submission
         document.getElementById('service-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('srv-submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Siunčiama...';
+            submitBtn.innerHTML = `<span>Siunčiama...</span>`;
 
             const srvTypeElem = document.getElementById('srv-type');
             if (!srvTypeElem.value) {
-                alert("Prašome pasirinkti paslaugą!");
+                alert("Prašome pasirinkti paslaugos paketą!");
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Siųsti užklausą';
+                submitBtn.innerHTML = `<span>Pateikti Užsakymą</span>`;
                 return;
             }
 
             const srvDateVal = document.getElementById('srv-date').value;
             if (!srvDateVal) {
-                alert("Prašome pasirinkti datą kalendoriuje!");
+                alert("Prašome nurodyti pageidaujamą fotosesijos datą!");
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Siųsti užklausą';
+                submitBtn.innerHTML = `<span>Pateikti Užsakymą</span>`;
                 return;
             }
 
             let uploadedUrls = [];
             if (selectedFiles.length > 0) {
-                submitBtn.innerText = 'Įkeliamos nuotraukos...';
+                submitBtn.innerHTML = `<span>Įkeliamos nuotraukos (${selectedFiles.length})...</span>`;
                 for (const file of selectedFiles) {
                     try {
                         const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -539,37 +1255,36 @@
                         const url = await getDownloadURL(storageRef);
                         uploadedUrls.push(url);
                     } catch (fileErr) {
-                        console.warn("Storage error:", fileErr);
+                        console.warn("Storage upload error:", fileErr);
                     }
                 }
             }
 
-            submitBtn.innerText = 'Išsaugoma užklausa...';
+            submitBtn.innerHTML = `<span>Išsaugoma užklausa...</span>`;
             const selectedOption = srvTypeElem.options[srvTypeElem.selectedIndex];
 
-            let socialVal = document.getElementById('srv-social')?.value || '';
+            let socialVal = document.getElementById('srv-social')?.value.trim() || '';
             let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
             let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
 
             const requestData = {
-                clientName: document.getElementById('srv-name')?.value || '',
-                email: document.getElementById('srv-email')?.value || '',
-                phone: document.getElementById('srv-phone')?.value || '',
+                clientName: document.getElementById('srv-name')?.value.trim() || '',
+                email: document.getElementById('srv-email')?.value.trim() || '',
+                phone: document.getElementById('srv-phone')?.value.trim() || '',
                 socialProfile: socialLink,
                 serviceId: srvTypeElem.value,
                 serviceName: selectedOption ? selectedOption.text : '',
                 originalPrice: Number(currentCalculation.original) || 0,
-                discount: Number(currentCalculation.discount) || 0,
                 finalPrice: Number(currentCalculation.final) || 0,
                 depositPercentage: 50,
                 depositAmount: Number(currentCalculation.deposit) || 0,
                 remainingAmount: Number(currentCalculation.remaining) || 0,
-                paymentMethod: document.getElementById('srv-payment')?.value || 'Nenurodyta',
+                paymentMethod: document.getElementById('srv-payment')?.value || 'Bank Transfer',
                 receiptNeeded: document.getElementById('srv-receipt')?.value || 'Ne',
                 preferredDate: srvDateVal,
-                preferredTime: document.getElementById('srv-time')?.value || '',
-                location: document.getElementById('srv-location')?.value || '',
-                additionalInformation: document.getElementById('srv-info')?.value || '',
+                preferredTime: document.getElementById('srv-time')?.value.trim() || '',
+                location: document.getElementById('srv-location')?.value.trim() || '',
+                additionalInformation: document.getElementById('srv-info')?.value.trim() || '',
                 reference_photos: uploadedUrls,
                 language: 'lt',
                 status: 'Pending',
@@ -579,28 +1294,44 @@
             try {
                 await addDoc(collection(db, "service_requests"), requestData);
 
+                // Auto email
                 try {
-                    const emailData = buildServiceEmail({
+                    const emailData = buildEmail('ServiceNew', 'lt', {
                         name: requestData.clientName,
                         serviceName: requestData.serviceName,
-                        finalPrice: requestData.finalPrice.toFixed(2),
-                        depositAmount: requestData.depositAmount.toFixed(2),
-                        remainingAmount: requestData.remainingAmount.toFixed(2),
+                        finalPrice: requestData.finalPrice,
+                        depositAmount: requestData.depositAmount,
+                        remainingAmount: requestData.remainingAmount,
                         paymentMethod: requestData.paymentMethod,
-                        bankDetails: 'DOMINIK ŠUŠKEVIČ LT867300010171188764',
-                        paypalEmail: 'Dominikphotofficial.lt@gmail.com'
+                        date_time: `${requestData.preferredDate} ${requestData.preferredTime}`.trim(),
+                        location: requestData.location
                     });
 
                     await addDoc(collection(db, "mail"), {
                         to: requestData.email,
                         message: { subject: emailData.subject, html: emailData.html }
                     });
-                } catch (mailError) {
-                    console.warn(mailError);
+                } catch (mailErr) {
+                    console.warn("Mail dispatch error:", mailErr);
                 }
 
+                // Telegram notification
                 try {
-                    let tgMessage = `💰 NAUJAS UŽSAKYMAS (LT)!\n\n👤 Vardas: ${requestData.clientName}\n🎬 Paslauga: ${requestData.serviceName}\n💶 Bendra kaina: ${requestData.finalPrice} €\n💳 Avansas (50%): ${requestData.depositAmount} €\n💵 Likutis: ${requestData.remainingAmount} €\n🧾 Kvitas: ${requestData.receiptNeeded}\n✉️ El. paštas: ${requestData.email}\n📱 Tel: ${requestData.phone || 'Nenurodyta'}\n🔗 Social: ${requestData.socialProfile || 'Nenurodyta'}\n📅 Data: ${requestData.preferredDate} ${requestData.preferredTime}\n📍 Vieta: ${requestData.location}\n📝 Idėja: ${requestData.additionalInformation}`;
+                    let tgMessage = `💎 NAUJAS PASLAUGOS UŽSAKYMAS (LT)!\n\n` +
+                        `👤 Klientas: ${requestData.clientName}\n` +
+                        `🎬 Paslauga: ${requestData.serviceName}\n` +
+                        `💶 Bendra kaina: ${requestData.finalPrice} €\n` +
+                        `💳 Avansas (50%): ${requestData.depositAmount} €\n` +
+                        `💵 Likutis: ${requestData.remainingAmount} €\n` +
+                        `💳 Apmokėjimas: ${requestData.paymentMethod}\n` +
+                        `🧾 Kvitas: ${requestData.receiptNeeded}\n` +
+                        `✉️ El. paštas: ${requestData.email}\n` +
+                        `📱 Tel: ${requestData.phone || 'Nenurodyta'}\n` +
+                        `🔗 Profilis: ${requestData.socialProfile || 'Nenurodyta'}\n` +
+                        `📅 Data ir laikas: ${requestData.preferredDate} ${requestData.preferredTime}\n` +
+                        `📍 Lokacija: ${requestData.location}\n` +
+                        `📝 Aprašymas: ${requestData.additionalInformation}`;
+
                     if (uploadedUrls.length > 0) {
                         tgMessage += `\n\n🖼 Nuotraukos (${uploadedUrls.length} vnt.):\n` + uploadedUrls.join('\n');
                     }
@@ -610,17 +1341,17 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ chat_id: chatId, text: tgMessage })
                     });
-                } catch (tgError) {
-                    console.warn(tgError);
+                } catch (tgErr) {
+                    console.warn("Telegram dispatch error:", tgErr);
                 }
 
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('service-success').style.display = 'block';
-                window.scrollTo({ top: document.getElementById('service-booking').offsetTop, behavior: 'smooth' });
+                document.getElementById('service-booking').scrollIntoView({ behavior: 'smooth' });
             } catch (dbError) {
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Klaida. Bandyti dar kartą';
-                alert("Nepavyko išsaugoti užklausos duomenų bazėje: " + (dbError.message || dbError));
+                submitBtn.innerHTML = `<span>Klaida. Bandyti dar kartą</span>`;
+                alert("Nepavyko pateikti užklausos: " + (dbError.message || dbError));
             }
         });
     </script>

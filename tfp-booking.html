@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO</title>
-    <meta name="description" content="Registruokitės nemokamai TFP fotosesijai Kaune. Kurkime vizualų portfolio kartu su Fujifilm X-S20 kokybe. Dominik Šuškevič kūrybiniai mainai ir meninė fotografija.">
+    <meta name="description" content="Nemokama TFP fotosesija Kaune. Kūrybiniai vizualiniai mainai, Fujifilm X-S20 kokybė, profesionalus portretas ir gatvės mada. Registruokitės dabar.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
     <meta property="og:type" content="website">
@@ -19,23 +19,461 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
+
     <style>
-        .thumb-container { position: relative; display: inline-block; margin-right: 10px; margin-bottom: 10px; }
-        .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(17,57,57,0.1); }
-        .thumb-remove { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px; line-height: 1; display: flex; justify-content: center; align-items: center; }
-        .form-input { width: 100%; padding: 12px 0; background: transparent; border: none; border-bottom: 1px solid rgba(17, 57, 57, 0.2); font-family: var(--font-body); font-size: 16px; color: var(--text-color); transition: var(--transition); outline: none; border-radius: 0; resize: vertical; }
-        .form-input:focus { border-bottom-color: var(--accent-color); }
-        .form-input::placeholder { color: rgba(26, 43, 43, 0.3); font-family: var(--font-body); }
+        .tfp-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 140px clamp(20px, 5vw, 60px) 80px clamp(20px, 5vw, 60px);
+        }
+
+        .tfp-split-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: clamp(40px, 6vw, 90px);
+            align-items: flex-start;
+        }
+
+        @media (max-width: 960px) {
+            .tfp-split-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Editorial Info Column */
+        .tfp-info-col {
+            color: var(--text-color);
+        }
+
+        .tfp-tag {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .tfp-title {
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            letter-spacing: clamp(4px, 1.5vw, 7px);
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+
+        .tfp-desc-lead {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            font-weight: 300;
+            color: rgba(26, 43, 43, 0.85);
+            margin-bottom: 30px;
+        }
+
+        /* Value highlight cards */
+        .tfp-highlights {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .tfp-highlight-box {
+            background: var(--surface-color);
+            padding: 24px 26px;
+            border-radius: 2px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .tfp-highlight-box h4 {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        .tfp-highlight-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: rgba(26, 43, 43, 0.85);
+        }
+
+        .tfp-highlight-box ul li {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .tfp-highlight-box ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Steps Timeline */
+        .tfp-steps-box {
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tfp-steps-box h4 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            color: var(--text-color);
+        }
+
+        .steps-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .steps-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-mini-card {
+            background: #ffffff;
+            padding: 18px 20px;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+            border-radius: 2px;
+        }
+
+        .step-mini-num {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--accent-light);
+            margin-bottom: 6px;
+        }
+
+        .step-mini-card strong {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-color);
+        }
+
+        .step-mini-card p {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: rgba(26, 43, 43, 0.7);
+            margin: 0;
+        }
+
+        /* Moodboard strip */
+        .moodboard-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .moodboard-item {
+            height: 120px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .moodboard-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .moodboard-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Form Card */
+        .tfp-form-card {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(17, 57, 57, 0.05);
+            padding: clamp(30px, 5vw, 55px);
+            position: sticky;
+            top: 100px;
+        }
+
+        .tfp-form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tfp-form-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .tfp-form-header p {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: rgba(26, 43, 43, 0.7);
+            margin: 0;
+        }
+
+        /* Google button */
+        .google-auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 20px;
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            color: var(--text-color);
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .google-auth-btn:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(17, 57, 57, 0.08);
+            background: rgba(17, 57, 57, 0.02);
+        }
+
+        .google-auth-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Form Controls */
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 550px) {
+            .form-row-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-label {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 7px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 15px;
+            background: var(--bg-color);
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            border-radius: 2px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text-color);
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.08);
+        }
+
+        .form-control::placeholder {
+            color: rgba(26, 43, 43, 0.35);
+        }
+
+        /* Quick chips for location */
+        .location-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .location-chip {
+            padding: 5px 12px;
+            background: var(--surface-color);
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            border-radius: 2px;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--accent-color);
+        }
+
+        .location-chip:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* Thumbnails */
+        .thumbs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .thumb-item {
+            position: relative;
+            width: 75px;
+            height: 75px;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+        }
+
+        .thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumb-del-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            background: rgba(17, 57, 57, 0.85);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .thumb-del-btn:hover {
+            background: #d9534f;
+        }
+
+        /* Submit Button */
+        .submit-tfp-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: 1px solid var(--accent-color);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.4s var(--cb);
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-tfp-btn:hover:not(:disabled) {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+            box-shadow: 0 10px 25px rgba(17, 57, 57, 0.15);
+        }
+
+        .submit-tfp-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Success Display */
+        .success-card {
+            display: none;
+            text-align: center;
+            padding: 50px 25px;
+            background: #ffffff;
+            border-radius: 4px;
+        }
+
+        .success-icon {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            background: var(--surface-color);
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .success-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.9rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+
+        .success-card p {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(26, 43, 43, 0.85);
+            max-width: 480px;
+            margin: 0 auto 25px auto;
+        }
     </style>
 </head>
 <body>
     <div id="preloader" data-nosnippet><div class="loader"></div></div>
-    
+
     <header id="main-header">
         <a href="index.html" class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></a>
         <nav class="desktop-nav">
@@ -44,7 +482,7 @@
             <a href="biography.html" class="nav-link">Biografija</a>
             <a href="about.html" class="nav-link">Apie</a>
             <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
+            <a href="tfp-booking.html" class="nav-link tfp-link active">TFP Registracija</a>
         </nav>
         <div class="burger" id="burger-menu"><span></span><span></span><span></span></div>
     </header>
@@ -56,84 +494,171 @@
             <a href="biography.html" class="nav-link">Biografija</a>
             <a href="about.html" class="nav-link">Apie</a>
             <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
+            <a href="tfp-booking.html" class="nav-link tfp-link active">TFP Registracija</a>
         </nav>
     </div>
 
-    <section class="tfp-section">
-        <div class="booking-layout">
-            <div class="info-column fade-in-up">
-                <h1>TFP Fotosesija</h1>
-                <div class="divider" style="margin: 0 0 30px 0;"></div>
-                <p>Ieškau naujų veidų ir kūrybiškų idėjų savo portfolio papildymui. TFP (Time for Print) yra bendradarbiavimo forma, kurioje modelis ir fotografas dirba kartu be finansinio atlygio, siekdami sukurti aukščiausios kokybės vizualinį turinį.</p>
-                <p>Fotosesijos metu naudojama <strong>Fujifilm X-S20</strong> įranga, užtikrinanti kinematografišką vaizdą ir gilias spalvas. Tai puiki galimybė gauti profesionalias nuotraukas mainais į jūsų laiką ir pozavimą.</p>
-                <p>Pasirinkite jums patogią datą kalendoriuje ir aprašykite savo viziją.</p>
-            </div>
-            
-            <div class="form-card fade-in-up">
-                <div id="success-display" style="display:none; text-align: center; padding: 30px 0; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9;">
-                    <h3 style="font-family: var(--font-heading); color: #2e7d32; letter-spacing: 2px; margin-bottom: 10px;">Ačiū už registraciją!</h3>
-                    <p style="font-family: var(--font-body); font-size: 16px; color: #1b5e20;">Gavau jūsų užklausą. Peržiūrėsiu jūsų idėjas ir netrukus su jumis susisieksiu patikslinti detalių.</p>
-                </div>
+    <main class="tfp-container">
+        <div class="tfp-split-layout">
+            <!-- Left Info Column -->
+            <div class="tfp-info-col fade-in-up">
+                <span class="tfp-tag">DP.PORTFOLIO Bendradarbiavimas</span>
+                <h1 class="tfp-title">TFP Fotosesija Kaune</h1>
+                <div class="divider" style="margin: 0 0 25px 0;"></div>
                 
+                <p class="tfp-desc-lead">
+                    Ieškau naujų veidų, unikalios išvaizdos ir kūrybiškų idėjų bendriems fotografijos projektams. 
+                    <strong>TFP (Time for Print / Pozavimas už nuotraukas)</strong> yra abipusis bendradarbiavimas be finansinio atlygio: 
+                    jūs skiriate savo laiką ir energiją, o mes kartu sukuriame aukštos kokybės kinematografinį turinį.
+                </p>
+
+                <!-- Value Boxes -->
+                <div class="tfp-highlights">
+                    <div class="tfp-highlight-box">
+                        <h4>Ką gaunate jūs:</h4>
+                        <ul>
+                            <li>10–15 autorinių retušuotų kadrų aukščiausia raiška</li>
+                            <li>Nemokama asmeninė Wfolio galerija be vandens ženklų</li>
+                            <li>Profesionali Fujifilm X-S20 cinema optika ir spalvų profiliai</li>
+                            <li>Pagalba pozavimui, stiliaus patarimai ir jauki atmosfera</li>
+                        </ul>
+                    </div>
+
+                    <div class="tfp-highlight-box">
+                        <h4>Ko mes ieškome šiuo metu:</h4>
+                        <ul>
+                            <li>Gatvės mada (Streetwear / Casual chic / High fashion)</li>
+                            <li>Charakteringi portretai ir unikalios veido išraiškos</li>
+                            <li>Automobilių ir motociklų kultūra bei naktinis Kaunas</li>
+                            <li>Meninės, kinematografinės ir film-noir idėjos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4 Steps -->
+                <div class="tfp-steps-box">
+                    <h4>Kaip Vyksta Procesas:</h4>
+                    <div class="steps-list">
+                        <div class="step-mini-card">
+                            <div class="step-mini-num">01</div>
+                            <strong>Užpildykite anketą</strong>
+                            <p>Aprašykite savo idėją, pridėkite profilį ir pasirinkite patogią datą.</p>
+                        </div>
+                        <div class="step-mini-card">
+                            <div class="step-mini-num">02</div>
+                            <strong>Idėjos suderinimas</strong>
+                            <p>Susisiekiame per 24–48 val., aptariame aprangą ir konkrečią vietą.</p>
+                        </div>
+                        <div class="step-mini-card">
+                            <div class="step-mini-num">03</div>
+                            <strong>Fotosesija (1–2 val.)</strong>
+                            <p>Laisva atmosfera Kauno lokacijose ar studijoje.</p>
+                        </div>
+                        <div class="step-mini-card">
+                            <div class="step-mini-num">04</div>
+                            <strong>Nuotraukų gavimas</strong>
+                            <p>Paruoštos nuotraukos pasieks jus per 7–10 dienų.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inspiration Moodboard Strip -->
+                <div>
+                    <h4 style="font-family: var(--font-heading); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px;">Vizualinis Įkvėpimas</h4>
+                    <div class="moodboard-strip">
+                        <div class="moodboard-item"><img src="https://i.postimg.cc/tgn0qRHR/zirgai-zeimenos-01.jpg" alt="Nuotrauka 1"></div>
+                        <div class="moodboard-item"><img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" alt="Nuotrauka 2"></div>
+                        <div class="moodboard-item"><img src="https://i.postimg.cc/90JLjs3J/IMG-7652.jpg" alt="Nuotrauka 3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Card -->
+            <div class="tfp-form-card fade-in-up">
+                <!-- Success Message -->
+                <div id="success-display" class="success-card">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3>Ačiū už Registraciją!</h3>
+                    <p>Jūsų TFP anketa sėkmingai gauta. Peržiūrėsime jūsų pateiktas idėjas ir su jumis susisieksime Instagram arba el. paštu per artimiausias 24–48 valandas.</p>
+                    <a href="index.html" class="submit-tfp-btn" style="text-decoration: none; width: auto; display: inline-block; padding: 14px 35px;">Grįžti į Pradžią</a>
+                </div>
+
+                <!-- Form Container -->
                 <div id="form-container">
-                    <button type="button" id="google-login-btn" class="cta-button" style="margin-top: 0; margin-bottom: 30px; background: rgba(17, 57, 57, 0.05); color: var(--accent-color); border: 1px solid rgba(17, 57, 57, 0.1); border-radius: 4px;">
+                    <div class="tfp-form-header">
+                        <h3>Registracijos Anketa</h3>
+                        <p>Užpildykite duomenis bendram projektui</p>
+                    </div>
+
+                    <button type="button" id="google-login-btn" class="google-auth-btn">
+                        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
                         Prisijungti su Google (Auto-užpildymas)
                     </button>
 
-                    <form id="tfp-firebase-form" style="display: grid; grid-template-columns: 1fr; gap: 25px;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
-                            <div>
-                                <label class="field-label" style="margin-top: 0;">Vardas ir Pavardė *</label>
-                                <input type="text" id="tfp-name" name="name" class="form-input" required autocomplete="off">
+                    <form id="tfp-firebase-form">
+                        <div class="form-row-2">
+                            <div class="input-group">
+                                <label class="input-label" for="tfp-name">Vardas ir Pavardė *</label>
+                                <input type="text" id="tfp-name" name="name" class="form-control" placeholder="Jūsų vardas" required autocomplete="name">
                             </div>
-                            <div>
-                                <label class="field-label" style="margin-top: 0;">El. paštas *</label>
-                                <input type="email" id="tfp-email" name="email" class="form-input" required autocomplete="off">
+                            <div class="input-group">
+                                <label class="input-label" for="tfp-email">El. Paštas *</label>
+                                <input type="email" id="tfp-email" name="email" class="form-control" placeholder="vardas@pavyzdys.lt" required autocomplete="email">
                             </div>
                         </div>
 
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Instagram / Socialinis tinklas *</label>
-                            <input type="text" id="tfp-instagram" name="instagram" class="form-input" placeholder="@jusu_profilis" required autocomplete="off">
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
-                            <div>
-                                <label class="field-label" style="margin-top: 0;">Pageidaujama data ir laikas *</label>
-                                <input type="text" id="datetime-picker" name="date_time" class="form-input" placeholder="Pasirinkite..." required autocomplete="off" style="background-color: #fff; border-radius: 4px; padding: 15px;">
-                            </div>
-                            <div>
-                                <label class="field-label" style="margin-top: 0;">Pageidaujama vieta *</label>
-                                <input type="text" id="tfp-location" name="location" class="form-input" placeholder="Studija / Miestas / Gamta" required autocomplete="off">
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Fotosesijos idėja *</label>
-                            <textarea id="tfp-idea" name="idea" class="form-input" rows="3" placeholder="Aprašykite savo viziją..." required style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
+                        <div class="input-group">
+                            <label class="input-label" for="tfp-instagram">Instagram / TikTok / Telegram *</label>
+                            <input type="text" id="tfp-instagram" name="instagram" class="form-control" placeholder="@jusu_profilis arba nuoroda" required>
                         </div>
 
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Nuotraukos-referencijos (neprivaloma)</label>
-                            <input type="file" id="tfp-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-input" style="padding: 10px 0; border: none;">
-                            <div id="photo-preview-container" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+                        <div class="form-row-2">
+                            <div class="input-group">
+                                <label class="input-label" for="datetime-picker">Pageidaujama data ir laikas *</label>
+                                <input type="text" id="datetime-picker" name="date_time" class="form-control" placeholder="Pasirinkite..." required readonly style="cursor: pointer; background-color: #fff;">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="tfp-location">Pageidaujama vieta *</label>
+                                <input type="text" id="tfp-location" name="location" class="form-control" placeholder="Kauno Senamiestis, Gamta..." required>
+                                <div class="location-chips">
+                                    <span class="location-chip" onclick="window.pickLocation('Kauno Senamiestis')">Senamiestis</span>
+                                    <span class="location-chip" onclick="window.pickLocation('Ąžuolynas')">Ąžuolynas</span>
+                                    <span class="location-chip" onclick="window.pickLocation('Nemuno Sala')">Nemuno Sala</span>
+                                    <span class="location-chip" onclick="window.pickLocation('Studija / Patalpos')">Studija</span>
+                                    <span class="location-chip" onclick="window.pickLocation('Urban / Gatvė')">Urban</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label class="field-label" style="margin-top: 0;">Papildoma informacija / Nuorodos</label>
-                            <textarea id="tfp-extra" name="extra_info" class="form-input" rows="2" placeholder="Pinterest/Instagram nuorodos arba kita svarbi informacija..." style="background-color: #fff; border-radius: 4px; padding: 15px;"></textarea>
+                        <div class="input-group">
+                            <label class="input-label" for="tfp-idea">Fotosesijos idėja & stiliaus vizija *</label>
+                            <textarea id="tfp-idea" name="idea" class="form-control" rows="3" placeholder="Aprašykite norimą įvaizdį, drabužių stilių, nuotaiką ar konkrečią idėją..." required></textarea>
                         </div>
-                        
-                        <button type="submit" id="submit-btn" class="cta-button" style="margin-top: 10px; border-radius: 4px;">Siųsti užklausą</button>
+
+                        <div class="input-group">
+                            <label class="input-label">Nuotraukos-referencijos / Portretas (neprivaloma)</label>
+                            <input type="file" id="tfp-photos" multiple accept="image/jpeg, image/png, image/webp" class="form-control" style="padding: 10px;">
+                            <div id="photo-preview-container" class="thumbs-grid"></div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="tfp-extra">Papildoma informacija / Pinterest nuorodos</label>
+                            <textarea id="tfp-extra" name="extra_info" class="form-control" rows="2" placeholder="Pinterest lenta, Instagram nuoroda ar kiti pastebėjimai..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="submit-tfp-btn">
+                            <span>Siųsti Registraciją</span>
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <footer>
-        <p>© 2026 DP.PORTFOLIO. VISOS TEISĖS SAUGOMOS.</p>
+        <p>© 2026 DP Corporation. Dominik Šuškevič. Visos teisės saugomos.</p>
         <div class="lang-switcher">
             <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
             <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
@@ -144,10 +669,25 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#datetime-picker", { enableTime: true, dateFormat: "Y-m-d H:i", minDate: "today", time_24hr: true, disableMobile: true, locale: "lt" });
+            flatpickr("#datetime-picker", { 
+                enableTime: true, 
+                dateFormat: "Y-m-d H:i", 
+                minDate: "today", 
+                time_24hr: true, 
+                disableMobile: true, 
+                locale: "lt" 
+            });
         });
+
+        window.pickLocation = function(loc) {
+            const locInput = document.getElementById('tfp-location');
+            if (locInput) {
+                locInput.value = loc;
+            }
+        };
     </script>
 
     <script type="module">
@@ -184,13 +724,20 @@
         photoInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
             files.forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`Failas ${file.name} viršija 10MB limitą.`);
+                    return;
+                }
                 selectedFiles.push(file);
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                     const div = document.createElement('div');
-                    div.className = 'thumb-container';
-                    div.innerHTML = `<img src="${ev.target.result}" class="thumb-img"><button type="button" class="thumb-remove">&times;</button>`;
-                    div.querySelector('.thumb-remove').addEventListener('click', () => {
+                    div.className = 'thumb-item';
+                    div.innerHTML = `
+                        <img src="${ev.target.result}" alt="Preview">
+                        <button type="button" class="thumb-del-btn" title="Pašalinti">&times;</button>
+                    `;
+                    div.querySelector('.thumb-del-btn').addEventListener('click', () => {
                         selectedFiles = selectedFiles.filter(f => f !== file);
                         div.remove();
                     });
@@ -201,48 +748,69 @@
             photoInput.value = ''; 
         });
 
-        document.getElementById('google-login-btn').addEventListener('click', async () => {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                if(result.user.displayName) document.getElementById('tfp-name').value = result.user.displayName;
-                if(result.user.email) document.getElementById('tfp-email').value = result.user.email;
-            } catch (error) {
-                console.error(error);
+        // Google sign-in auto-fill
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                if (user.displayName && !document.getElementById('tfp-name').value) {
+                    document.getElementById('tfp-name').value = user.displayName;
+                }
+                if (user.email && !document.getElementById('tfp-email').value) {
+                    document.getElementById('tfp-email').value = user.email;
+                }
             }
         });
 
+        document.getElementById('google-login-btn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                if (result && result.user) {
+                    if (result.user.displayName) document.getElementById('tfp-name').value = result.user.displayName;
+                    if (result.user.email) document.getElementById('tfp-email').value = result.user.email;
+                }
+            } catch (error) {
+                console.warn("Google auth error:", error);
+            }
+        });
+
+        // Form submission
         document.getElementById('tfp-firebase-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Siunčiama...';
+            submitBtn.innerHTML = `<span>Siunčiama...</span>`;
 
             let uploadedUrls = [];
             try {
                 if (selectedFiles.length > 0) {
-                    submitBtn.innerText = 'Įkeliamos nuotraukos...';
+                    submitBtn.innerHTML = `<span>Įkeliamos nuotraukos (${selectedFiles.length})...</span>`;
                     for (const file of selectedFiles) {
-                        const storageRef = ref(storage, `tfp_references/${Date.now()}_${file.name}`);
-                        await uploadBytes(storageRef, file);
-                        const url = await getDownloadURL(storageRef);
-                        uploadedUrls.push(url);
+                        try {
+                            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                            const storageRef = ref(storage, `tfp_references/${Date.now()}_${safeName}`);
+                            await uploadBytes(storageRef, file);
+                            const url = await getDownloadURL(storageRef);
+                            uploadedUrls.push(url);
+                        } catch (uploadErr) {
+                            console.warn("Upload error:", uploadErr);
+                        }
                     }
                 }
 
-                submitBtn.innerText = 'Išsaugoma užklausa...';
+                submitBtn.innerHTML = `<span>Išsaugoma registracija...</span>`;
 
-                let socialVal = document.getElementById('tfp-instagram').value;
+                let socialVal = document.getElementById('tfp-instagram').value.trim();
                 let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
                 let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
 
                 const requestData = {
-                    name: document.getElementById('tfp-name').value,
-                    email: document.getElementById('tfp-email').value,
-                    instagram: document.getElementById('tfp-instagram').value,
+                    name: document.getElementById('tfp-name').value.trim(),
+                    email: document.getElementById('tfp-email').value.trim(),
+                    instagram: document.getElementById('tfp-instagram').value.trim(),
+                    socialProfile: socialLink,
                     date_time: document.getElementById('datetime-picker').value,
-                    location: document.getElementById('tfp-location').value,
-                    idea: document.getElementById('tfp-idea').value,
-                    extra_info: document.getElementById('tfp-extra').value,
+                    location: document.getElementById('tfp-location').value.trim(),
+                    idea: document.getElementById('tfp-idea').value.trim(),
+                    extra_info: document.getElementById('tfp-extra').value.trim(),
                     reference_photos: uploadedUrls,
                     language: lang,
                     status: 'New',
@@ -251,30 +819,47 @@
 
                 await addDoc(collection(db, "tfp_requests"), requestData);
                 
-                const emailData = buildEmail('New', lang, requestData);
-                await addDoc(collection(db, "mail"), {
-                    to: requestData.email,
-                    message: { subject: emailData.subject, html: emailData.html }
-                });
-
-                let tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n👤 Vardas: ${requestData.name}\n✉️ El. paštas: ${requestData.email}\n📷 Instagram: ${socialLink}\n📅 Data: ${requestData.date_time}\n📍 Vieta: ${requestData.location}\n💡 Idėja: ${requestData.idea}`;
-                if (uploadedUrls.length > 0) {
-                    tgMessage += `\n\n🖼 Nuotraukos:\n${uploadedUrls.join('\n')}`;
+                try {
+                    const emailData = buildEmail('TFPNew', lang, requestData);
+                    await addDoc(collection(db, "mail"), {
+                        to: requestData.email,
+                        message: { subject: emailData.subject, html: emailData.html }
+                    });
+                } catch (mailErr) {
+                    console.warn("Auto email dispatch error:", mailErr);
                 }
 
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: tgMessage })
-                }).catch(err => console.error(err));
+                try {
+                    let tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n` +
+                        `👤 Vardas: ${requestData.name}\n` +
+                        `✉️ El. paštas: ${requestData.email}\n` +
+                        `📷 Socialinis tinklas: ${requestData.instagram}\n` +
+                        `📅 Data ir laikas: ${requestData.date_time}\n` +
+                        `📍 Vieta: ${requestData.location}\n` +
+                        `💡 Idėja: ${requestData.idea}\n` +
+                        `📝 Papildomai: ${requestData.extra_info || 'Nėra'}`;
+
+                    if (uploadedUrls.length > 0) {
+                        tgMessage += `\n\n🖼 Nuotraukos (${uploadedUrls.length} vnt.):\n` + uploadedUrls.join('\n');
+                    }
+
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: chatId, text: tgMessage })
+                    });
+                } catch (tgErr) {
+                    console.warn("Telegram dispatch error:", tgErr);
+                }
 
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-display').style.display = 'block';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: document.querySelector('.tfp-form-card').offsetTop - 80, behavior: 'smooth' });
             } catch (error) {
-                console.error(error);
+                console.error("Submission error:", error);
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Klaida. Bandyti dar kartą';
+                submitBtn.innerHTML = `<span>Klaida. Bandyti dar kartą</span>`;
+                alert("Nepavyko pateikti registracijos: " + (error.message || error));
             }
         });
     </script>

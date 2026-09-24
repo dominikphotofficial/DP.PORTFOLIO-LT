@@ -164,6 +164,13 @@
                 <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 10px; border: none; background: transparent;">
                 <span style="font-size: 13px; color: #666;">Failas bus automatiškai įkeltas, o klientas laiške gaus mygtuką kvitui atsisiųsti.</span>
             </div>
+
+            <button type="button" id="modal-preview-toggle-btn" class="admin-btn-outline" style="width: 100%; margin: 15px 0; font-size: 0.8rem; padding: 11px;">
+                👁 Rodyti / Slėpti el. laiško peržiūrą
+            </button>
+            <div id="modal-live-preview-container" style="display: none; margin-bottom: 22px; border: 1px solid rgba(17,57,57,0.15); border-radius: 6px; overflow: hidden; background: #f4f6f5; max-height: 480px; overflow-y: auto; padding: 12px;">
+                <div id="modal-live-preview"></div>
+            </div>
             
             <div class="req-actions" style="border: none; padding: 0; margin-top: 25px; justify-content: flex-end;">
                 <button class="admin-btn-delete" onclick="closeModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
@@ -469,6 +476,8 @@
             document.getElementById('modal-receipt-container').style.display = 'none';
 
             pendingEmailData = { collection: 'tfp_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
+            const previewContainer = document.getElementById('modal-live-preview-container');
+            if (previewContainer) previewContainer.style.display = 'none';
             document.getElementById('email-modal').classList.add('active');
         };
 
@@ -515,6 +524,8 @@
             }
 
             pendingEmailData = { collection: 'service_requests', id, email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
+            const previewContainer = document.getElementById('modal-live-preview-container');
+            if (previewContainer) previewContainer.style.display = 'none';
             document.getElementById('email-modal').classList.add('active');
         };
 
@@ -535,8 +546,37 @@
             }
         };
 
+        function updateModalPreview() {
+            if (!pendingEmailData) return;
+            const greeting = document.getElementById('modal-greeting').value;
+            const text = document.getElementById('modal-text').value;
+            const galleryUrl = document.getElementById('modal-gallery-link')?.value?.trim();
+            const galleryHtml = galleryUrl ? getGalleryHtml(pendingEmailData.lang || 'lt', galleryUrl) : '';
+            const finalHtml = buildFinalHtml(greeting, text, pendingEmailData.boxHtml, galleryHtml, '');
+            const previewEl = document.getElementById('modal-live-preview');
+            if (previewEl) {
+                previewEl.innerHTML = finalHtml;
+            }
+        }
+
+        document.getElementById('modal-preview-toggle-btn')?.addEventListener('click', () => {
+            const container = document.getElementById('modal-live-preview-container');
+            if (container.style.display === 'none' || !container.style.display) {
+                updateModalPreview();
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        });
+
+        document.getElementById('modal-greeting')?.addEventListener('input', updateModalPreview);
+        document.getElementById('modal-text')?.addEventListener('input', updateModalPreview);
+        document.getElementById('modal-gallery-link')?.addEventListener('input', updateModalPreview);
+
         window.closeModal = () => {
             document.getElementById('email-modal').classList.remove('active');
+            const previewContainer = document.getElementById('modal-live-preview-container');
+            if (previewContainer) previewContainer.style.display = 'none';
             pendingEmailData = null;
         };
 
