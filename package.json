@@ -1,0 +1,14 @@
+{
+  "name": "dp-portfolio",
+  "version": "1.0.0",
+  "description": "Profesionali fotografija Kaunas, Lietuva. Asmeninės fotosesijos, renginiai ir Premium videografija.",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
