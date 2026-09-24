@@ -265,27 +265,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
+        import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-            authDomain: "tfp-form.firebaseapp.com",
-            projectId: "tfp-form",
-            storageBucket: "tfp-form.firebasestorage.app",
-            messagingSenderId: "542082314917",
-            appId: "1:542082314917:web:5d3a750950a8ac4fd0d34c",
-            measurementId: "G-4VRZRBDHY2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
-        const googleProvider = new GoogleAuthProvider();
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
 

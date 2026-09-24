@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "TFPRequest": {
+      "title": "TFP Request",
+      "description": "Collaboration photoshoot request from potential model or creator",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "social": { "type": "string", "maxLength": 150 },
+        "date_time": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "idea": { "type": "string", "maxLength": 500 },
+        "photos": { "type": "array" },
+        "extra_info": { "type": "string", "maxLength": 1000 },
+        "language": { "type": "string", "maxLength": 10 },
+        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Rescheduled", "Completed", "Cancelled"] },
+        "galleryUrl": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "date_time", "location", "idea"]
+    },
+    "ServiceRequest": {
+      "title": "Service Request",
+      "description": "Client booking for paid photography or videography services",
+      "type": "object",
+      "properties": {
+        "clientName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "socialProfile": { "type": "string", "maxLength": 150 },
+        "serviceId": { "type": "string", "maxLength": 50 },
+        "serviceName": { "type": "string", "maxLength": 100 },
+        "originalPrice": { "type": "number" },
+        "finalPrice": { "type": "number" },
+        "depositPercentage": { "type": "number" },
+        "depositAmount": { "type": "number" },
+        "remainingAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "receiptNeeded": { "type": "string", "maxLength": 10 },
+        "preferredDate": { "type": "string", "maxLength": 50 },
+        "preferredTime": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "additionalInformation": { "type": "string", "maxLength": 1000 },
+        "reference_photos": { "type": "array" },
+        "language": { "type": "string", "maxLength": 10 },
+        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Deposit Paid", "Fully Paid", "Completed", "Cancelled"] },
+        "galleryUrl": { "type": "string", "maxLength": 500 },
+        "receiptUrl": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientName", "email", "serviceId", "serviceName", "preferredDate"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Client and model testimonials and reviews for portfolio",
+      "type": "object",
+      "properties": {
+        "clientName": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["service", "tfp"] },
+        "sessionTag": { "type": "string", "maxLength": 150 },
+        "rating": { "type": "number" },
+        "reviewLink": { "type": "string", "maxLength": 500 },
+        "comment": { "type": "string", "maxLength": 2000 },
+        "visible": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientName", "comment"]
+    },
+    "Setting": {
+      "title": "Setting",
+      "description": "Website global configuration and toggle settings",
+      "type": "object",
+      "properties": {
+        "visible": { "type": "boolean" },
+        "showSection": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Mail": {
+      "title": "Mail",
+      "description": "Queued email notification triggered upon booking and updates",
+      "type": "object",
+      "properties": {
+        "to": { "type": "string", "format": "email", "maxLength": 120 },
+        "message": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["to", "message"]
+    }
+  },
+  "firestore": {
+    "/tfp_requests/{requestId}": {
+      "schema": "TFPRequest",
+      "description": "Submissions from TFP registration form"
+    },
+    "/service_requests/{requestId}": {
+      "schema": "ServiceRequest",
+      "description": "Submissions from paid services booking form"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Customer reviews and testimonials displayed on portfolio"
+    },
+    "/settings/{settingId}": {
+      "schema": "Setting",
+      "description": "System and website presentation preferences"
+    },
+    "/mail/{mailId}": {
+      "schema": "Mail",
+      "description": "Automated email queue"
+    }
+  }
+}

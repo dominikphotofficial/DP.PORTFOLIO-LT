@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email == "dominikphotofficial.lt@gmail.com" &&
+        request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // TFP Requests: Public can create with validated payload; Admin has full access
+    match /tfp_requests/{requestId} {
+      allow create: if isValidId(requestId) &&
+        request.resource.data.name is string && request.resource.data.name.size() <= 100 &&
+        request.resource.data.email is string && request.resource.data.email.size() <= 120 &&
+        request.resource.data.idea is string && request.resource.data.idea.size() <= 500;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Service Requests: Public can create; Admin has full access
+    match /service_requests/{requestId} {
+      allow create: if isValidId(requestId) &&
+        request.resource.data.clientName is string && request.resource.data.clientName.size() <= 100 &&
+        request.resource.data.email is string && request.resource.data.email.size() <= 120 &&
+        request.resource.data.serviceId is string && request.resource.data.serviceId.size() <= 50;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Reviews: Public can read; Admin can create, update, delete
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Settings: Public can read; Admin can write
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Mail Queue: Public and Admin can create mail records
+    match /mail/{mailId} {
+      allow create: if isValidId(mailId) &&
+        request.resource.data.to is string && request.resource.data.to.size() <= 120;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}
