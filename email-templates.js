@@ -27,6 +27,7 @@ function getPaymentDetailsHtml(method, depositAmount, clientName) {
 const texts = {
     lt: {
         greeting: "Sveiki, {{name}}!",
+        TFPNew: { sub: "DP.PORTFOLIO | Gauta TFP fotosesijos užklausa", txt: "Labai ačiū už jūsų užklausą ir pasiūlytą idėją!\n\nPeržiūrėsime jūsų anketą ir netrukus susisieksime." },
         TFPConfirmed: { sub: "DP.PORTFOLIO | Patvirtinta: TFP Fotosesija", txt: "Mums labai patiko jūsų idėja, todėl su džiaugsmu patvirtiname jūsų TFP fotosesiją.\n\nNekantraujame pradėti kurti kartu! Susitikimo detalės pateiktos žemiau." },
         TFPRescheduled: { sub: "DP.PORTFOLIO | Atnaujinta: TFP Fotosesija", txt: "Norime informuoti, kad jūsų TFP fotosesijos laikas arba vieta buvo atnaujinta.\n\nJei šis laikas jums netinka, prašome atsakyti į šį laišką. Ačiū už jūsų lankstumą!" },
         TFPCancelled: { sub: "DP.PORTFOLIO | Atšaukta: TFP Fotosesija", txt: "Apgailestaujame, tačiau dėl nenumatytų aplinkybių turime atšaukti jūsų TFP fotosesiją.\n\nLabai vertiname jūsų norą bendradarbiauti ir tikimės, kad ateityje turėsime progą sukurti kažką gražaus kartu." },
@@ -43,6 +44,7 @@ const texts = {
     },
     en: {
         greeting: "Hello, {{name}}!",
+        TFPNew: { sub: "DP.PORTFOLIO | TFP Photoshoot Request Received", txt: "Thank you for your inquiry and idea proposal!\n\nWe will review your submission and contact you shortly." },
         TFPConfirmed: { sub: "DP.PORTFOLIO | Confirmed: TFP Photoshoot", txt: "We loved your idea and are thrilled to confirm your TFP photoshoot!\n\nMeeting details are provided below." },
         TFPRescheduled: { sub: "DP.PORTFOLIO | Rescheduled: TFP Photoshoot", txt: "We wanted to let you know that your TFP photoshoot details have been updated.\n\nIf this new time does not work for you, please reply to this email." },
         TFPCancelled: { sub: "DP.PORTFOLIO | Cancelled: TFP Photoshoot", txt: "We sincerely apologize, but due to unforeseen circumstances, we have to cancel your TFP photoshoot.\n\nThank you for understanding." },
@@ -59,6 +61,7 @@ const texts = {
     },
     ru: {
         greeting: "Здравствуйте, {{name}}!",
+        TFPNew: { sub: "DP.PORTFOLIO | Получена заявка на TFP фотосессию", txt: "Большое спасибо за вашу заявку и предложенную идею!\n\nМы рассмотрим вашу анкету и скоро свяжемся с вами." },
         TFPConfirmed: { sub: "DP.PORTFOLIO | Подтверждено: TFP Фотосессия", txt: "Ваша заявка на TFP фотосессию подтверждена!\n\nДетали встречи указаны ниже." },
         TFPRescheduled: { sub: "DP.PORTFOLIO | Обновлено: TFP Фотосессия", txt: "Время или место вашей TFP фотосессии было изменено.\n\nЕсли новое время вам не подходит, ответьте на это письмо." },
         TFPCancelled: { sub: "DP.PORTFOLIO | Отменено: TFP Фотосессия", txt: "К сожалению, мы вынуждены отменить вашу TFP фотосессию.\n\nСпасибо за понимание." },
@@ -147,4 +150,11 @@ export function buildFinalHtml(greeting, text, boxHtml, galleryHtml, receiptHtml
         ${receiptHtml || ''}
         ${galleryHtml || ''}
     ${emailWrapperEnd}`;
+}
+
+export function buildEmail(templateType, lang, data) {
+    const typeKey = templateType === 'New' ? 'TFPNew' : templateType;
+    const { subject, greeting, text, boxHtml } = getDefaultContent(typeKey, lang, data);
+    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
+    return { subject, html };
 }

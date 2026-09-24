@@ -1,14 +1,27 @@
-const cbScript = document.createElement('script');
-cbScript.id = 'Cookiebot';
-cbScript.src = 'https://consent.cookiebot.com/uc.js';
-cbScript.setAttribute('data-cbid', '06c15308-ea25-4737-9b50-13705638aa99');
-cbScript.setAttribute('data-blockingmode', 'auto');
-cbScript.type = 'text/javascript';
+// Global error handler to catch cross-origin script errors gracefully
+window.addEventListener('error', (event) => {
+    if (event.message === 'Script error.' && !event.filename) {
+        event.preventDefault();
+    }
+});
 
-if (document.head.firstChild) {
-    document.head.insertBefore(cbScript, document.head.firstChild);
-} else {
-    document.head.appendChild(cbScript);
+// Only initialize Cookiebot on official production domain outside iframe
+if (typeof window !== 'undefined' && 
+    window.location.hostname.endsWith('dominikphotofficial.lt') && 
+    window.self === window.top) {
+    if (!document.getElementById('Cookiebot')) {
+        const cbScript = document.createElement('script');
+        cbScript.id = 'Cookiebot';
+        cbScript.src = 'https://consent.cookiebot.com/uc.js';
+        cbScript.setAttribute('data-cbid', '06c15308-ea25-4737-9b50-13705638aa99');
+        cbScript.setAttribute('data-blockingmode', 'auto');
+        cbScript.type = 'text/javascript';
+        if (document.head.firstChild) {
+            document.head.insertBefore(cbScript, document.head.firstChild);
+        } else {
+            document.head.appendChild(cbScript);
+        }
+    }
 }
 
 window.addEventListener("load", () => {
@@ -121,9 +134,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 350);
         };
 
-        lightboxImg.addEventListener('load', () => {
-            lightboxImg.classList.remove('loading');
-        });
+        if (lightboxImg) {
+            lightboxImg.addEventListener('load', () => {
+                lightboxImg.classList.remove('loading');
+            });
+        }
         
         const closeL = () => {
             lightbox.classList.remove("active");
