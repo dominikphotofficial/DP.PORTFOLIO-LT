@@ -700,6 +700,187 @@
             background: var(--accent-color) !important;
             border-color: var(--accent-color) !important;
         }
+
+        /* FAQ Section Styles */
+        .faq-section {
+            margin-top: 80px;
+            margin-bottom: 90px;
+        }
+
+        .faq-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 40px auto;
+        }
+
+        .faq-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            font-weight: 300;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin: 10px 0 16px 0;
+        }
+
+        .faq-header p {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: rgba(26, 43, 43, 0.75);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .faq-filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+
+        .faq-filter-btn {
+            padding: 9px 20px;
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            border-radius: 20px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .faq-filter-btn:hover,
+        .faq-filter-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(17, 57, 57, 0.12);
+        }
+
+        .faq-list {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-card {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .faq-card:hover {
+            border-color: rgba(17, 57, 57, 0.28);
+            box-shadow: 0 6px 22px rgba(17, 57, 57, 0.05);
+        }
+
+        .faq-card.active {
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 8px 25px rgba(17, 57, 57, 0.07);
+        }
+
+        .faq-trigger {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 22px 26px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .faq-trigger-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .faq-category-tag {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 3px;
+            background: rgba(17, 57, 57, 0.06);
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .faq-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .faq-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            background: rgba(17, 57, 57, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            transition: transform 0.35s ease, background 0.3s ease, color 0.3s ease;
+        }
+
+        .faq-card.active .faq-icon {
+            transform: rotate(180deg);
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--cb), padding 0.3s ease;
+            padding: 0 26px;
+            background: #FCFDFD;
+        }
+
+        .faq-card.active .faq-body {
+            max-height: 500px;
+            padding: 0 26px 24px 26px;
+        }
+
+        .faq-answer {
+            font-family: var(--font-body);
+            font-size: 1.02rem;
+            line-height: 1.8;
+            color: rgba(26, 43, 43, 0.85);
+            margin: 0;
+            padding-top: 14px;
+            border-top: 1px solid rgba(17, 57, 57, 0.08);
+        }
+
+        .faq-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: underline;
+            transition: opacity 0.2s ease;
+        }
+
+        .faq-link:hover {
+            opacity: 0.75;
+        }
     </style>
 </head>
 <body>
@@ -826,7 +1007,6 @@
                         <li>Profesionalus kameros stabilizavimas</li>
                         <li>Spalvų gradacija (Cinematic LUTs) ir garso dizainas</li>
                         <li>Reels / TikTok vertikalus klipas + horizontalus video</li>
-                        <li>Licencijuotas muzikinis takelis</li>
                     </ul>
                     <button type="button" class="select-service-btn" onclick="window.selectService('video_basic', 60)">Pasirinkti Paketą</button>
                 </div>
@@ -836,17 +1016,17 @@
         <!-- How It Works Section -->
         <div class="process-section fade-in-up">
             <h3 class="process-title">Kaip Vyksta Bendradarbiavimas</h3>
-            <p class="process-subtitle">Skaidrus ir sklandus kūrybinis kelias nuo pirmosios idėjos iki galutinės nuotraukų galerijos.</p>
+            <p class="process-subtitle">Skaidrus ir sklandus kelias nuo pirmosios idėjos iki paruoštos nuotraukų galerijos.</p>
             <div class="process-grid">
                 <div class="process-card">
                     <div class="process-num">01</div>
-                    <h4>Rezervacija & Vizija</h4>
-                    <p>Užpildote formą, pasirenkate datą ir aprašote savo lūkesčius. Kartu suderiname aprangą, stilių ir lokaciją.</p>
+                    <h4>Rezervacija & Idėja</h4>
+                    <p>Užpildote formą, pasirenkate datą ir aprašote savo norus. Kartu suderiname aprangą, stilių ir lokaciją.</p>
                 </div>
                 <div class="process-card">
                     <div class="process-num">02</div>
                     <h4>Fotosesija</h4>
-                    <p>Draugiška, neįpareigojanti atmosfera. Padedame atsipalaiduoti prieš Fujifilm kamerą ir surasti geriausius kampus.</p>
+                    <p>Rami fotosesija be streso ir skubėjimo. Būkite savimi – patarsiu, kaip jaustis natūraliai ir laisvai.</p>
                 </div>
                 <div class="process-card">
                     <div class="process-num">03</div>
@@ -875,6 +1055,191 @@
                 <div class="sample-item gallery-item"><img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" loading="lazy" alt="Cirkliškis"><div class="sample-overlay">Peržiūrėti</div></div>
             </div>
         </div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section fade-in-up" id="faq">
+            <div class="faq-header">
+                <span class="section-tag">DUK & Informacija</span>
+                <h2>Dažniausiai Užduodami Klausimai</h2>
+                <div class="divider"></div>
+                <p>Viskas, ką verta žinoti apie fotosesijų užsakymą, 50% avanso mokėjimus, nemokamą TFP kūrybą bei paruoštų nuotraukų pristatymą.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="faq-filter-bar">
+                <button type="button" class="faq-filter-btn active" data-filter="all">Visi Klausimai</button>
+                <button type="button" class="faq-filter-btn" data-filter="orders">Užsakymai & Kainos</button>
+                <button type="button" class="faq-filter-btn" data-filter="tfp">TFP Bendradarbiavimas</button>
+                <button type="button" class="faq-filter-btn" data-filter="process">Fotosesija & Rezultatas</button>
+            </div>
+
+            <div class="faq-list">
+                <!-- FAQ 1: Mokama vs TFP -->
+                <div class="faq-card" data-category="orders">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Užsakymai</span>
+                            <h3 class="faq-title">Kuo skiriasi mokama fotosesija nuo TFP (Time For Print) bendradarbiavimo?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            <strong>Mokama fotosesija</strong> – tai individualiai jums skirta paslauga konkrečiai jūsų šventei, asmeniniam įvaizdžiui ar komerciniam projektui. Gaunate garantuotą kadrų skaičių (15–100+ vnt.), prioritetinį autorinį retušą, pasirinktą datą, laiką ir visišką dėmesį jūsų poreikiams.<br><br>
+                            <strong>TFP (Time For Print)</strong> – tai nemokamas kūrybinis bendradarbiavimas, skirtas abiejų pusių portfolio atnaujinimui, kur modelis gauna 10–15 profesionaliai retušuotų nuotraukų mainais už savo laiką, įvaizdį ir pozavimą. Jei norite garantuoto asmeninio laiko ar šventės įamžinimo – rinkitės paketą žemiau; jei norite dalyvauti bendrame kūrybiniame projekte – užpildykite <a href="tfp-booking.html" class="faq-link">TFP anketą čia</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2: Rezervacija ir avansas -->
+                <div class="faq-card" data-category="orders">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Užsakymai</span>
+                            <h3 class="faq-title">Kaip veikia rezervacija ir kada reikia sumokėti 50% avansą?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Užpildžius žemiau esančią formą, suderiname pageidaujamą datą, laiką ir fotosesijos lokaciją. Siekiant užrakinti datą mūsų kalendoriuje, pervedamas 50% rezervacijos avansas banko pavedimu (lietuviškas IBAN: <code>LT867300010171188764</code>) arba per PayPal. Likusi 50% suma atsiskaitoma tik po fotosesijos. Pervedus avansą, el. paštu iškart išsiunčiame oficialų patvirtinimą.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3: TFP atranka -->
+                <div class="faq-card" data-category="tfp">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">TFP</span>
+                            <h3 class="faq-title">Kas gali registruotis TFP fotosesijoms ir kaip vyksta atranka?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Registruotis TFP projektams Kaune ar Vilniuje gali kiekvienas – tiek patyrę modeliai, tiek pradedantieji, norintys išbandyti save prieš kino kamerą. Dominik peržiūri visas anketas bei Instagram profilį ir įvertina, ar idėja dera su planuojama kūrybine serija. Su atrinktais dalyviais susisiekiama per 24–48 valandas suderinti aprangos ir fotosesijos lokacijos.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 4: Pristatymo terminai ir formatas -->
+                <div class="faq-card" data-category="process">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Rezultatas</span>
+                            <h3 class="faq-title">Kada ir kokiu formatu gausiu paruoštas nuotraukas?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Nuotraukos paruošiamos per <strong>5–10 darbo dienų</strong> (Maksi pakete – pagal suderintą grafiką). Visi atrinkti kadrai kruopščiai retušuojami rankomis, subalansuojant spalvas ir šviesas pagal autorinį DP.PORTFOLIO stilių, ir patalpinami jūsų asmeninėje privačioje <strong>Wfolio</strong> galerijoje. Joje galite peržiūrėti nuotraukas bei vienu paspaudimu atsisiųsti visą ZIP archyvą arba atskirus failus originalia raiška be suspaudimo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 5: Neturiu pozavimo patirties -->
+                <div class="faq-card" data-category="process">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Procesas</span>
+                            <h3 class="faq-title">Neturiu jokios pozavimo patirties – ar fotosesija man pavyks?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Tikrai taip! Dauguma žmonių prieš kamerą stoja pirmą kartą. Jokios pozavimo patirties nereikia. Fotosesijos metu tiesiog ramiai bendraujame, pasivaikštome – patarsiu ir padėsiu jaustis patogiai, kad kadrai būtų gyvi, nuoširdūs ir natūralūs.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 6: Blogas oras -->
+                <div class="faq-card" data-category="process">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Procesas</span>
+                            <h3 class="faq-title">Ką daryti, jei fotosesijos dieną prastas oras (lietus, stiprus vėjas)?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Jei planuojama fotosesija lauke ir pranašaujamas stiprus lietus ar netinkamas oras, fotosesijos data <strong>nemokamai perkeliama</strong> į artimiausią abiem pusėms tinkamą dieną be jokių papildomų mokesčių.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 7: Apranga ir deriniai -->
+                <div class="faq-card" data-category="orders">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Užsakymai</span>
+                            <h3 class="faq-title">Kiek įvaizdžių/drabužių derinių galiu atsinešti ir kaip pasiruošti?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Mini pakete rekomenduojamas 1 derinis, Standartinėje fotosesijoje – 2–3 deriniai, o Maksi fotosesijoje – neribotas skaičius. Fotografijoje gražiausiai atrodo žemės, pasteliniai, natūralūs vienspalviai tonai (smėlio, chaki, kreminė, tamsiai žalia, juoda, balta) be stambių užrašų ar margų raštų. Pateikus užsakymą, visada padedame suderinti drabužių derinius pagal fotosesijos lokaciją.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 8: Apmokėjimo būdai ir kvitai -->
+                <div class="faq-card" data-category="orders">
+                    <button type="button" class="faq-trigger" aria-expanded="false">
+                        <div class="faq-trigger-content">
+                            <span class="faq-category-tag">Apmokėjimas</span>
+                            <h3 class="faq-title">Kokie mokėjimo būdai priimami ir ar išrašomi oficialūs kvitai?</h3>
+                        </div>
+                        <div class="faq-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <p class="faq-answer">
+                            Priimame tiesioginius SEPA bankinius pavedimus į Lietuvos sąskaitą (DOMINIK ŠUŠKEVIČ, IBAN: <code>LT867300010171188764</code>) bei PayPal mokėjimus (<code>Dominikphotofficial.lt@gmail.com</code>). Jei užsakymo formoje pažymite „Reikalingas kvitas: Taip“, atlikus mokėjimą el. paštu išsiunčiame oficialų PDF sąskaitos faktūros / mokėjimo kvitą.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Client Reviews / Testimonials Section -->
+        <section class="reviews-section fade-in-up" id="reviews">
+            <div class="reviews-header">
+                <span class="section-tag">Atsiliepimai</span>
+                <h2>Klientų & Modelių Atsiliepimai</h2>
+                <div class="divider"></div>
+                <p>Nuoširdūs įspūdžiai ir atsiliepimai po fotosesijų bei kūrybinių TFP projektų.</p>
+            </div>
+
+            <div class="reviews-filter-bar">
+                <button type="button" class="review-filter-btn active" data-review-filter="all">Visi Atsiliepimai</button>
+                <button type="button" class="review-filter-btn" data-review-filter="service">Mokamos Paslaugos</button>
+                <button type="button" class="review-filter-btn" data-review-filter="tfp">TFP Projektai</button>
+            </div>
+
+            <div id="reviews-grid" class="reviews-grid">
+                <!-- Loaded dynamically from Firestore -->
+            </div>
+        </section>
 
         <!-- Booking Form Card -->
         <div id="service-booking" class="booking-card fade-in-up">
@@ -1057,9 +1422,55 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>
     <script src="script.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // FAQ Accordion interaction
+            const faqCards = document.querySelectorAll('.faq-card');
+            faqCards.forEach(card => {
+                const trigger = card.querySelector('.faq-trigger');
+                if (!trigger) return;
+                trigger.addEventListener('click', () => {
+                    const isOpen = card.classList.contains('active');
+                    faqCards.forEach(c => {
+                        if (c !== card) {
+                            c.classList.remove('active');
+                            c.querySelector('.faq-trigger')?.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                    if (isOpen) {
+                        card.classList.remove('active');
+                        trigger.setAttribute('aria-expanded', 'false');
+                    } else {
+                        card.classList.add('active');
+                        trigger.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+
+            // FAQ Category Filtering
+            const filterBtns = document.querySelectorAll('.faq-filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.getAttribute('data-filter');
+
+                    faqCards.forEach(card => {
+                        const cat = card.getAttribute('data-category');
+                        if (filter === 'all' || cat === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
@@ -1079,6 +1490,136 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // Load & Render Reviews
+        const initialReviews = [
+            {
+                clientName: "Karolina V.",
+                type: "service",
+                sessionTag: "Standartinė fotosesija Kaune",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes neturiu patirties prieš objektyvą, bet Dominik sukūrė ramią ir jaukią atmosferą. Nuotraukų spalvos ir retušas – aukščiausio lygio!"
+            },
+            {
+                clientName: "Lukas & Sandra",
+                type: "service",
+                sessionTag: "Poros fotosesija Kauno senamiestyje",
+                rating: 5,
+                reviewLink: "https://portfolio.dominikphotofficial.lt",
+                comment: "Nuostabi patirtis. Fotosesija praėjo be jokio streso, viskas vyko labai natūraliai ir laisvai. Gauta privati galerija sužavėjo – kadrai atrodo kaip iš kino filmo."
+            },
+            {
+                clientName: "Gabija R.",
+                type: "tfp",
+                sessionTag: "Gatvės mada & portretas (TFP)",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Rekomenduoju visiems, norintiems išbandyti save!"
+            }
+        ];
+
+        function renderReviews(reviewsList) {
+            const container = document.getElementById('reviews-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            reviewsList.forEach(rev => {
+                const card = document.createElement('div');
+                card.className = 'review-card fade-in-up';
+                card.setAttribute('data-review-type', rev.type || 'service');
+
+                const isTfp = (rev.type === 'tfp');
+                const badgeText = isTfp ? 'TFP Projektas' : 'Mokama Paslauga';
+                const badgeClass = isTfp ? 'review-badge-tfp' : 'review-badge-service';
+                const starsCount = Math.max(1, Math.min(5, rev.rating || 5));
+                const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+                let linkHtml = '';
+                if (rev.reviewLink && rev.reviewLink.trim()) {
+                    const safeUrl = rev.reviewLink.trim();
+                    linkHtml = `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="review-link-badge">Atsiliepimo nuoroda ↗</a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="review-top">
+                        <span class="review-stars">${starsHtml}</span>
+                        <span class="review-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <p class="review-text">„${rev.comment || rev.reviewText || ''}“</p>
+                    <div class="review-author-block">
+                        <div class="review-author-info">
+                            <span class="review-author-name">${rev.clientName || 'Klientas'}</span>
+                            <span class="review-session-note">${rev.sessionTag || rev.category || (isTfp ? 'TFP fotosesija' : 'Fotosesija')}</span>
+                        </div>
+                        ${linkHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Reviews Section Visibility Setting Sync
+        try {
+            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
+                const section = document.getElementById('reviews');
+                if (!section) return;
+                if (docSnap.exists() && docSnap.data().visible === false) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = '';
+                }
+            }, (err) => {
+                console.warn("Reviews settings sync error:", err);
+            });
+        } catch(e) {
+            console.warn("Reviews settings init error:", e);
+        }
+
+        // Real-time Firestore sync
+        try {
+            const reviewsCol = collection(db, "reviews");
+            const q = query(reviewsCol, orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach(docSnap => {
+                        const d = docSnap.data();
+                        if (d.visible !== false) {
+                            loaded.push(d);
+                        }
+                    });
+                    if (loaded.length > 0) {
+                        renderReviews(loaded);
+                        return;
+                    }
+                }
+                renderReviews(initialReviews);
+            }, (err) => {
+                console.warn("Firestore reviews fallback:", err);
+                renderReviews(initialReviews);
+            });
+        } catch (e) {
+            console.warn("Reviews init error:", e);
+            renderReviews(initialReviews);
+        }
+
+        // Reviews filter tab handling
+        document.querySelectorAll('.review-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.review-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-review-filter');
+                document.querySelectorAll('.review-card').forEach(card => {
+                    const type = card.getAttribute('data-review-type');
+                    if (filter === 'all' || type === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";

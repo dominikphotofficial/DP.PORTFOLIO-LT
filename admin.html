@@ -123,11 +123,13 @@
             <div class="stat-box"><h3>Naujos Paslaugos</h3><p id="stat-srv-new">0</p></div>
             <div class="stat-box"><h3>Patvirtinta (Viso)</h3><p id="stat-confirmed">0</p></div>
             <div class="stat-box"><h3>Reikia kvito</h3><p id="stat-receipt-needed" style="color:#d9534f;">0</p></div>
+            <div class="stat-box"><h3>Atsiliepimai</h3><p id="stat-reviews-count" style="color:var(--accent-color);">0</p></div>
         </div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('tfp')">TFP Užklausos</button>
             <button class="tab-btn" onclick="switchTab('services')">Mokamos Paslaugos</button>
+            <button class="tab-btn" onclick="switchTab('reviews')">Atsiliepimai</button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -136,6 +138,89 @@
 
         <div id="services-tab" class="tab-content">
             <div id="services-list">Kraunama...</div>
+        </div>
+
+        <div id="reviews-tab" class="tab-content">
+            <!-- Master Website Reviews Visibility Control -->
+            <div class="request-card" style="margin-bottom: 25px; border-left: 4px solid var(--accent-color); background: #FAFBFB; padding: 22px 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap;">
+                            <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.15rem;">
+                                Atsiliepimų Skilties Matomumas Svetainėje
+                            </h3>
+                            <span id="reviews-section-status-badge" class="status-badge status-Confirmed">
+                                ✓ Rodoma svetainėje
+                            </span>
+                        </div>
+                        <p style="font-family: var(--font-body); font-size: 0.95rem; color: #666; margin: 0; max-width: 650px; line-height: 1.5;">
+                            Šis mygtukas įjungia arba visiškai paslepia „Atsiliepimai“ skiltį svetainės lankytojams (services.html ir tfp-booking.html puslapiuose).
+                        </p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <button type="button" id="toggle-section-visibility-btn" class="admin-btn" style="min-width: 220px; padding: 12px 22px; font-size: 0.85rem;">
+                            Nerodyti Skilties Svetainėje
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="request-card" style="margin-bottom: 30px; border-top: 4px solid var(--accent-color);">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-top: 0; margin-bottom: 8px;">Pridėti Naują Atsiliepimą</h3>
+                <p style="font-family: var(--font-body); font-size: 0.95rem; color: #666; margin-bottom: 22px;">Kai po fotosesijos paprašote atsiliepimo, čia įkelkite kliento žodžius ir nuorodą. Jis automatiškai pasirodys svetainėje.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 18px;">
+                    <div>
+                        <label class="field-label">Kliento / Modelio Vardas *</label>
+                        <input type="text" id="new-rev-name" class="admin-select" placeholder="Pvz.: Laura V. arba Mantas & Sandra">
+                    </div>
+                    <div>
+                        <label class="field-label">Fotosesijos Tipas *</label>
+                        <select id="new-rev-type" class="admin-select">
+                            <option value="service">Mokama Paslauga (Services)</option>
+                            <option value="tfp">TFP Projektas (Nemokamas)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label">Fotosesijos Tema / Prierašas</label>
+                        <input type="text" id="new-rev-tag" class="admin-select" placeholder="Pvz.: Portretinė fotosesija Kaune">
+                    </div>
+                    <div>
+                        <label class="field-label">Įvertinimas</label>
+                        <select id="new-rev-rating" class="admin-select">
+                            <option value="5" selected>★★★★★ (5/5)</option>
+                            <option value="4">★★★★☆ (4/5)</option>
+                            <option value="3">★★★☆☆ (3/5)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label class="field-label">Nuoroda į atsiliepimą / profilį (Link)</label>
+                    <input type="url" id="new-rev-link" class="admin-select" placeholder="https://instagram.com/p/... arba https://...">
+                    <span style="font-size: 12px; color: #888;">Klientai svetainėje galės paspausti ant šios nuorodos ir pamatyti originalų atsiliepimą ar profilį.</span>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label class="field-label">Atsiliepimo Tekstas / Citata *</label>
+                    <textarea id="new-rev-text" class="admin-select" style="height: 100px; line-height: 1.6;" placeholder="Ką parašė klientas..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <label style="display: flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 0.95rem; cursor: pointer;">
+                        <input type="checkbox" id="new-rev-visible" checked style="width: 18px; height: 18px;">
+                        <span>Rodyti svetainėje</span>
+                    </label>
+                    <button type="button" id="save-review-btn" class="admin-btn">Išsaugoti Atsiliepimą</button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0;">Svetainėje Rodomi Atsiliepimai</h3>
+                <button type="button" id="seed-reviews-btn" class="admin-btn-outline" style="font-size: 0.75rem; padding: 8px 16px;">+ Įkelti 3 pradines rekomendacijas</button>
+            </div>
+
+            <div id="reviews-list">Kraunama...</div>
         </div>
     </div>
 
@@ -181,7 +266,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
@@ -236,6 +321,7 @@
                 document.getElementById('admin-user-display').innerText = user.email;
                 loadTFPRequests();
                 loadServiceRequests();
+                loadReviews();
             } else if (user) {
                 alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
                 signOut(auth);
@@ -253,9 +339,12 @@
             if(tab === 'tfp') {
                 document.querySelectorAll('.tab-btn')[0].classList.add('active');
                 document.getElementById('tfp-tab').classList.add('active');
-            } else {
+            } else if(tab === 'services') {
                 document.querySelectorAll('.tab-btn')[1].classList.add('active');
                 document.getElementById('services-tab').classList.add('active');
+            } else if(tab === 'reviews') {
+                document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                document.getElementById('reviews-tab').classList.add('active');
             }
         };
 
@@ -654,6 +743,242 @@
                 }
             }
         };
+
+        // Reviews Section Website Visibility Sync & Toggle
+        let isReviewsSectionVisible = true;
+        const sectionBadge = document.getElementById('reviews-section-status-badge');
+        const toggleSectionBtn = document.getElementById('toggle-section-visibility-btn');
+
+        function updateSectionVisibilityUI(visible) {
+            isReviewsSectionVisible = visible;
+            if (sectionBadge) {
+                if (visible) {
+                    sectionBadge.className = 'status-badge status-Confirmed';
+                    sectionBadge.innerText = '✓ Rodoma svetainėje';
+                } else {
+                    sectionBadge.className = 'status-badge status-Cancelled';
+                    sectionBadge.innerText = '✕ Paslėpta svetainėje';
+                }
+            }
+            if (toggleSectionBtn) {
+                if (visible) {
+                    toggleSectionBtn.innerText = 'Nerodyti Skilties Svetainėje';
+                    toggleSectionBtn.style.background = '#8c7355';
+                } else {
+                    toggleSectionBtn.innerText = 'Rodyti Skiltį Svetainėje';
+                    toggleSectionBtn.style.background = 'var(--accent-color)';
+                }
+            }
+        }
+
+        try {
+            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    updateSectionVisibilityUI(data.visible !== false);
+                } else {
+                    updateSectionVisibilityUI(true);
+                }
+            }, (err) => {
+                console.warn("Reviews settings listener error:", err);
+            });
+        } catch(e) {
+            console.warn("Reviews settings init error:", e);
+        }
+
+        if (toggleSectionBtn) {
+            toggleSectionBtn.addEventListener('click', async () => {
+                toggleSectionBtn.disabled = true;
+                const nextState = !isReviewsSectionVisible;
+                try {
+                    await setDoc(doc(db, "settings", "reviews"), {
+                        visible: nextState,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                } catch(e) {
+                    console.error("Error setting review section visibility:", e);
+                    alert("Klaida keičiant nustatymą: " + (e.message || e));
+                } finally {
+                    toggleSectionBtn.disabled = false;
+                }
+            });
+        }
+
+        // Reviews Management for Admin
+        function loadReviews() {
+            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('reviews-list');
+                list.innerHTML = '';
+                const count = snapshot.size;
+                const statEl = document.getElementById('stat-reviews-count');
+                if (statEl) statEl.innerText = count;
+
+                if (snapshot.empty) {
+                    list.innerHTML = '<p style="padding: 20px; color: #888;">Atsiliepimų duomenų bazėje kol kas nėra. Galite įrašyti naują viršuje arba paspausti mygtuką „Įkelti 3 pradines rekomendacijas“.</p>';
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = 'request-card';
+                    const isTfp = (data.type === 'tfp');
+                    const badgeClass = isTfp ? 'review-badge-tfp' : 'review-badge-service';
+                    const badgeText = isTfp ? 'TFP Projektas' : 'Mokama Paslauga';
+                    const isVisible = data.visible !== false;
+                    const starsCount = Math.max(1, Math.min(5, data.rating || 5));
+                    const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+                    let linkHtml = '<span style="color:#999;">Nuoroda nenurodyta</span>';
+                    if (data.reviewLink && data.reviewLink.trim()) {
+                        const safeUrl = data.reviewLink.trim();
+                        linkHtml = `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-light); font-weight: 600; text-decoration: underline;">${safeUrl} ↗</a>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="req-header">
+                            <div class="req-client-title">
+                                <strong>${data.clientName || 'Be vardo'}</strong>
+                                <span class="review-badge ${badgeClass}" style="margin-left: 8px;">${badgeText}</span>
+                                <span style="color: #C5A880; font-size: 1.15rem; letter-spacing: 2px; margin-left: 8px;">${starsHtml}</span>
+                            </div>
+                            <span class="status-badge ${isVisible ? 'status-Confirmed' : 'status-Cancelled'}">
+                                ${isVisible ? '✓ Rodomas svetainėje' : '✕ Paslėptas'}
+                            </span>
+                        </div>
+                        <div class="req-body" style="grid-template-columns: 1fr;">
+                            <div class="req-info-block">
+                                <p><b>Fotosesijos tema / aprašas:</b> ${data.sessionTag || '-'}</p>
+                                <p><b>Nuoroda į atsiliepimą / profilį (Link):</b> ${linkHtml}</p>
+                                <p style="margin-top: 12px; font-style: italic; background: #FAFBFB; padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--accent-color); font-size: 1.05rem; line-height: 1.7;">
+                                    „${data.comment || data.reviewText || ''}“
+                                </p>
+                            </div>
+                        </div>
+                        <div class="req-actions">
+                            <button class="admin-btn-outline" onclick="toggleReviewVisibility('${docSnap.id}', ${isVisible})">
+                                ${isVisible ? 'Paslėpti svetainėje' : 'Rodyti svetainėje'}
+                            </button>
+                            <button class="admin-btn-delete" onclick="deleteDocRecord('reviews', '${docSnap.id}')">Ištrinti</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }, (err) => {
+                console.error("Error loading reviews:", err);
+                const list = document.getElementById('reviews-list');
+                if (list) list.innerHTML = `<p style="color:red;">Klaida kraunant atsiliepimus: ${err.message}</p>`;
+            });
+        }
+
+        window.toggleReviewVisibility = async (id, currentVisible) => {
+            try {
+                await updateDoc(doc(db, "reviews", id), { visible: !currentVisible });
+            } catch(e) {
+                console.error(e);
+                alert("Klaida keičiant matomumą: " + (e.message || e));
+            }
+        };
+
+        const saveRevBtn = document.getElementById('save-review-btn');
+        if (saveRevBtn) {
+            saveRevBtn.addEventListener('click', async () => {
+                const name = document.getElementById('new-rev-name').value.trim();
+                const type = document.getElementById('new-rev-type').value;
+                const tag = document.getElementById('new-rev-tag').value.trim();
+                const rating = parseInt(document.getElementById('new-rev-rating').value, 10) || 5;
+                const link = document.getElementById('new-rev-link').value.trim();
+                const text = document.getElementById('new-rev-text').value.trim();
+                const visible = document.getElementById('new-rev-visible').checked;
+
+                if (!name || !text) {
+                    alert("Prašome įvesti kliento vardą ir atsiliepimo tekstą.");
+                    return;
+                }
+
+                saveRevBtn.disabled = true;
+                saveRevBtn.innerText = 'Saugoma...';
+
+                try {
+                    await addDoc(collection(db, "reviews"), {
+                        clientName: name,
+                        type: type,
+                        sessionTag: tag || (type === 'tfp' ? 'TFP fotosesija' : 'Individuali fotosesija'),
+                        rating: rating,
+                        reviewLink: link,
+                        comment: text,
+                        visible: visible,
+                        createdAt: serverTimestamp()
+                    });
+                    alert("Atsiliepimas sėkmingai pridėtas! Jis jau matomas svetainėje.");
+                    document.getElementById('new-rev-name').value = '';
+                    document.getElementById('new-rev-tag').value = '';
+                    document.getElementById('new-rev-link').value = '';
+                    document.getElementById('new-rev-text').value = '';
+                } catch (err) {
+                    console.error(err);
+                    alert("Klaida išsaugant atsiliepimą: " + (err.message || err));
+                } finally {
+                    saveRevBtn.disabled = false;
+                    saveRevBtn.innerText = 'Išsaugoti Atsiliepimą';
+                }
+            });
+        }
+
+        const seedRevBtn = document.getElementById('seed-reviews-btn');
+        if (seedRevBtn) {
+            seedRevBtn.addEventListener('click', async () => {
+                if (!confirm("Ar norite įkelti 3 pavyzdines rekomendacijas į duomenų bazę?")) return;
+                seedRevBtn.disabled = true;
+                seedRevBtn.innerText = 'Keliama...';
+                const samples = [
+                    {
+                        clientName: "Karolina V.",
+                        type: "service",
+                        sessionTag: "Standartinė fotosesija Kaune",
+                        rating: 5,
+                        reviewLink: "https://instagram.com/dominikphotofficial",
+                        comment: "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes neturiu patirties prieš objektyvą, bet Dominik sukūrė ramią ir jaukią atmosferą. Nuotraukų spalvos ir retušas – aukščiausio lygio!",
+                        visible: true,
+                        createdAt: serverTimestamp()
+                    },
+                    {
+                        clientName: "Lukas & Sandra",
+                        type: "service",
+                        sessionTag: "Poros fotosesija Kauno senamiestyje",
+                        rating: 5,
+                        reviewLink: "https://portfolio.dominikphotofficial.lt",
+                        comment: "Nuostabi patirtis. Fotosesija praėjo be jokio streso, viskas vyko labai natūraliai ir laisvai. Gauta privati galerija sužavėjo – kadrai atrodo kaip iš kino filmo.",
+                        visible: true,
+                        createdAt: serverTimestamp()
+                    },
+                    {
+                        clientName: "Gabija R.",
+                        type: "tfp",
+                        sessionTag: "Gatvės mada & portretas (TFP)",
+                        rating: 5,
+                        reviewLink: "https://instagram.com/dominikphotofficial",
+                        comment: "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Rekomenduoju visiems, norintiems išbandyti save!",
+                        visible: true,
+                        createdAt: serverTimestamp()
+                    }
+                ];
+
+                try {
+                    for (const s of samples) {
+                        await addDoc(collection(db, "reviews"), s);
+                    }
+                    alert("Atsiliepimai sėkmingai įkelti į duomenų bazę!");
+                } catch(e) {
+                    console.error(e);
+                    alert("Klaida įkeliant: " + (e.message || e));
+                } finally {
+                    seedRevBtn.disabled = false;
+                    seedRevBtn.innerText = '+ Įkelti 3 pradines rekomendacijas';
+                }
+            });
+        }
     </script>
 </body>
 </html>

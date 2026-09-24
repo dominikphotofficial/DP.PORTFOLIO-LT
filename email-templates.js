@@ -288,7 +288,7 @@ export const texts = {
             title: "Naudingi patarimai prieš fotosesiją:",
             tip1: "<b>Apranga:</b> Rekomenduojame 1&ndash;2 derinius be ryškių logotipų. Pirmenybę teikite natūraliems, žemės, pasteliniams arba elegantiškiems tonams.",
             tip2: "<b>Laikas:</b> Prašome atvykti 5&ndash;10 minučių anksčiau, kad ramiai aptartume kadrus ir pradėtume laiku.",
-            tip3: "<b>Nuotaika:</b> Atsipalaiduokite ir būkite savimi &ndash; mes padėsime surasti gražiausius kampus ir natūralias pozas."
+            tip3: "<b>Nuotaika:</b> Jokio streso &ndash; fotosesija vyksta ramiai ir laisvai, padėsiu jaustis natūraliai."
         }
     },
     en: {
@@ -371,7 +371,7 @@ export const texts = {
             title: "Helpful tips before your shoot:",
             tip1: "<b>Outfits:</b> Bring 1–2 coordinated outfits without large logos. Earthy, neutral, or pastel colors photograph best.",
             tip2: "<b>Punctuality:</b> Please arrive 5–10 minutes early so we can discuss the shoot and start on time.",
-            tip3: "<b>Mindset:</b> Relax and have fun – we will guide your posing and capture your best natural angles."
+            tip3: "<b>Mindset:</b> Relax and be yourself – the session is calm and easygoing, I'll help you feel comfortable."
         }
     },
     ru: {
@@ -454,7 +454,7 @@ export const texts = {
             title: "Полезные советы перед фотосессией:",
             tip1: "<b>Одежда:</b> Возьмите 1–2 образа без крупных логотипов. Лучше всего смотрятся натуральные, пастельные и земляные оттенки.",
             tip2: "<b>Время:</b> Пожалуйста, приходите за 5–10 минут до начала, чтобы мы могли спокойно начать съемку.",
-            tip3: "<b>Настрой:</b> Расслабьтесь и будьте собой — мы поможем подобрать удачные позы и ракурсы."
+            tip3: "<b>Настрой:</b> Расслабьтесь и будьте собой — фотосессия пройдет спокойно и легко, помогу чувствовать себя естественно."
         }
     }
 };

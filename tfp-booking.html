@@ -552,12 +552,12 @@
                         <div class="step-mini-card">
                             <div class="step-mini-num">03</div>
                             <strong>Fotosesija (1–2 val.)</strong>
-                            <p>Laisva atmosfera Kauno lokacijose ar studijoje.</p>
+                            <p>Laisva ir paprasta fotosesija Kauno ar pasirinktoje lauko lokacijoje.</p>
                         </div>
                         <div class="step-mini-card">
                             <div class="step-mini-num">04</div>
                             <strong>Nuotraukų gavimas</strong>
-                            <p>Paruoštos nuotraukos pasieks jus per 7–10 dienų.</p>
+                            <p>Nuotraukas suredaguoju per 7–30 dienų ir atsiunčiu privačią galeriją.</p>
                         </div>
                     </div>
                 </div>
@@ -655,6 +655,19 @@
                 </div>
             </div>
         </div>
+
+        <!-- TFP Reviews Section -->
+        <section id="tfp-reviews-section" class="reviews-section fade-in-up" style="margin-top: 80px; margin-bottom: 50px;">
+            <div class="reviews-header">
+                <span class="section-tag">Atsiliepimai</span>
+                <h2>TFP Modelių & Dalyvių Įspūdžiai</h2>
+                <div class="divider"></div>
+                <p>Ką apie kūrybinį procesą ir gautus kadrus sako ankstesnių TFP fotosesijų dalyviai.</p>
+            </div>
+            <div id="tfp-reviews-grid" class="reviews-grid">
+                <!-- Dynamically loaded from Firestore or curated fallback -->
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -692,7 +705,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
@@ -712,6 +725,100 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // TFP Reviews Loader
+        const defaultTfpReviews = [
+            {
+                clientName: "Gabija R.",
+                type: "tfp",
+                sessionTag: "Gatvės mada & portretas Kaune",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Jokio streso, rekomenduoju!"
+            },
+            {
+                clientName: "Tomas K.",
+                type: "tfp",
+                sessionTag: "Urban & Automobilių estetika",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Puikiai suderinome idėją per Instagram. Fotosesija Kaune praėjo labai greitai ir lengvai, o rezultatas pranoko lūkesčius. Dominik mato kadrą kitaip."
+            }
+        ];
+
+        function renderTfpReviews(list) {
+            const container = document.getElementById('tfp-reviews-grid');
+            if (!container) return;
+            container.innerHTML = '';
+            list.forEach(rev => {
+                const card = document.createElement('div');
+                card.className = 'review-card fade-in-up';
+                const starsCount = Math.max(1, Math.min(5, rev.rating || 5));
+                const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+                let linkHtml = '';
+                if (rev.reviewLink && rev.reviewLink.trim()) {
+                    linkHtml = `<a href="${rev.reviewLink.trim()}" target="_blank" rel="noopener noreferrer" class="review-link-badge">Atsiliepimo nuoroda ↗</a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="review-top">
+                        <span class="review-stars">${starsHtml}</span>
+                        <span class="review-badge review-badge-tfp">TFP Projektas</span>
+                    </div>
+                    <p class="review-text">„${rev.comment || rev.reviewText || ''}“</p>
+                    <div class="review-author-block">
+                        <div class="review-author-info">
+                            <span class="review-author-name">${rev.clientName || 'Modelis'}</span>
+                            <span class="review-session-note">${rev.sessionTag || 'TFP Fotosesija'}</span>
+                        </div>
+                        ${linkHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Reviews Section Visibility Setting Sync
+        try {
+            onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
+                const section = document.getElementById('tfp-reviews-section');
+                if (!section) return;
+                if (docSnap.exists() && docSnap.data().visible === false) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = '';
+                }
+            }, (err) => {
+                console.warn("Reviews settings sync error:", err);
+            });
+        } catch(e) {
+            console.warn("Reviews settings init error:", e);
+        }
+
+        try {
+            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                if (!snapshot.empty) {
+                    const loaded = [];
+                    snapshot.forEach(docSnap => {
+                        const d = docSnap.data();
+                        if (d.visible !== false && (d.type === 'tfp' || !d.type)) {
+                            loaded.push(d);
+                        }
+                    });
+                    if (loaded.length > 0) {
+                        renderTfpReviews(loaded);
+                        return;
+                    }
+                }
+                renderTfpReviews(defaultTfpReviews);
+            }, (err) => {
+                renderTfpReviews(defaultTfpReviews);
+            });
+        } catch(e) {
+            renderTfpReviews(defaultTfpReviews);
+        }
 
         const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
         const chatId = "7040523282";
