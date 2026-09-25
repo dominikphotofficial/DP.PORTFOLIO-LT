@@ -15,7 +15,12 @@ export async function sendEmail({ to, subject, html, clientName, replyTo }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ to, subject, html, clientName, replyTo })
         });
-        serverResult = await response.json();
+        const text = await response.text();
+        try {
+            serverResult = JSON.parse(text);
+        } catch (_) {
+            serverResult = { success: response.ok, raw: text };
+        }
         serverDelivered = Boolean(serverResult && serverResult.delivered);
     } catch (apiErr) {
         console.warn("Server email API request error:", apiErr);

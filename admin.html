@@ -1084,6 +1084,19 @@
             });
         }
 
+        // Helper to safely parse JSON or catch HTML errors
+        async function parseJsonResponse(res) {
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (_) {
+                if (text && text.includes('<html')) {
+                    throw new Error("Serveris šiuo metu atsikuria arba nepasiekiamas. Bandykite dar kartą po kelių sekundžių.");
+                }
+                throw new Error(text || "Netikėtas serverio atsakymas");
+            }
+        }
+
         // -------------------------------------------------------------
         // Email Settings & Outbox Management
         // -------------------------------------------------------------
@@ -1092,7 +1105,7 @@
             try {
                 const res = await fetch('/api/email-config');
                 if (res.ok) {
-                    const cfg = await res.json();
+                    const cfg = await parseJsonResponse(res);
                     const emailInput = document.getElementById('smtp-email-input');
                     const nameInput = document.getElementById('smtp-name-input');
                     const statusBadge = document.getElementById('email-smtp-status-badge');
@@ -1122,7 +1135,7 @@
                 const res = await fetch('/api/emails-outbox');
                 const outboxList = document.getElementById('emails-outbox-list');
                 if (res.ok && outboxList) {
-                    const list = await res.json();
+                    const list = await parseJsonResponse(res);
                     if (!list || list.length === 0) {
                         outboxList.innerHTML = '<p style="padding: 20px; color: #888;">Išsiuntimo žurnalas kol kas tuščias. Čia atsiras visi klientams siunčiami patvirtinimai ir statuso laiškai.</p>';
                         return;
@@ -1201,7 +1214,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ user: email, fromName, pass })
                     });
-                    const data = await res.json();
+                    const data = await parseJsonResponse(res);
                     if (res.ok && data.success) {
                         feedbackMsg.style.color = '#2E7D32';
                         feedbackMsg.innerText = '✓ Nustatymai išsaugoti!';
@@ -1254,7 +1267,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ to: targetEmail })
                     });
-                    const data = await res.json();
+                    const data = await parseJsonResponse(res);
                     if (res.ok && data.success) {
                         feedbackMsg.style.color = '#2E7D32';
                         feedbackMsg.innerText = '✅ Pavyko! Testinis laiškas išsiųstas į ' + targetEmail;
@@ -1288,7 +1301,7 @@
             try {
                 const res = await fetch(`/api/emails-outbox/${id}`);
                 if (res.ok) {
-                    const email = await res.json();
+                    const email = await parseJsonResponse(res);
                     document.getElementById('outbox-modal-subject').innerText = email.subject || 'Laiško Peržiūra';
                     document.getElementById('outbox-modal-meta').innerHTML = `
                         <strong>Gavėjas:</strong> ${email.to} &bull; 
