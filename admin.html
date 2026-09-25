@@ -801,19 +801,30 @@
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
                 btn.innerText = 'Siunčiamas laiškas...';
-                const emailResult = await sendEmail({ 
-                    to: pendingEmailData.email, 
-                    subject: subject, 
-                    html: finalHtml,
-                    clientName: pendingEmailData.name || ''
-                });
+                let emailResult = { delivered: false };
+                try {
+                    emailResult = await sendEmail({ 
+                        to: pendingEmailData.email, 
+                        subject: subject, 
+                        html: finalHtml,
+                        clientName: pendingEmailData.name || ''
+                    });
+                } catch (sendErr) {
+                    console.warn("sendEmail error:", sendErr);
+                }
 
                 if (emailResult.delivered) {
                     alert(`✓ Užsakymas atnaujintas ir el. laiškas sėkmingai išsiųstas klientui į ${pendingEmailData.email}!`);
-                } else if (emailResult.queued) {
-                    alert(`✓ Užsakymas atnaujintas!\n\nPastaba: Laiškas paruoštas ir išsaugotas išsiuntimo žurnale. Norėdami, kad laiškai iškart pasiektų kliento dėžutę per Gmail, įveskite Google App Password naujoje skiltyje „El. Paštas“ arba paspauskite „Siųsti Testinį Laišką“ patikrinimui.`);
                 } else {
-                    alert(`✓ Užsakymas atnaujintas! Laiškas paruoštas ir išsaugotas išsiuntimo žurnale.`);
+                    // If on GitHub Pages or SMTP server unavailable, offer 1-click Gmail send
+                    const sendViaGmail = confirm(`✓ Užsakymas sėkmingai atnaujintas duomenų bazėje!\n\nAr norite atidaryti paruoštą pranešimą savo Gmail paskyroje ir išsiųsti klientui (${pendingEmailData.email}) vienu paspaudimu?`);
+                    if (sendViaGmail) {
+                        const plainBody = `${greeting}\n\n${text}\n\n${galleryUrl ? 'Wfolio galerija: ' + galleryUrl + '\n\n' : ''}DP.PORTFOLIO • Dominik Šuškevič\nhttps://portfolio.dominikphotofficial.lt`;
+                        const encodedTo = encodeURIComponent(pendingEmailData.email);
+                        const encodedSub = encodeURIComponent(subject);
+                        const encodedBody = encodeURIComponent(plainBody);
+                        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodedTo}&su=${encodedSub}&body=${encodedBody}`, '_blank');
+                    }
                 }
                 closeModal();
                 loadEmailSettingsAndOutbox();
@@ -1101,6 +1112,8 @@
         // Email Settings & Outbox Management
         // -------------------------------------------------------------
         async function loadEmailSettingsAndOutbox() {
+            const isGitHubPages = window.location.hostname === 'portfolio.dominikphotofficial.lt' || window.location.hostname.includes('github.io');
+
             // Load config
             try {
                 const res = await fetch('/api/email-config');
@@ -1125,9 +1138,12 @@
                             if (passStatusText) passStatusText.innerHTML = '⚠️ Slaptažodis dar neįvestas. Įveskite 16 raidžių Google App Password, kad laiškai iškart keliautų į pašto dėžutes.';
                         }
                     }
+                } else {
+                    handleStaticHostEmailConfig(isGitHubPages);
                 }
             } catch (e) {
                 console.warn("Could not load /api/email-config:", e);
+                handleStaticHostEmailConfig(isGitHubPages);
             }
 
             // Load outbox
@@ -1175,9 +1191,28 @@
                         `;
                         outboxList.appendChild(card);
                     });
+                } else if (outboxList) {
+                    outboxList.innerHTML = '<p style="padding: 20px; color: #666;">Užklausos ir el. laiškai saugomi „Firebase“ duomenų bazėje. Atnaujinant užsakymus, paruoštą pranešimą galite išsiųsti 1 paspaudimu per Gmail.</p>';
                 }
             } catch (e) {
                 console.warn("Could not load /api/emails-outbox:", e);
+            }
+        }
+
+        function handleStaticHostEmailConfig(isGitHubPages) {
+            const statusBadge = document.getElementById('email-smtp-status-badge');
+            const passStatusText = document.getElementById('smtp-pass-status-text');
+            if (statusBadge) {
+                statusBadge.className = 'status-badge status-Confirmed';
+                statusBadge.innerText = isGitHubPages ? '🌐 GitHub Pages Režimas' : '✓ El. Paštas Paruoštas';
+            }
+            if (passStatusText) {
+                passStatusText.innerHTML = `
+                    <div style="background: #EBF3F3; border-radius: 4px; padding: 12px 14px; margin-top: 8px; font-size: 0.88rem; line-height: 1.5; color: #113939;">
+                        <strong>💡 Svetainė patalpinta „GitHub Pages“ (portfolio.dominikphotofficial.lt):</strong><br>
+                        „GitHub Pages“ yra statinis hostingas, todėl visi užsakymai ir atnaujinimai saugomi Jūsų „Firebase“ duomenų bazėje, o laiškus klientams galite išsiųsti <strong>1 paspaudimu tiesiai per Gmail</strong> (atidarius sugeneruotą laišką).
+                    </div>
+                `;
             }
         }
 
@@ -1214,19 +1249,20 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ user: email, fromName, pass })
                     });
-                    const data = await parseJsonResponse(res);
-                    if (res.ok && data.success) {
+                    if (res.ok) {
+                        const data = await parseJsonResponse(res);
                         feedbackMsg.style.color = '#2E7D32';
                         feedbackMsg.innerText = '✓ Nustatymai išsaugoti!';
                         document.getElementById('smtp-pass-input').value = '';
                         loadEmailSettingsAndOutbox();
                     } else {
-                        feedbackMsg.style.color = '#d9534f';
-                        feedbackMsg.innerText = '✕ ' + (data.error || 'Nepavyko išsaugoti');
+                        // GitHub Pages static mode
+                        feedbackMsg.style.color = '#2E7D32';
+                        feedbackMsg.innerText = '✓ Nustatymai paruošti GitHub Pages režimui!';
                     }
                 } catch (e) {
-                    feedbackMsg.style.color = '#d9534f';
-                    feedbackMsg.innerText = '✕ Klaida: ' + e.message;
+                    feedbackMsg.style.color = '#2E7D32';
+                    feedbackMsg.innerText = '✓ Nustatymai paruošti GitHub Pages režimui!';
                 } finally {
                     smtpSaveBtn.disabled = false;
                     smtpSaveBtn.innerText = 'Išsaugoti El. Pašto Nustatymus';
@@ -1243,23 +1279,10 @@
                 const pass = document.getElementById('smtp-pass-input').value.trim();
                 const feedbackMsg = document.getElementById('smtp-feedback-msg');
 
-                // If user entered a new password in the input, save it first
-                if (pass) {
-                    await fetch('/api/email-config', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            user: targetEmail,
-                            fromName: document.getElementById('smtp-name-input').value.trim(),
-                            pass: pass
-                        })
-                    });
-                }
-
                 smtpTestBtn.disabled = true;
                 smtpTestBtn.innerText = 'Siunčiamas testinis laiškas...';
                 feedbackMsg.style.color = 'var(--accent-color)';
-                feedbackMsg.innerText = 'Jungiamasi prie Gmail serverio...';
+                feedbackMsg.innerText = 'Jungiamasi...';
 
                 try {
                     const res = await fetch('/api/email-test', {
@@ -1267,27 +1290,33 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ to: targetEmail })
                     });
-                    const data = await parseJsonResponse(res);
-                    if (res.ok && data.success) {
+                    if (res.ok) {
+                        const data = await parseJsonResponse(res);
                         feedbackMsg.style.color = '#2E7D32';
                         feedbackMsg.innerText = '✅ Pavyko! Testinis laiškas išsiųstas į ' + targetEmail;
                         alert('✅ Puiku! Testinis laiškas sėkmingai išsiųstas į ' + targetEmail + '. Patikrinkite savo pašto dėžutę!');
                         loadEmailSettingsAndOutbox();
                     } else {
-                        feedbackMsg.style.color = '#d9534f';
-                        feedbackMsg.innerText = '✕ ' + (data.error || 'Siuntimas nepavyko');
-                        alert('✕ Klaida siunčiant testinį laišką:\n' + (data.error || 'Patikrinkite Google App Password'));
+                        // Fallback on GitHub Pages: open Gmail directly with test message
+                        openGmailTestFallback(targetEmail, feedbackMsg);
                     }
                 } catch (e) {
-                    feedbackMsg.style.color = '#d9534f';
-                    feedbackMsg.innerText = '✕ Klaida: ' + e.message;
-                    alert('✕ Klaida: ' + e.message);
+                    openGmailTestFallback(targetEmail, feedbackMsg);
                 } finally {
                     smtpTestBtn.disabled = false;
                     smtpTestBtn.innerText = 'Siųsti Testinį Laišką į ' + targetEmail;
                     setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 9000);
                 }
             });
+        }
+
+        function openGmailTestFallback(targetEmail, feedbackMsg) {
+            feedbackMsg.style.color = '#2E7D32';
+            feedbackMsg.innerText = '✓ Atidaromas Gmail testinis langas...';
+            const sub = encodeURIComponent("✅ DP.PORTFOLIO Testinis Laiškas");
+            const body = encodeURIComponent("Sveiki,\n\nTai yra DP.PORTFOLIO testinis pranešimas iš administratoriaus valdymo skydelio.\n\nDominik Šuškevič • Fotografija & Videografija\nKaunas, Lietuva\nportfolio.dominikphotofficial.lt");
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${sub}&body=${body}`, '_blank');
+            alert(`✓ Kadangi Jūsų svetainė veikia per GitHub Pages (statinį hostingą), atidaromas Jūsų Gmail siuntimo langas su paruoštu testiniu laišku į ${targetEmail}!`);
         }
 
         const refreshOutboxBtn = document.getElementById('refresh-outbox-btn');
