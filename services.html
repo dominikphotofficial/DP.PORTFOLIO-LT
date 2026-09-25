@@ -1470,6 +1470,7 @@
 
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { sendEmail } from './email-sender.js';
         import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
         import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
@@ -1831,9 +1832,11 @@
                         location: requestData.location
                     });
 
-                    await addDoc(collection(db, "mail"), {
+                    await sendEmail({
                         to: requestData.email,
-                        message: { subject: emailData.subject, html: emailData.html }
+                        subject: emailData.subject,
+                        html: emailData.html,
+                        clientName: requestData.clientName
                     });
                 } catch (mailErr) {
                     console.warn("Mail dispatch error:", mailErr);

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "mail_1790338958549",
+    "to": "test@example.com",
+    "subject": "Test Tema",
+    "clientName": "",
+    "previewText": "Test Tema",
+    "html": "<p>Sveiki, testas!</p>",
+    "createdAt": "2026-09-25T12:22:38.549Z",
+    "status": "queued_no_smtp",
+    "deliveryDetails": "SMTP slaptažodis nesukonfigūruotas. Laiškas išsaugotas žurnale."
+  }
+]

@@ -130,6 +130,7 @@
             <button class="tab-btn active" onclick="switchTab('tfp')">TFP Užklausos</button>
             <button class="tab-btn" onclick="switchTab('services')">Mokamos Paslaugos</button>
             <button class="tab-btn" onclick="switchTab('reviews')">Atsiliepimai</button>
+            <button class="tab-btn" onclick="switchTab('emails')">✉️ El. Paštas</button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -222,6 +223,82 @@
 
             <div id="reviews-list">Kraunama...</div>
         </div>
+
+        <div id="emails-tab" class="tab-content">
+            <!-- Email Settings Card -->
+            <div class="request-card" style="margin-bottom: 25px; border-left: 4px solid var(--accent-color); background: #FAFBFB; padding: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.25rem;">
+                                Gmail / SMTP El. Laiškų Siuntimo Sistema
+                            </h3>
+                            <span id="email-smtp-status-badge" class="status-badge status-Confirmed">
+                                Tikrinama...
+                            </span>
+                        </div>
+                        <p style="font-family: var(--font-body); font-size: 0.95rem; color: #666; margin: 8px 0 0 0; line-height: 1.5;">
+                            Ši sistema užtikrina, kad klientai ir modeliai gautų oficialius, automatinius DP.PORTFOLIO patvirtinimus bei galerijos nuorodas tiesiai į savo el. paštą.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #E8ECEB; border-radius: 6px; padding: 22px; margin-bottom: 22px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 16px;">
+                        <div>
+                            <label class="field-label">Siuntėjo El. Pašto Adresas (Gmail)</label>
+                            <input type="email" id="smtp-email-input" class="admin-select" value="dominikphotofficial.lt@gmail.com" placeholder="dominikphotofficial.lt@gmail.com">
+                        </div>
+                        <div>
+                            <label class="field-label">Siuntėjo Vardas / Parašas</label>
+                            <input type="text" id="smtp-name-input" class="admin-select" value="Dominik Šuškevič | DP.PORTFOLIO" placeholder="Dominik Šuškevič">
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="field-label" style="margin: 0;">Google Programos Slaptažodis (App Password) *</label>
+                                <button type="button" id="smtp-toggle-pass-btn" style="background: none; border: none; color: var(--accent-color); font-size: 0.8rem; cursor: pointer; text-decoration: underline;">👁 Rodyti slaptažodį</button>
+                            </div>
+                            <input type="password" id="smtp-pass-input" class="admin-select" placeholder="Įveskite 16 simbolių Google App Password (pvz.: abcd efgh ijkl mnop)">
+                            <div id="smtp-pass-status-text" style="font-size: 13px; color: #666; margin-top: 6px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Helpful Step-by-step Guide -->
+                    <div style="background: #F4F6F5; border-left: 3px solid var(--accent-color); border-radius: 4px; padding: 15px 18px; font-size: 0.88rem; color: #333; line-height: 1.6; margin-bottom: 18px;">
+                        <strong>💡 Kaip gauti Gmail programos slaptažodį per 1 minutę?</strong>
+                        <ol style="margin: 8px 0 0 0; padding-left: 20px;">
+                            <li>Atsidarykite Google paskyrą: <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); font-weight: bold; text-decoration: underline;">myaccount.google.com/apppasswords ↗</a></li>
+                            <li>Jei prašo, patvirtinkite tapatybę ir įsitikinkite, kad 2FA (dviejų žingsnių patvirtinimas) įjungtas.</li>
+                            <li>Programos pavadinimui įrašykite pvz. <strong>DP Portfolio</strong> ir spauskite <strong>Sukurti (Create)</strong>.</li>
+                            <li>Nukopijuokite sugeneruotą 16 raidžių kodą, įklijuokite į laukelį aukščiau ir paspauskite „Išsaugoti El. Pašto Nustatymus“.</li>
+                        </ol>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                        <button type="button" id="smtp-save-btn" class="admin-btn">Išsaugoti El. Pašto Nustatymus</button>
+                        <button type="button" id="smtp-test-btn" class="admin-btn-outline">Siųsti Testinį Laišką į dominikphotofficial.lt@gmail.com</button>
+                        <span id="smtp-feedback-msg" style="font-size: 0.9rem; font-weight: 500;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outbox Log Card -->
+            <div class="request-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0;">
+                            Išsiųstų ir Paruoštų Laiškų Žurnalas (Outbox)
+                        </h3>
+                        <p style="font-family: var(--font-body); font-size: 0.9rem; color: #666; margin: 4px 0 0 0;">
+                            Čia matomi visi išsiųsti pranešimai klientams bei jų pristatymo būsenos.
+                        </p>
+                    </div>
+                    <button type="button" id="refresh-outbox-btn" class="admin-btn-outline" style="font-size: 0.8rem; padding: 8px 16px;">🔄 Atnaujinti Žurnalą</button>
+                </div>
+
+                <div id="emails-outbox-list">Kraunama...</div>
+            </div>
+        </div>
     </div>
 
     <div id="email-modal" class="modal-overlay">
@@ -264,8 +341,24 @@
         </div>
     </div>
 
+    <!-- Outbox View Modal -->
+    <div id="outbox-view-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 id="outbox-modal-subject" style="margin: 0; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color);">Laiško Peržiūra</h3>
+                <button type="button" onclick="closeOutboxModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #888;">✕</button>
+            </div>
+            <div id="outbox-modal-meta" style="font-size: 0.88rem; color: #666; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #eee;"></div>
+            <div id="outbox-modal-body" style="background: #f4f6f5; padding: 12px; border-radius: 6px; border: 1px solid #E8ECEB; max-height: 520px; overflow-y: auto;"></div>
+            <div style="margin-top: 18px; text-align: right;">
+                <button type="button" class="admin-btn" onclick="closeOutboxModal()">Uždaryti</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
+        import { sendEmail } from './email-sender.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
@@ -307,6 +400,7 @@
                 loadTFPRequests();
                 loadServiceRequests();
                 loadReviews();
+                loadEmailSettingsAndOutbox();
             } else if (user) {
                 alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
                 signOut(auth);
@@ -330,6 +424,10 @@
             } else if(tab === 'reviews') {
                 document.querySelectorAll('.tab-btn')[2].classList.add('active');
                 document.getElementById('reviews-tab').classList.add('active');
+            } else if(tab === 'emails') {
+                document.querySelectorAll('.tab-btn')[3].classList.add('active');
+                document.getElementById('emails-tab').classList.add('active');
+                loadEmailSettingsAndOutbox();
             }
         };
 
@@ -702,13 +800,23 @@
 
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
-                await addDoc(collection(db, "mail"), { 
+                btn.innerText = 'Siunčiamas laiškas...';
+                const emailResult = await sendEmail({ 
                     to: pendingEmailData.email, 
-                    message: { subject: subject, html: finalHtml } 
+                    subject: subject, 
+                    html: finalHtml,
+                    clientName: pendingEmailData.name || ''
                 });
 
-                alert("Užsakymas atnaujintas ir laiškas išsiųstas klientui!");
+                if (emailResult.delivered) {
+                    alert(`✓ Užsakymas atnaujintas ir el. laiškas sėkmingai išsiųstas klientui į ${pendingEmailData.email}!`);
+                } else if (emailResult.queued) {
+                    alert(`✓ Užsakymas atnaujintas!\n\nPastaba: Laiškas paruoštas ir išsaugotas išsiuntimo žurnale. Norėdami, kad laiškai iškart pasiektų kliento dėžutę per Gmail, įveskite Google App Password naujoje skiltyje „El. Paštas“ arba paspauskite „Siųsti Testinį Laišką“ patikrinimui.`);
+                } else {
+                    alert(`✓ Užsakymas atnaujintas! Laiškas paruoštas ir išsaugotas išsiuntimo žurnale.`);
+                }
                 closeModal();
+                loadEmailSettingsAndOutbox();
             } catch(e) {
                 console.error(e);
                 alert("Klaida siunčiant: " + (e.message || e));
@@ -975,6 +1083,229 @@
                 }
             });
         }
+
+        // -------------------------------------------------------------
+        // Email Settings & Outbox Management
+        // -------------------------------------------------------------
+        async function loadEmailSettingsAndOutbox() {
+            // Load config
+            try {
+                const res = await fetch('/api/email-config');
+                if (res.ok) {
+                    const cfg = await res.json();
+                    const emailInput = document.getElementById('smtp-email-input');
+                    const nameInput = document.getElementById('smtp-name-input');
+                    const statusBadge = document.getElementById('email-smtp-status-badge');
+                    const passStatusText = document.getElementById('smtp-pass-status-text');
+
+                    if (emailInput && cfg.user) emailInput.value = cfg.user;
+                    if (nameInput && cfg.fromName) nameInput.value = cfg.fromName;
+
+                    if (statusBadge) {
+                        if (cfg.hasPassword) {
+                            statusBadge.className = 'status-badge status-Confirmed';
+                            statusBadge.innerText = '✓ Gmail SMTP Aktyvus';
+                            if (passStatusText) passStatusText.innerHTML = '✅ Google App Password yra sukonfigūruotas ir paruoštas siuntimui.';
+                        } else {
+                            statusBadge.className = 'status-badge status-Cancelled';
+                            statusBadge.innerText = '⚠️ Reikia suvesti App Password';
+                            if (passStatusText) passStatusText.innerHTML = '⚠️ Slaptažodis dar neįvestas. Įveskite 16 raidžių Google App Password, kad laiškai iškart keliautų į pašto dėžutes.';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not load /api/email-config:", e);
+            }
+
+            // Load outbox
+            try {
+                const res = await fetch('/api/emails-outbox');
+                const outboxList = document.getElementById('emails-outbox-list');
+                if (res.ok && outboxList) {
+                    const list = await res.json();
+                    if (!list || list.length === 0) {
+                        outboxList.innerHTML = '<p style="padding: 20px; color: #888;">Išsiuntimo žurnalas kol kas tuščias. Čia atsiras visi klientams siunčiami patvirtinimai ir statuso laiškai.</p>';
+                        return;
+                    }
+
+                    outboxList.innerHTML = '';
+                    list.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'request-card';
+                        card.style.marginBottom = '12px';
+                        card.style.padding = '16px 20px';
+
+                        const isSent = (item.status === 'sent');
+                        const statusClass = isSent ? 'status-Confirmed' : (item.status === 'error' ? 'status-Cancelled' : 'status-new');
+                        const statusLabel = isSent ? '✓ Išsiųsta per SMTP' : (item.status === 'error' ? '✕ Klaida' : '⏳ Paruošta žurnale');
+                        const formattedDate = item.createdAt ? new Date(item.createdAt).toLocaleString('lt-LT') : '-';
+
+                        card.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
+                                        <strong style="color: var(--accent-color); font-size: 1.05rem;">${item.to}</strong>
+                                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                                    </div>
+                                    <div style="font-size: 0.92rem; color: #444; font-weight: 500;">Tema: ${item.subject}</div>
+                                    <div style="font-size: 0.82rem; color: #777; margin-top: 4px;">
+                                        Data: ${formattedDate} ${item.clientName ? '• Klientas: ' + item.clientName : ''}
+                                        ${item.deliveryDetails ? '<span style="color:#555;"> (' + item.deliveryDetails + ')</span>' : ''}
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" class="admin-btn-outline" style="font-size: 0.8rem; padding: 7px 14px;" onclick="viewOutboxEmail('${item.id}')">
+                                        👁 Peržiūrėti HTML
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        outboxList.appendChild(card);
+                    });
+                }
+            } catch (e) {
+                console.warn("Could not load /api/emails-outbox:", e);
+            }
+        }
+
+        // Toggle password visibility
+        const togglePassBtn = document.getElementById('smtp-toggle-pass-btn');
+        if (togglePassBtn) {
+            togglePassBtn.addEventListener('click', () => {
+                const passInput = document.getElementById('smtp-pass-input');
+                if (passInput.type === 'password') {
+                    passInput.type = 'text';
+                    togglePassBtn.innerText = '🙈 Slėpti slaptažodį';
+                } else {
+                    passInput.type = 'password';
+                    togglePassBtn.innerText = '👁 Rodyti slaptažodį';
+                }
+            });
+        }
+
+        // Save email settings
+        const smtpSaveBtn = document.getElementById('smtp-save-btn');
+        if (smtpSaveBtn) {
+            smtpSaveBtn.addEventListener('click', async () => {
+                const email = document.getElementById('smtp-email-input').value.trim();
+                const fromName = document.getElementById('smtp-name-input').value.trim();
+                const pass = document.getElementById('smtp-pass-input').value.trim();
+                const feedbackMsg = document.getElementById('smtp-feedback-msg');
+
+                smtpSaveBtn.disabled = true;
+                smtpSaveBtn.innerText = 'Saugoma...';
+
+                try {
+                    const res = await fetch('/api/email-config', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user: email, fromName, pass })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        feedbackMsg.style.color = '#2E7D32';
+                        feedbackMsg.innerText = '✓ Nustatymai išsaugoti!';
+                        document.getElementById('smtp-pass-input').value = '';
+                        loadEmailSettingsAndOutbox();
+                    } else {
+                        feedbackMsg.style.color = '#d9534f';
+                        feedbackMsg.innerText = '✕ ' + (data.error || 'Nepavyko išsaugoti');
+                    }
+                } catch (e) {
+                    feedbackMsg.style.color = '#d9534f';
+                    feedbackMsg.innerText = '✕ Klaida: ' + e.message;
+                } finally {
+                    smtpSaveBtn.disabled = false;
+                    smtpSaveBtn.innerText = 'Išsaugoti El. Pašto Nustatymus';
+                    setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 6000);
+                }
+            });
+        }
+
+        // Test email sending
+        const smtpTestBtn = document.getElementById('smtp-test-btn');
+        if (smtpTestBtn) {
+            smtpTestBtn.addEventListener('click', async () => {
+                const targetEmail = document.getElementById('smtp-email-input').value.trim() || 'dominikphotofficial.lt@gmail.com';
+                const pass = document.getElementById('smtp-pass-input').value.trim();
+                const feedbackMsg = document.getElementById('smtp-feedback-msg');
+
+                // If user entered a new password in the input, save it first
+                if (pass) {
+                    await fetch('/api/email-config', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user: targetEmail,
+                            fromName: document.getElementById('smtp-name-input').value.trim(),
+                            pass: pass
+                        })
+                    });
+                }
+
+                smtpTestBtn.disabled = true;
+                smtpTestBtn.innerText = 'Siunčiamas testinis laiškas...';
+                feedbackMsg.style.color = 'var(--accent-color)';
+                feedbackMsg.innerText = 'Jungiamasi prie Gmail serverio...';
+
+                try {
+                    const res = await fetch('/api/email-test', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ to: targetEmail })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        feedbackMsg.style.color = '#2E7D32';
+                        feedbackMsg.innerText = '✅ Pavyko! Testinis laiškas išsiųstas į ' + targetEmail;
+                        alert('✅ Puiku! Testinis laiškas sėkmingai išsiųstas į ' + targetEmail + '. Patikrinkite savo pašto dėžutę!');
+                        loadEmailSettingsAndOutbox();
+                    } else {
+                        feedbackMsg.style.color = '#d9534f';
+                        feedbackMsg.innerText = '✕ ' + (data.error || 'Siuntimas nepavyko');
+                        alert('✕ Klaida siunčiant testinį laišką:\n' + (data.error || 'Patikrinkite Google App Password'));
+                    }
+                } catch (e) {
+                    feedbackMsg.style.color = '#d9534f';
+                    feedbackMsg.innerText = '✕ Klaida: ' + e.message;
+                    alert('✕ Klaida: ' + e.message);
+                } finally {
+                    smtpTestBtn.disabled = false;
+                    smtpTestBtn.innerText = 'Siųsti Testinį Laišką į ' + targetEmail;
+                    setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 9000);
+                }
+            });
+        }
+
+        const refreshOutboxBtn = document.getElementById('refresh-outbox-btn');
+        if (refreshOutboxBtn) {
+            refreshOutboxBtn.addEventListener('click', () => {
+                loadEmailSettingsAndOutbox();
+            });
+        }
+
+        window.viewOutboxEmail = async (id) => {
+            try {
+                const res = await fetch(`/api/emails-outbox/${id}`);
+                if (res.ok) {
+                    const email = await res.json();
+                    document.getElementById('outbox-modal-subject').innerText = email.subject || 'Laiško Peržiūra';
+                    document.getElementById('outbox-modal-meta').innerHTML = `
+                        <strong>Gavėjas:</strong> ${email.to} &bull; 
+                        <strong>Data:</strong> ${new Date(email.createdAt).toLocaleString('lt-LT')} &bull; 
+                        <strong>Būsena:</strong> ${email.status === 'sent' ? '<span style="color:#2E7D32;">✓ Išsiųsta per SMTP</span>' : '<span style="color:#E08700;">⏳ Paruošta žurnale</span>'}
+                    `;
+                    document.getElementById('outbox-modal-body').innerHTML = email.html || '<p style="color:#888;">(Tuščias laiško turinys)</p>';
+                    document.getElementById('outbox-view-modal').classList.add('active');
+                }
+            } catch (e) {
+                alert("Nepavyko atidaryti laiško: " + e.message);
+            }
+        };
+
+        window.closeOutboxModal = () => {
+            document.getElementById('outbox-view-modal').classList.remove('active');
+        };
     </script>
 </body>
 </html>

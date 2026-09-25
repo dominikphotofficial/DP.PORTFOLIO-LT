@@ -1,0 +1,11 @@
+{
+  "service": "gmail",
+  "host": "smtp.gmail.com",
+  "port": 465,
+  "secure": true,
+  "user": "dominikphotofficial.lt@gmail.com",
+  "pass": "",
+  "fromName": "Dominik Šuškevič | DP.PORTFOLIO",
+  "fromEmail": "dominikphotofficial.lt@gmail.com",
+  "replyTo": "dominikphotofficial.lt@gmail.com"
+}
