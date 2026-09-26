@@ -926,7 +926,8 @@
                     const emailData = buildEmail('TFPNew', lang, requestData);
                     await addDoc(collection(db, "mail"), {
                         to: requestData.email,
-                        message: { subject: emailData.subject, html: emailData.html }
+                        message: { subject: emailData.subject, html: emailData.html },
+                        createdAt: serverTimestamp()
                     });
                 } catch (mailErr) {
                     console.warn("Auto email dispatch error:", mailErr);

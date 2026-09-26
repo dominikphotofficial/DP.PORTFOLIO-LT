@@ -1833,7 +1833,8 @@
 
                     await addDoc(collection(db, "mail"), {
                         to: requestData.email,
-                        message: { subject: emailData.subject, html: emailData.html }
+                        message: { subject: emailData.subject, html: emailData.html },
+                        createdAt: serverTimestamp()
                     });
                 } catch (mailErr) {
                     console.warn("Mail dispatch error:", mailErr);
