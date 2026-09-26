@@ -1481,28 +1481,51 @@
             {
                 clientName: "Karolina V.",
                 type: "service",
-                sessionTag: "Standartinė fotosesija Kaune",
+                sessionTag: "Asmeninis portretas Kaune",
                 rating: 5,
                 reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes neturiu patirties prieš objektyvą, bet Dominik sukūrė ramią ir jaukią atmosferą. Nuotraukų spalvos ir retušas – aukščiausio lygio!"
+                comment: "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes retai stoviu prieš objektyvą, tačiau Dominik sukūrė ramią, pasitikėjimą keliančią atmosferą. Spalvų tonavimas ir retušas – nepriekaištingi."
             },
             {
-                clientName: "Lukas & Sandra",
+                clientName: "Mantas & Sandra",
                 type: "service",
                 sessionTag: "Poros fotosesija Kauno senamiestyje",
                 rating: 5,
                 reviewLink: "https://portfolio.dominikphotofficial.lt",
-                comment: "Nuostabi patirtis. Fotosesija praėjo be jokio streso, viskas vyko labai natūraliai ir laisvai. Gauta privati galerija sužavėjo – kadrai atrodo kaip iš kino filmo."
+                comment: "Nuostabi patirtis. Viskas vyko labai natūraliai, be jokio dirbtinio pozavimo. Dominik puikiai pagavo tikras emocijas ir šviesą. Gavus privačią galeriją buvome sužavėti – kadrai atrodo stilingai ir jaukiai."
             },
             {
                 clientName: "Gabija R.",
                 type: "tfp",
-                sessionTag: "Gatvės mada & portretas (TFP)",
+                sessionTag: "Gatvės mada & Editorial (TFP)",
                 rating: 5,
                 reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Rekomenduoju visiems, norintiems išbandyti save!"
+                comment: "Dalyvavau kūrybiniame TFP projekte. Bendravimas nuo pat pirmos žinutės buvo profesionalus ir aiškus. Dominik turi puikią viziją, geba greitai nukreipti ir sukurti stiprius kadrus portfolio papildymui. Tikrai rekomenduoju!"
+            },
+            {
+                clientName: "Deividas M.",
+                type: "service",
+                sessionTag: "Įvaizdžio & Verslo portretai",
+                rating: 5,
+                reviewLink: "https://portfolio.dominikphotofficial.lt/services.html",
+                comment: "Kreipiausi dėl verslo įvaizdžio nuotraukų LinkedIn ir interneto svetainei. Fotosesija praėjo greitai ir produktyviai, nuotraukos buvo atiduotos anksčiau sutarto termino. Kokybė viršijo lūkesčius."
+            },
+            {
+                clientName: "Viktorija S.",
+                type: "tfp",
+                sessionTag: "Portretas gamtoje (TFP)",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Labai ačiū už bendradarbiavimą! Kūrybinis procesas buvo lengvas ir įdomus, nuotraukos išėjo labai gyvos, šiltų atspalvių ir švarios. Labai džiaugiuosi bendru rezultatu."
             }
         ];
+
+        function getInitials(name) {
+            if (!name) return 'DP';
+            const parts = name.trim().split(/\s+/);
+            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
 
         function renderReviews(reviewsList) {
             const container = document.getElementById('reviews-grid');
@@ -1519,6 +1542,8 @@
                 const badgeClass = isTfp ? 'review-badge-tfp' : 'review-badge-service';
                 const starsCount = Math.max(1, Math.min(5, rev.rating || 5));
                 const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+                const initials = getInitials(rev.clientName);
+                const verifiedText = isTfp ? '✓ Patvirtintas modelis' : '✓ Patvirtintas klientas';
 
                 let linkHtml = '';
                 if (rev.reviewLink && rev.reviewLink.trim()) {
@@ -1533,9 +1558,13 @@
                     </div>
                     <p class="review-text">„${rev.comment || rev.reviewText || ''}“</p>
                     <div class="review-author-block">
-                        <div class="review-author-info">
-                            <span class="review-author-name">${rev.clientName || 'Klientas'}</span>
-                            <span class="review-session-note">${rev.sessionTag || rev.category || (isTfp ? 'TFP fotosesija' : 'Fotosesija')}</span>
+                        <div class="review-author-row">
+                            <div class="review-avatar">${initials}</div>
+                            <div class="review-author-info">
+                                <span class="review-author-name">${rev.clientName || 'Klientas'}</span>
+                                <span class="review-session-note">${rev.sessionTag || rev.category || (isTfp ? 'TFP fotosesija' : 'Fotosesija')}</span>
+                                <span class="review-verified-badge">${verifiedText}</span>
+                            </div>
                         </div>
                         ${linkHtml}
                     </div>

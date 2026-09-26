@@ -1007,14 +1007,28 @@ footer p {
 .review-card {
     background: #ffffff;
     border-radius: 8px;
-    padding: 30px;
+    padding: 32px 28px;
     border: 1px solid rgba(17, 57, 57, 0.08);
     box-shadow: 0 8px 30px rgba(17, 57, 57, 0.04);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     position: relative;
+    overflow: hidden;
+}
+
+.review-card::before {
+    content: "“";
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-size: 5rem;
+    line-height: 1;
+    font-family: Georgia, serif;
+    color: rgba(17, 57, 57, 0.06);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .review-card:hover {
@@ -1029,6 +1043,8 @@ footer p {
     align-items: center;
     margin-bottom: 18px;
     gap: 12px;
+    position: relative;
+    z-index: 1;
 }
 
 .review-stars {
@@ -1070,22 +1086,49 @@ footer p {
     margin: 0 0 22px 0;
     font-style: italic;
     flex-grow: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .review-author-block {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     padding-top: 18px;
     border-top: 1px solid rgba(17, 57, 57, 0.06);
     flex-wrap: wrap;
     gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.review-author-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.review-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #113939 0%, #2A5C5C 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(17, 57, 57, 0.12);
 }
 
 .review-author-info {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
 }
 
 .review-author-name {
@@ -1100,7 +1143,18 @@ footer p {
 .review-session-note {
     font-family: var(--font-body);
     font-size: 0.85rem;
-    color: rgba(26, 43, 43, 0.6);
+    color: rgba(26, 43, 43, 0.65);
+}
+
+.review-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: #2E7D32;
+    font-weight: 600;
+    margin-top: 2px;
+    font-family: var(--font-body);
 }
 
 .review-link-badge {

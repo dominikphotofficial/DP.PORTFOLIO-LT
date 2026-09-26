@@ -716,20 +716,35 @@
             {
                 clientName: "Gabija R.",
                 type: "tfp",
-                sessionTag: "Gatvės mada & portretas Kaune",
+                sessionTag: "Gatvės mada & Editorial (TFP)",
                 rating: 5,
                 reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Dalyvavau TFP fotosesijoje – bendravimas buvo itin sklandus ir profesionalus. Gavau retušuotas nuotraukas, kurios papuošė mano portfolio. Jokio streso, rekomenduoju!"
+                comment: "Dalyvavau kūrybiniame TFP projekte. Bendravimas nuo pat pirmos žinutės buvo profesionalus ir aiškus. Dominik turi puikią viziją, geba greitai nukreipti ir sukurti stiprius kadrus portfolio papildymui. Tikrai rekomenduoju!"
+            },
+            {
+                clientName: "Viktorija S.",
+                type: "tfp",
+                sessionTag: "Portretas gamtoje (TFP)",
+                rating: 5,
+                reviewLink: "https://instagram.com/dominikphotofficial",
+                comment: "Labai ačiū už bendradarbiavimą! Kūrybinis procesas buvo lengvas ir įdomus, nuotraukos išėjo labai gyvos, šiltų atspalvių ir švarios. Labai džiaugiuosi bendru rezultatu."
             },
             {
                 clientName: "Tomas K.",
                 type: "tfp",
-                sessionTag: "Urban & Automobilių estetika",
+                sessionTag: "Urban & Automobilių estetika (TFP)",
                 rating: 5,
                 reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Puikiai suderinome idėją per Instagram. Fotosesija Kaune praėjo labai greitai ir lengvai, o rezultatas pranoko lūkesčius. Dominik mato kadrą kitaip."
+                comment: "Puikiai suderinome idėją per Instagram. Fotosesija Kaune praėjo labai greitai ir lengvai, o rezultatas pranoko lūkesčius. Dominik mato kadrą kitaip ir moka dirbti su šviesa."
             }
         ];
+
+        function getInitials(name) {
+            if (!name) return 'DP';
+            const parts = name.trim().split(/\s+/);
+            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
 
         function renderTfpReviews(list) {
             const container = document.getElementById('tfp-reviews-grid');
@@ -740,6 +755,7 @@
                 card.className = 'review-card fade-in-up';
                 const starsCount = Math.max(1, Math.min(5, rev.rating || 5));
                 const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+                const initials = getInitials(rev.clientName);
 
                 let linkHtml = '';
                 if (rev.reviewLink && rev.reviewLink.trim()) {
@@ -753,9 +769,13 @@
                     </div>
                     <p class="review-text">„${rev.comment || rev.reviewText || ''}“</p>
                     <div class="review-author-block">
-                        <div class="review-author-info">
-                            <span class="review-author-name">${rev.clientName || 'Modelis'}</span>
-                            <span class="review-session-note">${rev.sessionTag || 'TFP Fotosesija'}</span>
+                        <div class="review-author-row">
+                            <div class="review-avatar">${initials}</div>
+                            <div class="review-author-info">
+                                <span class="review-author-name">${rev.clientName || 'Modelis'}</span>
+                                <span class="review-session-note">${rev.sessionTag || 'TFP Fotosesija'}</span>
+                                <span class="review-verified-badge">✓ Patvirtintas modelis</span>
+                            </div>
                         </div>
                         ${linkHtml}
                     </div>

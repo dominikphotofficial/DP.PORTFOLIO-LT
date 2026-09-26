@@ -71,19 +71,18 @@ const emailWrapperEnd = `
 
                     <!-- Footer Section -->
                     <tr>
-                        <td style="background-color: #FAFBFB; border-top: 1px solid #E8ECEB; padding: 30px 32px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
-                            <p style="margin: 0 0 12px 0; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 600;">
-                                ${BRAND.name} &bull; Dominik Šuškevič
+                        <td style="background-color: #FAFBFB; border-top: 1px solid #E8ECEB; padding: 26px 30px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
+                            <p style="margin: 0 0 8px 0; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 600;">
+                                Dominik Šuškevič
                             </p>
                             
-                            <p style="margin: 0 0 18px 0; font-size: 13px; color: #607272; line-height: 1.8;">
-                                Kaunas, Lietuva &bull; Fujifilm X Cinema & Photography<br>
-                                Instagram: <a href="${BRAND.instagramUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">${BRAND.instagramHandle}</a> &bull;
-                                Svetainė: <a href="${BRAND.websiteUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">portfolio.dominikphotofficial.lt</a><br>
-                                El. paštas: <a href="mailto:${BRAND.email}" style="color: #113939; text-decoration: none;">${BRAND.email}</a>
+                            <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
+                                Fotografija & Videografija &bull; Kaunas, Lietuva<br>
+                                <a href="${BRAND.websiteUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">portfolio.dominikphotofficial.lt</a> &bull;
+                                <a href="${BRAND.instagramUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">${BRAND.instagramHandle}</a>
                             </p>
 
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 16px auto;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 14px auto;">
                                 <tr>
                                     <td style="padding: 0 8px;">
                                         <a href="${BRAND.instagramUrl}" target="_blank" style="display: inline-block; background: #113939; color: #ffffff; padding: 6px 14px; border-radius: 3px; font-size: 11px; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;">Instagram</a>
@@ -94,9 +93,8 @@ const emailWrapperEnd = `
                                 </tr>
                             </table>
 
-                            <p style="margin: 0; font-size: 11px; color: #9AA7A7; line-height: 1.5;">
-                                &copy; 2026 DP Corporation. Dominik Šuškevič. Visos teisės saugomos.<br>
-                                Šis el. laiškas yra konfidencialus ir skirtas tik nurodytam gavėjui.
+                            <p style="margin: 0; font-size: 11px; color: #9AA7A7; line-height: 1.4;">
+                                &copy; 2026 DP.PORTFOLIO. Dominik Šuškevič. Visos teisės saugomos.
                             </p>
                         </td>
                     </tr>
@@ -215,52 +213,52 @@ export const texts = {
         badgeCompleted: "Galerija Paruošta",
         badgeCancelled: "Atšaukta",
         TFPNew: {
-            sub: "DP.PORTFOLIO | Gauta TFP fotosesijos užklausa",
-            txt: "Labai ačiū už jūsų užklausą ir pasiūlytą kūrybinę idėją!\n\nJūsų registraciją sėkmingai gavome. Dominik peržiūrės jūsų anketą, Instagram/socialinį profilį bei idėją ir susisieks su jumis per artimiausias 24–48 valandas suderinti detalių."
+            sub: "DP.PORTFOLIO | TFP fotosesijos užklausa gauta",
+            txt: "Dėkoju už Jūsų anketą ir pasiūlytą fotosesijos idėją.\n\nUžklausa sėkmingai gauta. Peržiūrėsiu Jūsų profilį ir netrukus susisieksiu suderinti fotosesijos detalių."
         },
         TFPConfirmed: {
-            sub: "DP.PORTFOLIO | Patvirtinta: TFP Fotosesija Kaune",
-            txt: "Mums labai patiko jūsų idėja, todėl su džiaugsmu patvirtiname jūsų TFP fotosesiją!\n\nNekantraujame kartu sukurti išskirtinių kinematografinių kadrų. Žemiau pateikiame suderintą susitikimo laiką, lokaciją bei naudingus patarimus pasiruošimui."
+            sub: "DP.PORTFOLIO | TFP fotosesija patvirtinta",
+            txt: "Jūsų TFP fotosesija patvirtinta.\n\nŽemiau pateikta suderinta susitikimo data, laikas bei lokacija. Iki susitikimo!"
         },
         TFPRescheduled: {
-            sub: "DP.PORTFOLIO | Atnaujinta: TFP Fotosesijos laikas arba vieta",
-            txt: "Norime informuoti, kad jūsų TFP fotosesijos data, laikas arba vieta buvo atnaujinta.\n\nPeržiūrėkite atnaujintą informaciją žemiau. Jei šis laikas jums netinka, prašome iškart atsakyti į šį laišką su jums patogia alternatyva."
+            sub: "DP.PORTFOLIO | Fotosesijos laiko / vietos pakeitimas",
+            txt: "Informuoju, kad fotosesijos data, laikas arba vieta buvo atnaujinta.\n\nPeržiūrėkite atnaujintą informaciją žemiau. Jei turite klausimų, atsakykite į šį laišką."
         },
         TFPCancelled: {
-            sub: "DP.PORTFOLIO | Atšaukta: TFP Fotosesija",
-            txt: "Apgailestaujame, tačiau dėl nenumatytų aplinkybių ar pasikeitusių planų turime atšaukti jūsų suplanuotą TFP fotosesiją.\n\nNuoširdžiai dėkojame už jūsų norą bendradarbiauti ir tikimės, kad ateityje dar turėsime progą sukurti bendrą projektą."
+            sub: "DP.PORTFOLIO | Fotosesijos užklausa atšaukta",
+            txt: "Informuoju, kad planuota fotosesija yra atšaukta.\n\nDėkoju už Jūsų skirtą laiką ir susidomėjimą."
         },
         TFPCompleted: {
-            sub: "DP.PORTFOLIO | Ačiū už fotosesiją! Nuotraukos paruoštos",
-            txt: "Didelis ačiū už jūsų energiją, profesionalumą ir puikią nuotaiką fotosesijos metu!\n\nVisos geriausios nuotraukos jau kruopščiai atrinktos, autoriniu būdu retušuotos ir patalpintos jūsų asmeninėje Wfolio galerijoje. Spustelėkite žemiau esantį mygtuką, kad peržiūrėtumėte ir atsisiųstumėte kadrus aukščiausia raiška."
+            sub: "DP.PORTFOLIO | Nuotraukos paruoštos",
+            txt: "Dėkoju už bendradarbiavimą fotosesijos metu.\n\nJūsų nuotraukos paruoštos. Jas galite peržiūrėti ir atsisiųsti paspaudę žemiau esantį Wfolio galerijos mygtuką."
         },
         ServiceNew: {
-            sub: "DP.PORTFOLIO | Užsakymo patvirtinimas & Informacija",
-            txt: "Nuoširdžiai dėkojame, kad pasirinkote DP.PORTFOLIO profesionalias paslaugas!\n\nJūsų užklausa sėkmingai priimta. Peržiūrėkite žemiau pateiktą informaciją ir mokėjimo rekvizitus. Netrukus susisieksime patvirtinti visų detalių."
+            sub: "DP.PORTFOLIO | Užsakymas gautas",
+            txt: "Dėkoju už Jūsų paslaugų užsakymą.\n\nUžsakymo informacija ir pasirinktas apmokėjimo būdas pateikti žemiau. Netrukus susisieksiu su Jumis."
         },
         ServiceConfirmed: {
             sub: "DP.PORTFOLIO | Užsakymas patvirtintas – Mokėjimo informacija",
-            txt: "Jūsų paslaugų užsakymas yra oficialiai patvirtintas!\n\nNorėdami galutinai rezervuoti laiką mūsų kalendoriuje, atlikite 50% avanso mokėjimą pagal žemiau nurodytus jūsų pasirinkto mokėjimo būdo rekvizitus. Gavę mokėjimą, iškart atsiųsime patvirtinimą."
+            txt: "Jūsų užsakymas patvirtintas.\n\nNorėdami galutinai rezervuoti fotosesijos laiką, atlikite 50% avanso mokėjimą pagal žemiau nurodytus rekvizitus."
         },
         ServiceDepositPaid: {
-            sub: "DP.PORTFOLIO | Avansas gautas. Rezervacija pilnai patvirtinta!",
-            txt: "Sėkmingai gavome jūsų 50% avansinį mokėjimą. Ačiū!\n\nJūsų pasirinktas fotosesijos laikas ir data yra galutinai užrakinti mūsų kalendoriuje. Susitiksime sutartoje vietoje! Likusią sumos dalį galėsite atsiskaityti po fotosesijos atlikimo."
+            sub: "DP.PORTFOLIO | Avansas gautas – Rezervacija patvirtinta",
+            txt: "50% avansas gautas, fotosesijos laikas rezervuotas.\n\nIki susitikimo sutartoje vietoje! Likusi suma apmokama po fotosesijos."
         },
         ServiceFullyPaid: {
-            sub: "DP.PORTFOLIO | Pilnas apmokėjimas gautas. Ačiū!",
-            txt: "Informuojame, kad sėkmingai gavome pilną apmokėjimą už atliktas paslaugas.\n\nNuoširdžiai dėkojame už bendradarbiavimą, sklandų bendravimą ir pasitikėjimą DP.PORTFOLIO kūrybine komanda!"
+            sub: "DP.PORTFOLIO | Pilnas apmokėjimas gautas",
+            txt: "Pilnas apmokėjimas už paslaugas gautas.\n\nNuoširdžiai dėkoju už bendradarbiavimą ir pasitikėjimą."
         },
         ServiceCompleted: {
-            sub: "DP.PORTFOLIO | Paslauga atlikta. Jūsų nuotraukos paruoštos!",
-            txt: "Jūsų užsakymas yra sėkmingai atliktas!\n\nVisi atrinkti kadrai buvo kruopščiai retušuoti, sukalibruotomis spalvomis ir patalpinti jūsų asmeninėje Wfolio galerijoje. Kviečiame peržiūrėti ir atsisiųsti pilna kokybe."
+            sub: "DP.PORTFOLIO | Nuotraukos paruoštos",
+            txt: "Jūsų užsakymas atliktas, nuotraukos paruoštos.\n\nKviečiu peržiūrėti ir atsisiųsti darbus asmeninėje Wfolio galerijoje."
         },
         ServiceCancelled: {
             sub: "DP.PORTFOLIO | Užsakymas atšauktas",
-            txt: "Informuojame, kad jūsų užsakymas buvo atšauktas.\n\nJeigu užsakymas buvo atšauktas per klaidą arba turite papildomų klausimų, maloniai prašome atsakyti į šį el. laišką."
+            txt: "Informuoju, kad Jūsų užsakymas yra atšauktas.\n\nJei turite klausimų, atsakykite tiesiogiai į šį laišką."
         },
         ServiceStatusUpdate: {
-            sub: "DP.PORTFOLIO | Užsakymo statuso atnaujinimas",
-            txt: "Informuojame, kad jūsų užsakymo statusas DP.PORTFOLIO sistemoje buvo atnaujintas."
+            sub: "DP.PORTFOLIO | Užsakymo statusas atnaujintas",
+            txt: "Informuoju, kad Jūsų užsakymo statusas sistemoje buvo atnaujintas."
         },
         labels: {
             date: "Data ir laikas:",
@@ -303,7 +301,7 @@ export const texts = {
         },
         TFPConfirmed: {
             sub: "DP.PORTFOLIO | Confirmed: TFP Photoshoot in Kaunas",
-            txt: "We loved your idea and are thrilled to officially confirm your TFP photoshoot!\n\nWe look forward to creating stunning cinematic imagery together. Please review the confirmed schedule, location, and preparation tips below."
+            txt: "Your TFP photoshoot is officially confirmed.\n\nPlease review the confirmed schedule, location, and preparation tips below. Looking forward to working together!"
         },
         TFPRescheduled: {
             sub: "DP.PORTFOLIO | Rescheduled: TFP Photoshoot Time or Location",
