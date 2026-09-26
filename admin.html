@@ -707,7 +707,29 @@
                     message: { subject: subject, html: finalHtml } 
                 });
 
-                alert("Užsakymas atnaujintas ir laiškas išsiųstas klientui!");
+                // Send Telegram confirmation notification to Dominik
+                try {
+                    const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
+                    const chatId = "7040523282";
+                    let tgText = `📢 UŽSAKYMAS ATNAUJINTAS!\n\n` +
+                        `👤 Klientas: ${pendingEmailData.name || pendingEmailData.email}\n` +
+                        `✉️ El. paštas: ${pendingEmailData.email}\n` +
+                        `📌 Statusas: ${pendingEmailData.newStatus}\n` +
+                        `📅 Data: ${pendingEmailData.newDate || 'Nenurodyta'}\n` +
+                        `📍 Lokacija: ${pendingEmailData.newLoc || 'Nenurodyta'}`;
+                    if (galleryUrl) tgText += `\n🖼 Galerija: ${galleryUrl}`;
+                    if (receiptUrl) tgText += `\n🧾 Kvitas: ${receiptUrl}`;
+
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: chatId, text: tgText })
+                    });
+                } catch (tgErr) {
+                    console.warn("Telegram admin notification skipped:", tgErr);
+                }
+
+                alert("Užsakymas atnaujintas ir laiškas išsiųstas!");
                 closeModal();
             } catch(e) {
                 console.error(e);
