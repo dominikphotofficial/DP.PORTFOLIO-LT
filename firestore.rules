@@ -43,6 +43,12 @@ service cloud.firestore {
       allow write: if true;
     }
 
+    // Contact Messages: Public can create; Signed-in admin can read, update, delete
+    match /contact_messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
+    }
+
     // Mail Queue: Public and Admin can create mail records
     match /mail/{mailId} {
       allow create: if true;

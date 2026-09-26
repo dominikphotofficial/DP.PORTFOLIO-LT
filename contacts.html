@@ -111,7 +111,17 @@
 
             <div class="form-card">
                 <h3 class="form-title">Bendra Užklausa</h3>
-                <form action="https://formspree.io/f/mgvnbvaw" method="POST">
+
+                <div id="contact-success" style="display: none; padding: 30px 20px; text-align: center; background: #FAFBFB; border: 1px solid rgba(17, 57, 57, 0.15); border-radius: 6px;">
+                    <div style="font-size: 2.4rem; color: var(--accent-color); margin-bottom: 12px; line-height: 1;">✓</div>
+                    <h4 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.15rem;">Žinutė Sėkmingai Gauta!</h4>
+                    <p style="font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0 0 22px 0;">
+                        Dėkojame už Jūsų kreipimąsi. Dominik netrukus susisieks su Jumis nurodytu el. pašto adresu.
+                    </p>
+                    <button type="button" id="contact-reset-btn" class="submit-btn" style="padding: 12px 28px; font-size: 0.85rem; width: auto; display: inline-block;">Siųsti naują žinutę</button>
+                </div>
+
+                <form id="contact-form" action="https://formspree.io/f/mgvnbvaw" method="POST">
                     <div class="form-group">
                         <label for="name">Jūsų vardas *</label>
                         <input type="text" id="name" name="name" required placeholder="Vardas Pavardė" autocomplete="name">
@@ -133,7 +143,7 @@
                         <label for="message">Žinutė *</label>
                         <textarea id="message" name="message" rows="5" required placeholder="Jūsų žinutė arba klausimas..."></textarea>
                     </div>
-                    <button type="submit" class="submit-btn" style="width: 100%; padding: 18px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; border-radius: 4px;">Siųsti žinutę</button>
+                    <button type="submit" id="contact-submit-btn" class="submit-btn" style="width: 100%; padding: 18px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; border-radius: 4px;">Siųsti žinutę</button>
                 </form>
             </div>
         </div>
@@ -149,5 +159,138 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- Firestore & Backend Notification Handler for Contact Form -->
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('contact-submit-btn');
+        const successBox = document.getElementById('contact-success');
+        const resetBtn = document.getElementById('contact-reset-btn');
+
+        const botToken = "8957388911:AAGGLdEWFqH3hSXUyQKQ5IIt9zYhudkdnT0";
+        const chatId = "7040523282";
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const nameVal = document.getElementById('name').value.trim();
+                const emailVal = document.getElementById('email').value.trim();
+                const styleVal = document.getElementById('style').value;
+                const messageVal = document.getElementById('message').value.trim();
+
+                if (!nameVal || !emailVal || !messageVal) {
+                    alert("Prašome užpildyti visus privalomus laukus.");
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = 'Siunčiama...';
+
+                try {
+                    // 1. Save message to Firestore collection "contact_messages"
+                    await addDoc(collection(db, "contact_messages"), {
+                        name: nameVal,
+                        email: emailVal,
+                        subject: styleVal,
+                        message: messageVal,
+                        status: 'New',
+                        createdAt: serverTimestamp()
+                    });
+
+                    // 2. Queue email acknowledgement in Firestore "mail" collection
+                    try {
+                        const ackHtml = `
+                            <div style="font-family: Arial, sans-serif; background-color: #F4F6F5; padding: 30px 15px;">
+                                <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #E8ECEB; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                                    <div style="background-color: #113939; padding: 25px; text-align: center; color: #ffffff;">
+                                        <h2 style="margin: 0; font-size: 20px; letter-spacing: 3px; text-transform: uppercase;">DP.PORTFOLIO</h2>
+                                        <div style="font-size: 11px; letter-spacing: 2px; color: #A2BFBD; margin-top: 5px;">Dominik Šuškevič • Fotografija & Videografija</div>
+                                    </div>
+                                    <div style="padding: 30px 25px; color: #1A2B2B; line-height: 1.6;">
+                                        <h3 style="color: #113939; margin-top: 0;">Sveiki, ${nameVal}!</h3>
+                                        <p>Ačiū už Jūsų žinutę. Patvirtiname, kad Jūsų užklausa sėkmingai gauta:</p>
+                                        <div style="background: #F7F6F2; border-left: 3px solid #113939; padding: 12px 16px; margin: 18px 0; border-radius: 4px;">
+                                            <p style="margin: 0 0 6px 0; font-size: 13px; color: #607272;"><strong>Tema:</strong> ${styleVal}</p>
+                                            <p style="margin: 0; font-size: 14px; color: #113939;"><em>„${messageVal}“</em></p>
+                                        </div>
+                                        <p>Netrukus susisieksiu su Jumis atsakydamas į visus klausimus.</p>
+                                        <p style="margin-top: 25px; font-size: 13px; color: #607272;">
+                                            Pagarbiai,<br>
+                                            <strong>Dominik Šuškevič</strong><br>
+                                            <a href="https://portfolio.dominikphotofficial.lt" style="color: #113939; text-decoration: underline;">portfolio.dominikphotofficial.lt</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        await addDoc(collection(db, "mail"), {
+                            to: emailVal,
+                            message: {
+                                subject: "Gauta Jūsų žinutė | DP.PORTFOLIO",
+                                html: ackHtml
+                            }
+                        });
+                    } catch (mailErr) {
+                        console.warn("Mail queueing error:", mailErr);
+                    }
+
+                    // 3. Trigger Telegram notification to Dominik
+                    try {
+                        const tgText = `💬 NAUJA ŽINUTĖ IŠ CONTACTS.HTML!\n\n` +
+                            `👤 Vardas: ${nameVal}\n` +
+                            `✉️ El. paštas: ${emailVal}\n` +
+                            `📌 Tema: ${styleVal}\n` +
+                            `📝 Žinutė:\n${messageVal}`;
+
+                        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ chat_id: chatId, text: tgText })
+                        });
+                    } catch (tgErr) {
+                        console.warn("Telegram trigger error:", tgErr);
+                    }
+
+                    // 4. Background backup to Formspree
+                    try {
+                        const formData = new FormData();
+                        formData.append('name', nameVal);
+                        formData.append('email', emailVal);
+                        formData.append('style', styleVal);
+                        formData.append('message', messageVal);
+                        fetch('https://formspree.io/f/mgvnbvaw', {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'Accept': 'application/json' }
+                        }).catch(() => {});
+                    } catch (_) {}
+
+                    // 5. Show clean in-page success UI
+                    contactForm.reset();
+                    contactForm.style.display = 'none';
+                    successBox.style.display = 'block';
+                } catch (err) {
+                    console.error("Contact submission error:", err);
+                    alert("Nepavyko išsiųsti žinutės: " + (err.message || err));
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                }
+            });
+        }
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                successBox.style.display = 'none';
+                contactForm.style.display = 'block';
+            });
+        }
+    </script>
 </body>
 </html>

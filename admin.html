@@ -121,6 +121,7 @@
         <div class="dashboard-stats">
             <div class="stat-box"><h3>Naujos TFP</h3><p id="stat-tfp-new">0</p></div>
             <div class="stat-box"><h3>Naujos Paslaugos</h3><p id="stat-srv-new">0</p></div>
+            <div class="stat-box"><h3>Naujos Žinutės</h3><p id="stat-contact-new" style="color:var(--accent-color);">0</p></div>
             <div class="stat-box"><h3>Patvirtinta (Viso)</h3><p id="stat-confirmed">0</p></div>
             <div class="stat-box"><h3>Reikia kvito</h3><p id="stat-receipt-needed" style="color:#d9534f;">0</p></div>
             <div class="stat-box"><h3>Atsiliepimai</h3><p id="stat-reviews-count" style="color:var(--accent-color);">0</p></div>
@@ -129,6 +130,7 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('tfp')">TFP Užklausos</button>
             <button class="tab-btn" onclick="switchTab('services')">Mokamos Paslaugos</button>
+            <button class="tab-btn" onclick="switchTab('contacts')">Žinutės (Kontaktai)</button>
             <button class="tab-btn" onclick="switchTab('reviews')">Atsiliepimai</button>
         </div>
 
@@ -138,6 +140,10 @@
 
         <div id="services-tab" class="tab-content">
             <div id="services-list">Kraunama...</div>
+        </div>
+
+        <div id="contacts-tab" class="tab-content">
+            <div id="contacts-list">Kraunama...</div>
         </div>
 
         <div id="reviews-tab" class="tab-content">
@@ -306,6 +312,7 @@
                 document.getElementById('admin-user-display').innerText = user.email;
                 loadTFPRequests();
                 loadServiceRequests();
+                loadContactMessages();
                 loadReviews();
             } else if (user) {
                 alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
@@ -327,8 +334,11 @@
             } else if(tab === 'services') {
                 document.querySelectorAll('.tab-btn')[1].classList.add('active');
                 document.getElementById('services-tab').classList.add('active');
-            } else if(tab === 'reviews') {
+            } else if(tab === 'contacts') {
                 document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                document.getElementById('contacts-tab').classList.add('active');
+            } else if(tab === 'reviews') {
+                document.querySelectorAll('.tab-btn')[3].classList.add('active');
                 document.getElementById('reviews-tab').classList.add('active');
             }
         };
@@ -522,6 +532,79 @@
                 document.getElementById('services-list').innerHTML = `<p style="color:red;">Klaida: ${error.message}</p>`;
             });
         }
+
+        function loadContactMessages() {
+            const q = query(collection(db, "contact_messages"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('contacts-list');
+                const statEl = document.getElementById('stat-contact-new');
+                if (!list) return;
+                list.innerHTML = '';
+                let newCount = 0;
+
+                if (snapshot.empty) {
+                    list.innerHTML = '<p style="padding: 20px; color: #888;">Bendrų žinučių iš kontaktų formos kol kas nėra.</p>';
+                    if (statEl) statEl.innerText = '0';
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const isNew = (!data.status || data.status === 'New');
+                    if (isNew) newCount++;
+
+                    const card = document.createElement('div');
+                    card.className = 'request-card';
+                    card.style.borderLeft = isNew ? '4px solid var(--accent-color)' : '4px solid #aaa';
+
+                    const formattedDate = data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate().toLocaleString('lt-LT') : new Date(data.createdAt).toLocaleString('lt-LT')) : '-';
+                    const statusBadgeClass = isNew ? 'status-new' : 'status-Confirmed';
+                    const statusLabel = isNew ? 'Nauja žinutė' : 'Atsakyta';
+
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <strong style="font-size: 1.15rem; color: var(--accent-color);">${data.name || 'Nenurodyta'}</strong>
+                                <span class="status-badge ${statusBadgeClass}">${statusLabel}</span>
+                            </div>
+                            <span style="font-size: 0.85rem; color: #777;">Gauta: ${formattedDate}</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 12px;">
+                            <div>
+                                <p style="margin: 4px 0;"><b>El. paštas:</b> <a href="mailto:${data.email}" style="color: var(--accent-light); font-weight: 600;">${data.email}</a></p>
+                                <p style="margin: 4px 0;"><b>Tema:</b> <span style="background: rgba(17,57,57,0.06); padding: 2px 8px; border-radius: 3px; font-weight: 500;">${data.subject || 'Kita'}</span></p>
+                            </div>
+                            <div style="background: #FAFBFB; padding: 12px 14px; border-radius: 4px; border: 1px solid #E8ECEB;">
+                                <p style="margin: 0 0 4px 0; font-size: 0.8rem; color: #777; text-transform: uppercase; letter-spacing: 1px;">Žinutės turinys:</p>
+                                <p style="margin: 0; font-size: 0.95rem; line-height: 1.5; color: #113939; white-space: pre-wrap;">${data.message || ''}</p>
+                            </div>
+                        </div>
+                        <div class="req-actions" style="margin-top: 15px;">
+                            <a href="mailto:${data.email}?subject=Atsakymas:%20${encodeURIComponent(data.subject || 'DP.PORTFOLIO Užklausa')}" class="admin-btn" style="text-decoration: none; display: inline-block;">✉️ Rašyti atsakymą per Gmail</a>
+                            <button type="button" class="admin-btn-outline" onclick="toggleContactStatus('${docSnap.id}', '${data.status || 'New'}')">
+                                ${isNew ? '✓ Pasižymėti kaip atsakytą' : '↺ Grąžinti į naujas'}
+                            </button>
+                            <button type="button" class="admin-btn-delete" onclick="deleteDocRecord('contact_messages', '${docSnap.id}')">Ištrinti</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+
+                if (statEl) statEl.innerText = newCount;
+            }, (error) => {
+                const list = document.getElementById('contacts-list');
+                if (list) list.innerHTML = `<p style="color:red;">Klaida: ${error.message}</p>`;
+            });
+        }
+
+        window.toggleContactStatus = async (id, currentStatus) => {
+            try {
+                const nextStatus = (currentStatus === 'New') ? 'Answered' : 'New';
+                await updateDoc(doc(db, "contact_messages", id), { status: nextStatus });
+            } catch (err) {
+                alert("Nepavyko atnaujinti statuso: " + err.message);
+            }
+        };
 
         window.prepareTFP = async (id, lang, email, name, idea) => {
             const newStatus = document.getElementById(`status-${id}`).value;
