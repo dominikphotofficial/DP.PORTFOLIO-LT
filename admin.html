@@ -348,6 +348,78 @@
             .admin-btn, .admin-btn-outline { width: 100%; }
             .req-actions { flex-direction: column; }
         }
+
+        /* Official Sign in with Google Button */
+        .gsi-material-button {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -webkit-appearance: none;
+            background-color: #ffffff;
+            background-image: none;
+            border: 1px solid #747775;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #1f1f1f;
+            cursor: pointer;
+            font-family: var(--font-body), 'Roboto', arial, sans-serif;
+            font-size: 14px;
+            height: 44px;
+            letter-spacing: 0.25px;
+            outline: none;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, box-shadow 0.2s, border-color 0.2s;
+            text-decoration: none;
+        }
+        .gsi-material-button:hover {
+            background-color: #f8f9fa;
+            border-color: #5f6368;
+            box-shadow: 0 1px 3px rgba(60,64,67,0.3);
+        }
+        .gsi-material-button .gsi-material-button-icon {
+            height: 20px;
+            margin-right: 12px;
+            min-width: 20px;
+            width: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .gsi-material-button .gsi-material-button-content-wrapper {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            height: 100%;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+        .gsi-material-button .gsi-material-button-contents {
+            font-weight: 500;
+        }
+
+        /* Google Sheets Integration Components */
+        .sheets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 25px; }
+        .sheets-card { background: #ffffff; border: 1px solid rgba(17,57,57,0.08); border-radius: 8px; padding: 22px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .sheets-sync-btn { background: #113939; color: #ffffff; border: none; padding: 11px 20px; border-radius: 4px; font-family: var(--font-heading); font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .sheets-sync-btn:hover { background: #0c2727; box-shadow: 0 4px 12px rgba(17,57,57,0.2); }
+        .sheets-sync-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+        .sheets-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-heading); }
+        .sheets-status-badge.connected { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+        .sheets-status-badge.disconnected { background: #FFF3E0; color: #E08700; border: 1px solid #FFE0B2; }
+        .sheets-table-wrap { width: 100%; overflow-x: auto; background: #ffffff; border: 1px solid rgba(17,57,57,0.08); border-radius: 6px; max-height: 500px; }
+        .sheets-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 0.88rem; }
+        .sheets-table th { background: #113939; color: #ffffff; padding: 10px 14px; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 2; white-space: nowrap; }
+        .sheets-table td { padding: 9px 14px; border-bottom: 1px solid rgba(17,57,57,0.06); border-right: 1px solid rgba(17,57,57,0.04); color: var(--text-color); white-space: nowrap; }
+        .sheets-table tr:hover td { background: rgba(17,57,57,0.02); }
     </style>
 </head>
 <body>
@@ -393,8 +465,21 @@
         </button>
 
         <div class="auth-divider">ARBA SU GOOGLE PASKYRA</div>
-        <button id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%;">
-            Prisijungti su Google
+        <button id="admin-login-google-btn" class="gsi-material-button" style="width: 100%;">
+          <div class="gsi-material-button-state"></div>
+          <div class="gsi-material-button-content-wrapper">
+            <div class="gsi-material-button-icon">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                <path fill="none" d="M0 0h48v48H0z"></path>
+              </svg>
+            </div>
+            <span class="gsi-material-button-contents">Prisijungti su Google (Sheets & Drive)</span>
+            <span style="display: none;">Prisijungti su Google</span>
+          </div>
         </button>
     </div>
 
@@ -473,6 +558,7 @@
             <button class="tab-btn" data-tab="email-diag" onclick="switchTab('email-diag')">✉️ El. Pašto Būsena</button>
             <button class="tab-btn" data-tab="vmi" id="tab-btn-vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
             <button class="tab-btn" data-tab="team" id="tab-btn-team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
+            <button class="tab-btn" data-tab="sheets" id="tab-btn-sheets" onclick="switchTab('sheets')">📗 Google Sheets <span id="badge-sheets" style="display:none; background:#2E7D32; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">✓</span></button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -489,6 +575,7 @@
                     <button type="button" class="filter-pill" data-filter="Confirmed">Patvirtinti (<span id="tfp-pill-count-conf">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Completed">Atlikti (<span id="tfp-pill-count-comp">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Cancelled">Atšaukti (<span id="tfp-pill-count-canc">0</span>)</button>
+                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('tfp')">📗 Į Google Sheets</button>
                 </div>
             </div>
             <div id="tfp-list">Kraunama...</div>
@@ -509,6 +596,7 @@
                     <button type="button" class="filter-pill" data-filter="Deposit Paid">Avansas (<span id="srv-pill-count-dep">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Completed">Atlikti (<span id="srv-pill-count-comp">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="receipt">Reikia kvito (<span id="srv-pill-count-rec">0</span>)</button>
+                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('services')">📗 Į Google Sheets</button>
                 </div>
             </div>
             <div id="services-list">Kraunama...</div>
@@ -526,6 +614,7 @@
                     <button type="button" class="filter-pill active" data-filter="all">Visos žinutės (<span id="contact-pill-count-all">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="New">Naujos (<span id="contact-pill-count-new">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Answered">Atsakytos (<span id="contact-pill-count-ans">0</span>)</button>
+                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('contacts')">📗 Į Google Sheets</button>
                 </div>
             </div>
             <div id="contacts-list">Kraunama...</div>
@@ -702,6 +791,9 @@
                     <button type="button" class="admin-btn-outline" id="export-vmi-csv-btn" style="padding: 10px 18px; font-size: 0.8rem;">
                         📥 Eksportuoti CSV
                     </button>
+                    <button type="button" class="admin-btn-outline" style="padding: 10px 18px; font-size: 0.8rem; border-color: #2E7D32; color: #2E7D32;" onclick="quickSyncToGoogleSheets('vmi')">
+                        📗 Į Google Sheets
+                    </button>
                 </div>
             </div>
 
@@ -823,6 +915,255 @@
             <!-- Team Members Grid -->
             <div id="team-members-list" class="team-grid">
                 <!-- Loaded via JS -->
+            </div>
+        </div>
+
+        <!-- 📗 Google Sheets Integracijos Tab -->
+        <div id="sheets-tab" class="tab-content">
+            <!-- Header Banner -->
+            <div class="request-card" style="margin-bottom: 25px; padding: 26px 28px; background: linear-gradient(135deg, #FAFBFB 0%, #F0F6F5 100%); border-left: 5px solid #2E7D32;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span style="background: #2E7D32; color: #ffffff; font-size: 0.72rem; padding: 4px 10px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📗 Google Sheets & Drive API</span>
+                            <span id="sheets-connection-badge" class="sheets-status-badge disconnected">⚪ Tikrinama prieiga</span>
+                        </div>
+                        <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 400;">
+                            Google Sheets Sinchronizavimas & Duomenų Eksportas
+                        </h2>
+                        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.75); margin: 0; line-height: 1.6; max-width: 780px;">
+                            Sinchronizuokite TFP užklausas, mokamas fotosesijas, klientų žinutes ir VMI individualios veiklos apskaitos duomenis tiesiai į savo asmeninę „Google Sheets“ skaičiuoklę vienu paspaudimu.
+                        </p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                        <button type="button" id="sheets-connect-google-btn" class="gsi-material-button">
+                          <div class="gsi-material-button-state"></div>
+                          <div class="gsi-material-button-content-wrapper">
+                            <div class="gsi-material-button-icon">
+                              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
+                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                                <path fill="none" d="M0 0h48v48H0z"></path>
+                              </svg>
+                            </div>
+                            <span class="gsi-material-button-contents" id="sheets-auth-btn-text">Prijungti Google Paskyrą</span>
+                          </div>
+                        </button>
+                        <span id="sheets-user-email-text" style="font-size: 0.8rem; color: #666;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Spreadsheet Card -->
+            <div class="request-card" style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(17,57,57,0.08); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <span class="field-label" style="margin-bottom: 4px;">Aktyvi Google Sheets Lentelė</span>
+                        <h3 id="active-sheet-title" style="margin: 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.3rem;">
+                            DP.PORTFOLIO Užsakymai & Finansai
+                        </h3>
+                        <div id="active-sheet-id-sub" style="font-size: 0.8rem; color: #888; font-family: monospace; margin-top: 4px;"></div>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <a id="open-sheet-external-link" href="#" target="_blank" class="admin-btn" style="padding: 10px 18px; font-size: 0.8rem; text-decoration: none; display: none;">
+                            ↗️ Atverti Google Sheets
+                        </a>
+                        <button type="button" id="sheets-test-connection-btn" class="admin-btn-outline" style="padding: 10px 16px; font-size: 0.8rem;">
+                            🔄 Tikrinti ryšį
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <!-- Create New Spreadsheet -->
+                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span style="font-size: 1.2rem;">➕</span>
+                            <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Sukurti Naują Lentelę</strong>
+                        </div>
+                        <p style="font-size: 0.88rem; color: #666; margin: 0 0 14px 0; line-height: 1.5;">
+                            Automatiškai sukurs naują Google Spreadsheet jūsų Google Drive diske su paruoštais lapais (TFP, Paslaugos, Kontaktai, VMI) ir firminiu dizainu.
+                        </p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="new-sheet-title-input" class="admin-select" value="DP.PORTFOLIO Užsakymai & Finansai" style="margin-top: 0; font-size: 0.9rem;">
+                            <button type="button" id="btn-create-new-spreadsheet" class="admin-btn" style="white-space: nowrap; padding: 10px 18px; font-size: 0.8rem;">
+                                Sukurti
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Link Existing from Drive or ID -->
+                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span style="font-size: 1.2rem;">📂</span>
+                            <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Pasirinkti iš Google Drive arba ID</strong>
+                        </div>
+                        <p style="font-size: 0.88rem; color: #666; margin: 0 0 14px 0; line-height: 1.5;">
+                            Pasirinkite iš savo Google Drive diske esančių lentelių arba įklijuokite bet kurios skaičiuoklės ID ar URL nuorodą.
+                        </p>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <select id="drive-sheets-dropdown" class="admin-select" style="margin-top: 0; font-size: 0.9rem;">
+                                <option value="">-- Kraunamos lentelės iš Google Drive... --</option>
+                            </select>
+                            <button type="button" id="btn-refresh-drive-sheets" class="admin-btn-outline" style="white-space: nowrap; padding: 9px 14px; font-size: 0.8rem;" title="Atnaujinti Drive sąrašą">
+                                🔄
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="manual-sheet-id-input" class="admin-select" placeholder="Arba įklijuokite Spreadsheet ID / URL" style="margin-top: 0; font-size: 0.9rem;">
+                            <button type="button" id="btn-save-manual-sheet" class="admin-btn" style="white-space: nowrap; padding: 10px 18px; font-size: 0.8rem;">
+                                Susieti
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Sync Actions Grid -->
+            <div style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 4px 0; font-size: 1.2rem;">
+                            Sinchronizavimo Veiksmai
+                        </h3>
+                        <span id="last-sync-timestamp" style="font-size: 0.85rem; color: #666;">Paskutinis sinchronizavimas: dar neatliktas</span>
+                    </div>
+                    <button type="button" id="sync-all-to-sheets-btn" class="sheets-sync-btn" style="background: #2E7D32; font-size: 0.9rem; padding: 12px 24px;">
+                        ⚡ Sinchronizuoti Visus Lapus (TFP + Paslaugos + Kontaktai + VMI)
+                    </button>
+                </div>
+
+                <div class="sheets-grid">
+                    <!-- TFP Card -->
+                    <div class="sheets-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">📸 TFP Užklausos</strong>
+                                <span class="lang-pill" id="sheets-tfp-count">0 įrašų</span>
+                            </div>
+                            <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
+                                Lapas: <code>TFP Užklausos</code><br>
+                                Eksportuoja modelio vardą, el. paštą, Instagram, fotosesijos idėją, datą ir būseną.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 15px;">
+                            <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('tfp')">
+                                🔄 Sinchronizuoti TFP
+                            </button>
+                            <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('TFP Užklausos')" title="Peržiūrėti lapą">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Services Card -->
+                    <div class="sheets-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">💼 Mokamos Paslaugos</strong>
+                                <span class="lang-pill" id="sheets-services-count">0 užsakymų</span>
+                            </div>
+                            <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
+                                Lapas: <code>Mokamos Paslaugos</code><br>
+                                Eksportuoja pilną finansų informaciją, kainas, avansus, likučius, kvitus ir Wfolio galerijų nuorodas.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 15px;">
+                            <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('services')">
+                                🔄 Sinchronizuoti Paslaugas
+                            </button>
+                            <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('Mokamos Paslaugos')" title="Peržiūrėti lapą">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contacts Card -->
+                    <div class="sheets-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">✉️ Kontaktų Žinutės</strong>
+                                <span class="lang-pill" id="sheets-contacts-count">0 žinučių</span>
+                            </div>
+                            <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
+                                Lapas: <code>Kontaktai & Žinutės</code><br>
+                                Eksportuoja gautas žinutes iš svetainės kontaktų formos su siuntėjo duomenimis ir tema.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 15px;">
+                            <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('contacts')">
+                                🔄 Sinchronizuoti Žinutes
+                            </button>
+                            <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('Kontaktai & Žinutės')" title="Peržiūrėti lapą">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- VMI Card -->
+                    <div class="sheets-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">📊 VMI Pajamų Žurnalas</strong>
+                                <span class="lang-pill" id="sheets-vmi-count">0 įrašų</span>
+                            </div>
+                            <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
+                                Lapas: <code>VMI Pajamos</code><br>
+                                Eksportuoja individualios veiklos (EVRK 74.20) pajamų žurnalą su kvitų numeriais ir apyvarta.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 15px;">
+                            <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('vmi')">
+                                🔄 Sinchronizuoti VMI
+                            </button>
+                            <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('VMI Pajamos')" title="Peržiūrėti lapą">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Sheet Data Preview Inspector -->
+            <div class="request-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 4px 0; font-size: 1.15rem;">
+                            Gyva Google Sheets Duomenų Peržiūra
+                        </h3>
+                        <p style="font-size: 0.85rem; color: #666; margin: 0;">
+                            Tiesiogiai nuskaitomi įrašai iš aktyvios Google Sheets lentelės
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <select id="preview-tab-selector" class="admin-select" style="min-width: 200px; margin-top: 0; padding: 9px 12px; font-size: 0.88rem;">
+                            <option value="TFP Užklausos">Lapas: TFP Užklausos</option>
+                            <option value="Mokamos Paslaugos" selected>Lapas: Mokamos Paslaugos</option>
+                            <option value="Kontaktai & Žinutės">Lapas: Kontaktai & Žinutės</option>
+                            <option value="VMI Pajamos">Lapas: VMI Pajamos</option>
+                        </select>
+                        <button type="button" id="btn-fetch-sheet-preview" class="admin-btn-outline" style="padding: 9px 16px; font-size: 0.82rem;">
+                            🔄 Gauti duomenis
+                        </button>
+                    </div>
+                </div>
+
+                <div id="sheet-preview-status" style="font-size: 0.85rem; color: #666; margin-bottom: 12px; font-style: italic;">
+                    Pasirinkite lapą ir paspauskite „Gauti duomenis“ peržiūrai.
+                </div>
+
+                <div class="sheets-table-wrap">
+                    <table class="sheets-table" id="live-sheets-preview-table">
+                        <thead>
+                            <tr id="preview-table-header"><th>Pasirinkite lapą peržiūrai</th></tr>
+                        </thead>
+                        <tbody id="preview-table-body">
+                            <tr><td style="text-align: center; padding: 25px; color: #888;">Duomenys bus atvaizduoti paspaudus „Gauti duomenis“</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -975,9 +1316,26 @@
         import { db, auth, storage, googleProvider } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
+        import {
+            authenticateGoogleSheets,
+            getCachedToken,
+            setCachedToken,
+            clearCachedToken,
+            listGoogleSpreadsheets,
+            createPortfolioSpreadsheet,
+            getSpreadsheetDetails,
+            ensureRequiredSheets,
+            syncAllDatasetsToSheet,
+            syncTab,
+            formatTfpData,
+            formatServicesData,
+            formatContactsData,
+            formatVmiData,
+            getSheetValues
+        } from './google-sheets-service.js';
 
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
 
@@ -1096,6 +1454,7 @@
             loadMailDiagnostics();
             loadVmiSummary();
             loadTeamMembers();
+            loadSheetsSettings();
         }
 
         function handleLogout() {
@@ -1104,6 +1463,8 @@
                 sessionStorage.removeItem('dp_admin_session');
             } catch(e) {}
             currentAdminSession = null;
+            clearCachedToken();
+            updateSheetsAuthStatus(null);
             signOut(auth);
             authSection.style.display = 'block';
             dashboardSection.style.display = 'none';
@@ -1234,7 +1595,12 @@
         // Google login
         document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
             try {
-                await signInWithPopup(auth, googleProvider);
+                const result = await signInWithPopup(auth, googleProvider);
+                const cred = GoogleAuthProvider.credentialFromResult(result);
+                if (cred?.accessToken) {
+                    setCachedToken(cred.accessToken);
+                    updateSheetsAuthStatus(result.user);
+                }
             } catch (error) {
                 console.warn("Google login popup error:", error);
                 // Graceful fallback for iframe restrictions
@@ -1255,6 +1621,7 @@
             if (btn) { btn.disabled = false; btn.innerText = 'Prisijungti'; }
 
             if (user) {
+                updateSheetsAuthStatus(user);
                 const userEmail = (user.email || "").toLowerCase();
                 const isOwner = (userEmail === ADMIN_EMAIL.toLowerCase() || userEmail === "dominik.suskevic@gmail.com");
 
@@ -1297,6 +1664,9 @@
                         console.error("Team check error:", err);
                     }
                 }
+            } else {
+                clearCachedToken();
+                updateSheetsAuthStatus(null);
             }
         });
 
@@ -1312,6 +1682,7 @@
 
             if (tab === 'vmi') loadVmiSummary();
             if (tab === 'team') loadTeamMembers();
+            if (tab === 'sheets') initGoogleSheetsTab();
         };
 
         // Unified Dashboard Stats calculation
@@ -1359,6 +1730,7 @@
                 badgeContacts.innerText = contactsNew;
                 badgeContacts.style.display = contactsNew > 0 ? 'inline-block' : 'none';
             }
+            updateSheetsDataCounts();
         }
 
         function formatLinks(text) {
@@ -3160,6 +3532,464 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
                 btn.disabled = false;
                 btn.innerText = 'Išsaugoti ir Siųsti Slaptažodžio Nuorodą';
             }
+        });
+
+        // ==============================================================================
+        // 📗 GOOGLE SHEETS & DRIVE API INTEGRACIJA
+        // ==============================================================================
+        let activeSpreadsheetId = localStorage.getItem('dp_active_spreadsheet_id') || '';
+        let activeSpreadsheetTitle = localStorage.getItem('dp_active_spreadsheet_title') || 'DP.PORTFOLIO Užsakymai & Finansai';
+
+        function updateSheetsAuthStatus(user = auth.currentUser) {
+            const token = getCachedToken();
+            const badge = document.getElementById('sheets-connection-badge');
+            const btnText = document.getElementById('sheets-auth-btn-text');
+            const emailText = document.getElementById('sheets-user-email-text');
+            const tabBadge = document.getElementById('badge-sheets');
+
+            if (token) {
+                if (badge) {
+                    badge.className = 'sheets-status-badge connected';
+                    badge.innerHTML = '● Google Paskyra Prijungta';
+                }
+                if (btnText) btnText.innerText = 'Atnaujinti Google Prieigą';
+                if (emailText) emailText.innerText = `Prijungta: ${user?.email || ADMIN_EMAIL}`;
+                if (tabBadge) tabBadge.style.display = 'inline-block';
+            } else {
+                if (badge) {
+                    badge.className = 'sheets-status-badge disconnected';
+                    badge.innerHTML = '⚪ Google Prieiga Neprijungta';
+                }
+                if (btnText) btnText.innerText = 'Prijungti Google Paskyrą';
+                if (emailText) emailText.innerText = 'Reikalingas prisijungimas su Google Sheets teisėmis';
+                if (tabBadge) tabBadge.style.display = 'none';
+            }
+        }
+
+        async function loadSheetsSettings() {
+            // Check Firestore for shared team spreadsheet settings
+            try {
+                const settingsDoc = await getDoc(doc(db, "admin_settings", "google_sheets"));
+                if (settingsDoc.exists()) {
+                    const data = settingsDoc.data();
+                    if (data.spreadsheetId) {
+                        activeSpreadsheetId = data.spreadsheetId;
+                        activeSpreadsheetTitle = data.title || activeSpreadsheetTitle;
+                        localStorage.setItem('dp_active_spreadsheet_id', activeSpreadsheetId);
+                        localStorage.setItem('dp_active_spreadsheet_title', activeSpreadsheetTitle);
+                    }
+                    if (data.lastSync) {
+                        const el = document.getElementById('last-sync-timestamp');
+                        if (el) el.innerText = `Paskutinis sinchronizavimas: ${data.lastSync}`;
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not load google_sheets settings from Firestore:", err);
+            }
+
+            renderActiveSpreadsheetInfo();
+            updateSheetsAuthStatus();
+        }
+
+        function renderActiveSpreadsheetInfo() {
+            const titleEl = document.getElementById('active-sheet-title');
+            const subEl = document.getElementById('active-sheet-id-sub');
+            const openLink = document.getElementById('open-sheet-external-link');
+            const manualInput = document.getElementById('manual-sheet-id-input');
+
+            if (activeSpreadsheetId) {
+                if (titleEl) titleEl.innerText = activeSpreadsheetTitle || 'DP.PORTFOLIO Užsakymai & Finansai';
+                if (subEl) subEl.innerHTML = `ID: <code>${activeSpreadsheetId}</code> &bull; <span style="color:#2E7D32;">✓ Susietas su valdymo skydu</span>`;
+                if (openLink) {
+                    openLink.href = `https://docs.google.com/spreadsheets/d/${activeSpreadsheetId}/edit`;
+                    openLink.style.display = 'inline-flex';
+                }
+                if (manualInput) manualInput.value = activeSpreadsheetId;
+            } else {
+                if (titleEl) titleEl.innerText = 'Lentelė dar nesukurta arba nesusieta';
+                if (subEl) subEl.innerHTML = '<span style="color:#E08700;">⚠️ Paspauskite „Sukurti Naują Lentelę“ arba pasirinkite iš Drive</span>';
+                if (openLink) openLink.style.display = 'none';
+            }
+
+            updateSheetsDataCounts();
+        }
+
+        function updateSheetsDataCounts() {
+            const tfpCount = (window._adminCache.tfp || []).length;
+            const srvCount = (window._adminCache.services || []).length;
+            const cntCount = (window._adminCache.contacts || []).length;
+            const vmiCount = (window._adminCache.services || []).filter(s => s.status === 'Deposit Paid' || s.status === 'Fully Paid' || s.status === 'Completed').length;
+
+            const elTfp = document.getElementById('sheets-tfp-count');
+            const elSrv = document.getElementById('sheets-services-count');
+            const elCnt = document.getElementById('sheets-contacts-count');
+            const elVmi = document.getElementById('sheets-vmi-count');
+
+            if (elTfp) elTfp.innerText = `${tfpCount} įrašų`;
+            if (elSrv) elSrv.innerText = `${srvCount} užsakymų`;
+            if (elCnt) elCnt.innerText = `${cntCount} žinučių`;
+            if (elVmi) elVmi.innerText = `${vmiCount} įrašų`;
+        }
+
+        // Ensure user is authenticated with Google and has valid in-memory token
+        async function ensureGoogleSheetsAuth() {
+            let token = getCachedToken();
+            if (token) return token;
+
+            // Prompt user to connect with Google
+            showToast("Jungiamasi prie Google...", 'success');
+            const authResult = await authenticateGoogleSheets(auth);
+            if (authResult?.accessToken) {
+                updateSheetsAuthStatus(authResult.user);
+                showToast("✓ Google paskyra sėkmingai prijungta!");
+                return authResult.accessToken;
+            }
+            throw new Error("Nepavyko gauti Google prieigos rakto.");
+        }
+
+        // Create new spreadsheet
+        async function handleCreateNewSpreadsheet() {
+            const btn = document.getElementById('btn-create-new-spreadsheet');
+            const titleInput = document.getElementById('new-sheet-title-input');
+            const title = (titleInput?.value || "DP.PORTFOLIO Užsakymai & Finansai").trim();
+
+            if (btn) { btn.disabled = true; btn.innerText = 'Kuriama...'; }
+
+            try {
+                const token = await ensureGoogleSheetsAuth();
+                const newSheet = await createPortfolioSpreadsheet(title, token);
+                
+                activeSpreadsheetId = newSheet.spreadsheetId;
+                activeSpreadsheetTitle = newSheet.properties?.title || title;
+
+                localStorage.setItem('dp_active_spreadsheet_id', activeSpreadsheetId);
+                localStorage.setItem('dp_active_spreadsheet_title', activeSpreadsheetTitle);
+
+                // Save to Firestore so other admins see it too
+                try {
+                    await setDoc(doc(db, "admin_settings", "google_sheets"), {
+                        spreadsheetId: activeSpreadsheetId,
+                        title: activeSpreadsheetTitle,
+                        url: `https://docs.google.com/spreadsheets/d/${activeSpreadsheetId}/edit`,
+                        createdAt: serverTimestamp(),
+                        createdBy: auth.currentUser?.email || ADMIN_EMAIL
+                    }, { merge: true });
+                } catch (e) {
+                    console.warn("Could not save to Firestore admin_settings:", e);
+                }
+
+                renderActiveSpreadsheetInfo();
+                showToast("✓ Nauja Google Sheets lentelė sėkmingai sukurta!");
+
+                // Offer immediate full sync
+                if (confirm(`Nauja Google lentelė „${activeSpreadsheetTitle}“ sukurta!\n\nAr norite iš karto sinchronizuoti visus dabartinius duomenis (TFP, Paslaugas, Žinutes, VMI) į šią lentelę?`)) {
+                    await executeSyncAllSheets();
+                }
+            } catch (err) {
+                console.error("Create spreadsheet error:", err);
+                alert("Klaida kuriant Google Sheets lentelę: " + (err.message || err));
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerText = 'Sukurti'; }
+            }
+        }
+
+        // Load existing spreadsheets from Google Drive
+        async function loadDriveSpreadsheetsList() {
+            const dropdown = document.getElementById('drive-sheets-dropdown');
+            const btn = document.getElementById('btn-refresh-drive-sheets');
+
+            if (btn) btn.disabled = true;
+            if (dropdown) dropdown.innerHTML = '<option value="">Kraunama iš Google Drive...</option>';
+
+            try {
+                const token = await ensureGoogleSheetsAuth();
+                const files = await listGoogleSpreadsheets(token);
+
+                if (dropdown) {
+                    if (files.length === 0) {
+                        dropdown.innerHTML = '<option value="">Google Drive diske lentelių nerasta</option>';
+                    } else {
+                        dropdown.innerHTML = '<option value="">-- Pasirinkite lentelę iš sąrašo --</option>';
+                        files.forEach(f => {
+                            const isSelected = f.id === activeSpreadsheetId ? 'selected' : '';
+                            dropdown.innerHTML += `<option value="${f.id}" ${isSelected}>${f.name} (${new Date(f.modifiedTime).toLocaleDateString('lt-LT')})</option>`;
+                        });
+                    }
+                }
+            } catch (err) {
+                console.warn("Load drive files error:", err);
+                if (dropdown) dropdown.innerHTML = '<option value="">Klaida kraunant: spustelėkite „Prijungti Google Paskyrą“</option>';
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        // Link existing spreadsheet
+        async function handleLinkSpreadsheet(rawInput) {
+            let id = (rawInput || '').trim();
+            if (!id) {
+                alert("Prašome įvesti Google Spreadsheet ID arba URL nuorodą.");
+                return;
+            }
+
+            // Extract ID if URL was provided
+            const match = id.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (match && match[1]) {
+                id = match[1];
+            }
+
+            try {
+                const token = await ensureGoogleSheetsAuth();
+                const details = await getSpreadsheetDetails(id, token);
+
+                activeSpreadsheetId = id;
+                activeSpreadsheetTitle = details.properties?.title || "Google Spreadsheet";
+
+                localStorage.setItem('dp_active_spreadsheet_id', activeSpreadsheetId);
+                localStorage.setItem('dp_active_spreadsheet_title', activeSpreadsheetTitle);
+
+                try {
+                    await setDoc(doc(db, "admin_settings", "google_sheets"), {
+                        spreadsheetId: activeSpreadsheetId,
+                        title: activeSpreadsheetTitle,
+                        url: `https://docs.google.com/spreadsheets/d/${activeSpreadsheetId}/edit`,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                } catch(e) {}
+
+                renderActiveSpreadsheetInfo();
+                showToast(`✓ Sėkmingai susieta: „${activeSpreadsheetTitle}“`);
+            } catch (err) {
+                console.error("Link sheet error:", err);
+                alert("Nepavyko pasiekti Google Sheets lentelės. Patikrinkite ID ir įsitikinkite, kad turite leidimą prie jos prisijungti: " + (err.message || err));
+            }
+        }
+
+        // Master Full Sync
+        async function executeSyncAllSheets() {
+            if (!activeSpreadsheetId) {
+                alert("Pirmiausia sukurkite naują Google Sheets lentelę arba susiekite esamą.");
+                return;
+            }
+
+            // Explicit user confirmation (MANDATORY per Workspace integration skill)
+            const confirmed = confirm(
+                `Ar tikrai norite atnaujinti Google Sheets lentelę „${activeSpreadsheetTitle}“?\n\nBus atnaujinti visi 4 lapai:\n- TFP Užklausos\n- Mokamos Paslaugos\n- Kontaktai & Žinutės\n- VMI Pajamos\n\nŠis veiksmas atnaujins lentelę naujausiais duomenimis iš duomenų bazės.`
+            );
+            if (!confirmed) return;
+
+            const syncBtn = document.getElementById('sync-all-to-sheets-btn');
+            if (syncBtn) { syncBtn.disabled = true; syncBtn.innerText = '⏳ Sinchronizuojama su Google Sheets...'; }
+
+            try {
+                const token = await ensureGoogleSheetsAuth();
+                await syncAllDatasetsToSheet(activeSpreadsheetId, {
+                    tfp: window._adminCache.tfp || [],
+                    services: window._adminCache.services || [],
+                    contacts: window._adminCache.contacts || []
+                }, token);
+
+                const nowStr = new Date().toLocaleString('lt-LT');
+                const lastSyncEl = document.getElementById('last-sync-timestamp');
+                if (lastSyncEl) lastSyncEl.innerText = `Paskutinis sinchronizavimas: ${nowStr}`;
+
+                try {
+                    await setDoc(doc(db, "admin_settings", "google_sheets"), {
+                        lastSync: nowStr,
+                        lastSyncBy: auth.currentUser?.email || ADMIN_EMAIL
+                    }, { merge: true });
+                } catch(e) {}
+
+                showToast("✓ Visi duomenys sėkmingai sinchronizuoti į Google Sheets!");
+                previewSheetTab("Mokamos Paslaugos");
+            } catch (err) {
+                console.error("Sync all error:", err);
+                alert("Klaida sinchronizuojant į Google Sheets: " + (err.message || err));
+            } finally {
+                if (syncBtn) { syncBtn.disabled = false; syncBtn.innerText = '⚡ Sinchronizuoti Visus Lapus (TFP + Paslaugos + Kontaktai + VMI)'; }
+            }
+        }
+
+        // Single Tab Sync with confirmation
+        window.syncSingleTabWithConfirm = async (type) => {
+            if (!activeSpreadsheetId) {
+                alert("Pirmiausia sukurkite arba pasirinkite Google Sheets lentelę „Google Sheets“ skiltyje.");
+                window.switchTab('sheets');
+                return;
+            }
+
+            const tabMap = {
+                tfp: { name: "TFP Užklausos", format: () => formatTfpData(window._adminCache.tfp || []) },
+                services: { name: "Mokamos Paslaugos", format: () => formatServicesData(window._adminCache.services || []) },
+                contacts: { name: "Kontaktai & Žinutės", format: () => formatContactsData(window._adminCache.contacts || []) },
+                vmi: { name: "VMI Pajamos", format: () => formatVmiData(window._adminCache.services || []) }
+            };
+
+            const config = tabMap[type];
+            if (!config) return;
+
+            // Explicit user confirmation (MANDATORY)
+            const confirmed = confirm(
+                `Ar tikrai norite sinchronizuoti lapą „${config.name}“ į Google Sheets lentelę „${activeSpreadsheetTitle}“?`
+            );
+            if (!confirmed) return;
+
+            try {
+                showToast(`⏳ Sinchronizuojama „${config.name}“...`);
+                const token = await ensureGoogleSheetsAuth();
+                await ensureRequiredSheets(activeSpreadsheetId, [config.name], token);
+                const values = config.format();
+                await syncTab(activeSpreadsheetId, config.name, values, token);
+
+                const nowStr = new Date().toLocaleString('lt-LT');
+                const lastSyncEl = document.getElementById('last-sync-timestamp');
+                if (lastSyncEl) lastSyncEl.innerText = `Paskutinis sinchronizavimas: ${nowStr} (${config.name})`;
+
+                showToast(`✓ Lapas „${config.name}“ sėkmingai atnaujintas Google Sheets!`);
+                previewSheetTab(config.name);
+            } catch (err) {
+                console.error("Single tab sync error:", err);
+                alert(`Klaida sinchronizuojant lapą „${config.name}“: ` + (err.message || err));
+            }
+        };
+
+        // Quick Sync wrapper for toolbars
+        window.quickSyncToGoogleSheets = async (type) => {
+            if (!activeSpreadsheetId) {
+                alert("Pirmiausia atidarykite „Google Sheets“ skiltį ir sukurkite arba pasirinkite lentelę.");
+                window.switchTab('sheets');
+                return;
+            }
+            await window.syncSingleTabWithConfirm(type);
+        };
+
+        // Live Preview of Google Sheets Tab
+        window.previewSheetTab = async (tabName) => {
+            const selector = document.getElementById('preview-tab-selector');
+            if (selector) selector.value = tabName;
+            await loadSheetPreview(tabName);
+        };
+
+        async function loadSheetPreview(tabName = null) {
+            if (!tabName) {
+                const selector = document.getElementById('preview-tab-selector');
+                tabName = selector?.value || "Mokamos Paslaugos";
+            }
+
+            if (!activeSpreadsheetId) {
+                alert("Nėra pasirinktos Google Sheets lentelės.");
+                return;
+            }
+
+            const headerRow = document.getElementById('preview-table-header');
+            const tbody = document.getElementById('preview-table-body');
+            const statusEl = document.getElementById('sheet-preview-status');
+            const btn = document.getElementById('btn-fetch-sheet-preview');
+
+            if (btn) btn.disabled = true;
+            if (statusEl) statusEl.innerText = `Kraunama „${tabName}“ iš Google Sheets...`;
+
+            try {
+                const token = await ensureGoogleSheetsAuth();
+                const res = await getSheetValues(activeSpreadsheetId, `${tabName}!A1:Z100`, token);
+                const rows = res.values || [];
+
+                if (rows.length === 0) {
+                    if (headerRow) headerRow.innerHTML = `<th>${tabName} (tuščias lapas)</th>`;
+                    if (tbody) tbody.innerHTML = `<tr><td style="text-align: center; padding: 25px; color: #888;">Šiame lape duomenų dar nėra. Paspauskite „Sinchronizuoti“ aukščiau.</td></tr>`;
+                    if (statusEl) statusEl.innerText = `Lapas „${tabName}“ tuščias.`;
+                    return;
+                }
+
+                // Render headers
+                const headers = rows[0] || [];
+                if (headerRow) {
+                    headerRow.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
+                }
+
+                // Render rows
+                if (tbody) {
+                    if (rows.length <= 1) {
+                        tbody.innerHTML = `<tr><td colspan="${headers.length}" style="text-align: center; padding: 20px; color: #888;">Įrašų po antrašte nėra.</td></tr>`;
+                    } else {
+                        const dataRows = rows.slice(1);
+                        tbody.innerHTML = dataRows.map(row => {
+                            const cells = headers.map((_, colIdx) => `<td>${row[colIdx] !== undefined ? row[colIdx] : ''}</td>`).join('');
+                            return `<tr>${cells}</tr>`;
+                        }).join('');
+                    }
+                }
+
+                if (statusEl) {
+                    statusEl.innerText = `✓ Sėkmingai nuskaityti ${rows.length - 1} įrašai iš lapo „${tabName}“ (Google Sheets).`;
+                }
+            } catch (err) {
+                console.error("Preview fetch error:", err);
+                if (statusEl) statusEl.innerText = `✕ Klaida nuskaitant lapą: ${err.message || err}`;
+                if (tbody) tbody.innerHTML = `<tr><td style="color: red; padding: 20px;">Nepavyko nuskaityti lapo „${tabName}“: ${err.message || err}</td></tr>`;
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        // Initialize Google Sheets Tab UI listeners
+        window.initGoogleSheetsTab = () => {
+            renderActiveSpreadsheetInfo();
+            updateSheetsAuthStatus();
+            if (getCachedToken()) {
+                loadDriveSpreadsheetsList();
+            }
+        };
+
+        // Bind Google Sheets UI Buttons
+        document.getElementById('sheets-connect-google-btn')?.addEventListener('click', async () => {
+            try {
+                await ensureGoogleSheetsAuth();
+                loadDriveSpreadsheetsList();
+            } catch (e) {
+                console.warn("Sheets connect:", e);
+            }
+        });
+
+        document.getElementById('btn-create-new-spreadsheet')?.addEventListener('click', handleCreateNewSpreadsheet);
+
+        document.getElementById('drive-sheets-dropdown')?.addEventListener('change', (e) => {
+            if (e.target.value) {
+                handleLinkSpreadsheet(e.target.value);
+            }
+        });
+
+        document.getElementById('btn-refresh-drive-sheets')?.addEventListener('click', loadDriveSpreadsheetsList);
+
+        document.getElementById('btn-save-manual-sheet')?.addEventListener('click', () => {
+            const input = document.getElementById('manual-sheet-id-input');
+            if (input) handleLinkSpreadsheet(input.value);
+        });
+
+        document.getElementById('sync-all-to-sheets-btn')?.addEventListener('click', executeSyncAllSheets);
+
+        document.getElementById('sheets-test-connection-btn')?.addEventListener('click', async () => {
+            if (!activeSpreadsheetId) {
+                alert("Nėra pasirinktos Google Sheets lentelės.");
+                return;
+            }
+            try {
+                showToast("Tikrinamas ryšys su Google Sheets...");
+                const token = await ensureGoogleSheetsAuth();
+                const details = await getSpreadsheetDetails(activeSpreadsheetId, token);
+                alert(`✓ Ryšys puikus!\n\nLentelė: „${details.properties?.title}“\nLapai: ${(details.sheets || []).map(s => s.properties?.title).join(', ')}`);
+                showToast("✓ Ryšys su Google Sheets sėkmingai patikrintas!");
+            } catch (e) {
+                alert("Klaida tikrinant ryšį: " + (e.message || e));
+            }
+        });
+
+        document.getElementById('preview-tab-selector')?.addEventListener('change', (e) => {
+            loadSheetPreview(e.target.value);
+        });
+
+        document.getElementById('btn-fetch-sheet-preview')?.addEventListener('click', () => {
+            loadSheetPreview();
         });
     </script>
 </body>

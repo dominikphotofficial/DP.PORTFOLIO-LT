@@ -20,3 +20,15 @@ export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
+// Workspace scopes requested by user for Google Sheets & Drive
+export const WORKSPACE_SCOPES = [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.file',
+    'https://www.googleapis.com/auth/drive.readonly',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/spreadsheets.readonly'
+];
+
+WORKSPACE_SCOPES.forEach(scope => {
+    googleProvider.addScope(scope);
+});
