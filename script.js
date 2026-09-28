@@ -218,6 +218,124 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(el);
     });
 
+    // =========================================================================
+    // Interactive Gallery Category Filter Bar (Automotive, Nature, Heritage, Flora)
+    // =========================================================================
+    const filterButtons = document.querySelectorAll(".gallery-filter-btn");
+    const albumCards = document.querySelectorAll(".album-grid-columns .album-card");
+    const filterStatus = document.getElementById("gallery-filter-status");
+
+    if (filterButtons.length > 0 && albumCards.length > 0) {
+        // Dynamic category count calculation
+        const counts = {
+            all: albumCards.length,
+            automotive: 0,
+            nature: 0,
+            heritage: 0,
+            flora: 0
+        };
+
+        albumCards.forEach(card => {
+            const cat = (card.getAttribute("data-category") || "").toLowerCase().trim();
+            if (counts[cat] !== undefined) {
+                counts[cat]++;
+            }
+        });
+
+        // Update badge counts in filter buttons
+        Object.keys(counts).forEach(key => {
+            const countEl = document.getElementById(`count-${key}`);
+            if (countEl) {
+                countEl.textContent = counts[key];
+            }
+        });
+
+        const categoryLabels = {
+            all: "Visi darbai",
+            automotive: "Automotive",
+            nature: "Nature",
+            heritage: "Heritage",
+            flora: "Flora"
+        };
+
+        const updateFilterStatus = (activeFilter, visibleCount) => {
+            if (!filterStatus) return;
+            if (activeFilter === "all") {
+                filterStatus.innerHTML = `Rodomi visi ${visibleCount} galerijos albumai`;
+            } else {
+                const label = categoryLabels[activeFilter] || activeFilter;
+                filterStatus.innerHTML = `Kategorija: <strong>${label}</strong> &bull; Rodomi ${visibleCount} albumai`;
+            }
+        };
+
+        const applyFilter = (filterName) => {
+            let visibleCount = 0;
+
+            albumCards.forEach(card => {
+                const cardCat = (card.getAttribute("data-category") || "").toLowerCase().trim();
+                const matches = (filterName === "all" || cardCat === filterName);
+
+                if (matches) {
+                    card.classList.remove("filter-hidden");
+                    card.classList.remove("filter-animating-in");
+                    // Force reflow to replay entry animation
+                    void card.offsetWidth;
+                    card.classList.add("filter-animating-in");
+                    card.classList.add("visible");
+                    visibleCount++;
+                } else {
+                    card.classList.add("filter-hidden");
+                    card.classList.remove("filter-animating-in");
+                }
+            });
+
+            // Update button active state & aria attributes
+            filterButtons.forEach(btn => {
+                const btnFilter = btn.getAttribute("data-filter");
+                const isActive = (btnFilter === filterName);
+                btn.classList.toggle("active", isActive);
+                btn.setAttribute("aria-selected", isActive ? "true" : "false");
+            });
+
+            updateFilterStatus(filterName, visibleCount);
+        };
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const filter = btn.getAttribute("data-filter");
+                const isCurrentlyActive = btn.classList.contains("active");
+
+                // Toggle logic: If user clicks the active category button again, toggle back to 'all'
+                if (isCurrentlyActive && filter !== "all") {
+                    applyFilter("all");
+                } else {
+                    applyFilter(filter);
+                }
+            });
+
+            // Keyboard navigation support
+            btn.addEventListener("keydown", (e) => {
+                const buttons = Array.from(filterButtons);
+                const currentIndex = buttons.indexOf(btn);
+
+                if (e.key === "ArrowRight") {
+                    e.preventDefault();
+                    const nextBtn = buttons[(currentIndex + 1) % buttons.length];
+                    nextBtn.focus();
+                    nextBtn.click();
+                } else if (e.key === "ArrowLeft") {
+                    e.preventDefault();
+                    const prevBtn = buttons[(currentIndex - 1 + buttons.length) % buttons.length];
+                    prevBtn.focus();
+                    prevBtn.click();
+                }
+            });
+        });
+
+        // Initial status update
+        updateFilterStatus("all", albumCards.length);
+    }
+
     const tfpForm = document.getElementById('tfp-booking-form');
     if(tfpForm) {
         tfpForm.addEventListener('submit', function(e) {
