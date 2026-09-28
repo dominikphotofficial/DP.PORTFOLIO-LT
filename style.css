@@ -667,37 +667,107 @@ header.scrolled {
     color: #FFFFFF;
 }
 
-/* Dedicated styling for special themed albums */
+/* Dedicated styling for atmospheric themed albums */
 .album-card-zeimenos {
-    border: 1px solid rgba(30, 58, 109, 0.3);
+    border: 1px solid rgba(30, 58, 109, 0.35);
+    background-color: #0b1424;
 }
 .album-card-zeimenos:hover {
-    border-color: #2F5AA3;
-    box-shadow: 0 22px 50px rgba(30, 58, 109, 0.25);
+    border-color: #3b6bc2;
+    box-shadow: 0 22px 50px rgba(30, 58, 109, 0.3);
 }
 .album-card-zeimenos .album-overlay {
-    background: linear-gradient(145deg, rgba(23, 44, 82, 0.95) 0%, rgba(12, 24, 46, 0.98) 100%);
+    background: linear-gradient(145deg, rgba(23, 44, 82, 0.96) 0%, rgba(12, 22, 42, 0.98) 100%);
 }
 .album-card-zeimenos .album-tag {
-    background: rgba(71, 96, 59, 0.25);
-    border-color: rgba(162, 191, 189, 0.45);
+    background: rgba(71, 96, 59, 0.3);
+    border-color: rgba(162, 191, 189, 0.5);
     color: #DDE8D7;
 }
 
 .album-card-automotive {
-    border: 1px solid rgba(197, 168, 128, 0.35);
+    border: 1px solid rgba(229, 168, 35, 0.3);
+    background-color: #0e1114;
 }
 .album-card-automotive:hover {
+    border-color: #F5C869;
+    box-shadow: 0 22px 50px rgba(229, 168, 35, 0.22), 0 10px 25px rgba(0,0,0,0.5);
+}
+.album-card-automotive .album-overlay {
+    background: linear-gradient(145deg, rgba(20, 24, 28, 0.96) 0%, rgba(10, 12, 16, 0.98) 100%);
+}
+.album-card-automotive .album-tag {
+    background: rgba(229, 168, 35, 0.18);
+    border-color: rgba(229, 168, 35, 0.5);
+    color: #F5C869;
+}
+
+.album-card-heritage {
+    border: 1px solid rgba(197, 168, 128, 0.3);
+    background-color: #17130f;
+}
+.album-card-heritage:hover {
     border-color: #C5A880;
     box-shadow: 0 22px 50px rgba(197, 168, 128, 0.22);
 }
-.album-card-automotive .album-overlay {
-    background: linear-gradient(145deg, rgba(24, 28, 32, 0.96) 0%, rgba(10, 15, 18, 0.98) 100%);
+.album-card-heritage .album-overlay {
+    background: linear-gradient(145deg, rgba(32, 25, 20, 0.96) 0%, rgba(16, 12, 9, 0.98) 100%);
 }
-.album-card-automotive .album-tag {
-    background: rgba(197, 168, 128, 0.2);
-    border-color: rgba(197, 168, 128, 0.5);
-    color: #EADBC8;
+.album-card-heritage .album-tag {
+    background: rgba(197, 168, 128, 0.18);
+    border-color: rgba(197, 168, 128, 0.45);
+    color: #EBD9C6;
+}
+
+.album-card-nature {
+    border: 1px solid rgba(42, 92, 92, 0.3);
+    background-color: #091717;
+}
+.album-card-nature:hover {
+    border-color: #429898;
+    box-shadow: 0 22px 50px rgba(17, 57, 57, 0.28);
+}
+.album-card-nature .album-overlay {
+    background: linear-gradient(145deg, rgba(14, 38, 38, 0.96) 0%, rgba(7, 22, 22, 0.98) 100%);
+}
+.album-card-nature .album-tag {
+    background: rgba(42, 92, 92, 0.22);
+    border-color: rgba(162, 191, 189, 0.45);
+    color: #C6E0DE;
+}
+
+.album-card-flora {
+    border: 1px solid rgba(184, 107, 119, 0.3);
+    background-color: #170d13;
+}
+.album-card-flora:hover {
+    border-color: #d88190;
+    box-shadow: 0 22px 50px rgba(184, 107, 119, 0.22);
+}
+.album-card-flora .album-overlay {
+    background: linear-gradient(145deg, rgba(36, 17, 26, 0.96) 0%, rgba(18, 8, 13, 0.98) 100%);
+}
+.album-card-flora .album-tag {
+    background: rgba(184, 107, 119, 0.2);
+    border-color: rgba(184, 107, 119, 0.5);
+    color: #F7D8DF;
+}
+
+.album-card-cosmic {
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    background-color: #080a1c;
+}
+.album-card-cosmic:hover {
+    border-color: #818cf8;
+    box-shadow: 0 22px 50px rgba(99, 102, 241, 0.28);
+}
+.album-card-cosmic .album-overlay {
+    background: linear-gradient(145deg, rgba(14, 18, 48, 0.96) 0%, rgba(6, 8, 24, 0.98) 100%);
+}
+.album-card-cosmic .album-tag {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #C7D2FE;
 }
 
 /* Dedicated Zeimenos Žirgai Feature Board */
@@ -1128,237 +1198,306 @@ header.scrolled {
 }
 
 /* ==============================================================================
-   Premium Editorial Footer / Foyer
+   Minimalist Luxury Footer (Švarus ir neperkrautas)
    ============================================================================== */
-.footer-premium {
-    background-color: #0c2323;
+.footer-minimal, .footer-premium {
+    background-color: #081414;
     color: #FBF9F6;
-    border-top: 1px solid rgba(197, 168, 128, 0.22);
-    padding: 85px 0 35px 0;
-    margin-top: 100px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 20px 28px 20px;
+    margin-top: 80px;
+    text-align: center;
     font-family: var(--font-body);
 }
 
-.footer-container {
-    max-width: 1400px;
+.footer-min-container {
+    max-width: 860px;
     margin: 0 auto;
-    padding: 0 clamp(20px, 4vw, 50px);
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1.15fr 1.25fr;
-    gap: clamp(30px, 4vw, 60px);
-    margin-bottom: 60px;
-}
-
-.footer-col {
     display: flex;
     flex-direction: column;
-}
-
-.footer-brand-logo {
-    display: flex;
     align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    margin-bottom: 20px;
+    gap: 16px;
 }
 
-.footer-brand-logo img {
-    width: 46px;
-    height: 46px;
+.footer-min-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.footer-min-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.footer-min-logo img {
+    width: 32px;
+    height: 32px;
     object-fit: contain;
 }
 
-.footer-brand-title {
+.footer-min-logo span {
     font-family: var(--font-heading);
-    font-size: 1.1rem;
-    letter-spacing: 3px;
+    font-size: 1.05rem;
+    letter-spacing: 3.5px;
     text-transform: uppercase;
-    color: #FFFFFF;
     font-weight: 400;
 }
 
-.footer-brand-sub {
-    font-size: 0.72rem;
+.footer-min-tagline {
+    font-size: 0.76rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #D4C3B3;
-    font-weight: 300;
-    margin-top: 2px;
-}
-
-.footer-about-text {
-    font-size: 0.95rem;
-    line-height: 1.75;
-    color: rgba(251, 249, 246, 0.8);
-    font-weight: 300;
-    margin: 0 0 20px 0;
-}
-
-.footer-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(46, 125, 50, 0.16);
-    border: 1px solid rgba(46, 125, 50, 0.35);
-    color: #A5D6A7;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.72rem;
-    font-family: var(--font-heading);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    width: fit-content;
-}
-
-.footer-status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #66BB6A;
-    box-shadow: 0 0 8px #66BB6A;
-}
-
-.footer-heading {
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #D4C3B3;
-    margin: 0 0 24px 0;
-    font-weight: 600;
-    position: relative;
-    padding-bottom: 12px;
-}
-
-.footer-heading::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 32px;
-    height: 1px;
-    background: #C5A880;
-}
-
-.footer-links-list {
-    list-style: none;
-    padding: 0;
+    color: rgba(212, 195, 179, 0.7);
     margin: 0;
+    font-family: var(--font-heading);
+}
+
+.footer-min-nav {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: clamp(14px, 3vw, 24px);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 4px 0;
 }
 
-.footer-links-list li a {
-    color: rgba(251, 249, 246, 0.78);
+.footer-min-nav a {
+    color: rgba(251, 249, 246, 0.7);
     text-decoration: none;
-    font-size: 0.92rem;
-    font-family: var(--font-body);
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.footer-links-list li a:hover {
-    color: #FFFFFF;
-    transform: translateX(4px);
-}
-
-.footer-contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 16px;
-    color: rgba(251, 249, 246, 0.82);
-    font-size: 0.92rem;
-    line-height: 1.5;
-}
-
-.footer-contact-item svg {
-    flex-shrink: 0;
-    margin-top: 3px;
-    stroke: #D4C3B3;
-}
-
-.footer-contact-item a {
-    color: rgba(251, 249, 246, 0.85);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-contact-item a:hover {
-    color: #FFFFFF;
-    text-decoration: underline;
-}
-
-.footer-cta-btn {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 12px 24px;
-    background: #D4C3B3;
-    color: #113939;
     font-family: var(--font-heading);
     font-size: 0.78rem;
     letter-spacing: 2px;
     text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 2px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-align: center;
+    transition: color 0.3s ease;
 }
 
-.footer-cta-btn:hover {
-    background: #FFFFFF;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+.footer-min-nav a:hover {
+    color: #D4C3B3;
 }
 
-.footer-bottom {
-    border-top: 1px solid rgba(251, 249, 246, 0.1);
-    padding-top: 28px;
+.footer-min-contact-row {
     display: flex;
-    justify-content: space-between;
+    gap: 14px;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
-}
-
-.footer-bottom-copy {
-    font-family: var(--font-heading);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(251, 249, 246, 0.55);
-}
-
-.footer-lang-list {
-    display: flex;
-    gap: 16px;
-    font-family: var(--font-heading);
     font-size: 0.8rem;
-    letter-spacing: 2px;
+    color: rgba(251, 249, 246, 0.5);
+    font-family: var(--font-body);
 }
 
-.footer-lang-list a {
-    color: rgba(251, 249, 246, 0.5);
+.footer-min-contact-row a {
+    color: rgba(251, 249, 246, 0.75);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.footer-lang-list a:hover {
+.footer-min-contact-row a:hover {
+    color: #FFFFFF;
+}
+
+.footer-min-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.footer-min-copy {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(251, 249, 246, 0.4);
+}
+
+.footer-min-langs {
+    display: flex;
+    gap: 12px;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+}
+
+.footer-min-langs a {
+    color: rgba(251, 249, 246, 0.4);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-min-langs a:hover {
     color: #D4C3B3;
 }
 
-.footer-lang-list a.active {
+.footer-min-langs a.active {
     color: #FFFFFF;
-    font-weight: 600;
     border-bottom: 1px solid #D4C3B3;
     pointer-events: none;
+}
+
+/* ==============================================================================
+   Atmospheric Album Themes (Special Atmosphere for each photoshoot category)
+   ============================================================================== */
+/* 1. Automotive Night & Street Culture Atmosphere */
+body.theme-automotive {
+    background-color: #090B0E !important;
+    color: #E2E8F0;
+}
+body.theme-automotive #main-header {
+    background: rgba(9, 11, 14, 0.95);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+}
+.automotive-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #F59E0B;
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-family: var(--font-heading);
+    font-size: 0.74rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+.automotive-meta-chips {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+.automotive-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #CBD5E1;
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-family: var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+body.theme-automotive .gallery-item {
+    border: 1px solid rgba(245, 158, 11, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+body.theme-automotive .gallery-item:hover {
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 15px 40px rgba(245, 158, 11, 0.15), 0 5px 15px rgba(0,0,0,0.8);
+}
+
+/* 2. Equestrian & Nature Atmosphere (Žeimenos žirgai) */
+body.theme-equestrian {
+    background-color: #0B1914 !important;
+    color: #F1EFEA;
+}
+body.theme-equestrian #main-header {
+    background: rgba(11, 25, 20, 0.95);
+    border-bottom: 1px solid rgba(200, 159, 104, 0.2);
+}
+.equestrian-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200, 159, 104, 0.12);
+    border: 1px solid rgba(200, 159, 104, 0.4);
+    color: #D4A373;
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-family: var(--font-heading);
+    font-size: 0.74rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+body.theme-equestrian .gallery-item {
+    border: 1px solid rgba(200, 159, 104, 0.15);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+body.theme-equestrian .gallery-item:hover {
+    border-color: rgba(200, 159, 104, 0.5);
+    box-shadow: 0 16px 45px rgba(200, 159, 104, 0.2);
+}
+
+/* 3. Cosmic Deep Night Atmosphere (Molėtų observatorija) */
+body.theme-cosmic {
+    background-color: #040714 !important;
+    color: #E0E7FF;
+}
+body.theme-cosmic #main-header {
+    background: rgba(4, 7, 20, 0.95);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+}
+.cosmic-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(129, 140, 248, 0.12);
+    border: 1px solid rgba(129, 140, 248, 0.4);
+    color: #A5B4FC;
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-family: var(--font-heading);
+    font-size: 0.74rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+body.theme-cosmic .gallery-item {
+    border: 1px solid rgba(129, 140, 248, 0.15);
+    box-shadow: 0 12px 35px rgba(4, 7, 20, 0.7);
+}
+body.theme-cosmic .gallery-item:hover {
+    border-color: rgba(129, 140, 248, 0.5);
+    box-shadow: 0 16px 45px rgba(129, 140, 248, 0.25);
+}
+
+/* 4. Heritage & Historical Museum Atmosphere (Petrauskų namai) */
+body.theme-heritage {
+    background-color: #14100C !important;
+    color: #F5EBE1;
+}
+body.theme-heritage #main-header {
+    background: rgba(20, 16, 12, 0.95);
+    border-bottom: 1px solid rgba(212, 163, 115, 0.2);
+}
+.heritage-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212, 163, 115, 0.12);
+    border: 1px solid rgba(212, 163, 115, 0.4);
+    color: #E4BD8E;
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-family: var(--font-heading);
+    font-size: 0.74rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+body.theme-heritage .gallery-item {
+    border: 1px solid rgba(212, 163, 115, 0.15);
+}
+body.theme-heritage .gallery-item:hover {
+    border-color: rgba(212, 163, 115, 0.5);
+    box-shadow: 0 16px 45px rgba(212, 163, 115, 0.2);
 }
 
 footer {

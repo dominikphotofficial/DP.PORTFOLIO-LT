@@ -88,6 +88,36 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["to", "message"]
+    },
+    "AdminTeamMember": {
+      "title": "Admin Team Member",
+      "description": "Authorized admin and team members with assigned roles and privileges",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "pin": { "type": "string", "maxLength": 30 },
+        "role": { "type": "string", "enum": ["superadmin", "manager", "photographer"] },
+        "permissions": { "type": "array" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "role"]
+    },
+    "VmiExpense": {
+      "title": "VMI Expense",
+      "description": "Business expense for Lithuanian individual activity tax reporting (EVRK 74.20)",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "amount": { "type": "number" },
+        "category": { "type": "string", "maxLength": 60 },
+        "date": { "type": "string", "maxLength": 30 },
+        "invoiceNumber": { "type": "string", "maxLength": 60 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "amount", "date"]
     }
   },
   "firestore": {
@@ -110,6 +140,14 @@
     "/mail/{mailId}": {
       "schema": "Mail",
       "description": "Automated email queue"
+    },
+    "/admin_team/{memberId}": {
+      "schema": "AdminTeamMember",
+      "description": "Team members with administrative access and role-based permissions"
+    },
+    "/vmi_expenses/{expenseId}": {
+      "schema": "VmiExpense",
+      "description": "Documented tax expenses for individual activity accounting"
     }
   }
 }

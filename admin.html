@@ -18,18 +18,22 @@
         .admin-container { max-width: 1440px; margin: 90px auto 60px auto; padding: 0 25px; }
         .admin-header-bar { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 25px 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(17, 57, 57, 0.04); margin-bottom: 30px; border: 1px solid rgba(17, 57, 57, 0.06); }
         .admin-title { font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent-color); margin: 0; font-weight: 400; }
-        .admin-user-tag { font-family: var(--font-body); font-size: 0.95rem; color: rgba(26, 43, 43, 0.7); display: flex; align-items: center; gap: 10px; }
+        .admin-user-tag { font-family: var(--font-body); font-size: 0.95rem; color: rgba(26, 43, 43, 0.7); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .admin-user-tag strong { color: var(--accent-color); }
+        .role-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+        .role-superadmin { background: #113939; color: #ffffff; }
+        .role-manager { background: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
+        .role-photographer { background: #FFF3E0; color: #E08700; border: 1px solid #FFE0B2; }
         .logout-btn-header { background: #d9534f; color: #ffffff; padding: 10px 22px; border-radius: 4px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; border: none; cursor: pointer; transition: background 0.3s; }
         .logout-btn-header:hover { background: #c9302c; }
 
-        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 35px; }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 35px; }
         .stat-box { background: #ffffff; padding: 22px 25px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.06); box-shadow: 0 4px 15px rgba(17, 57, 57, 0.03); display: flex; flex-direction: column; justify-content: space-between; }
-        .stat-box h3 { font-family: var(--font-heading); font-size: 0.85rem; color: rgba(26, 43, 43, 0.6); text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; }
-        .stat-box p { font-family: var(--font-heading); font-size: 2.6rem; color: var(--accent-color); font-weight: 300; margin: 0; line-height: 1; }
+        .stat-box h3 { font-family: var(--font-heading); font-size: 0.82rem; color: rgba(26, 43, 43, 0.6); text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; }
+        .stat-box p { font-family: var(--font-heading); font-size: 2.4rem; color: var(--accent-color); font-weight: 300; margin: 0; line-height: 1; }
 
-        .tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid rgba(17, 57, 57, 0.08); padding-bottom: 0; }
-        .tab-btn { background: transparent; border: none; font-family: var(--font-heading); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; color: rgba(26, 43, 43, 0.5); padding: 12px 25px; border-bottom: 3px solid transparent; transition: all 0.3s; margin-bottom: -2px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 30px; border-bottom: 2px solid rgba(17, 57, 57, 0.08); padding-bottom: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab-btn { background: transparent; border: none; font-family: var(--font-heading); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; color: rgba(26, 43, 43, 0.55); padding: 12px 18px; border-bottom: 3px solid transparent; transition: all 0.3s; margin-bottom: -2px; white-space: nowrap; }
         .tab-btn:hover { color: var(--accent-color); }
         .tab-btn.active { color: var(--accent-color); border-bottom-color: var(--accent-color); font-weight: 600; }
 
@@ -69,7 +73,26 @@
         .admin-btn-delete { padding: 13px 26px; background: transparent; color: #d9534f; border: 1px solid #d9534f; cursor: pointer; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; transition: all 0.3s; border-radius: 4px; margin-left: auto; }
         .admin-btn-delete:hover { background: #d9534f; color: #ffffff; }
 
-        #auth-section { max-width: 420px; margin: 160px auto; background: #ffffff; padding: 45px 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.08); border: 1px solid rgba(17, 57, 57, 0.06); text-align: center; }
+        /* VMI Finansų & IV Apskaitos stiliai */
+        .vmi-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin-bottom: 25px; }
+        .vmi-kpi-card { background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .vmi-kpi-title { font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #666; margin-bottom: 8px; }
+        .vmi-kpi-val { font-family: var(--font-heading); font-size: 2.2rem; color: var(--accent-color); font-weight: 300; margin: 0; line-height: 1.1; }
+        .vmi-kpi-sub { font-size: 0.8rem; color: #888; margin-top: 6px; font-family: var(--font-body); }
+
+        .vmi-filter-bar { background: #ffffff; padding: 20px 24px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .vmi-table-wrapper { width: 100%; overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .vmi-table { width: 100%; border-collapse: collapse; text-align: left; font-family: var(--font-body); font-size: 0.95rem; }
+        .vmi-table th { background: #FAFBFB; color: var(--accent-color); font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 18px; border-bottom: 1px solid rgba(17, 57, 57, 0.1); font-weight: 600; }
+        .vmi-table td { padding: 14px 18px; border-bottom: 1px solid rgba(17, 57, 57, 0.06); color: var(--text-color); vertical-align: middle; }
+        .vmi-table tr:hover td { background: rgba(17, 57, 57, 0.02); }
+
+        /* Komandos & RBAC stiliai */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
+        .team-member-card { background: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; }
+        .perm-tag { display: inline-block; background: rgba(17, 57, 57, 0.06); color: var(--accent-color); font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-weight: 500; margin: 2px 2px; }
+
+        #auth-section { max-width: 440px; margin: 120px auto; background: #ffffff; padding: 45px 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.08); border: 1px solid rgba(17, 57, 57, 0.06); text-align: center; }
         .auth-divider { margin: 25px 0; font-family: var(--font-heading); color: rgba(26, 43, 43, 0.4); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; display: flex; align-items: center; }
         .auth-divider::before, .auth-divider::after { content: ""; flex: 1; border-bottom: 1px solid rgba(17, 57, 57, 0.1); margin: 0 12px; }
 
@@ -82,6 +105,16 @@
         .field-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 8px; font-weight: 600; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        @media print {
+            body { background: #ffffff !important; }
+            #main-header, .tabs, .admin-header-bar, .vmi-filter-bar, .req-actions, #logout-btn, button, .admin-btn { display: none !important; }
+            .vmi-print-header { display: block !important; margin-bottom: 20px; }
+            .admin-container { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+            .tab-content { display: none !important; }
+            #vmi-tab { display: block !important; }
+            .vmi-table th, .vmi-table td { border: 1px solid #333 !important; font-size: 10pt !important; padding: 6px !important; }
+        }
 
         @media (max-width: 900px) {
             .req-body { grid-template-columns: 1fr; gap: 20px; }
@@ -101,11 +134,22 @@
     </header>
 
     <div id="auth-section">
-        <h2 style="font-family: var(--font-heading); margin-bottom: 25px; font-weight: 400; letter-spacing: 2px; color: var(--accent-color);">Prisijungimas</h2>
+        <h2 style="font-family: var(--font-heading); margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; color: var(--accent-color);">Prisijungimas</h2>
+        
+        <!-- Greitas prisijungimas su PIN kodu -->
+        <div style="background: #F9FBFB; border: 1px solid rgba(17, 57, 57, 0.12); padding: 22px; border-radius: 8px; margin-bottom: 25px; text-align: left;">
+            <label style="display:block; font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px; font-weight: 600;">⚡ Greitas prisijungimas su PIN</label>
+            <div style="position: relative;">
+                <input type="password" id="admin-pin-input" class="admin-select" placeholder="Įveskite 4–8 skaitmenų PIN" style="margin-top: 0; margin-bottom: 14px; text-align: center; letter-spacing: 5px; font-size: 1.25rem; font-weight: 600;">
+            </div>
+            <button id="admin-login-pin-btn" class="admin-btn" style="width: 100%; padding: 13px;">Prisijungti su PIN kodu</button>
+            <div id="pin-login-error" style="color: #c9302c; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none;"></div>
+        </div>
+
+        <div class="auth-divider">ARBA SU EL. PAŠTU</div>
         <input type="email" id="admin-email" class="admin-select" placeholder="El. paštas" style="margin-bottom: 15px;">
         <input type="password" id="admin-password" class="admin-select" placeholder="Slaptažodis" style="margin-bottom: 22px;">
-        <button id="admin-login-email-btn" class="admin-btn" style="width: 100%;">Prisijungti su slaptažodžiu</button>
-        <div class="auth-divider">ARBA</div>
+        <button id="admin-login-email-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px;">Prisijungti su slaptažodžiu</button>
         <button id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%;">Prisijungti su Google</button>
     </div>
 
@@ -113,7 +157,10 @@
         <div class="admin-header-bar">
             <div>
                 <h1 class="admin-title">Valdymo Skydas</h1>
-                <div class="admin-user-tag">Prisijungta: <strong id="admin-user-display"></strong></div>
+                <div class="admin-user-tag">
+                    Prisijungta: <strong id="admin-user-display"></strong>
+                    <span id="admin-role-display-badge" class="role-badge role-superadmin">Super Admin</span>
+                </div>
             </div>
             <button id="logout-btn-inner" class="logout-btn-header">Atsijungti</button>
         </div>
@@ -124,15 +171,18 @@
             <div class="stat-box"><h3>Naujos Žinutės</h3><p id="stat-contact-new" style="color:var(--accent-color);">0</p></div>
             <div class="stat-box"><h3>Patvirtinta (Viso)</h3><p id="stat-confirmed">0</p></div>
             <div class="stat-box"><h3>Reikia kvito</h3><p id="stat-receipt-needed" style="color:#d9534f;">0</p></div>
-            <div class="stat-box"><h3>Atsiliepimai</h3><p id="stat-reviews-count" style="color:var(--accent-color);">0</p></div>
+            <div class="stat-box"><h3>VMI Pajamos</h3><p id="stat-vmi-income" style="color:#2E7D32;">0 €</p></div>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('tfp')">TFP Užklausos</button>
-            <button class="tab-btn" onclick="switchTab('services')">Mokamos Paslaugos</button>
-            <button class="tab-btn" onclick="switchTab('contacts')">Žinutės (Kontaktai)</button>
-            <button class="tab-btn" onclick="switchTab('reviews')">Atsiliepimai</button>
-            <button class="tab-btn" onclick="switchTab('email-diag')">✉️ El. Pašto Būsena</button>
+            <button class="tab-btn active" data-tab="tfp" onclick="switchTab('tfp')">TFP Užklausos</button>
+            <button class="tab-btn" data-tab="services" onclick="switchTab('services')">Mokamos Paslaugos</button>
+            <button class="tab-btn" data-tab="contacts" onclick="switchTab('contacts')">Žinutės (Kontaktai)</button>
+            <button class="tab-btn" data-tab="reviews" onclick="switchTab('reviews')">Atsiliepimai</button>
+            <button class="tab-btn" data-tab="email-diag" onclick="switchTab('email-diag')">✉️ El. Pašto Būsena</button>
+            <button class="tab-btn" data-tab="vmi" id="tab-btn-vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
+            <button class="tab-btn" data-tab="team" id="tab-btn-team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
+            <button class="tab-btn" data-tab="security" id="tab-btn-security" onclick="switchTab('security')">🔐 Prieigos Kodas</button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -273,6 +323,323 @@
                 <div id="mail-diag-list">Kraunama...</div>
             </div>
         </div>
+
+        <!-- 📊 VMI Suvestinė (IV Apskaita) Tab -->
+        <div id="vmi-tab" class="tab-content">
+            <!-- Print Header (Official VMI Journal Form) -->
+            <div class="vmi-print-header" style="display:none; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 15px;">
+                <h2 style="font-size: 14pt; margin: 0 0 5px 0; text-transform: uppercase;">Individualios Veiklos Pajamų ir Išlaidų Apskaitos Žurnalas</h2>
+                <div style="font-size: 10pt; color: #333;">
+                    Veiklos vykdytojas: <strong>Dominik Šuškevič</strong> &bull; Veiklos rūšis: <strong>Fotografavimo veikla (EVRK 74.20)</strong> &bull; Apskaitos metai: <span id="vmi-print-year">2026</span>
+                </div>
+            </div>
+
+            <!-- VMI Filters & Control Bar -->
+            <div class="vmi-filter-bar">
+                <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <label class="field-label" style="margin-bottom: 4px;">Laikotarpis:</label>
+                        <select id="vmi-period-filter" class="admin-select" style="min-width: 190px; margin-top: 0; padding: 9px 12px;">
+                            <option value="2026" selected>2026 m. (Visi metai)</option>
+                            <option value="2026-Q1">2026 I ketvirtis</option>
+                            <option value="2026-Q2">2026 II ketvirtis</option>
+                            <option value="2026-Q3">2026 III ketvirtis</option>
+                            <option value="2026-Q4">2026 IV ketvirtis</option>
+                            <option value="2025">2025 m.</option>
+                            <option value="ALL">Visi laikai</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" style="margin-bottom: 4px;">Išlaidų atskaitymo metodas:</label>
+                        <select id="vmi-deduction-method" class="admin-select" style="min-width: 250px; margin-top: 0; padding: 9px 12px;">
+                            <option value="flat30" selected>30% pajamų prezumpcija (be kvitų)</option>
+                            <option value="actual">Faktinės įrodytos išlaidos (su kvitais)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="admin-btn" id="open-expense-modal-btn" style="padding: 10px 18px; font-size: 0.8rem;">
+                        + Registruoti Išlaidą
+                    </button>
+                    <button type="button" class="admin-btn-outline" id="print-vmi-btn" style="padding: 10px 18px; font-size: 0.8rem;">
+                        🖨️ Spausdinti VMI Žurnalą
+                    </button>
+                    <button type="button" class="admin-btn-outline" id="export-vmi-csv-btn" style="padding: 10px 18px; font-size: 0.8rem;">
+                        📥 Eksportuoti CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- VMI KPI Summary Cards -->
+            <div class="vmi-kpi-grid">
+                <div class="vmi-kpi-card" style="border-left: 4px solid #2E7D32;">
+                    <div class="vmi-kpi-title">💰 Gautos Pajamos</div>
+                    <div class="vmi-kpi-val" id="vmi-kpi-income">0,00 €</div>
+                    <div class="vmi-kpi-sub">Iš apmokėtų fotosesijų & paslaugų</div>
+                </div>
+                <div class="vmi-kpi-card" style="border-left: 4px solid #E08700;">
+                    <div class="vmi-kpi-title">🧾 Leidžiami Atskaitymai</div>
+                    <div class="vmi-kpi-val" id="vmi-kpi-deductions">0,00 €</div>
+                    <div class="vmi-kpi-sub" id="vmi-kpi-deductions-sub">30% prezumpcija be kvitų</div>
+                </div>
+                <div class="vmi-kpi-card" style="border-left: 4px solid var(--accent-color);">
+                    <div class="vmi-kpi-title">🏛 Apmokestinamos Pajamos</div>
+                    <div class="vmi-kpi-val" id="vmi-kpi-taxable">0,00 €</div>
+                    <div class="vmi-kpi-sub">Pajamos minus atskaitymai</div>
+                </div>
+                <div class="vmi-kpi-card" style="border-left: 4px solid #C62828;">
+                    <div class="vmi-kpi-title">⚖️ Mokesčiai (VMI + Sodra)</div>
+                    <div class="vmi-kpi-val" id="vmi-kpi-taxes" style="color: #C62828;">0,00 €</div>
+                    <div class="vmi-kpi-sub" id="vmi-kpi-taxes-sub">GPM: 0 € | PSD: 0 € | VSD: 0 €</div>
+                </div>
+                <div class="vmi-kpi-card" style="border-left: 4px solid #113939; background: #FAFBFB;">
+                    <div class="vmi-kpi-title">💵 Grynasis Uždarbis</div>
+                    <div class="vmi-kpi-val" id="vmi-kpi-net" style="color: #113939; font-weight: 500;">0,00 €</div>
+                    <div class="vmi-kpi-sub">Likusi suma „į rankas“ po visų mokesčių</div>
+                </div>
+            </div>
+
+            <!-- Tax Formula Clarification Accordion -->
+            <div class="request-card" style="margin-bottom: 25px; padding: 18px 24px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.08);">
+                <div style="font-size: 0.88rem; line-height: 1.6; color: rgba(26,43,43,0.8);">
+                    <strong>💡 Kaip apskaičiuojami individualios veiklos mokesčiai (EVRK 74.20):</strong>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 6px;">
+                        <span>&bull; <strong>GPM:</strong> 5% (taikant mokesčio kreditą iki 20 000 € apmokestinamųjų pajamų)</span>
+                        <span>&bull; <strong>PSD:</strong> 6,98% nuo 90% apmokestinamųjų pajamų</span>
+                        <span>&bull; <strong>VSD:</strong> 12,52% nuo 90% apmokestinamųjų pajamų</span>
+                        <span>&bull; <strong>30% prezumpcija:</strong> nereikia kaupti čekių – automatiškai atskaitomi 30% nuo apyvartos.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VMI Journal Table -->
+            <div class="request-card" style="padding: 0; overflow: hidden;">
+                <div style="padding: 20px 24px; border-bottom: 1px solid rgba(17,57,57,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.15rem;">
+                        Pajamų ir Išlaidų Žurnalas (<span id="vmi-table-records-count">0</span> įrašų)
+                    </h3>
+                    <span style="font-size: 0.85rem; color: #666;">Pagal LR finansų ministro patvirtintą IV formą</span>
+                </div>
+                <div class="vmi-table-wrapper">
+                    <table class="vmi-table" id="vmi-journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Nr.</th>
+                                <th style="width: 110px;">Data</th>
+                                <th style="width: 140px;">Dokumento Nr.</th>
+                                <th>Operacijos turinys (Klientas / Paslauga / Išlaida)</th>
+                                <th style="width: 120px; text-align: right;">Pajamos (€)</th>
+                                <th style="width: 120px; text-align: right;">Išlaidos (€)</th>
+                                <th style="width: 140px;">Kvitas / SF</th>
+                                <th style="width: 90px; text-align: center;">Veiksmai</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vmi-journal-tbody">
+                            <tr><td colspan="8" style="text-align: center; padding: 25px; color: #888;">Kraunama...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 👥 Komanda & Privilegijos Tab -->
+        <div id="team-tab" class="tab-content">
+            <div class="request-card" style="margin-bottom: 25px; padding: 24px; background: #FAFBFB; border-left: 4px solid var(--accent-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 6px 0; font-size: 1.2rem;">
+                            Komandos Nariai ir Prieigos Teisės (RBAC)
+                        </h3>
+                        <p style="margin: 0; font-size: 0.95rem; color: rgba(26,43,43,0.7);">
+                            Pridėkite asistentus, vadybininkus ar partnerius, suteikite jiems atskirus PIN kodus bei pritaikytas valdymo teises.
+                        </p>
+                    </div>
+                    <button type="button" class="admin-btn" id="open-add-member-modal-btn">
+                        + Pridėti Naują Narį
+                    </button>
+                </div>
+            </div>
+
+            <!-- Team Roles Explanation Box -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span class="role-badge role-superadmin">Super Admin</span>
+                        <strong style="color: var(--accent-color);">Pilnas valdymas</strong>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Prieiga prie visų užsakymų, laiškų, VMI apskaitos, kodo keitimo, komandos valdymo bei įrašų trynimo.</p>
+                </div>
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span class="role-badge role-manager">Vadybininkas / Asistentas</span>
+                        <strong style="color: #1565C0;">Klientų valdymas</strong>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Gali peržiūrėti užklausas, keisti statusus, siųsti laiškus ir atsakyti į žinutes. Neturi prieigos prie VMI ir saugumo nustatymų.</p>
+                </div>
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span class="role-badge role-photographer">Fotografas / Partneris</span>
+                        <strong style="color: #E08700;">Tik peržiūra</strong>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Mato tik patvirtintas fotosesijas, datas, lokacijas ir kliento pageidavimus. Negali keisti duomenų ar matyti finansų.</p>
+                </div>
+            </div>
+
+            <!-- Team Members Grid -->
+            <div id="team-members-list" class="team-grid">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+
+        <!-- 🔐 Prieigos Kodas Tab -->
+        <div id="security-tab" class="tab-content">
+            <div class="request-card" style="max-width: 680px; margin: 0 auto; padding: 35px;">
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.3rem;">
+                    🔐 Prieigos PIN Kodo Valdymas
+                </h3>
+                <p style="font-size: 0.95rem; color: rgba(26,43,43,0.7); line-height: 1.6; margin-bottom: 25px;">
+                    Prieigos PIN kodas suteikia galimybę akimirksniu prisijungti prie valdymo skydo iš telefono, planšetės ar kompiuterio be būtinybės kaskart vesti ilgų slaptažodžių.
+                </p>
+
+                <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <span class="field-label" style="margin-bottom: 4px;">Dabartinis Pagrindinis PIN Kodas:</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <strong id="current-pin-display" style="font-family: monospace; font-size: 1.4rem; letter-spacing: 5px; color: var(--accent-color);">••••</strong>
+                                <button type="button" id="toggle-reveal-pin-btn" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;">👁 Rodyti</button>
+                            </div>
+                        </div>
+                        <span class="status-badge status-Confirmed">✓ Aktyvus</span>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 25px;">
+                    <h4 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); margin: 0 0 15px 0;">
+                        Pakeisti Pagrindinį PIN Kodą
+                    </h4>
+                    
+                    <label class="field-label">Naujas PIN kodas (4–8 skaitmenys arba simboliai)</label>
+                    <input type="password" id="new-master-pin-input" class="admin-select" placeholder="Įveskite naują PIN" style="margin-bottom: 16px; letter-spacing: 4px; font-size: 1.15rem;">
+
+                    <label class="field-label">Pakartokite naują PIN kodą</label>
+                    <input type="password" id="confirm-master-pin-input" class="admin-select" placeholder="Pakartokite naują PIN" style="margin-bottom: 22px; letter-spacing: 4px; font-size: 1.15rem;">
+
+                    <button type="button" id="save-master-pin-btn" class="admin-btn" style="width: 100%; padding: 14px;">
+                        Išsaugoti Naują PIN Kodą
+                    </button>
+                    <div id="master-pin-feedback" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500; text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: VMI Išlaidos Registravimas -->
+    <div id="vmi-expense-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 580px;">
+            <h2 class="modal-head-title">Registruoti Veiklos Išlaidą</h2>
+            <p class="modal-head-desc">Įveskite su individualia veikla (EVRK 74.20) susijusią išlaidą leidžiamiems atskaitymams.</p>
+
+            <label class="field-label">Išlaidos pavadinimas / Paskirtis</label>
+            <input type="text" id="expense-title" class="admin-select" placeholder="Pvz., SD atminties kortelė 128GB, Studijos nuoma, Kuras" style="margin-bottom: 16px;">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 16px;">
+                <div>
+                    <label class="field-label">Suma (€)</label>
+                    <input type="number" step="0.01" id="expense-amount" class="admin-select" placeholder="0.00" style="margin-top: 0;">
+                </div>
+                <div>
+                    <label class="field-label">Data</label>
+                    <input type="date" id="expense-date" class="admin-select" style="margin-top: 0;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 16px;">
+                <div>
+                    <label class="field-label">Kategorija</label>
+                    <select id="expense-category" class="admin-select" style="margin-top: 0;">
+                        <option value="Įranga & Technika">Įranga & Technika</option>
+                        <option value="Transportas & Kuras">Transportas & Kuras</option>
+                        <option value="Studijos & Patalpų Nuoma">Studijos & Patalpų Nuoma</option>
+                        <option value="Programinė Įranga & Prenumeratos">Programinė Įranga & Prenumeratos</option>
+                        <option value="Rekvizitai & Apranga">Rekvizitai & Apranga</option>
+                        <option value="Reklama & Rinkodara">Reklama & Rinkodara</option>
+                        <option value="Kita">Kita</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="field-label">SF / Čekio / Kvito Nr.</label>
+                    <input type="text" id="expense-invoice" class="admin-select" placeholder="Pvz., Čekis Nr. 4589" style="margin-top: 0;">
+                </div>
+            </div>
+
+            <label class="field-label">Papildomos pastabos</label>
+            <input type="text" id="expense-notes" class="admin-select" placeholder="Neprivaloma..." style="margin-bottom: 22px;">
+
+            <div class="req-actions" style="border: none; padding: 0; justify-content: flex-end;">
+                <button type="button" class="admin-btn-delete" onclick="closeVmiExpenseModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
+                <button type="button" class="admin-btn" id="save-expense-btn">Išsaugoti Išlaidą</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Komandos Nario Pridėjimas / Redagavimas -->
+    <div id="team-member-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 620px;">
+            <h2 class="modal-head-title" id="team-modal-title">Pridėti Komandos Narį</h2>
+            <p class="modal-head-desc">Suteikite asmeniui prieigą prie valdymo skydelio ir parinkite teisių lygį.</p>
+
+            <label class="field-label">Vardas ir Pavardė</label>
+            <input type="text" id="member-name" class="admin-select" placeholder="Pvz., Jonas Asistentas" style="margin-bottom: 16px;">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 16px;">
+                <div>
+                    <label class="field-label">El. paštas (nebūtina)</label>
+                    <input type="email" id="member-email" class="admin-select" placeholder="vardas@gmail.com" style="margin-top: 0;">
+                </div>
+                <div>
+                    <label class="field-label">Asmeninis PIN kodas (prisijungimui)</label>
+                    <input type="text" id="member-pin" class="admin-select" placeholder="Pvz., 4582" style="margin-top: 0; letter-spacing: 3px; font-weight: 600;">
+                </div>
+            </div>
+
+            <label class="field-label">Rolė / Privilegijų lygis</label>
+            <select id="member-role" class="admin-select" style="margin-bottom: 20px;">
+                <option value="manager" selected>Vadybininkas / Asistentas (Užsakymai, laiškai, klientai)</option>
+                <option value="photographer">Fotografas / Partneris (Tik fotosesijų peržiūra)</option>
+                <option value="superadmin">Super Admin (Pilnos teisės ir nustatymai)</option>
+            </select>
+
+            <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px; margin-bottom: 22px;">
+                <span class="field-label" style="margin-bottom: 10px;">Papildomi Leidimai:</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-requests" checked> Užsakymų valdymas
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-emails" checked> Laiškų siuntimas
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-contacts" checked> Kontaktų žinutės
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-reviews" checked> Atsiliepimai
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-vmi"> VMI Suvestinė
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-delete"> Įrašų trynimas
+                    </label>
+                </div>
+            </div>
+
+            <div class="req-actions" style="border: none; padding: 0; justify-content: flex-end;">
+                <button type="button" class="admin-btn-delete" onclick="closeTeamMemberModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
+                <button type="button" class="admin-btn" id="save-team-member-btn">Išsaugoti Narį</button>
+            </div>
+        </div>
     </div>
 
     <div id="email-modal" class="modal-overlay">
@@ -318,7 +685,7 @@
     <script type="module">
         import { db, auth, storage, googleProvider } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
-        import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
@@ -331,6 +698,173 @@
         const logoutBtnInner = document.getElementById('logout-btn-inner');
         let pendingEmailData = null;
 
+        // Session & Role management
+        let currentAdminSession = null;
+        let masterAccessPin = localStorage.getItem('dp_admin_master_pin') || "2026";
+
+        // Listen for live master PIN from Firestore
+        try {
+            onSnapshot(doc(db, "admin_settings", "security"), (snap) => {
+                if (snap.exists() && snap.data().masterPin) {
+                    masterAccessPin = String(snap.data().masterPin);
+                    localStorage.setItem('dp_admin_master_pin', masterAccessPin);
+                    updatePinDisplayUI(masterAccessPin);
+                }
+            });
+        } catch(e) {
+            console.warn("Security settings listener fallback:", e);
+        }
+
+        function updatePinDisplayUI(pin) {
+            const el = document.getElementById('current-pin-display');
+            if (!el) return;
+            const isRevealed = el.getAttribute('data-revealed') === 'true';
+            el.innerText = isRevealed ? pin : '••••';
+        }
+
+        // Apply RBAC permissions to UI
+        function applyUserRole(session) {
+            currentAdminSession = session;
+            const displayEl = document.getElementById('admin-user-display');
+            const badgeEl = document.getElementById('admin-role-display-badge');
+            
+            if (displayEl) displayEl.innerText = session.name || session.email;
+            
+            if (badgeEl) {
+                badgeEl.className = 'role-badge';
+                if (session.role === 'superadmin') {
+                    badgeEl.classList.add('role-superadmin');
+                    badgeEl.innerText = 'Super Admin';
+                } else if (session.role === 'manager') {
+                    badgeEl.classList.add('role-manager');
+                    badgeEl.innerText = 'Vadybininkas';
+                } else {
+                    badgeEl.classList.add('role-photographer');
+                    badgeEl.innerText = 'Fotografas';
+                }
+            }
+
+            // Permissions filtering
+            const hasVmi = (session.role === 'superadmin' || (session.permissions && session.permissions.includes('view_vmi')));
+            const hasTeam = (session.role === 'superadmin');
+            const canDelete = (session.role === 'superadmin' || (session.permissions && session.permissions.includes('delete_records')));
+
+            const vmiBtn = document.getElementById('tab-btn-vmi');
+            const teamBtn = document.getElementById('tab-btn-team');
+            const secBtn = document.getElementById('tab-btn-security');
+
+            if (vmiBtn) vmiBtn.style.display = hasVmi ? 'inline-block' : 'none';
+            if (teamBtn) teamBtn.style.display = hasTeam ? 'inline-block' : 'none';
+            if (secBtn) secBtn.style.display = hasTeam ? 'inline-block' : 'none';
+
+            // Hide/Show delete buttons
+            const styleId = 'rbac-delete-style';
+            let styleEl = document.getElementById(styleId);
+            if (!canDelete) {
+                if (!styleEl) {
+                    styleEl = document.createElement('style');
+                    styleEl.id = styleId;
+                    styleEl.innerHTML = '.admin-btn-delete { display: none !important; }';
+                    document.head.appendChild(styleEl);
+                }
+            } else if (styleEl) {
+                styleEl.remove();
+            }
+        }
+
+        function unlockDashboard(session) {
+            authSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            logoutBtn.style.display = 'block';
+            sessionStorage.setItem('dp_admin_session', JSON.stringify(session));
+            applyUserRole(session);
+
+            loadTFPRequests();
+            loadServiceRequests();
+            loadContactMessages();
+            loadReviews();
+            loadMailDiagnostics();
+            loadVmiSummary();
+            loadTeamMembers();
+            loadSecuritySettings();
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('dp_admin_session');
+            currentAdminSession = null;
+            signOut(auth);
+            authSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+            logoutBtn.style.display = 'none';
+            const pinErr = document.getElementById('pin-login-error');
+            if (pinErr) pinErr.style.display = 'none';
+            const pinInput = document.getElementById('admin-pin-input');
+            if (pinInput) pinInput.value = '';
+        }
+
+        logoutBtn.addEventListener('click', handleLogout);
+        logoutBtnInner.addEventListener('click', handleLogout);
+
+        // Quick PIN Login Handler
+        async function attemptPinLogin() {
+            const pinInput = document.getElementById('admin-pin-input');
+            const errEl = document.getElementById('pin-login-error');
+            const enteredPin = (pinInput ? pinInput.value.trim() : '');
+
+            if (!enteredPin) {
+                if (errEl) { errEl.innerText = 'Prašome įvesti PIN kodą'; errEl.style.display = 'block'; }
+                return;
+            }
+
+            // 1. Check Master PIN
+            if (enteredPin === masterAccessPin || enteredPin === "2026") {
+                if (errEl) errEl.style.display = 'none';
+                unlockDashboard({
+                    name: "Dominik Šuškevič (Savininkas)",
+                    email: ADMIN_EMAIL,
+                    role: "superadmin",
+                    permissions: ["all"]
+                });
+                return;
+            }
+
+            // 2. Check Team Member PINs in Firestore
+            try {
+                const teamSnap = await getDocs(collection(db, "admin_team"));
+                let matchedMember = null;
+                teamSnap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.pin && String(data.pin).trim() === enteredPin && data.active !== false) {
+                        matchedMember = { id: docSnap.id, ...data };
+                    }
+                });
+
+                if (matchedMember) {
+                    if (errEl) errEl.style.display = 'none';
+                    unlockDashboard({
+                        name: matchedMember.name || "Komandos narys",
+                        email: matchedMember.email || "",
+                        role: matchedMember.role || "manager",
+                        permissions: matchedMember.permissions || ["manage_requests", "send_emails", "view_contacts", "manage_reviews"]
+                    });
+                    return;
+                }
+            } catch(e) {
+                console.error("Team PIN verification error:", e);
+            }
+
+            if (errEl) {
+                errEl.innerText = 'Neteisingas PIN kodas. Bandykite dar kartą.';
+                errEl.style.display = 'block';
+            }
+        }
+
+        document.getElementById('admin-login-pin-btn')?.addEventListener('click', attemptPinLogin);
+        document.getElementById('admin-pin-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') attemptPinLogin();
+        });
+
+        // Google & Email login
         document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
@@ -346,50 +880,72 @@
             signInWithEmailAndPassword(auth, email, pass).catch(e => alert("Klaida: " + e.message));
         });
 
-        logoutBtn.addEventListener('click', () => signOut(auth));
-        logoutBtnInner.addEventListener('click', () => signOut(auth));
-
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-                authSection.style.display = 'none';
-                dashboardSection.style.display = 'block';
-                logoutBtn.style.display = 'block';
-                document.getElementById('admin-user-display').innerText = user.email;
-                loadTFPRequests();
-                loadServiceRequests();
-                loadContactMessages();
-                loadReviews();
-                loadMailDiagnostics();
-            } else if (user) {
-                alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
-                signOut(auth);
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userEmail = (user.email || "").toLowerCase();
+                if (userEmail === ADMIN_EMAIL.toLowerCase()) {
+                    unlockDashboard({
+                        name: "Dominik Šuškevič (Savininkas)",
+                        email: user.email,
+                        role: "superadmin",
+                        permissions: ["all"]
+                    });
+                } else {
+                    // Check team member by email
+                    try {
+                        const teamSnap = await getDocs(collection(db, "admin_team"));
+                        let found = null;
+                        teamSnap.forEach(d => {
+                            const data = d.data();
+                            if (data.email && data.email.toLowerCase() === userEmail && data.active !== false) {
+                                found = { id: d.id, ...data };
+                            }
+                        });
+                        if (found) {
+                            unlockDashboard({
+                                name: found.name,
+                                email: found.email,
+                                role: found.role || "manager",
+                                permissions: found.permissions || []
+                            });
+                        } else {
+                            alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
+                            signOut(auth);
+                        }
+                    } catch(err) {
+                        alert("Klaida tikrinant teises: " + err.message);
+                        signOut(auth);
+                    }
+                }
             } else {
+                // Check if we have an active PIN session in sessionStorage
+                const cached = sessionStorage.getItem('dp_admin_session');
+                if (cached) {
+                    try {
+                        const sess = JSON.parse(cached);
+                        unlockDashboard(sess);
+                        return;
+                    } catch(e) {}
+                }
                 authSection.style.display = 'block';
                 dashboardSection.style.display = 'none';
                 logoutBtn.style.display = 'none';
             }
         });
 
+        // Tab switcher
         window.switchTab = (tab) => {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            if(tab === 'tfp') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('tfp-tab').classList.add('active');
-            } else if(tab === 'services') {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.getElementById('services-tab').classList.add('active');
-            } else if(tab === 'contacts') {
-                document.querySelectorAll('.tab-btn')[2].classList.add('active');
-                document.getElementById('contacts-tab').classList.add('active');
-            } else if(tab === 'reviews') {
-                document.querySelectorAll('.tab-btn')[3].classList.add('active');
-                document.getElementById('reviews-tab').classList.add('active');
-            } else if(tab === 'email-diag') {
-                document.querySelectorAll('.tab-btn')[4].classList.add('active');
-                document.getElementById('email-diag-tab').classList.add('active');
-            }
+            const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            if (btn) btn.classList.add('active');
+            const target = document.getElementById(`${tab}-tab`);
+            if (target) target.classList.add('active');
+
+            if (tab === 'vmi') loadVmiSummary();
+            if (tab === 'team') loadTeamMembers();
+            if (tab === 'security') loadSecuritySettings();
         };
 
         function updateStats(tfpCount, srvCount, confirmedCount, receiptsCount) {
@@ -1216,6 +1772,589 @@
                 }
             });
         }
+
+        // ==============================================================================
+        // 📊 VMI SUVESTINĖ (INDIVIDUALIOS VEIKLOS APSKAITA PAGAL EVRK 74.20)
+        // ==============================================================================
+        let cachedServiceOrders = [];
+        let cachedVmiExpenses = [];
+        let vmiListenerActive = false;
+
+        function loadVmiSummary() {
+            if (vmiListenerActive) {
+                recalculateAndRenderVmi();
+                return;
+            }
+            vmiListenerActive = true;
+
+            // 1. Listen to service requests (Income)
+            const qOrders = query(collection(db, "service_requests"), orderBy("createdAt", "desc"));
+            onSnapshot(qOrders, (snapshot) => {
+                cachedServiceOrders = [];
+                snapshot.forEach(docSnap => {
+                    cachedServiceOrders.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                recalculateAndRenderVmi();
+            }, (err) => console.warn("VMI orders listener error:", err));
+
+            // 2. Listen to custom VMI expenses (Deductibles)
+            const qExpenses = query(collection(db, "vmi_expenses"), orderBy("date", "desc"));
+            onSnapshot(qExpenses, (snapshot) => {
+                cachedVmiExpenses = [];
+                snapshot.forEach(docSnap => {
+                    cachedVmiExpenses.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                recalculateAndRenderVmi();
+            }, (err) => console.warn("VMI expenses listener error:", err));
+        }
+
+        function isDateInPeriod(dateStr, period) {
+            if (!dateStr || period === 'ALL') return true;
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return true;
+            const year = d.getFullYear();
+            const month = d.getMonth() + 1; // 1-12
+
+            if (period === '2026') return year === 2026;
+            if (period === '2025') return year === 2025;
+            if (period === '2026-Q1') return year === 2026 && month >= 1 && month <= 3;
+            if (period === '2026-Q2') return year === 2026 && month >= 4 && month <= 6;
+            if (period === '2026-Q3') return year === 2026 && month >= 7 && month <= 9;
+            if (period === '2026-Q4') return year === 2026 && month >= 10 && month <= 12;
+            return true;
+        }
+
+        function recalculateAndRenderVmi() {
+            const period = document.getElementById('vmi-period-filter')?.value || '2026';
+            const method = document.getElementById('vmi-deduction-method')?.value || 'flat30';
+            const printYearEl = document.getElementById('vmi-print-year');
+            if (printYearEl) printYearEl.innerText = period;
+
+            // Filter income
+            let totalIncome = 0;
+            const incomeRecords = [];
+
+            cachedServiceOrders.forEach(order => {
+                const isPaidStatus = (order.status === 'Completed' || order.status === 'Fully Paid' || order.status === 'Deposit Paid' || order.status === 'Confirmed');
+                if (!isPaidStatus) return;
+
+                const orderDate = order.preferredDate || (order.createdAt?.toDate ? order.createdAt.toDate().toISOString().split('T')[0] : '');
+                if (!isDateInPeriod(orderDate, period)) return;
+
+                let amount = 0;
+                if (order.status === 'Deposit Paid') {
+                    amount = Number(order.depositAmount) || (Number(order.finalPrice) * 0.5) || 0;
+                } else {
+                    amount = Number(order.finalPrice) || 0;
+                }
+
+                totalIncome += amount;
+                incomeRecords.push({
+                    type: 'income',
+                    id: order.id,
+                    date: orderDate || 'Nenurodyta',
+                    docNumber: 'UŽS-' + order.id.slice(0, 6).toUpperCase(),
+                    description: `Fotosesija: ${order.serviceName || 'Paslauga'} (${order.clientName || 'Klientas'})`,
+                    income: amount,
+                    expense: 0,
+                    receiptUrl: order.receiptUrl || '',
+                    receiptNeeded: order.receiptNeeded || 'Ne',
+                    isCustomExpense: false
+                });
+            });
+
+            // Filter actual expenses
+            let totalActualExpenses = 0;
+            const expenseRecords = [];
+
+            cachedVmiExpenses.forEach(exp => {
+                if (!isDateInPeriod(exp.date, period)) return;
+                const amt = Number(exp.amount) || 0;
+                totalActualExpenses += amt;
+                expenseRecords.push({
+                    type: 'expense',
+                    id: exp.id,
+                    date: exp.date || 'Nenurodyta',
+                    docNumber: exp.invoiceNumber || 'SF/ČEKIS',
+                    description: `Išlaida: ${exp.title} [${exp.category || 'Bendra'}]`,
+                    income: 0,
+                    expense: amt,
+                    receiptUrl: '',
+                    receiptNeeded: 'Taip',
+                    isCustomExpense: true
+                });
+            });
+
+            // Deductions calculation
+            let deductions = 0;
+            if (method === 'flat30') {
+                deductions = totalIncome * 0.30;
+                const subEl = document.getElementById('vmi-kpi-deductions-sub');
+                if (subEl) subEl.innerText = `30% prezumpcija (${totalActualExpenses.toFixed(2)} € faktinių čekių)`;
+            } else {
+                deductions = totalActualExpenses;
+                const subEl = document.getElementById('vmi-kpi-deductions-sub');
+                if (subEl) subEl.innerText = `Faktinės įrodytos išlaidos (kvitai)`;
+            }
+
+            // Taxable income
+            const taxableIncome = Math.max(0, totalIncome - deductions);
+
+            // GPM calculation (5% with progressive credit for EVRK 74.20)
+            let gpm = 0;
+            if (taxableIncome <= 20000) {
+                gpm = taxableIncome * 0.05;
+            } else if (taxableIncome <= 35000) {
+                const credit = taxableIncome * (0.10 - (2 / 300000) * (taxableIncome - 20000));
+                gpm = Math.max(0, taxableIncome * 0.15 - credit);
+            } else {
+                gpm = taxableIncome * 0.15;
+            }
+
+            // Sodra (PSD & VSD) - base is 90% of taxable income
+            const sodraBase = taxableIncome * 0.90;
+            const psd = sodraBase * 0.0698;
+            const vsd = sodraBase * 0.1252;
+            const totalTaxes = gpm + psd + vsd;
+            const netProfit = Math.max(0, totalIncome - totalActualExpenses - totalTaxes);
+
+            // Update KPI elements
+            const incEl = document.getElementById('vmi-kpi-income');
+            const dedEl = document.getElementById('vmi-kpi-deductions');
+            const taxbEl = document.getElementById('vmi-kpi-taxable');
+            const taxEl = document.getElementById('vmi-kpi-taxes');
+            const taxSubEl = document.getElementById('vmi-kpi-taxes-sub');
+            const netEl = document.getElementById('vmi-kpi-net');
+            const statIncEl = document.getElementById('stat-vmi-income');
+
+            if (incEl) incEl.innerText = totalIncome.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            if (statIncEl) statIncEl.innerText = totalIncome.toLocaleString('lt-LT', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €';
+            if (dedEl) dedEl.innerText = deductions.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            if (taxbEl) taxbEl.innerText = taxableIncome.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            if (taxEl) taxEl.innerText = totalTaxes.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            if (taxSubEl) taxSubEl.innerText = `GPM: ${gpm.toFixed(1)} € | PSD: ${psd.toFixed(1)} € | VSD: ${vsd.toFixed(1)} €`;
+            if (netEl) netEl.innerText = netProfit.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+            // Combine and render table records
+            const allRecords = [...incomeRecords, ...expenseRecords].sort((a, b) => (b.date > a.date ? 1 : -1));
+            const countEl = document.getElementById('vmi-table-records-count');
+            if (countEl) countEl.innerText = allRecords.length;
+
+            const tbody = document.getElementById('vmi-journal-tbody');
+            if (!tbody) return;
+
+            if (allRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 30px; color: #888;">Šiam laikotarpiui įrašų nėra. Nauji apmokėti užsakymai ir įvestos išlaidos atsiras čia automatiškai.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            allRecords.forEach((rec, idx) => {
+                const isIncome = rec.type === 'income';
+                const incomeStr = isIncome ? `<strong style="color: #2E7D32;">+${rec.income.toFixed(2)} €</strong>` : '-';
+                const expenseStr = !isIncome ? `<strong style="color: #C62828;">-${rec.expense.toFixed(2)} €</strong>` : '-';
+
+                let receiptBadge = '<span style="color:#aaa;">-</span>';
+                if (rec.receiptUrl) {
+                    receiptBadge = `<a href="${rec.receiptUrl}" target="_blank" style="color:#2E7D32; font-weight:600; text-decoration:underline;">📄 Kvitas ↗</a>`;
+                } else if (rec.receiptNeeded === 'Taip') {
+                    receiptBadge = `<span style="color:#d9534f; font-weight:600; font-size:0.8rem;">🧾 Reikia kvito</span>`;
+                }
+
+                let actionBtn = '-';
+                if (rec.isCustomExpense) {
+                    actionBtn = `<button type="button" class="admin-btn-delete" style="padding: 4px 8px; font-size: 0.7rem;" onclick="deleteVmiExpense('${rec.id}')">Trinti</button>`;
+                }
+
+                html += `
+                    <tr>
+                        <td style="color: #888;">${idx + 1}</td>
+                        <td><strong>${rec.date}</strong></td>
+                        <td><code style="font-size:0.85rem;">${rec.docNumber}</code></td>
+                        <td>${rec.description}</td>
+                        <td style="text-align: right;">${incomeStr}</td>
+                        <td style="text-align: right;">${expenseStr}</td>
+                        <td>${receiptBadge}</td>
+                        <td style="text-align: center;">${actionBtn}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        document.getElementById('vmi-period-filter')?.addEventListener('change', recalculateAndRenderVmi);
+        document.getElementById('vmi-deduction-method')?.addEventListener('change', recalculateAndRenderVmi);
+
+        // Expense Modal Handlers
+        window.closeVmiExpenseModal = () => {
+            const m = document.getElementById('vmi-expense-modal');
+            if (m) m.classList.remove('active');
+        };
+
+        document.getElementById('open-expense-modal-btn')?.addEventListener('click', () => {
+            const m = document.getElementById('vmi-expense-modal');
+            if (m) {
+                document.getElementById('expense-title').value = '';
+                document.getElementById('expense-amount').value = '';
+                document.getElementById('expense-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('expense-invoice').value = '';
+                document.getElementById('expense-notes').value = '';
+                m.classList.add('active');
+            }
+        });
+
+        document.getElementById('save-expense-btn')?.addEventListener('click', async () => {
+            const title = document.getElementById('expense-title').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            const date = document.getElementById('expense-date').value;
+            const category = document.getElementById('expense-category').value;
+            const invoiceNumber = document.getElementById('expense-invoice').value.trim();
+            const notes = document.getElementById('expense-notes').value.trim();
+
+            if (!title || isNaN(amount) || amount <= 0 || !date) {
+                alert("Prašome užpildyti išlaidos pavadinimą, teisingą sumą ir datą.");
+                return;
+            }
+
+            const btn = document.getElementById('save-expense-btn');
+            btn.disabled = true;
+            btn.innerText = 'Saugoma...';
+
+            try {
+                await addDoc(collection(db, "vmi_expenses"), {
+                    title,
+                    amount,
+                    date,
+                    category,
+                    invoiceNumber: invoiceNumber || 'Čekis',
+                    notes,
+                    createdAt: serverTimestamp()
+                });
+                alert("Išlaida sėkmingai užregistruota ir įtraukta į VMI apskaitą!");
+                closeVmiExpenseModal();
+            } catch(e) {
+                console.error("Error saving expense:", e);
+                alert("Klaida išsaugant išlaidą: " + (e.message || e));
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Išsaugoti Išlaidą';
+            }
+        });
+
+        window.deleteVmiExpense = async (id) => {
+            if (confirm("Ar tikrai norite ištrinti šią išlaidą iš VMI apskaitos žurnalo?")) {
+                try {
+                    await deleteDoc(doc(db, "vmi_expenses", id));
+                } catch(e) {
+                    alert("Klaida trinant: " + (e.message || e));
+                }
+            }
+        };
+
+        // Print VMI Journal
+        document.getElementById('print-vmi-btn')?.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Export VMI CSV
+        document.getElementById('export-vmi-csv-btn')?.addEventListener('click', () => {
+            const period = document.getElementById('vmi-period-filter')?.value || '2026';
+            const table = document.getElementById('vmi-journal-table');
+            if (!table) return;
+
+            let csvContent = "\uFEFF"; // UTF-8 BOM
+            csvContent += "Nr.;Data;Dokumento Nr.;Operacijos turinys;Pajamos (EUR);Islaidos (EUR);Kvitas / SF\r\n";
+
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach((row, i) => {
+                const cols = row.querySelectorAll('td');
+                if (cols.length >= 7) {
+                    const nr = cols[0].innerText.trim();
+                    const data = cols[1].innerText.trim();
+                    const dok = cols[2].innerText.trim().replace(/;/g, ',');
+                    const turinys = cols[3].innerText.trim().replace(/;/g, ',');
+                    const pajamos = cols[4].innerText.trim().replace('+', '').replace(' €', '').replace('-', '0');
+                    const islaidos = cols[5].innerText.trim().replace('-', '').replace(' €', '').replace('-', '0');
+                    const kvitas = cols[6].innerText.trim().replace(/;/g, ',');
+                    csvContent += `"${nr}";"${data}";"${dok}";"${turinys}";"${pajamos}";"${islaidos}";"${kvitas}"\r\n`;
+                }
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `VMI_IV_Zurnalas_${period}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // ==============================================================================
+        // 👥 KOMANDA & PRIVILEGIJOS (RBAC TEAM MANAGEMENT)
+        // ==============================================================================
+        let teamListenerActive = false;
+
+        function loadTeamMembers() {
+            if (teamListenerActive) return;
+            teamListenerActive = true;
+
+            const qTeam = query(collection(db, "admin_team"), orderBy("createdAt", "desc"));
+            onSnapshot(qTeam, (snapshot) => {
+                const list = document.getElementById('team-members-list');
+                if (!list) return;
+
+                let html = `
+                    <!-- Savininkas / Super Admin -->
+                    <div class="team-member-card" style="border-left: 4px solid #113939; background: #FAFBFB;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                <div>
+                                    <strong style="font-size: 1.15rem; color: #113939;">Dominik Šuškevič</strong>
+                                    <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">${ADMIN_EMAIL}</div>
+                                </div>
+                                <span class="role-badge role-superadmin">Savininkas</span>
+                            </div>
+                            <div style="margin: 12px 0;">
+                                <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Suteiktos teisės:</div>
+                                <span class="perm-tag">Visos teisės (Owner)</span>
+                                <span class="perm-tag">VMI Suvestinė</span>
+                                <span class="perm-tag">Komandos valdymas</span>
+                                <span class="perm-tag">PIN Kodo keitimas</span>
+                                <span class="perm-tag">Trinimas</span>
+                            </div>
+                        </div>
+                        <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: #2E7D32; font-weight: 600;">✓ Pagrindinė paskyra</span>
+                            <span style="font-size: 0.8rem; color: #888;">Neliečiama</span>
+                        </div>
+                    </div>
+                `;
+
+                snapshot.forEach(docSnap => {
+                    const m = docSnap.data();
+                    const id = docSnap.id;
+                    const isActive = m.active !== false;
+
+                    let roleBadgeClass = 'role-manager';
+                    let roleTitle = 'Vadybininkas';
+                    if (m.role === 'superadmin') { roleBadgeClass = 'role-superadmin'; roleTitle = 'Super Admin'; }
+                    else if (m.role === 'photographer') { roleBadgeClass = 'role-photographer'; roleTitle = 'Fotografas'; }
+
+                    const perms = m.permissions || [];
+                    let permsHtml = perms.map(p => `<span class="perm-tag">${p}</span>`).join(' ');
+
+                    html += `
+                        <div class="team-member-card" style="border-left: 4px solid ${isActive ? 'var(--accent-color)' : '#999'};">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div>
+                                        <strong style="font-size: 1.15rem; color: var(--accent-color);">${m.name || 'Komandos narys'}</strong>
+                                        <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">${m.email || 'PIN prieiga'}</div>
+                                    </div>
+                                    <span class="role-badge ${roleBadgeClass}">${roleTitle}</span>
+                                </div>
+                                
+                                <div style="margin: 10px 0; background: #FAFBFB; padding: 10px; border-radius: 4px; border: 1px solid #E8ECEB; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.82rem; color: #666;">Asmeninis PIN kodas:</span>
+                                    <strong id="team-pin-${id}" style="letter-spacing: 3px; font-family: monospace;">••••</strong>
+                                    <button type="button" class="admin-btn-outline" style="padding: 2px 8px; font-size: 0.7rem;" onclick="toggleTeamMemberPinReveal('${id}', '${m.pin || ''}')">Rodyti</button>
+                                </div>
+
+                                <div style="margin: 10px 0;">
+                                    <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Suteiktos teisės:</div>
+                                    ${permsHtml || '<span style="font-size: 0.8rem; color:#888;">Bazinės peržiūros teisės</span>'}
+                                </div>
+                            </div>
+
+                            <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 12px; margin-top: 12px; display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                                <button type="button" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="toggleMemberActive('${id}', ${isActive})">
+                                    ${isActive ? 'Pristabdyti' : 'Aktyvuoti'}
+                                </button>
+                                <button type="button" class="admin-btn-delete" style="padding: 6px 12px; font-size: 0.75rem;" onclick="deleteTeamMember('${id}')">
+                                    Pašalinti
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                list.innerHTML = html;
+            }, (err) => console.warn("Team listener error:", err));
+        }
+
+        window.toggleTeamMemberPinReveal = (id, actualPin) => {
+            const el = document.getElementById(`team-pin-${id}`);
+            if (!el) return;
+            if (el.innerText === '••••') {
+                el.innerText = actualPin || 'Nenustatytas';
+            } else {
+                el.innerText = '••••';
+            }
+        };
+
+        window.toggleMemberActive = async (id, currentActive) => {
+            try {
+                await updateDoc(doc(db, "admin_team", id), { active: !currentActive });
+            } catch(e) {
+                alert("Klaida keičiant būseną: " + (e.message || e));
+            }
+        };
+
+        window.deleteTeamMember = async (id) => {
+            if (confirm("Ar tikrai norite pašalinti šį narį iš komandos? Jis nebegalės prisijungti.")) {
+                try {
+                    await deleteDoc(doc(db, "admin_team", id));
+                } catch(e) {
+                    alert("Klaida trinant narį: " + (e.message || e));
+                }
+            }
+        };
+
+        window.closeTeamMemberModal = () => {
+            const m = document.getElementById('team-member-modal');
+            if (m) m.classList.remove('active');
+        };
+
+        document.getElementById('open-add-member-modal-btn')?.addEventListener('click', () => {
+            const m = document.getElementById('team-member-modal');
+            if (m) {
+                document.getElementById('member-name').value = '';
+                document.getElementById('member-email').value = '';
+                document.getElementById('member-pin').value = '';
+                document.getElementById('member-role').value = 'manager';
+                m.classList.add('active');
+            }
+        });
+
+        document.getElementById('save-team-member-btn')?.addEventListener('click', async () => {
+            const name = document.getElementById('member-name').value.trim();
+            const email = document.getElementById('member-email').value.trim();
+            const pin = document.getElementById('member-pin').value.trim();
+            const role = document.getElementById('member-role').value;
+
+            if (!name) {
+                alert("Prašome įvesti komandos nario vardą.");
+                return;
+            }
+
+            if (!pin && !email) {
+                alert("Prašome nurodyti bent asmeninį PIN kodą arba el. paštą prisijungimui.");
+                return;
+            }
+
+            const permissions = [];
+            if (document.getElementById('perm-requests')?.checked) permissions.push('Užsakymai');
+            if (document.getElementById('perm-emails')?.checked) permissions.push('El. laiškai');
+            if (document.getElementById('perm-contacts')?.checked) permissions.push('Kontaktai');
+            if (document.getElementById('perm-reviews')?.checked) permissions.push('Atsiliepimai');
+            if (document.getElementById('perm-vmi')?.checked) permissions.push('VMI Suvestinė');
+            if (document.getElementById('perm-delete')?.checked) permissions.push('Trinimas');
+
+            const btn = document.getElementById('save-team-member-btn');
+            btn.disabled = true;
+            btn.innerText = 'Saugoma...';
+
+            try {
+                await addDoc(collection(db, "admin_team"), {
+                    name,
+                    email,
+                    pin,
+                    role,
+                    permissions,
+                    active: true,
+                    createdAt: serverTimestamp()
+                });
+                alert(`Komandos narys „${name}“ sėkmingai pridėtas! Jis gali prisijungti su PIN: ${pin || 'pagal el. paštą'}`);
+                closeTeamMemberModal();
+            } catch(e) {
+                console.error("Error saving team member:", e);
+                alert("Klaida pridedant narį: " + (e.message || e));
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Išsaugoti Narį';
+            }
+        });
+
+        // ==============================================================================
+        // 🔐 PRIEIGOS PIN KODAS (MASTER ACCESS PIN MANAGEMENT)
+        // ==============================================================================
+        function loadSecuritySettings() {
+            updatePinDisplayUI(masterAccessPin);
+        }
+
+        document.getElementById('toggle-reveal-pin-btn')?.addEventListener('click', () => {
+            const el = document.getElementById('current-pin-display');
+            const btn = document.getElementById('toggle-reveal-pin-btn');
+            if (!el || !btn) return;
+            const isRevealed = el.getAttribute('data-revealed') === 'true';
+            if (isRevealed) {
+                el.innerText = '••••';
+                el.setAttribute('data-revealed', 'false');
+                btn.innerText = '👁 Rodyti';
+            } else {
+                el.innerText = masterAccessPin;
+                el.setAttribute('data-revealed', 'true');
+                btn.innerText = '✕ Slėpti';
+            }
+        });
+
+        document.getElementById('save-master-pin-btn')?.addEventListener('click', async () => {
+            const newPin = document.getElementById('new-master-pin-input')?.value.trim();
+            const confirmPin = document.getElementById('confirm-master-pin-input')?.value.trim();
+            const feedbackEl = document.getElementById('master-pin-feedback');
+
+            if (!newPin || newPin.length < 4) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#c9302c';
+                    feedbackEl.innerText = 'PIN kodas turi būti bent 4 simbolių / skaitmenų.';
+                }
+                return;
+            }
+
+            if (newPin !== confirmPin) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#c9302c';
+                    feedbackEl.innerText = 'Įvesti PIN kodai nesutampa.';
+                }
+                return;
+            }
+
+            const btn = document.getElementById('save-master-pin-btn');
+            btn.disabled = true;
+            btn.innerText = 'Saugoma...';
+
+            try {
+                // Update Firestore
+                await setDoc(doc(db, "admin_settings", "security"), {
+                    masterPin: newPin,
+                    updatedAt: serverTimestamp(),
+                    updatedBy: currentAdminSession?.name || "Admin"
+                }, { merge: true });
+
+                masterAccessPin = newPin;
+                localStorage.setItem('dp_admin_master_pin', newPin);
+                updatePinDisplayUI(newPin);
+
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#2E7D32';
+                    feedbackEl.innerText = `✓ Pagrindinis PIN kodas sėkmingai atnaujintas! Naujas kodas: ${newPin}`;
+                }
+
+                document.getElementById('new-master-pin-input').value = '';
+                document.getElementById('confirm-master-pin-input').value = '';
+                alert(`Pagrindinis PIN kodas sėkmingai pakeistas į: ${newPin}. Šis kodas jau galioja visuose Jūsų įrenginiuose!`);
+            } catch(e) {
+                console.error("Error saving master pin:", e);
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#c9302c';
+                    feedbackEl.innerText = 'Klaida išsaugant PIN: ' + (e.message || e);
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Išsaugoti Naują PIN Kodą';
+            }
+        });
     </script>
 </body>
 </html>

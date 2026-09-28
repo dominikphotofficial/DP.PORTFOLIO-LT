@@ -54,5 +54,19 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if isSignedIn();
     }
+
+    // Admin Team & RBAC
+    match /admin_team/{memberId} {
+      allow read, write: if true;
+    }
+
+    // VMI Expenses & Settings
+    match /vmi_expenses/{expenseId} {
+      allow read, write: if true;
+    }
+
+    match /admin_settings/{settingId} {
+      allow read, write: if true;
+    }
   }
 }
