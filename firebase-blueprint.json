@@ -96,13 +96,13 @@
       "properties": {
         "name": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "format": "email", "maxLength": 120 },
-        "pin": { "type": "string", "maxLength": 30 },
-        "role": { "type": "string", "enum": ["superadmin", "manager", "photographer"] },
+        "role": { "type": "string", "enum": ["superadmin", "manager", "photographer", "accountant"] },
         "permissions": { "type": "array" },
         "active": { "type": "boolean" },
+        "lastInviteSentAt": { "type": "string", "format": "date-time" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["name", "role"]
+      "required": ["name", "email", "role"]
     },
     "VmiExpense": {
       "title": "VMI Expense",

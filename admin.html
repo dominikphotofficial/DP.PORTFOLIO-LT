@@ -24,6 +24,7 @@
         .role-superadmin { background: #113939; color: #ffffff; }
         .role-manager { background: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
         .role-photographer { background: #FFF3E0; color: #E08700; border: 1px solid #FFE0B2; }
+        .role-accountant { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
         .logout-btn-header { background: #d9534f; color: #ffffff; padding: 10px 22px; border-radius: 4px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; border: none; cursor: pointer; transition: background 0.3s; }
         .logout-btn-header:hover { background: #c9302c; }
 
@@ -92,7 +93,7 @@
         .team-member-card { background: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; }
         .perm-tag { display: inline-block; background: rgba(17, 57, 57, 0.06); color: var(--accent-color); font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-weight: 500; margin: 2px 2px; }
 
-        #auth-section { max-width: 440px; margin: 120px auto; background: #ffffff; padding: 45px 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.08); border: 1px solid rgba(17, 57, 57, 0.06); text-align: center; }
+        #auth-section { max-width: 460px; margin: 110px auto; background: #ffffff; padding: 45px 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.08); border: 1px solid rgba(17, 57, 57, 0.06); text-align: center; }
         .auth-divider { margin: 25px 0; font-family: var(--font-heading); color: rgba(26, 43, 43, 0.4); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; display: flex; align-items: center; }
         .auth-divider::before, .auth-divider::after { content: ""; flex: 1; border-bottom: 1px solid rgba(17, 57, 57, 0.1); margin: 0 12px; }
 
@@ -133,24 +134,39 @@
         </div>
     </header>
 
+    <!-- Saugus Prisijungimas el. paštu ir slaptažodžiu -->
     <div id="auth-section">
-        <h2 style="font-family: var(--font-heading); margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; color: var(--accent-color);">Prisijungimas</h2>
-        
-        <!-- Greitas prisijungimas su PIN kodu -->
-        <div style="background: #F9FBFB; border: 1px solid rgba(17, 57, 57, 0.12); padding: 22px; border-radius: 8px; margin-bottom: 25px; text-align: left;">
-            <label style="display:block; font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 10px; font-weight: 600;">⚡ Greitas prisijungimas su PIN</label>
-            <div style="position: relative;">
-                <input type="password" id="admin-pin-input" class="admin-select" placeholder="Įveskite 4–8 skaitmenų PIN" style="margin-top: 0; margin-bottom: 14px; text-align: center; letter-spacing: 5px; font-size: 1.25rem; font-weight: 600;">
-            </div>
-            <button id="admin-login-pin-btn" class="admin-btn" style="width: 100%; padding: 13px;">Prisijungti su PIN kodu</button>
-            <div id="pin-login-error" style="color: #c9302c; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none;"></div>
+        <h2 style="font-family: var(--font-heading); margin-bottom: 8px; font-weight: 400; letter-spacing: 2.5px; color: var(--accent-color); text-transform: uppercase;">
+            Administracija
+        </h2>
+        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.7); margin-bottom: 25px;">
+            Prisijunkite su savo autorizuotu el. paštu ir slaptažodžiu
+        </p>
+
+        <div style="text-align: left; margin-bottom: 16px;">
+            <label class="field-label">El. pašto adresas</label>
+            <input type="email" id="admin-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required>
         </div>
 
-        <div class="auth-divider">ARBA SU EL. PAŠTU</div>
-        <input type="email" id="admin-email" class="admin-select" placeholder="El. paštas" style="margin-bottom: 15px;">
-        <input type="password" id="admin-password" class="admin-select" placeholder="Slaptažodis" style="margin-bottom: 22px;">
-        <button id="admin-login-email-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px;">Prisijungti su slaptažodžiu</button>
-        <button id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%;">Prisijungti su Google</button>
+        <div style="text-align: left; margin-bottom: 22px;">
+            <label class="field-label">Slaptažodis</label>
+            <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required>
+        </div>
+
+        <button id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 14px; padding: 14px;">
+            Prisijungti
+        </button>
+
+        <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
+            🔑 Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą
+        </button>
+
+        <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 15px;"></div>
+
+        <div class="auth-divider">ARBA SU GOOGLE PASKYRA</div>
+        <button id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%;">
+            Prisijungti su Google
+        </button>
     </div>
 
     <div id="dashboard-section" class="admin-container" style="display:none;">
@@ -163,6 +179,45 @@
                 </div>
             </div>
             <button id="logout-btn-inner" class="logout-btn-header">Atsijungti</button>
+        </div>
+
+        <!-- 📢 Pranešimas apie Naujausius Sistemos Pakeitimus -->
+        <div id="system-updates-banner" class="request-card" style="background: linear-gradient(135deg, #FAFBFB 0%, #F0F6F5 100%); border-left: 5px solid var(--accent-color); padding: 24px 28px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(17,57,57,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 280px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span style="background: var(--accent-color); color: #fff; font-size: 0.72rem; padding: 4px 10px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📢 Naujausi Sistemos Pakeitimai</span>
+                        <span style="font-size: 0.8rem; color: #888;">2026 m. rugsėjo atnaujinimas</span>
+                    </div>
+                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 14px 0; font-size: 1.25rem;">
+                        Kas pasikeitė valdymo sistemoje ir svetainėje?
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; font-family: var(--font-body); font-size: 0.92rem; color: rgba(26, 43, 43, 0.85); line-height: 1.55;">
+                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">✉️ Slaptažodžio nustatymo nuorodos el. paštu (vietoje PIN kodų):</strong>
+                            Skaitmeniniai PIN kodai pilnai pašalinti. Dabar kiekvienam komandos nariui (ar naujai pridėtam darbuotojui) galite vienu paspaudimu išsiųsti slaptažodžio nustatymo nuorodą tiesiai į jo el. paštą. Narys pats susikuria slaptažodį ir prisijungia saugiai.
+                        </div>
+                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">👥 Komandos valdymas ir rolės su teisėmis (RBAC):</strong>
+                            Pridėkite vadybininką, fotografą ar buhalterį. Kiekvienai rolei suteikiami tik reikalingi leidimai (užsakymai, laiškai, klientų žinutės, atsiliepimai, VMI ar trynimas).
+                        </div>
+                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">📊 VMI Suvestinė (Individuali veikla EVRK 74.20):</strong>
+                            Tikslus pajamų ir išlaidų žurnalas pagal LR reikalavimus: 30% standartinis atskaitymas arba faktinės išlaidos, automatinis GPM (5%), PSD (6,98%) ir VSD (12,52%) mokesčių skaičiavimas, A4 spausdinimas ir CSV eksportas.
+                        </div>
+                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">🎨 Minimalistinė vienos krypties poraštė be logotipo:</strong>
+                            Svetainės poraštė atnaujinta į švarią, elegantišką vienos krypties linijinę struktūrą su akcentinėmis spalvomis ir be logotipo, kad atrodytų tvarkingai ir profesionaliai.
+                        </div>
+                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">🏎️ Automobilių renginio albumas pagal datą:</strong>
+                            Failas pervardytas ir susietas kaip <code>car-meet-2026-05-26.html</code> su specialia tamsia naktine automobiline atmosfera bei tiesioginiu nukreipimu.
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="document.getElementById('system-updates-banner').style.display='none'" class="admin-btn-outline" style="padding: 6px 14px; font-size: 0.75rem; white-space: nowrap; border-radius: 4px;">✕ Paslėpti</button>
+            </div>
         </div>
 
         <div class="dashboard-stats">
@@ -182,7 +237,6 @@
             <button class="tab-btn" data-tab="email-diag" onclick="switchTab('email-diag')">✉️ El. Pašto Būsena</button>
             <button class="tab-btn" data-tab="vmi" id="tab-btn-vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
             <button class="tab-btn" data-tab="team" id="tab-btn-team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
-            <button class="tab-btn" data-tab="security" id="tab-btn-security" onclick="switchTab('security')">🔐 Prieigos Kodas</button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -491,48 +545,6 @@
                 <!-- Loaded via JS -->
             </div>
         </div>
-
-        <!-- 🔐 Prieigos Kodas Tab -->
-        <div id="security-tab" class="tab-content">
-            <div class="request-card" style="max-width: 680px; margin: 0 auto; padding: 35px;">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.3rem;">
-                    🔐 Prieigos PIN Kodo Valdymas
-                </h3>
-                <p style="font-size: 0.95rem; color: rgba(26,43,43,0.7); line-height: 1.6; margin-bottom: 25px;">
-                    Prieigos PIN kodas suteikia galimybę akimirksniu prisijungti prie valdymo skydo iš telefono, planšetės ar kompiuterio be būtinybės kaskart vesti ilgų slaptažodžių.
-                </p>
-
-                <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px; margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                        <div>
-                            <span class="field-label" style="margin-bottom: 4px;">Dabartinis Pagrindinis PIN Kodas:</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <strong id="current-pin-display" style="font-family: monospace; font-size: 1.4rem; letter-spacing: 5px; color: var(--accent-color);">••••</strong>
-                                <button type="button" id="toggle-reveal-pin-btn" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;">👁 Rodyti</button>
-                            </div>
-                        </div>
-                        <span class="status-badge status-Confirmed">✓ Aktyvus</span>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 25px;">
-                    <h4 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); margin: 0 0 15px 0;">
-                        Pakeisti Pagrindinį PIN Kodą
-                    </h4>
-                    
-                    <label class="field-label">Naujas PIN kodas (4–8 skaitmenys arba simboliai)</label>
-                    <input type="password" id="new-master-pin-input" class="admin-select" placeholder="Įveskite naują PIN" style="margin-bottom: 16px; letter-spacing: 4px; font-size: 1.15rem;">
-
-                    <label class="field-label">Pakartokite naują PIN kodą</label>
-                    <input type="password" id="confirm-master-pin-input" class="admin-select" placeholder="Pakartokite naują PIN" style="margin-bottom: 22px; letter-spacing: 4px; font-size: 1.15rem;">
-
-                    <button type="button" id="save-master-pin-btn" class="admin-btn" style="width: 100%; padding: 14px;">
-                        Išsaugoti Naują PIN Kodą
-                    </button>
-                    <div id="master-pin-feedback" style="margin-top: 15px; font-size: 0.9rem; font-weight: 500; text-align: center;"></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Modal: VMI Išlaidos Registravimas -->
@@ -588,30 +600,23 @@
     <div id="team-member-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 620px;">
             <h2 class="modal-head-title" id="team-modal-title">Pridėti Komandos Narį</h2>
-            <p class="modal-head-desc">Suteikite asmeniui prieigą prie valdymo skydelio ir parinkite teisių lygį.</p>
+            <p class="modal-head-desc">Pridėkite narį ir išsiųskite jam slaptažodžio nustatymo nuorodą tiesiai į el. paštą.</p>
 
-            <label class="field-label">Vardas ir Pavardė</label>
+            <label class="field-label">Vardas ir Pavardė *</label>
             <input type="text" id="member-name" class="admin-select" placeholder="Pvz., Jonas Asistentas" style="margin-bottom: 16px;">
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 16px;">
-                <div>
-                    <label class="field-label">El. paštas (nebūtina)</label>
-                    <input type="email" id="member-email" class="admin-select" placeholder="vardas@gmail.com" style="margin-top: 0;">
-                </div>
-                <div>
-                    <label class="field-label">Asmeninis PIN kodas (prisijungimui)</label>
-                    <input type="text" id="member-pin" class="admin-select" placeholder="Pvz., 4582" style="margin-top: 0; letter-spacing: 3px; font-weight: 600;">
-                </div>
-            </div>
+            <label class="field-label">El. pašto adresas * (prisijungimui & slaptažodžio nustatymo nuorodai)</label>
+            <input type="email" id="member-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-bottom: 16px;" required>
 
             <label class="field-label">Rolė / Privilegijų lygis</label>
             <select id="member-role" class="admin-select" style="margin-bottom: 20px;">
                 <option value="manager" selected>Vadybininkas / Asistentas (Užsakymai, laiškai, klientai)</option>
                 <option value="photographer">Fotografas / Partneris (Tik fotosesijų peržiūra)</option>
+                <option value="accountant">Buhalteris (VMI Suvestinė, finansai, kvitai)</option>
                 <option value="superadmin">Super Admin (Pilnos teisės ir nustatymai)</option>
             </select>
 
-            <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px; margin-bottom: 22px;">
+            <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px; margin-bottom: 16px;">
                 <span class="field-label" style="margin-bottom: 10px;">Papildomi Leidimai:</span>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -635,9 +640,13 @@
                 </div>
             </div>
 
+            <div style="background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: 6px; padding: 14px 16px; margin-bottom: 22px; font-size: 0.88rem; color: #1B5E20; line-height: 1.5;">
+                <strong>💡 Kaip narys prisijungs:</strong> Išsaugojus narį, į jo el. paštą bus automatiškai išsiųsta slaptažodžio nustatymo nuoroda. Narys paspaudžia nuorodą, susikuria savo slaptažodį ir prisijungia be jokių skaitmeninių kodų!
+            </div>
+
             <div class="req-actions" style="border: none; padding: 0; justify-content: flex-end;">
                 <button type="button" class="admin-btn-delete" onclick="closeTeamMemberModal()" style="border-color: transparent; color: var(--text-color);">Atšaukti</button>
-                <button type="button" class="admin-btn" id="save-team-member-btn">Išsaugoti Narį</button>
+                <button type="button" class="admin-btn" id="save-team-member-btn">Išsaugoti ir Siųsti Slaptažodžio Nuorodą</button>
             </div>
         </div>
     </div>
@@ -686,7 +695,7 @@
         import { db, auth, storage, googleProvider } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
 
@@ -696,31 +705,11 @@
         const dashboardSection = document.getElementById('dashboard-section');
         const logoutBtn = document.getElementById('logout-btn');
         const logoutBtnInner = document.getElementById('logout-btn-inner');
+        const authFeedback = document.getElementById('auth-status-feedback');
         let pendingEmailData = null;
 
         // Session & Role management
         let currentAdminSession = null;
-        let masterAccessPin = localStorage.getItem('dp_admin_master_pin') || "2026";
-
-        // Listen for live master PIN from Firestore
-        try {
-            onSnapshot(doc(db, "admin_settings", "security"), (snap) => {
-                if (snap.exists() && snap.data().masterPin) {
-                    masterAccessPin = String(snap.data().masterPin);
-                    localStorage.setItem('dp_admin_master_pin', masterAccessPin);
-                    updatePinDisplayUI(masterAccessPin);
-                }
-            });
-        } catch(e) {
-            console.warn("Security settings listener fallback:", e);
-        }
-
-        function updatePinDisplayUI(pin) {
-            const el = document.getElementById('current-pin-display');
-            if (!el) return;
-            const isRevealed = el.getAttribute('data-revealed') === 'true';
-            el.innerText = isRevealed ? pin : '••••';
-        }
 
         // Apply RBAC permissions to UI
         function applyUserRole(session) {
@@ -738,24 +727,28 @@
                 } else if (session.role === 'manager') {
                     badgeEl.classList.add('role-manager');
                     badgeEl.innerText = 'Vadybininkas';
-                } else {
+                } else if (session.role === 'photographer') {
                     badgeEl.classList.add('role-photographer');
                     badgeEl.innerText = 'Fotografas';
+                } else if (session.role === 'accountant') {
+                    badgeEl.classList.add('role-accountant');
+                    badgeEl.innerText = 'Buhalteris';
+                } else {
+                    badgeEl.classList.add('role-manager');
+                    badgeEl.innerText = session.role || 'Komanda';
                 }
             }
 
             // Permissions filtering
-            const hasVmi = (session.role === 'superadmin' || (session.permissions && session.permissions.includes('view_vmi')));
+            const hasVmi = (session.role === 'superadmin' || session.role === 'accountant' || (session.permissions && session.permissions.includes('VMI Suvestinė')));
             const hasTeam = (session.role === 'superadmin');
-            const canDelete = (session.role === 'superadmin' || (session.permissions && session.permissions.includes('delete_records')));
+            const canDelete = (session.role === 'superadmin' || (session.permissions && session.permissions.includes('Trinimas')));
 
             const vmiBtn = document.getElementById('tab-btn-vmi');
             const teamBtn = document.getElementById('tab-btn-team');
-            const secBtn = document.getElementById('tab-btn-security');
 
             if (vmiBtn) vmiBtn.style.display = hasVmi ? 'inline-block' : 'none';
             if (teamBtn) teamBtn.style.display = hasTeam ? 'inline-block' : 'none';
-            if (secBtn) secBtn.style.display = hasTeam ? 'inline-block' : 'none';
 
             // Hide/Show delete buttons
             const styleId = 'rbac-delete-style';
@@ -786,7 +779,6 @@
             loadMailDiagnostics();
             loadVmiSummary();
             loadTeamMembers();
-            loadSecuritySettings();
         }
 
         function handleLogout() {
@@ -796,75 +788,98 @@
             authSection.style.display = 'block';
             dashboardSection.style.display = 'none';
             logoutBtn.style.display = 'none';
-            const pinErr = document.getElementById('pin-login-error');
-            if (pinErr) pinErr.style.display = 'none';
-            const pinInput = document.getElementById('admin-pin-input');
-            if (pinInput) pinInput.value = '';
+            if (authFeedback) authFeedback.style.display = 'none';
         }
 
         logoutBtn.addEventListener('click', handleLogout);
         logoutBtnInner.addEventListener('click', handleLogout);
 
-        // Quick PIN Login Handler
-        async function attemptPinLogin() {
-            const pinInput = document.getElementById('admin-pin-input');
-            const errEl = document.getElementById('pin-login-error');
-            const enteredPin = (pinInput ? pinInput.value.trim() : '');
+        // Password Reset / Account Setup Link via Email
+        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', async () => {
+            const emailInput = document.getElementById('admin-email');
+            let email = emailInput ? emailInput.value.trim() : '';
 
-            if (!enteredPin) {
-                if (errEl) { errEl.innerText = 'Prašome įvesti PIN kodą'; errEl.style.display = 'block'; }
-                return;
+            if (!email) {
+                email = prompt("Įveskite savo autorizuotą el. pašto adresą, kuriam norite gauti slaptažodžio nustatymo nuorodą:");
+                if (!email) return;
+                if (emailInput) emailInput.value = email;
             }
 
-            // 1. Check Master PIN
-            if (enteredPin === masterAccessPin || enteredPin === "2026") {
-                if (errEl) errEl.style.display = 'none';
-                unlockDashboard({
-                    name: "Dominik Šuškevič (Savininkas)",
-                    email: ADMIN_EMAIL,
-                    role: "superadmin",
-                    permissions: ["all"]
-                });
-                return;
+            if (authFeedback) {
+                authFeedback.style.display = 'block';
+                authFeedback.style.background = '#E8F5E9';
+                authFeedback.style.color = '#2E7D32';
+                authFeedback.innerHTML = `⏳ Siunčiama slaptažodžio nustatymo nuoroda į <strong>${email}</strong>...`;
             }
 
-            // 2. Check Team Member PINs in Firestore
             try {
-                const teamSnap = await getDocs(collection(db, "admin_team"));
-                let matchedMember = null;
-                teamSnap.forEach(docSnap => {
-                    const data = docSnap.data();
-                    if (data.pin && String(data.pin).trim() === enteredPin && data.active !== false) {
-                        matchedMember = { id: docSnap.id, ...data };
-                    }
-                });
-
-                if (matchedMember) {
-                    if (errEl) errEl.style.display = 'none';
-                    unlockDashboard({
-                        name: matchedMember.name || "Komandos narys",
-                        email: matchedMember.email || "",
-                        role: matchedMember.role || "manager",
-                        permissions: matchedMember.permissions || ["manage_requests", "send_emails", "view_contacts", "manage_reviews"]
-                    });
-                    return;
+                await sendPasswordResetEmail(auth, email);
+                if (authFeedback) {
+                    authFeedback.style.background = '#E8F5E9';
+                    authFeedback.style.color = '#1B5E20';
+                    authFeedback.innerHTML = `✓ <strong>Slaptažodžio nuoroda išsiųsta!</strong><br>Patikrinkite savo pašto dėžutę adresu <u>${email}</u> (taip pat peržiūrėkite „Šlamšto / Spam“ aplanką) ir spustelėkite gautą nuorodą, kad nustatytumėte naują slaptažodį.`;
                 }
-            } catch(e) {
-                console.error("Team PIN verification error:", e);
+            } catch (err) {
+                console.error("Password reset error:", err);
+                if (authFeedback) {
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let msg = err.message || err;
+                    if (err.code === 'auth/user-not-found') {
+                        msg = 'Vartotojas su šiuo el. paštu dar neturi paskyros. Įsitikinkite, kad administratorius įtraukė Jus į komandą.';
+                    } else if (err.code === 'auth/invalid-email') {
+                        msg = 'Neteisingas el. pašto formato adresas.';
+                    }
+                    authFeedback.innerHTML = `✕ <strong>Klaida:</strong> ${msg}`;
+                }
             }
-
-            if (errEl) {
-                errEl.innerText = 'Neteisingas PIN kodas. Bandykite dar kartą.';
-                errEl.style.display = 'block';
-            }
-        }
-
-        document.getElementById('admin-login-pin-btn')?.addEventListener('click', attemptPinLogin);
-        document.getElementById('admin-pin-input')?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') attemptPinLogin();
         });
 
-        // Google & Email login
+        // Email & Password login
+        document.getElementById('admin-login-email-btn').addEventListener('click', async () => {
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-password').value;
+
+            if (!email || !pass) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Prašome įvesti el. paštą ir slaptažodį.';
+                } else {
+                    alert("Įveskite el. paštą ir slaptažodį");
+                }
+                return;
+            }
+
+            const btn = document.getElementById('admin-login-email-btn');
+            btn.disabled = true;
+            btn.innerText = 'Jungiamasi...';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch(e) {
+                console.error("Login error:", e);
+                btn.disabled = false;
+                btn.innerText = 'Prisijungti';
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let errorMsg = 'Neteisingas el. paštas arba slaptažodis.';
+                    if (e.code === 'auth/user-not-found') {
+                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Jei esate naujas komandos narys, paspauskite mygtuką žemiau „Pamiršote ar neturite slaptažodžio?“, kad jį susikurtumėte.';
+                    } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+                        errorMsg = 'Neteisingas slaptažodis. Paspauskite „Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“, kad pasikeistumėte.';
+                    }
+                    authFeedback.innerText = errorMsg;
+                } else {
+                    alert("Klaida: " + e.message);
+                }
+            }
+        });
+
+        // Google login
         document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
@@ -873,17 +888,15 @@
             }
         });
 
-        document.getElementById('admin-login-email-btn').addEventListener('click', () => {
-            const email = document.getElementById('admin-email').value.trim();
-            const pass = document.getElementById('admin-password').value;
-            if(!email || !pass) { alert("Įveskite el. paštą ir slaptažodį"); return; }
-            signInWithEmailAndPassword(auth, email, pass).catch(e => alert("Klaida: " + e.message));
-        });
-
         onAuthStateChanged(auth, async (user) => {
+            const btn = document.getElementById('admin-login-email-btn');
+            if (btn) { btn.disabled = false; btn.innerText = 'Prisijungti'; }
+
             if (user) {
                 const userEmail = (user.email || "").toLowerCase();
-                if (userEmail === ADMIN_EMAIL.toLowerCase()) {
+                const isOwner = (userEmail === ADMIN_EMAIL.toLowerCase() || userEmail === "dominik.suskevic@gmail.com");
+
+                if (isOwner) {
                     unlockDashboard({
                         name: "Dominik Šuškevič (Savininkas)",
                         email: user.email,
@@ -891,7 +904,7 @@
                         permissions: ["all"]
                     });
                 } else {
-                    // Check team member by email
+                    // Check team member by email in Firestore
                     try {
                         const teamSnap = await getDocs(collection(db, "admin_team"));
                         let found = null;
@@ -901,15 +914,23 @@
                                 found = { id: d.id, ...data };
                             }
                         });
+
                         if (found) {
                             unlockDashboard({
-                                name: found.name,
+                                name: found.name || user.displayName || found.email,
                                 email: found.email,
                                 role: found.role || "manager",
                                 permissions: found.permissions || []
                             });
                         } else {
-                            alert("Priėjimas uždraustas. Šis el. paštas neturi administratoriaus teisių.");
+                            if (authFeedback) {
+                                authFeedback.style.display = 'block';
+                                authFeedback.style.background = '#FFEBEE';
+                                authFeedback.style.color = '#C62828';
+                                authFeedback.innerHTML = `✕ <strong>Priėjimas uždraustas:</strong> El. paštas <u>${userEmail}</u> nėra įtrauktas į komandos narių sąrašą arba prieiga yra sustabdyta. Kreipkitės į administratorių.`;
+                            } else {
+                                alert(`Priėjimas uždraustas. El. pašto adresas „${userEmail}“ neturi administratoriaus teisių.`);
+                            }
                             signOut(auth);
                         }
                     } catch(err) {
@@ -918,15 +939,6 @@
                     }
                 }
             } else {
-                // Check if we have an active PIN session in sessionStorage
-                const cached = sessionStorage.getItem('dp_admin_session');
-                if (cached) {
-                    try {
-                        const sess = JSON.parse(cached);
-                        unlockDashboard(sess);
-                        return;
-                    } catch(e) {}
-                }
                 authSection.style.display = 'block';
                 dashboardSection.style.display = 'none';
                 logoutBtn.style.display = 'none';
@@ -945,7 +957,6 @@
 
             if (tab === 'vmi') loadVmiSummary();
             if (tab === 'team') loadTeamMembers();
-            if (tab === 'security') loadSecuritySettings();
         };
 
         function updateStats(tfpCount, srvCount, confirmedCount, receiptsCount) {
@@ -2091,7 +2102,7 @@
         });
 
         // ==============================================================================
-        // 👥 KOMANDA & PRIVILEGIJOS (RBAC TEAM MANAGEMENT)
+        // 👥 KOMANDA & PRIVILEGIJOS (RBAC TEAM MANAGEMENT SU EL. PAŠTO NUORODOMIS)
         // ==============================================================================
         let teamListenerActive = false;
 
@@ -2120,7 +2131,7 @@
                                 <span class="perm-tag">Visos teisės (Owner)</span>
                                 <span class="perm-tag">VMI Suvestinė</span>
                                 <span class="perm-tag">Komandos valdymas</span>
-                                <span class="perm-tag">PIN Kodo keitimas</span>
+                                <span class="perm-tag">El. pašto kvietimai</span>
                                 <span class="perm-tag">Trinimas</span>
                             </div>
                         </div>
@@ -2140,6 +2151,7 @@
                     let roleTitle = 'Vadybininkas';
                     if (m.role === 'superadmin') { roleBadgeClass = 'role-superadmin'; roleTitle = 'Super Admin'; }
                     else if (m.role === 'photographer') { roleBadgeClass = 'role-photographer'; roleTitle = 'Fotografas'; }
+                    else if (m.role === 'accountant') { roleBadgeClass = 'role-accountant'; roleTitle = 'Buhalteris'; }
 
                     const perms = m.permissions || [];
                     let permsHtml = perms.map(p => `<span class="perm-tag">${p}</span>`).join(' ');
@@ -2150,15 +2162,26 @@
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
                                     <div>
                                         <strong style="font-size: 1.15rem; color: var(--accent-color);">${m.name || 'Komandos narys'}</strong>
-                                        <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">${m.email || 'PIN prieiga'}</div>
+                                        <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">
+                                            <a href="mailto:${m.email}" style="color: #113939; text-decoration: underline;">${m.email || 'Nenurodytas el. paštas'}</a>
+                                        </div>
                                     </div>
                                     <span class="role-badge ${roleBadgeClass}">${roleTitle}</span>
                                 </div>
                                 
-                                <div style="margin: 10px 0; background: #FAFBFB; padding: 10px; border-radius: 4px; border: 1px solid #E8ECEB; display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 0.82rem; color: #666;">Asmeninis PIN kodas:</span>
-                                    <strong id="team-pin-${id}" style="letter-spacing: 3px; font-family: monospace;">••••</strong>
-                                    <button type="button" class="admin-btn-outline" style="padding: 2px 8px; font-size: 0.7rem;" onclick="toggleTeamMemberPinReveal('${id}', '${m.pin || ''}')">Rodyti</button>
+                                <div style="margin: 12px 0; background: #FAFBFB; padding: 12px 14px; border-radius: 6px; border: 1px solid #E8ECEB;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span style="font-size: 0.8rem; color: #555; font-weight: 500;">Prieiga su slaptažodžiu:</span>
+                                        <span style="font-size: 0.75rem; color: #2E7D32; font-weight: 600;">✓ El. pašto nuoroda</span>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        <button type="button" class="admin-btn" style="padding: 7px 12px; font-size: 0.72rem; flex: 1;" onclick="sendMemberPasswordReset('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
+                                            ✉️ Siųsti slaptažodžio nuorodą
+                                        </button>
+                                        <button type="button" class="admin-btn-outline" style="padding: 7px 12px; font-size: 0.72rem;" onclick="copyInviteInstructions('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
+                                            📋 Kopijuoti instrukciją
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div style="margin: 10px 0;">
@@ -2183,14 +2206,43 @@
             }, (err) => console.warn("Team listener error:", err));
         }
 
-        window.toggleTeamMemberPinReveal = (id, actualPin) => {
-            const el = document.getElementById(`team-pin-${id}`);
-            if (!el) return;
-            if (el.innerText === '••••') {
-                el.innerText = actualPin || 'Nenustatytas';
-            } else {
-                el.innerText = '••••';
+        // Siųsti slaptažodžio nustatymo nuorodą tiesiai į nario el. paštą
+        window.sendMemberPasswordReset = async (email, name) => {
+            if (!email) {
+                alert("Šis komandos narys neturi nurodyto el. pašto adreso.");
+                return;
             }
+
+            if (!confirm(`Ar norite išsiųsti slaptažodžio nustatymo nuorodą į „${email}“ (${name})?`)) {
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(`✓ Slaptažodžio nustatymo nuoroda sėkmingai išsiųsta į ${email}! Narys gavęs laišką paspaus nuorodą ir susikurs savo slaptažodį.`);
+            } catch(e) {
+                console.error("sendMemberPasswordReset error:", e);
+                alert("Klaida siunčiant nuorodą: " + (e.message || e));
+            }
+        };
+
+        // Nukopijuoti prisijungimo nuorodą ir instrukciją administratoriui
+        window.copyInviteInstructions = (email, name) => {
+            const loginUrl = window.location.origin + window.location.pathname;
+            const text = `Sveiki, ${name}!
+Jums suteikta prieiga prie DP.PORTFOLIO valdymo skydo: ${loginUrl}
+Prisijungimo el. paštas: ${email}
+
+Kaip prisijungti:
+1. Atidarykite nuorodą: ${loginUrl}
+2. Paspauskite mygtuką „Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“
+3. Įveskite savo el. paštą ${email} ir pasitikrinkite gautą laišką slaptažodžiui susikurti.`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✓ Prisijungimo instrukcija nukopijuota į iškarpinę! Galite nusiųsti komandos nariui per Telegram, WhatsApp ar el. paštu.");
+            }).catch(() => {
+                prompt("Nukopijuokite šią instrukciją:", text);
+            });
         };
 
         window.toggleMemberActive = async (id, currentActive) => {
@@ -2202,7 +2254,7 @@
         };
 
         window.deleteTeamMember = async (id) => {
-            if (confirm("Ar tikrai norite pašalinti šį narį iš komandos? Jis nebegalės prisijungti.")) {
+            if (confirm("Ar tikrai norite pašalinti šį narį iš komandos? Jis nebegalės prisijungti prie valdymo skydo.")) {
                 try {
                     await deleteDoc(doc(db, "admin_team", id));
                 } catch(e) {
@@ -2221,25 +2273,25 @@
             if (m) {
                 document.getElementById('member-name').value = '';
                 document.getElementById('member-email').value = '';
-                document.getElementById('member-pin').value = '';
                 document.getElementById('member-role').value = 'manager';
                 m.classList.add('active');
             }
         });
 
+        // Išsaugoti komandos narį ir išsiųsti slaptažodžio nuorodą
         document.getElementById('save-team-member-btn')?.addEventListener('click', async () => {
             const name = document.getElementById('member-name').value.trim();
-            const email = document.getElementById('member-email').value.trim();
-            const pin = document.getElementById('member-pin').value.trim();
+            const email = document.getElementById('member-email').value.trim().toLowerCase();
             const role = document.getElementById('member-role').value;
 
-            if (!name) {
-                alert("Prašome įvesti komandos nario vardą.");
+            if (!name || !email) {
+                alert("Prašome užpildyti komandos nario vardą ir el. pašto adresą.");
                 return;
             }
 
-            if (!pin && !email) {
-                alert("Prašome nurodyti bent asmeninį PIN kodą arba el. paštą prisijungimui.");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Prašome įvesti teisingą el. pašto adresą (pvz., vardas@pavyzdys.lt).");
                 return;
             }
 
@@ -2253,106 +2305,89 @@
 
             const btn = document.getElementById('save-team-member-btn');
             btn.disabled = true;
-            btn.innerText = 'Saugoma...';
+            btn.innerText = 'Saugoma ir siunčiama nuoroda...';
 
             try {
+                // 1. Save member to Firestore admin_team
                 await addDoc(collection(db, "admin_team"), {
                     name,
                     email,
-                    pin,
                     role,
                     permissions,
                     active: true,
-                    createdAt: serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    lastInviteSentAt: serverTimestamp()
                 });
-                alert(`Komandos narys „${name}“ sėkmingai pridėtas! Jis gali prisijungti su PIN: ${pin || 'pagal el. paštą'}`);
+
+                // 2. Send Firebase Auth Password Reset Email
+                let resetSent = false;
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    resetSent = true;
+                } catch(resetErr) {
+                    console.warn("sendPasswordResetEmail notice:", resetErr);
+                }
+
+                // 3. Queue branded notification in Firestore mail collection
+                try {
+                    const roleLabels = {
+                        superadmin: 'Super Administratorius',
+                        manager: 'Vadybininkas / Asistentas',
+                        photographer: 'Fotografas / Partneris',
+                        accountant: 'Buhalteris'
+                    };
+                    const roleName = roleLabels[role] || role;
+                    const loginUrl = window.location.origin + window.location.pathname;
+
+                    await addDoc(collection(db, "mail"), {
+                        to: email,
+                        message: {
+                            subject: "Kvietimas prisijungti prie DP.PORTFOLIO valdymo sistemos",
+                            html: `
+                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background: #ffffff;">
+                                    <div style="text-align: center; margin-bottom: 20px;">
+                                        <h2 style="color: #113939; margin: 0; text-transform: uppercase; letter-spacing: 2px;">DP.PORTFOLIO</h2>
+                                        <p style="color: #666; font-size: 13px; margin: 5px 0 0 0;">Dominik Šuškevič Fotografija & Kinematografija</p>
+                                    </div>
+                                    <div style="border-top: 2px solid #113939; padding-top: 20px; color: #333; line-height: 1.6;">
+                                        <p>Sveiki, <strong>${name}</strong>,</p>
+                                        <p>Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo kaip: <span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-weight: bold;">${roleName}</span>.</p>
+                                        <p>Prisijungimui naudokite savo el. pašto adresą: <strong>${email}</strong>.</p>
+                                        <div style="background: #fafbfb; padding: 16px; border-radius: 6px; border: 1px solid #e8eceb; margin: 20px 0;">
+                                            <strong>Norėdami nustatyti arba susikurti savo slaptažodį:</strong>
+                                            <ol style="margin: 8px 0 0 0; padding-left: 20px;">
+                                                <li>Atidarykite valdymo skydą: <a href="${loginUrl}" style="color: #113939; font-weight: bold;">${loginUrl}</a></li>
+                                                <li>Spustelėkite <em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em></li>
+                                                <li>Įveskite savo el. paštą <strong>${email}</strong> ir nustatykite norimą slaptažodį.</li>
+                                            </ol>
+                                        </div>
+                                        <div style="text-align: center; margin-top: 25px;">
+                                            <a href="${loginUrl}" style="display: inline-block; background: #113939; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Atidaryti Valdymo Skydą</a>
+                                        </div>
+                                    </div>
+                                    <div style="border-top: 1px solid #eee; margin-top: 30px; padding-top: 15px; font-size: 12px; color: #888; text-align: center;">
+                                        © 2026 DP.PORTFOLIO. Dominik Šuškevič.
+                                    </div>
+                                </div>
+                            `
+                        },
+                        createdAt: serverTimestamp()
+                    });
+                } catch(mailErr) {
+                    console.warn("Mail queue invite error:", mailErr);
+                }
+
+                alert(`✓ Komandos narys „${name}“ sėkmingai pridėtas!
+Slaptažodžio nustatymo nuoroda ir kvietimas išsiųsti į el. paštą: ${email}.
+Narys galės susikurti savo slaptažodį ir prisijungti.`);
+
                 closeTeamMemberModal();
             } catch(e) {
                 console.error("Error saving team member:", e);
                 alert("Klaida pridedant narį: " + (e.message || e));
             } finally {
                 btn.disabled = false;
-                btn.innerText = 'Išsaugoti Narį';
-            }
-        });
-
-        // ==============================================================================
-        // 🔐 PRIEIGOS PIN KODAS (MASTER ACCESS PIN MANAGEMENT)
-        // ==============================================================================
-        function loadSecuritySettings() {
-            updatePinDisplayUI(masterAccessPin);
-        }
-
-        document.getElementById('toggle-reveal-pin-btn')?.addEventListener('click', () => {
-            const el = document.getElementById('current-pin-display');
-            const btn = document.getElementById('toggle-reveal-pin-btn');
-            if (!el || !btn) return;
-            const isRevealed = el.getAttribute('data-revealed') === 'true';
-            if (isRevealed) {
-                el.innerText = '••••';
-                el.setAttribute('data-revealed', 'false');
-                btn.innerText = '👁 Rodyti';
-            } else {
-                el.innerText = masterAccessPin;
-                el.setAttribute('data-revealed', 'true');
-                btn.innerText = '✕ Slėpti';
-            }
-        });
-
-        document.getElementById('save-master-pin-btn')?.addEventListener('click', async () => {
-            const newPin = document.getElementById('new-master-pin-input')?.value.trim();
-            const confirmPin = document.getElementById('confirm-master-pin-input')?.value.trim();
-            const feedbackEl = document.getElementById('master-pin-feedback');
-
-            if (!newPin || newPin.length < 4) {
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#c9302c';
-                    feedbackEl.innerText = 'PIN kodas turi būti bent 4 simbolių / skaitmenų.';
-                }
-                return;
-            }
-
-            if (newPin !== confirmPin) {
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#c9302c';
-                    feedbackEl.innerText = 'Įvesti PIN kodai nesutampa.';
-                }
-                return;
-            }
-
-            const btn = document.getElementById('save-master-pin-btn');
-            btn.disabled = true;
-            btn.innerText = 'Saugoma...';
-
-            try {
-                // Update Firestore
-                await setDoc(doc(db, "admin_settings", "security"), {
-                    masterPin: newPin,
-                    updatedAt: serverTimestamp(),
-                    updatedBy: currentAdminSession?.name || "Admin"
-                }, { merge: true });
-
-                masterAccessPin = newPin;
-                localStorage.setItem('dp_admin_master_pin', newPin);
-                updatePinDisplayUI(newPin);
-
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#2E7D32';
-                    feedbackEl.innerText = `✓ Pagrindinis PIN kodas sėkmingai atnaujintas! Naujas kodas: ${newPin}`;
-                }
-
-                document.getElementById('new-master-pin-input').value = '';
-                document.getElementById('confirm-master-pin-input').value = '';
-                alert(`Pagrindinis PIN kodas sėkmingai pakeistas į: ${newPin}. Šis kodas jau galioja visuose Jūsų įrenginiuose!`);
-            } catch(e) {
-                console.error("Error saving master pin:", e);
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#c9302c';
-                    feedbackEl.innerText = 'Klaida išsaugant PIN: ' + (e.message || e);
-                }
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'Išsaugoti Naują PIN Kodą';
+                btn.innerText = 'Išsaugoti ir Siųsti Slaptažodžio Nuorodą';
             }
         });
     </script>
