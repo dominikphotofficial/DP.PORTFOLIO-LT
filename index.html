@@ -151,14 +151,31 @@
             <div class="promo-bg" style="flex: 1.2; min-width: 300px; min-height: 500px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg');"></div>
         </div>
 
-        <div class="film-promo-board fade-in-up" style="margin-bottom: 120px; display: flex; align-items: center; flex-wrap: wrap; background: #ffffff; border-radius: 2px; overflow: hidden; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.04); border: 1px solid rgba(17, 57, 57, 0.05);">
-            <div class="promo-bg" style="flex: 1.2; min-width: 300px; height: 450px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('https://i.postimg.cc/PfSbZTLR/IMG-9538.jpg');"></div>
-            <div class="promo-content" style="flex: 1; min-width: 300px; padding: 60px; color: var(--text-color); text-align: center;">
-                <span class="promo-badge" style="letter-spacing: 3px; font-size: 0.8rem; background: rgba(17, 57, 57, 0.05); padding: 5px 15px; color: var(--accent-color); font-family: var(--font-heading); text-transform: uppercase;">Equestrian & Nature</span>
-                <h2 style="font-size: clamp(2.2rem, 6vw, 3.8rem); margin: 25px 0; letter-spacing: 10px; font-family: var(--font-heading); text-transform: uppercase;">ŽEIMENOS ŽIRGAI</h2>
-                <div class="divider"></div>
-                <p style="font-weight: 300; margin-bottom: 45px; opacity: 0.9; font-size: 1.1rem; font-family: var(--font-body);">Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Vasaros stovyklos, profesionalios jojimo pamokos bei įsimintinos gimtadienių šventės Švenčionėliuose.</p>
-                <a href="albums/zeimenos-zirgai.html" class="promo-btn" style="display: inline-block; padding: 20px 60px; border: 1px solid var(--accent-color); color: var(--accent-color); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); background: transparent; text-decoration: none;">Peržiūrėti galeriją</a>
+        <!-- Elevated Feature Board: Žeimenos Žirgai -->
+        <div class="zeimenos-feature-board fade-in-up" style="margin-bottom: 120px;">
+            <div class="zeimenos-feature-img" style="background-image: url('https://i.postimg.cc/PfSbZTLR/IMG-9538.jpg');">
+                <span class="zeimenos-location-chip">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Švenčionėliai, Lietuva
+                </span>
+            </div>
+            <div class="zeimenos-feature-content">
+                <span class="zeimenos-badge">Equestrian & Gamta</span>
+                <h2>ŽEIMENOS ŽIRGAI</h2>
+                <div class="zeimenos-gold-divider"></div>
+                <p>Atraskite ypatingą ryšį tarp žmogaus ir žirgo. Tai erdvė, kurioje susipina gamtos darna, laisvė ir vizualinis pasakojimas. Vasaros stovyklos, profesionalios jojimo pamokos bei įsimintinos fotosesijos.</p>
+                <div class="zeimenos-tag-pills">
+                    <span>Vasaros stovyklos</span>
+                    <span>Jojimo pamokos</span>
+                    <span>Šventės & Fotosesijos</span>
+                </div>
+                <div class="zeimenos-cta-row">
+                    <a href="albums/zeimenos-zirgai.html" class="zeimenos-primary-btn">Peržiūrėti galeriją &rarr;</a>
+                    <a href="tel:+37062345327" class="zeimenos-phone-link">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        +370 623 45327
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -167,14 +184,29 @@
         <div class="album-grid-columns" style="margin-bottom: 100px;">
             <a href="albums/azuolynas.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" alt="Gamtos ir miesto fotografija Kaunas Street Ąžuolynas" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Miesto Gamta & Kaunas</span>
                     <span class="album-title">Ąžuolynas</span>
                 </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Miesto Gamta & Kaunas</span>
+                    <h3 class="album-title">Ąžuolynas</h3>
+                    <p class="album-desc">Šimtamečių ąžuolų ramybė ir natūralios šviesos paieškos viename didžiausių miesto ąžuolynų Europoje.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
             </a>
+
             <a href="albums/azuolyno-parkas.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/8PmLjkfL/street_azuolynas_33.jpg" alt="Profesionali fotografija Lietuva Ąžuolyno Parkas Kaune" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Gamtos Peizažai</span>
                     <span class="album-title">Ąžuolyno Parkas</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Gamtos Peizažai</span>
+                    <h3 class="album-title">Ąžuolyno Parkas</h3>
+                    <p class="album-desc">Gamtos ir Kauno architektūros dialogas. Šviesos ir šešėlių kontrastai ramiuose pasivaikščiojimų takuose.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
         </div>
@@ -182,114 +214,312 @@
         <h2 class="section-title fade-in-up">Galerija</h2>
         <div class="divider fade-in-up"></div>
         <div class="album-grid-columns">
-            <a href="albums/rundale.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/4NqyTsg1/LATVIJA-2025-33.jpg" alt="Architektūros fotografija Rundāle Palace" loading="lazy">
-                <div class="album-overlay">
-                    <span class="album-title">Rundāle Palace</span>
+            <!-- CAR MEET KAUNAS MEGA -->
+            <a href="albums/car-meet-kaunas.html" class="album-card album-card-automotive fade-in-up">
+                <img src="https://i.postimg.cc/90JLjs3J/IMG-7652.jpg" alt="CAR MEET | KAUNAS MEGA automobilių fotografija" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Automobilių Kultūra</span>
+                    <span class="album-title">CAR MEET | KAUNAS MEGA</span>
                 </div>
-            </a>
-            
-            <a href="albums/noka.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/28SthTZg/noka-car-01.jpg" alt="Premium automobilių renginių fotografija Kaunas NOKA Gathering" loading="lazy">
                 <div class="album-overlay">
-                    <span class="album-title">NOKA Gathering</span>
+                    <span class="album-tag">Automobilių Kultūra</span>
+                    <h3 class="album-title">CAR MEET | KAUNAS MEGA</h3>
+                    <p class="album-desc">Didžiausias pavasario automobilių kultūros susitikimas Kaune prie MEGA. Naktinio miesto dvasia, modifikuoti automobiliai ir bendruomenės aistra technikai.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
 
-            <a href="albums/zeimenos-zirgai.html" class="album-card fade-in-up">
+            <!-- ŽEIMENOS ŽIRGAI -->
+            <a href="albums/zeimenos-zirgai.html" class="album-card album-card-zeimenos fade-in-up">
                 <img src="https://i.postimg.cc/1zzBbXNR/IMG-9454.jpg" alt="Žeimenos Žirgai Švenčionėliai" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Equestrian & Gamta</span>
                     <span class="album-title">Žeimenos Žirgai</span>
                 </div>
-            </a>
-
-            <a href="albums/bmw-e36.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/vTpSGtSm/BMWE36-01.jpg" alt="Premium automobilių fotografija BMW E36 naktinė estetika" loading="lazy">
                 <div class="album-overlay">
-                    <span class="album-title">BMW E36</span>
+                    <span class="album-tag">Equestrian & Gamta</span>
+                    <h3 class="album-title">Žeimenos Žirgai</h3>
+                    <p class="album-desc">Ypatingas ryšys tarp žmogaus ir žirgo. Vasaros stovyklos, jojimo pamokos bei vizualinis pasakojimas Švenčionėliuose.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
 
+            <!-- NOKA GATHERING -->
+            <a href="albums/noka.html" class="album-card album-card-automotive fade-in-up">
+                <img src="https://i.postimg.cc/28SthTZg/noka-car-01.jpg" alt="Premium automobilių renginių fotografija Kaunas NOKA Gathering" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Automobilių Renginys</span>
+                    <span class="album-title">NOKA Gathering</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Automobilių Renginys</span>
+                    <h3 class="album-title">NOKA Gathering</h3>
+                    <p class="album-desc">Išskirtinių sportinių automobilių susitikimas. Elegantiškos kėbulo formos, inžinerinis menas ir naktinis Kaunas.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
+            </a>
+
+            <!-- BMW E36 -->
+            <a href="albums/bmw-e36.html" class="album-card album-card-automotive fade-in-up">
+                <img src="https://i.postimg.cc/vTpSGtSm/BMWE36-01.jpg" alt="Premium automobilių fotografija BMW E36 naktinė estetika" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Automobilių Estetika</span>
+                    <span class="album-title">BMW E36</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Automobilių Estetika</span>
+                    <h3 class="album-title">BMW E36</h3>
+                    <p class="album-desc">Klasikinis BMW E36 naktinėje Kauno šviesoje. Švarus siluetas, griežtos kėbulo linijos ir asfalto atspindžiai.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
+            </a>
+
+            <!-- RUNDALE PALACE -->
+            <a href="albums/rundale.html" class="album-card fade-in-up">
+                <img src="https://i.postimg.cc/4NqyTsg1/LATVIJA-2025-33.jpg" alt="Architektūros fotografija Rundāle Palace" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Architektūra & Paveldas</span>
+                    <span class="album-title">Rundāle Palace</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Architektūra & Paveldas</span>
+                    <h3 class="album-title">Rundāle Palace</h3>
+                    <p class="album-desc">Baroko ir rokoko šedevras Latvijoje. Didingi rūmų fasadai, prancūziško parko geometrija ir istorinė didybė.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
+            </a>
+
+            <!-- CIRKLISKIS -->
+            <a href="albums/cirkliskis.html" class="album-card fade-in-up">
+                <img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" alt="Paveldo fotografija Lietuva Cirkliškio dvaras" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Dvarų Paveldas</span>
+                    <span class="album-title">Cirkliškis</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Dvarų Paveldas</span>
+                    <h3 class="album-title">Cirkliškis</h3>
+                    <p class="album-desc">Klasicistinio Cirkliškio dvaro elegancija, senojo parko alėjos ir paslaptinga ramybė Švenčionių krašte.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
+            </a>
+
+            <!-- VALDOVU RUMAI -->
+            <a href="albums/valdovu-rumai.html" class="album-card fade-in-up">
+                <img src="https://i.postimg.cc/C5XjhNy7/Vilniaus-muziejus.png" alt="Istorinės architektūros fotografija Lietuva Valdovų Rūmai" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Istorinė Architektūra</span>
+                    <span class="album-title">Valdovų Rūmai</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Istorinė Architektūra</span>
+                    <h3 class="album-title">Valdovų Rūmai</h3>
+                    <p class="album-desc">Lietuvos Didžiosios Kunigaikštystės širdis Vilniuje. Monumentalūs renesanso ir baroko mūrai.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
+            </a>
+
+            <!-- GELES -->
             <a href="albums/geles.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/Dy2Q1ryc/Flower-01.jpg" alt="Gamtos makro fotografija Lietuva Gėlės" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Makro Fotografija</span>
                     <span class="album-title">Gėlės</span>
+                </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Makro Fotografija</span>
+                    <h3 class="album-title">Gėlės</h3>
+                    <p class="album-desc">Subtilios žiedlapių tekstūros, rasos lašai ir gilus autorinis spalvų tonavimas natūralioje šviesoje.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
             
+            <!-- BALTOJI KIELE -->
             <a href="albums/baltoji-kiele.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/KYbYwNkK/bird-01.jpg" alt="Laukinės gamtos fotografija Baltoji kielė" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Laukinė Gamta</span>
                     <span class="album-title">Baltoji kielė</span>
                 </div>
-            </a>
-
-            <a href="albums/cirkliskis.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/x8pRF86C/cirkliskis-01.jpg" alt="Paveldo fotografija Lietuva Cirkliškio dvaras" loading="lazy">
                 <div class="album-overlay">
-                    <span class="album-title">Cirkliškis</span>
+                    <span class="album-tag">Laukinė Gamta</span>
+                    <h3 class="album-title">Baltoji kielė</h3>
+                    <p class="album-desc">Greiti ir grakštūs baltosios kielės judesiai, sustabdytos akimirkos natūralioje upės pakrantėje.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
 
+            <!-- SIRVETOS PARKAS -->
             <a href="albums/sirvetos-parkas.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/NF6TM5F4/srp-02.jpg" alt="Gamtos peizažų fotografija Sirvėtos regioninis parkas" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Gamtos Peizažai</span>
                     <span class="album-title">Sirvėtos parkas</span>
                 </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Gamtos Peizažai</span>
+                    <h3 class="album-title">Sirvėtos parkas</h3>
+                    <p class="album-desc">Aukštaitijos ežerų, kalvų ir miškų panorama Sirvėtos regioniniame parke saulėlydžio šviesoje.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
             </a>
 
+            <!-- SVENTA -->
             <a href="albums/sventa.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/QM6Nbm4p/venta-0.jpg" alt="Kraštovaizdžio fotografija Šventos upė" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Vandens Kraštovaizdis</span>
                     <span class="album-title">Šventa</span>
                 </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Vandens Kraštovaizdis</span>
+                    <h3 class="album-title">Šventa</h3>
+                    <p class="album-desc">Srauni Šventos upės tėkmė, laukinė pakrančių gamta, medžių atspindžiai ir vandens ramybė.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
             </a>
 
+            <!-- VDU SODAS -->
             <a href="albums/vdu-sodas.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/HL0Fv0Xk/vdu-botanikos-sodas-01.jpg" alt="Botanikos sodo fotografija Kaunas VDU Botanikos sodas" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Botanikos Sodas</span>
                     <span class="album-title">VDU Sodas</span>
                 </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Botanikos Sodas</span>
+                    <h3 class="album-title">VDU Sodas</h3>
+                    <p class="album-desc">Žiedų harmonija, egzotinė oranžerijos augmenija ir ramybės oazė Kauno botanikos sode.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
             </a>
 
+            <!-- MOLETU OBSERVATORIJA -->
             <a href="albums/moletu-observatorija.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/3x3PgfJH/Teleskopas-165-cm.png" alt="Mokslo ir architektūros fotografija Molėtų observatorija" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Mokslas & Naktis</span>
                     <span class="album-title">Observatorija</span>
                 </div>
+                <div class="album-overlay">
+                    <span class="album-tag">Mokslas & Naktis</span>
+                    <h3 class="album-title">Observatorija</h3>
+                    <p class="album-desc">Didieji teleskopų kupolai ir naktinė mistika Molėtų miškuose, po giliu žvaigždėtu dangumi.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
+                </div>
             </a>
 
+            <!-- GANDRAS -->
             <a href="albums/gandras.html" class="album-card fade-in-up">
                 <img src="https://i.postimg.cc/KYtMgjLT/Gandras-01.jpg" alt="Paukščių fotografija Lietuva Gandras" loading="lazy">
-                <div class="album-overlay">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Lietuvos Gamta</span>
                     <span class="album-title">Gandras</span>
                 </div>
-            </a>
-
-            <a href="albums/petrausku-namai.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/8k0XLvTx/miko-ir-kipro-petrausku-namai-01.jpg" alt="Muziejų ir istorijos fotografija Kaunas Miko ir Kipro Petrauskų namai" loading="lazy">
                 <div class="album-overlay">
-                    <span class="album-title">Petrauskų Namai</span>
+                    <span class="album-tag">Lietuvos Gamta</span>
+                    <h3 class="album-title">Gandras</h3>
+                    <p class="album-desc">Lietuvos nacionalinio paukščio didybė ir skrydžio elegancija atvirose vasaros pievose.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
 
-            <a href="albums/valdovu-rumai.html" class="album-card fade-in-up">
-                <img src="https://i.postimg.cc/C5XjhNy7/Vilniaus-muziejus.png" alt="Istorinės architektūros fotografija Lietuva Valdovų Rūmai" loading="lazy">
+            <!-- PETRAUSKU NAMAI -->
+            <a href="albums/petrausku-namai.html" class="album-card fade-in-up">
+                <img src="https://i.postimg.cc/8k0XLvTx/miko-ir-kipro-petrausku-namai-01.jpg" alt="Muziejų ir istorijos fotografija Kaunas Miko ir Kipro Petrauskų namai" loading="lazy">
+                <div class="album-bottom-bar">
+                    <span class="album-tag">Muziejų Istorija</span>
+                    <span class="album-title">Petrauskų Namai</span>
+                </div>
                 <div class="album-overlay">
-                    <span class="album-title">Valdovų Rūmai</span>
+                    <span class="album-tag">Muziejų Istorija</span>
+                    <h3 class="album-title">Petrauskų Namai</h3>
+                    <p class="album-desc">Miko ir Kipro Petrauskų namų muziejus Kaune – tarpukario kultūros dvasia ir muzikos aidai.</p>
+                    <span class="album-btn-text">Atidaryti albumą &rarr;</span>
                 </div>
             </a>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</p>
-        <div class="lang-switcher">
-            <a href="https://dominikphotofficial.lt">LT</a>
-            <a href="https://en.dominikphotofficial.lt" class="active">EN</a>
-            <a href="https://pl.dominikphotofficial.lt">PL</a>
-            <a href="https://ru.dominikphotofficial.lt">RU</a>
-            <a href="https://kr.dominikphotofficial.lt">KR</a>
+    <!-- Premium Footer / Foyer su About ir Pilna Informacija -->
+    <footer class="footer-premium">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Col 1: About Dominik & DP.PORTFOLIO -->
+                <div class="footer-col">
+                    <a href="index.html" class="footer-brand-logo">
+                        <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO Logo">
+                        <div>
+                            <div class="footer-brand-title">DP.PORTFOLIO</div>
+                            <div class="footer-brand-sub">Dominik Šuškevič</div>
+                        </div>
+                    </a>
+                    <p class="footer-about-text">
+                        Profesionali fotografija ir videografija Kaune bei visoje Lietuvoje. Kuriu vizualias istorijas, kuriose susitinka natūrali šviesa, kinematografinis koloritas ir nesumeluotos emocijos.
+                    </p>
+                    <div class="footer-status-badge">
+                        <span class="footer-status-dot"></span>
+                        Priimami užsakymai 2026 sezonui
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation & Services -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigacija</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="index.html">Darbai & Galerija</a></li>
+                        <li><a href="services.html">Paslaugos & Kainos</a></li>
+                        <li><a href="tfp-booking.html">TFP Modelio Registracija</a></li>
+                        <li><a href="biography.html">Biografija</a></li>
+                        <li><a href="about.html">Apie Mane</a></li>
+                        <li><a href="contacts.html">Kontaktai & Užklausos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Selected Albums -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Teminiai Albumai</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="albums/car-meet-kaunas.html">Car Meet | Kaunas Mega</a></li>
+                        <li><a href="albums/zeimenos-zirgai.html">Žeimenos Žirgai (Švenčionėliai)</a></li>
+                        <li><a href="albums/noka.html">NOKA Gathering</a></li>
+                        <li><a href="albums/bmw-e36.html">BMW E36 Naktinė Estetika</a></li>
+                        <li><a href="albums/azuolynas.html">Ąžuolynas & Kaunas</a></li>
+                        <li><a href="albums/rundale.html">Rundāle Palace</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contacts & Booking -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Kontaktai & Užsakymai</h4>
+                    <div class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Kaunas / Vilnius / Visa Lietuva</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <a href="mailto:dominikphotofficial.lt@gmail.com">dominikphotofficial.lt@gmail.com</a>
+                    </div>
+                    <div class="footer-contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        <a href="https://www.instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                    </div>
+                    <a href="services.html#service-booking" class="footer-cta-btn">Rezervuoti fotosesiją &rarr;</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-copy">
+                    &copy; 2026 DP.PORTFOLIO. Dominik Šuškevič. Visos teisės saugomos.
+                </div>
+                <div class="footer-lang-list">
+                    <a href="https://dominikphotofficial.lt" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt">KR</a>
+                </div>
+            </div>
         </div>
     </footer>
 

@@ -510,56 +510,354 @@ header.scrolled {
 
 .album-grid-columns {
     column-count: 3;
-    column-gap: clamp(15px, 3vw, 30px);
+    column-gap: clamp(18px, 3vw, 32px);
 }
 
 .album-card {
     position: relative;
     display: block;
     break-inside: avoid;
-    margin-bottom: clamp(15px, 3vw, 30px);
+    margin-bottom: clamp(20px, 3.5vw, 36px);
     overflow: hidden;
-    background-color: #f5f5f5;
-    border-radius: 2px;
-    box-shadow: 0 10px 30px rgba(17, 57, 57, 0.04);
+    background-color: #0b2020;
+    border-radius: 4px;
+    box-shadow: 0 12px 35px rgba(17, 57, 57, 0.08);
+    border: 1px solid rgba(17, 57, 57, 0.08);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+    text-decoration: none;
+}
+
+.album-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px rgba(17, 57, 57, 0.18);
+    border-color: rgba(197, 168, 128, 0.45);
 }
 
 .album-card img {
     width: 100%;
     height: auto;
     display: block;
-    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.album-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(17, 57, 57, 0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.album-title {
-    color: #FFFFFF;
-    font-size: clamp(0.8rem, 2vw, 1.1rem);
-    letter-spacing: 3px;
-    text-align: center;
-    font-weight: 500;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
 }
 
 .album-card:hover img {
-    transform: scale(1.05);
+    transform: scale(1.06);
+    filter: brightness(0.92);
+}
+
+/* Subtle default bottom bar showing album tag & title */
+.album-bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 35px 22px 18px 22px;
+    background: linear-gradient(to top, rgba(10, 28, 28, 0.94) 0%, rgba(10, 28, 28, 0.6) 65%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 2;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+}
+
+.album-bottom-bar .album-tag {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #D4C3B3;
+    font-weight: 500;
+}
+
+.album-bottom-bar .album-title {
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+/* Full rich frosted overlay on hover with description */
+.album-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, rgba(17, 57, 57, 0.95) 0%, rgba(8, 26, 26, 0.97) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 24px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(8px);
 }
 
 .album-card:hover .album-overlay {
     opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.album-card:hover .album-bottom-bar {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.album-overlay .album-tag {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 3px 10px;
+    background: rgba(212, 195, 179, 0.15);
+    border: 1px solid rgba(212, 195, 179, 0.35);
+    color: #D4C3B3;
+    border-radius: 2px;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.album-overlay .album-title {
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 1.25;
+    margin: 0 0 10px 0;
+}
+
+.album-overlay .album-desc {
+    color: rgba(251, 249, 246, 0.88);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0 0 18px 0;
+    font-weight: 300;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.album-overlay .album-btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #D4C3B3;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.3s ease, gap 0.3s ease;
+}
+
+.album-card:hover .album-overlay .album-btn-text {
+    gap: 12px;
+    color: #FFFFFF;
+}
+
+/* Dedicated styling for special themed albums */
+.album-card-zeimenos {
+    border: 1px solid rgba(30, 58, 109, 0.3);
+}
+.album-card-zeimenos:hover {
+    border-color: #2F5AA3;
+    box-shadow: 0 22px 50px rgba(30, 58, 109, 0.25);
+}
+.album-card-zeimenos .album-overlay {
+    background: linear-gradient(145deg, rgba(23, 44, 82, 0.95) 0%, rgba(12, 24, 46, 0.98) 100%);
+}
+.album-card-zeimenos .album-tag {
+    background: rgba(71, 96, 59, 0.25);
+    border-color: rgba(162, 191, 189, 0.45);
+    color: #DDE8D7;
+}
+
+.album-card-automotive {
+    border: 1px solid rgba(197, 168, 128, 0.35);
+}
+.album-card-automotive:hover {
+    border-color: #C5A880;
+    box-shadow: 0 22px 50px rgba(197, 168, 128, 0.22);
+}
+.album-card-automotive .album-overlay {
+    background: linear-gradient(145deg, rgba(24, 28, 32, 0.96) 0%, rgba(10, 15, 18, 0.98) 100%);
+}
+.album-card-automotive .album-tag {
+    background: rgba(197, 168, 128, 0.2);
+    border-color: rgba(197, 168, 128, 0.5);
+    color: #EADBC8;
+}
+
+/* Dedicated Zeimenos Žirgai Feature Board */
+.zeimenos-feature-board {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    background: #F7F4F0;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(30, 58, 109, 0.08);
+    border: 1px solid rgba(30, 58, 109, 0.12);
+}
+
+.zeimenos-feature-img {
+    flex: 1.25;
+    min-width: 320px;
+    min-height: 480px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.zeimenos-location-chip {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(247, 244, 240, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1E3A6D;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.zeimenos-feature-content {
+    flex: 1;
+    min-width: 320px;
+    padding: clamp(35px, 5vw, 65px);
+    color: #1B241A;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.zeimenos-badge {
+    letter-spacing: 3px;
+    font-size: 0.75rem;
+    background: rgba(30, 58, 109, 0.08);
+    border: 1px solid rgba(30, 58, 109, 0.2);
+    padding: 6px 16px;
+    color: #1E3A6D;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    border-radius: 2px;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.zeimenos-feature-content h2 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    margin: 0 0 16px 0;
+    letter-spacing: 8px;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    color: #1E3A6D;
+    font-weight: 400;
+    line-height: 1.1;
+}
+
+.zeimenos-gold-divider {
+    width: 60px;
+    height: 2px;
+    background: #47603B;
+    margin: 0 0 25px 0;
+}
+
+.zeimenos-feature-content p {
+    font-weight: 300;
+    margin-bottom: 30px;
+    font-size: 1.08rem;
+    font-family: var(--font-body);
+    line-height: 1.8;
+    color: rgba(27, 36, 26, 0.85);
+}
+
+.zeimenos-tag-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+}
+
+.zeimenos-tag-pills span {
+    padding: 6px 16px;
+    border: 1px solid rgba(30, 58, 109, 0.18);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #1E3A6D;
+    border-radius: 2px;
+    background: rgba(30, 58, 109, 0.04);
+}
+
+.zeimenos-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.zeimenos-primary-btn {
+    display: inline-block;
+    padding: 16px 38px;
+    background: #1E3A6D;
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.82rem;
+    text-decoration: none;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(30, 58, 109, 0.2);
+}
+
+.zeimenos-primary-btn:hover {
+    background: #2F5AA3;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(30, 58, 109, 0.3);
+}
+
+.zeimenos-phone-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #47603B;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.zeimenos-phone-link:hover {
+    color: #1E3A6D;
 }
 
 .gallery-grid {
@@ -829,6 +1127,240 @@ header.scrolled {
     border-color: var(--accent-color) !important;
 }
 
+/* ==============================================================================
+   Premium Editorial Footer / Foyer
+   ============================================================================== */
+.footer-premium {
+    background-color: #0c2323;
+    color: #FBF9F6;
+    border-top: 1px solid rgba(197, 168, 128, 0.22);
+    padding: 85px 0 35px 0;
+    margin-top: 100px;
+    font-family: var(--font-body);
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 50px);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.15fr 1.25fr;
+    gap: clamp(30px, 4vw, 60px);
+    margin-bottom: 60px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.footer-brand-logo img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+}
+
+.footer-brand-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.footer-brand-sub {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #D4C3B3;
+    font-weight: 300;
+    margin-top: 2px;
+}
+
+.footer-about-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(251, 249, 246, 0.8);
+    font-weight: 300;
+    margin: 0 0 20px 0;
+}
+
+.footer-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46, 125, 50, 0.16);
+    border: 1px solid rgba(46, 125, 50, 0.35);
+    color: #A5D6A7;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+.footer-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #66BB6A;
+    box-shadow: 0 0 8px #66BB6A;
+}
+
+.footer-heading {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #D4C3B3;
+    margin: 0 0 24px 0;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.footer-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 32px;
+    height: 1px;
+    background: #C5A880;
+}
+
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-links-list li a {
+    color: rgba(251, 249, 246, 0.78);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-links-list li a:hover {
+    color: #FFFFFF;
+    transform: translateX(4px);
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: rgba(251, 249, 246, 0.82);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.footer-contact-item svg {
+    flex-shrink: 0;
+    margin-top: 3px;
+    stroke: #D4C3B3;
+}
+
+.footer-contact-item a {
+    color: rgba(251, 249, 246, 0.85);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact-item a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.footer-cta-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 12px 24px;
+    background: #D4C3B3;
+    color: #113939;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.footer-cta-btn:hover {
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(251, 249, 246, 0.1);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-bottom-copy {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(251, 249, 246, 0.55);
+}
+
+.footer-lang-list {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.footer-lang-list a {
+    color: rgba(251, 249, 246, 0.5);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-lang-list a:hover {
+    color: #D4C3B3;
+}
+
+.footer-lang-list a.active {
+    color: #FFFFFF;
+    font-weight: 600;
+    border-bottom: 1px solid #D4C3B3;
+    pointer-events: none;
+}
+
 footer {
     text-align: center;
     padding: 60px 20px;
@@ -889,6 +1421,17 @@ footer p {
     .gallery-grid {
         column-count: 2;
     }
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    .zeimenos-feature-board {
+        flex-direction: column;
+    }
+    .zeimenos-feature-img {
+        min-height: 360px;
+        width: 100%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -896,6 +1439,27 @@ footer p {
     .album-grid-columns { column-count: 1; }
     .nav-link { letter-spacing: 4px; }
     .tfp-section { margin-top: 100px; }
+    .album-card .album-bottom-bar {
+        display: none;
+    }
+    .album-card .album-overlay {
+        opacity: 1;
+        position: relative;
+        background: #0d2626;
+        transform: translateY(0);
+        padding: 22px 20px;
+        pointer-events: auto;
+    }
+    .album-card-zeimenos .album-overlay {
+        background: #142744;
+    }
+    .album-card-automotive .album-overlay {
+        background: #191f24;
+    }
+    .album-overlay .album-desc {
+        -webkit-line-clamp: 2;
+        margin-bottom: 14px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -929,6 +1493,15 @@ footer p {
     }
     .gallery-grid {
         column-count: 1;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
     }
 }
 
