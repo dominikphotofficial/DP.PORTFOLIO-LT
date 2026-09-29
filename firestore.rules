@@ -57,16 +57,16 @@ service cloud.firestore {
 
     // Admin Team & RBAC
     match /admin_team/{memberId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
     // VMI Expenses & Settings
     match /vmi_expenses/{expenseId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
 
     match /admin_settings/{settingId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn();
     }
   }
 }

@@ -459,10 +459,6 @@
 
         <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 15px;"></div>
 
-        <div class="auth-divider">ARBA GREITA PRIEIGA</div>
-        <button type="button" id="admin-quick-owner-btn" class="admin-btn" style="width: 100%; margin-bottom: 12px; background: #113939; border-color: #113939;">
-            ⚡ Savininko prieiga (Dominik Šuškevič)
-        </button>
 
         <div class="auth-divider">ARBA SU GOOGLE PASKYRA</div>
         <button id="admin-login-google-btn" class="gsi-material-button" style="width: 100%;">
@@ -1475,147 +1471,7 @@
         logoutBtn.addEventListener('click', handleLogout);
         logoutBtnInner.addEventListener('click', handleLogout);
 
-        // Immediate session restore on page load
-        try {
-            const savedSession = localStorage.getItem('dp_admin_session') || sessionStorage.getItem('dp_admin_session');
-            if (savedSession) {
-                const parsed = JSON.parse(savedSession);
-                if (parsed && (parsed.email || parsed.role)) {
-                    unlockDashboard(parsed);
-                }
-            }
-        } catch (e) {
-            console.warn("Session restore:", e);
-        }
-
-        // Quick Owner Login (Direct access for Dominik Šuškevič)
-        document.getElementById('admin-quick-owner-btn')?.addEventListener('click', () => {
-            unlockDashboard({
-                name: "Dominik Šuškevič (Savininkas)",
-                email: ADMIN_EMAIL,
-                role: "superadmin",
-                permissions: ["all"]
-            });
-            showToast("✓ Prisijungta kaip savininkui!");
-        });
-
-        // Password Reset / Account Setup Link via Email
-        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', async () => {
-            const emailInput = document.getElementById('admin-email');
-            let email = emailInput ? emailInput.value.trim() : '';
-
-            if (!email) {
-                email = prompt("Įveskite savo autorizuotą el. pašto adresą, kuriam norite gauti slaptažodžio nustatymo nuorodą:");
-                if (!email) return;
-                if (emailInput) emailInput.value = email;
-            }
-
-            if (authFeedback) {
-                authFeedback.style.display = 'block';
-                authFeedback.style.background = '#E8F5E9';
-                authFeedback.style.color = '#2E7D32';
-                authFeedback.innerHTML = `⏳ Siunčiama slaptažodžio nustatymo nuoroda į <strong>${email}</strong>...`;
-            }
-
-            try {
-                await sendPasswordResetEmail(auth, email);
-                if (authFeedback) {
-                    authFeedback.style.background = '#E8F5E9';
-                    authFeedback.style.color = '#1B5E20';
-                    authFeedback.innerHTML = `✓ <strong>Slaptažodžio nuoroda išsiųsta!</strong><br>Patikrinkite savo pašto dėžutę adresu <u>${email}</u> (taip pat peržiūrėkite „Šlamšto / Spam“ aplanką) ir spustelėkite gautą nuorodą, kad nustatytumėte naują slaptažodį.`;
-                }
-            } catch (err) {
-                console.error("Password reset error:", err);
-                if (authFeedback) {
-                    authFeedback.style.background = '#FFEBEE';
-                    authFeedback.style.color = '#C62828';
-                    let msg = err.message || err;
-                    if (err.code === 'auth/user-not-found') {
-                        msg = 'Vartotojas su šiuo el. paštu dar neturi paskyros. Įsitikinkite, kad administratorius įtraukė Jus į komandą.';
-                    } else if (err.code === 'auth/invalid-email') {
-                        msg = 'Neteisingas el. pašto formato adresas.';
-                    }
-                    authFeedback.innerHTML = `✕ <strong>Klaida:</strong> ${msg}`;
-                }
-            }
-        });
-
-        // Email & Password login (also supports Master PIN 1139)
-        document.getElementById('admin-login-email-btn').addEventListener('click', async () => {
-            const email = document.getElementById('admin-email').value.trim();
-            const pass = document.getElementById('admin-password').value;
-
-            if (!email && !pass) {
-                if (authFeedback) {
-                    authFeedback.style.display = 'block';
-                    authFeedback.style.background = '#FFEBEE';
-                    authFeedback.style.color = '#C62828';
-                    authFeedback.innerText = 'Prašome įvesti el. paštą arba paspausti „Savininko prieiga“.';
-                }
-                return;
-            }
-
-            // Master passcode check
-            if (pass === '1139' || pass === '2026' || (email && email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && (pass === 'dominik' || pass === 'admin' || pass === '1139'))) {
-                unlockDashboard({
-                    name: "Dominik Šuškevič (Savininkas)",
-                    email: ADMIN_EMAIL,
-                    role: "superadmin",
-                    permissions: ["all"]
-                });
-                showToast("✓ Prisijungta sėkmingai!");
-                return;
-            }
-
-            const btn = document.getElementById('admin-login-email-btn');
-            btn.disabled = true;
-            btn.innerText = 'Jungiamasi...';
-
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch(e) {
-                console.error("Login error:", e);
-                btn.disabled = false;
-                btn.innerText = 'Prisijungti';
-                if (authFeedback) {
-                    authFeedback.style.display = 'block';
-                    authFeedback.style.background = '#FFEBEE';
-                    authFeedback.style.color = '#C62828';
-                    let errorMsg = 'Neteisingas el. paštas arba slaptažodis. Jei esate savininkas, paspauskite mygtuką „⚡ Savininko prieiga“.';
-                    if (e.code === 'auth/user-not-found') {
-                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Paspauskite mygtuką žemiau „Pamiršote ar neturite slaptažodžio?“, kad jį susikurtumėte.';
-                    } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-                        errorMsg = 'Neteisingas slaptažodis. Paspauskite „Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“, kad pasikeistumėte.';
-                    }
-                    authFeedback.innerText = errorMsg;
-                }
-            }
-        });
-
-        // Google login
-        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const cred = GoogleAuthProvider.credentialFromResult(result);
-                if (cred?.accessToken) {
-                    setCachedToken(cred.accessToken);
-                    updateSheetsAuthStatus(result.user);
-                }
-            } catch (error) {
-                console.warn("Google login popup error:", error);
-                // Graceful fallback for iframe restrictions
-                if (confirm("Google prisijungimo langas naršyklėje blokuojamas arba neturi leidimo. Ar norite prisijungti kaip savininkas (Dominik Šuškevič)?")) {
-                    unlockDashboard({
-                        name: "Dominik Šuškevič (Savininkas)",
-                        email: ADMIN_EMAIL,
-                        role: "superadmin",
-                        permissions: ["all"]
-                    });
-                    showToast("✓ Prisijungta!");
-                }
-            }
-        });
-
+        // Secure Auth State Management: Dashboard is strictly unlocked only when Firebase Auth verifies an authorized user
         onAuthStateChanged(auth, async (user) => {
             const btn = document.getElementById('admin-login-email-btn');
             if (btn) { btn.disabled = false; btn.innerText = 'Prisijungti'; }
@@ -1656,9 +1512,13 @@
                                 authFeedback.style.display = 'block';
                                 authFeedback.style.background = '#FFEBEE';
                                 authFeedback.style.color = '#C62828';
-                                authFeedback.innerHTML = `✕ <strong>Priėjimas uždraustas:</strong> El. paštas <u>${userEmail}</u> nėra įtrauktas į komandos narių sąrašą arba prieiga yra sustabdyta.`;
+                                authFeedback.innerHTML = `✕ <strong>Priėjimas uždraustas:</strong> El. paštas <u>${userEmail}</u> nėra autorizuotas valdymo skydo naudotojas.`;
                             }
-                            signOut(auth);
+                            await signOut(auth);
+                            currentAdminSession = null;
+                            authSection.style.display = 'block';
+                            dashboardSection.style.display = 'none';
+                            logoutBtn.style.display = 'none';
                         }
                     } catch(err) {
                         console.error("Team check error:", err);
@@ -1667,6 +1527,125 @@
             } else {
                 clearCachedToken();
                 updateSheetsAuthStatus(null);
+                currentAdminSession = null;
+                try {
+                    localStorage.removeItem('dp_admin_session');
+                    sessionStorage.removeItem('dp_admin_session');
+                } catch(e) {}
+                authSection.style.display = 'block';
+                dashboardSection.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        });
+
+        // Password Reset / Account Setup Link via Email
+        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', async () => {
+            const emailInput = document.getElementById('admin-email');
+            let email = emailInput ? emailInput.value.trim() : '';
+
+            if (!email) {
+                email = prompt("Įveskite savo autorizuotą el. pašto adresą, kuriam norite gauti slaptažodžio nustatymo nuorodą:");
+                if (!email) return;
+                if (emailInput) emailInput.value = email;
+            }
+
+            if (authFeedback) {
+                authFeedback.style.display = 'block';
+                authFeedback.style.background = '#E8F5E9';
+                authFeedback.style.color = '#2E7D32';
+                authFeedback.innerHTML = `⏳ Siunčiama slaptažodžio nustatymo nuoroda į <strong>${email}</strong>...`;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                if (authFeedback) {
+                    authFeedback.style.background = '#E8F5E9';
+                    authFeedback.style.color = '#1B5E20';
+                    authFeedback.innerHTML = `✓ <strong>Slaptažodžio nuoroda išsiųsta!</strong><br>Patikrinkite savo pašto dėžutę adresu <u>${email}</u> (taip pat peržiūrėkite „Šlamšto / Spam“ aplanką) ir spustelėkite gautą nuorodą, kad nustatytumėte slaptažodį.`;
+                }
+            } catch (err) {
+                console.error("Password reset error:", err);
+                if (authFeedback) {
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let msg = err.message || err;
+                    if (err.code === 'auth/user-not-found') {
+                        msg = 'Vartotojas su šiuo el. paštu dar neturi paskyros sistemoje.';
+                    } else if (err.code === 'auth/invalid-email') {
+                        msg = 'Neteisingas el. pašto formato adresas.';
+                    }
+                    authFeedback.innerHTML = `✕ <strong>Klaida:</strong> ${msg}`;
+                }
+            }
+        });
+
+        // Email & Password login
+        document.getElementById('admin-login-email-btn').addEventListener('click', async () => {
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-password').value;
+
+            if (!email || !pass) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Prašome įvesti el. pašto adresą ir slaptažodį.';
+                }
+                return;
+            }
+
+            const btn = document.getElementById('admin-login-email-btn');
+            btn.disabled = true;
+            btn.innerText = 'Jungiamasi...';
+            if (authFeedback) authFeedback.style.display = 'none';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch(e) {
+                console.error("Login error:", e);
+                btn.disabled = false;
+                btn.innerText = 'Prisijungti';
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let errorMsg = 'Neteisingas el. pašto adresas arba slaptažodis.';
+                    if (e.code === 'auth/user-not-found') {
+                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Jei pamiršote slaptažodį, naudokite nuorodą žemiau.';
+                    } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+                        errorMsg = 'Neteisingas slaptažodis arba prisijungimo duomenys.';
+                    } else if (e.code === 'auth/too-many-requests') {
+                        errorMsg = 'Per daug nesėkmingų bandymų. Pabandykite vėliau arba atstatykite slaptažodį.';
+                    }
+                    authFeedback.innerText = errorMsg;
+                }
+            }
+        });
+
+        // Google login
+        document.getElementById('admin-login-google-btn').addEventListener('click', async () => {
+            if (authFeedback) authFeedback.style.display = 'none';
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const cred = GoogleAuthProvider.credentialFromResult(result);
+                if (cred?.accessToken) {
+                    setCachedToken(cred.accessToken);
+                    updateSheetsAuthStatus(result.user);
+                }
+            } catch (error) {
+                console.warn("Google login popup error:", error);
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let msg = 'Google prisijungimas nepavyko arba langas buvo uždarytas.';
+                    if (error.code === 'auth/popup-closed-by-user') {
+                        msg = 'Prisijungimo langas buvo uždarytas.';
+                    } else if (error.code === 'auth/popup-blocked') {
+                        msg = 'Naršyklė užblokavo iškylantįjį (popup) langą. Prašome leisti iškylančius langus šiai svetainei.';
+                    }
+                    authFeedback.innerText = msg;
+                }
             }
         });
 
