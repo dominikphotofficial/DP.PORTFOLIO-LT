@@ -877,8 +877,8 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <button type="button" id="open-ai-assistant-header-btn" class="ai-pulse-btn" onclick="switchTab('ai')">
-                    ✨ AI Asistentas
+                <button type="button" id="admin-guide-toggle-btn" class="admin-btn-outline" style="padding: 7px 15px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleAdminGuide()">
+                    📖 Kaip viskas veikia?
                 </button>
                 <button id="logout-btn-inner" class="logout-btn-header">Atsijungti</button>
             </div>
@@ -916,11 +916,6 @@
                     🔄 Sinchronizuoti
                 </button>
             </div>
-            <div class="quick-tool-item" style="margin-left: auto;">
-                <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 7px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="triggerVmiAiAssistant('general')">
-                    ✨ AI Keisti / Analizuoti Ataskaitą
-                </button>
-            </div>
         </div>
 
         <div class="dashboard-stats">
@@ -930,6 +925,64 @@
             <div class="stat-box"><h3>Patvirtinta (Viso)</h3><p id="stat-confirmed">0</p></div>
             <div class="stat-box"><h3>Reikia kvito</h3><p id="stat-receipt-needed" style="color:#d9534f;">0</p></div>
             <div class="stat-box"><h3>VMI Pajamos</h3><p id="stat-vmi-income" style="color:#2E7D32;">0 €</p></div>
+        </div>
+
+        <!-- 📘 Išsamus Administratoriaus Vadovas & Sistemos Paaiškinimas (Expandable) -->
+        <div id="admin-system-guide" class="request-card" style="margin-bottom: 25px; padding: 24px; background: #FAFBFB; border-left: 5px solid #113939; border: 1px solid rgba(17,57,57,0.12);">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleAdminGuide()">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.3rem;">📘</span>
+                    <div>
+                        <h3 style="margin: 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px;">
+                            Administratoriaus Vadovas: Kaip Veikia Ši Panelė?
+                        </h3>
+                        <p style="margin: 4px 0 0 0; font-size: 0.86rem; color: #555;">
+                            Spustelėkite čia, norėdami sužinoti apie užsakymus, VMI žurnalą, 30% prezumpciją, mokesčius ir AI paslaugų analizę.
+                        </p>
+                    </div>
+                </div>
+                <button type="button" id="guide-chevron-btn" class="admin-btn-outline" style="padding: 5px 12px; font-size: 0.8rem;">
+                    Suskleisti ▲
+                </button>
+            </div>
+            
+            <div id="admin-guide-content" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; border-top: 1px solid rgba(17,57,57,0.08); padding-top: 18px;">
+                <div style="background: #ffffff; padding: 18px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <h4 style="margin: 0 0 8px 0; color: #113939; font-size: 0.95rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px;">
+                        1. Užsakymai & Klientai (TFP ir Mokamos)
+                    </h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555; line-height: 1.55;">
+                        Klientai užsiregistruoja svetainėje. Kortelėse matote jų kontaktus, pasirinktą datą ir kainą. Pakeitę statusą į <strong>„Confirmed“</strong> arba <strong>„Completed“</strong>, suma automatiškai patenka į <strong>VMI Pajamas</strong>! Taip pat galite vienu mygtuku išsiųsti patvirtinimo laišką.
+                    </p>
+                </div>
+
+                <div style="background: #ffffff; padding: 18px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <h4 style="margin: 0 0 8px 0; color: #2E7D32; font-size: 0.95rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px;">
+                        2. VMI Žurnalas & 30% Prezumpcija
+                    </h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555; line-height: 1.55;">
+                        Vykdant individualią veiklą (EVRK 74.20), pagal LR įstatymus galite taikyti <strong>30% prezumpciją be kvitų</strong> – VMI automatiškai nurašo 30% pajamų kaip išlaidas, todėl nereikia rinkti jokių čekių! Jei turite didelių faktinių išlaidų, galite pasirinkti „Faktinės išlaidos“.
+                    </p>
+                </div>
+
+                <div style="background: #ffffff; padding: 18px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <h4 style="margin: 0 0 8px 0; color: #C62828; font-size: 0.95rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px;">
+                        3. Mokesčių Skaičiavimas (GPM & Sodra)
+                    </h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555; line-height: 1.55;">
+                        Apmokestinamosios pajamos = Pajamos minus atskaitymai. <strong>GPM: 5%</strong> (iki 20 000 €). <strong>Sodra:</strong> PSD 6,98% ir VSD 12,52% skaičiuojami nuo 90% apmokestinamos sumos. Sistema automatiškai suskaičiuoja grynąjį pelną „į rankas“.
+                    </p>
+                </div>
+
+                <div style="background: #ffffff; padding: 18px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                    <h4 style="margin: 0 0 8px 0; color: #113939; font-size: 0.95rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px;">
+                        4. AI Asistentas (Vienoje Vietoje)
+                    </h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555; line-height: 1.55;">
+                        Visos AI funkcijos sutelktos kortelėje <strong>✨ AI Asistentas</strong>. Čia vienu paspaudimu galite išanalizuoti visas teikiamas paslaugas, automatiškai suformuoti pajamas ir rekomenduojamas veiklos išlaidas (kuras, studija, technika) tiesiai į VMI žurnalą!
+                    </p>
+                </div>
+            </div>
         </div>
 
         <div class="tabs">
@@ -1128,6 +1181,60 @@
 
         <!-- 📊 VMI Suvestinė (IV Apskaita) Tab -->
         <div id="vmi-tab" class="tab-content">
+            <!-- 💡 Kaip Veikia VMI Suvestinė (Aiškus Gidas) -->
+            <div class="request-card" style="margin-bottom: 22px; padding: 20px 24px; background: #FAFBFB; border-left: 5px solid #2E7D32;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 1.2rem;">💡</span>
+                            <h3 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">
+                                Kaip Veikia Ši VMI Suvestinė?
+                            </h3>
+                        </div>
+                        <p style="margin: 0 0 10px 0; font-size: 0.88rem; color: #444; line-height: 1.55;">
+                            Tai oficialus individualios veiklos (EVRK 74.20 – Fotografavimo veikla) pajamų ir išlaidų apskaitos žurnalas pagal LR įstatymus.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px;">
+                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
+                                <strong style="color: #2E7D32; font-size: 0.84rem;">1. Pajamų gavimas:</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">Patvirtinus arba atlikus fotosesijos užsakymą, suma automatiškai atsiranda pajamų stulpelyje.</p>
+                            </div>
+                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
+                                <strong style="color: #E08700; font-size: 0.84rem;">2. Išlaidos & 30% taisyklė:</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">Galite rinkti pirkimo kvitus ARBA pasirinkti 30% prezumpciją (VMI leidžia nurašyti 30% pajamų be jokių kvitų!).</p>
+                            </div>
+                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
+                                <strong style="color: #C62828; font-size: 0.84rem;">3. Mokesčiai & Grynasis:</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">GPM 5% + Sodros PSD (6,98%) ir VSD (12,52%) nuo 90% bazės. Likutis – Jūsų grynasis uždarbis į rankas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ⚡ Paslaugų Analizė & Automatinis Išlaidų Įkėlimas -->
+            <div class="request-card" style="margin-bottom: 22px; padding: 22px 26px; background: #FFFFFF; border: 1px solid rgba(17,57,57,0.1); border-left: 5px solid #113939;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <h3 style="margin: 0 0 4px 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.12rem; text-transform: uppercase; letter-spacing: 1px;">
+                            ⚡ Paslaugų Analizė ir Įtraukimas į Pajamas bei Išlaidas
+                        </h3>
+                        <p style="margin: 0; font-size: 0.86rem; color: #666;">
+                            Išanalizuokite visas studijos teikiamas paslaugas, nustatykite pajamas ir vienu paspaudimu suformuokite rekomenduojamas veiklos išlaidas (kuras, studija, technika, programos) į VMI žurnalą.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 9px 18px; font-size: 0.82rem;" onclick="runAiServicesAnalysis()">
+                            🔍 Analizuoti Paslaugas & Siūlyti Išlaidas
+                        </button>
+                    </div>
+                </div>
+
+                <div id="services-ai-analysis-box" style="display: none; border-top: 1px solid rgba(17,57,57,0.08); padding-top: 16px; margin-top: 14px;">
+                    <!-- Populated by runAiServicesAnalysis() -->
+                </div>
+            </div>
+
             <!-- Print Header (Official VMI Journal Form) -->
             <div class="vmi-print-header" style="display:none; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 15px;">
                 <h2 style="font-size: 14pt; margin: 0 0 5px 0; text-transform: uppercase;">Individualios Veiklos Pajamų ir Išlaidų Apskaitos Žurnalas</h2>
@@ -1164,8 +1271,8 @@
                     <button type="button" class="admin-btn" id="open-expense-modal-btn" style="padding: 10px 18px; font-size: 0.8rem;">
                         + Registruoti Išlaidą
                     </button>
-                    <button type="button" class="admin-btn" id="btn-vmi-ai-assist" onclick="triggerVmiAiAssistant()" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 10px 18px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;">
-                        ✨ AI Keisti / Generuoti Ataskaitą
+                    <button type="button" class="admin-btn-outline" onclick="switchTab('ai')" style="padding: 10px 18px; font-size: 0.8rem;">
+                        Ataskaitos Valdymas (AI Lange) &rarr;
                     </button>
                     <button type="button" class="admin-btn-outline" id="print-vmi-btn" style="padding: 10px 18px; font-size: 0.8rem;">
                         🖨️ Spausdinti VMI Žurnalą
@@ -1220,8 +1327,8 @@
                         </p>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 8px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="triggerVmiAiAssistant('summary')">
-                            ✨ AI Atnaujinti Suvestinę
+                        <button type="button" class="admin-btn" style="background: #113939; padding: 8px 16px; font-size: 0.8rem;" onclick="generateOfficialVmiSummaryText()">
+                            Atnaujinti Suvestinės Tekstą
                         </button>
                         <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="copyVmiReportNotes()">
                             📋 Kopijuoti
@@ -1582,21 +1689,25 @@
             </div>
 
             <!-- Quick Action Prompt Cards -->
-            <div class="ai-prompt-grid">
+            <div class="ai-prompt-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+                <div class="ai-prompt-card" style="border-left: 4px solid #2E7D32;" onclick="runAiQuickPrompt('services_income_expenses')">
+                    <strong style="color: #2E7D32;">⚡ 1. Paslaugų & Išlaidų analizė</strong>
+                    <span>Išanalizuoja teikiamas paslaugas, nustato pajamas ir suformuoja rekomenduojamas veiklos išlaidas į VMI žurnalą.</span>
+                </div>
                 <div class="ai-prompt-card" onclick="runAiQuickPrompt('vmi_audit')">
-                    <strong>📊 1. Analizuoti ir koreguoti VMI ataskaitą</strong>
+                    <strong>📊 2. Analizuoti ir koreguoti VMI ataskaitą</strong>
                     <span>Išanalizuoja visas pajamas, 30% prezumpciją, GPM/PSD/VSD mokesčius ir pateikia ataskaitos optimizavimo santrauką.</span>
                 </div>
                 <div class="ai-prompt-card" onclick="runAiQuickPrompt('quarter_summary')">
-                    <strong>📝 2. Generuoti ketvirčio / mėnesio suvestinę</strong>
+                    <strong>📝 3. Generuoti ketvirčio / mėnesio suvestinę</strong>
                     <span>Paruošia oficialią ataskaitą su pajamų šaltiniais, kvitų poreikiu ir grynosiomis pajamomis.</span>
                 </div>
                 <div class="ai-prompt-card" onclick="runAiQuickPrompt('expense_advice')">
-                    <strong>🧾 3. Išlaidų ir sąnaudų optimizavimas</strong>
+                    <strong>🧾 4. Išlaidų ir sąnaudų optimizavimas</strong>
                     <span>Palygina 30% prezumpciją su faktinėmis išlaidomis ir pataria, kuris būdas finansiškai naudingesnis.</span>
                 </div>
                 <div class="ai-prompt-card" onclick="runAiQuickPrompt('client_reply')">
-                    <strong>✉️ 4. Kliento atsakymo / pasiūlymo ruošimas</strong>
+                    <strong>✉️ 5. Kliento atsakymo / pasiūlymo ruošimas</strong>
                     <span>Suformuluoja mandagų, profesionalų fotosesijos patvirtinimo ar kainos pasiūlymo laišką.</span>
                 </div>
             </div>
@@ -1615,18 +1726,18 @@
                     </div>
                 </div>
                 
-                <textarea id="ai-user-prompt" rows="3" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 80px; font-family: var(--font-body); font-size: 0.98rem; padding: 14px; line-height: 1.5;" placeholder="Pvz.: „Pakeisk ataskaitą į III ketvirčio oficialią suvestinę: pridėk paaiškinimą apie fotografavimo paslaugas ir perskaičiuok mokesčius“ arba „Paruošk atsakymą klientui dėl savaitgalio fotosesijos“..."></textarea>
+                <textarea id="ai-user-prompt" rows="3" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 80px; font-family: var(--font-body); font-size: 0.98rem; padding: 14px; line-height: 1.5;" placeholder="Pvz.: „Išanalizuok mano teikiamas paslaugas ir pateik pajamų bei būtinųjų išlaidų sąrašą į VMI žurnalą“ arba „Paruošk oficialią III ketvirčio suvestinę“..."></textarea>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 12px;">
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="quick-period-btn" style="border-color:#2E7D32; color:#2E7D32;" onclick="appendPromptText('Išanalizuok mano teikiamas paslaugas ir pateik pajamų bei būtinųjų išlaidų (kuro, studijos, įrangos) sąrašą į VMI žurnalą.')">
+                            ⚡ Analizuoti paslaugas & išlaidas
+                        </button>
                         <button type="button" class="quick-period-btn" onclick="appendPromptText('Pakeisk ataskaitos pastabas ir išryškink grynąjį pelną.')">
                             + Pakeisti pastabas
                         </button>
                         <button type="button" class="quick-period-btn" onclick="appendPromptText('Paskaičiuok kiek mokesčių (GPM 5%, PSD 6.98%, VSD 12.52%) reikia sumokėti.')">
                             + Mokesčių skaičiavimas
-                        </button>
-                        <button type="button" class="quick-period-btn" onclick="appendPromptText('Paruošk oficialų VMI žurnalo tekstą spausdinimui.')">
-                            + VMI spaudos tekstas
                         </button>
                     </div>
                     <button type="button" id="btn-submit-ai-prompt" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 12px 28px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;">
@@ -1651,6 +1762,9 @@
                         <button type="button" class="admin-btn" style="padding: 7px 14px; font-size: 0.78rem; background: #2E7D32;" onclick="applyAiReportToNotes()">
                             ✅ Taikyti į VMI Žurnalą
                         </button>
+                        <button type="button" class="admin-btn" style="padding: 7px 14px; font-size: 0.78rem; background: #113939;" onclick="insertAiSuggestedExpenses()">
+                            📥 Įkelti Išlaidas į VMI Žurnalą
+                        </button>
                         <button type="button" class="admin-btn-outline" style="padding: 7px 14px; font-size: 0.78rem;" onclick="downloadAiReport()">
                             📥 Atsisiųsti (.txt)
                         </button>
@@ -1668,66 +1782,6 @@
                 </div>
 
                 <div id="ai-rendered-output" class="ai-response-box" style="white-space: pre-wrap; font-family: var(--font-body);"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🤖 Floating AI Assistant Drawer / Quick Panel (Accessible on any tab) -->
-    <div id="floating-ai-launcher" class="floating-ai-launcher" onclick="toggleFloatingAiDrawer()" title="AI Asistentas (Gemini 3.8 Flash)">
-        <span class="ai-spark-icon">✨</span>
-        <span class="ai-launcher-text">AI Asistentas</span>
-        <span class="ai-pulse-dot"></span>
-    </div>
-
-    <div id="floating-ai-drawer" class="floating-ai-drawer">
-        <div class="floating-ai-header">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.2rem;">✨</span>
-                <div>
-                    <h4 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;">AI Asistentas</h4>
-                    <span style="font-size: 0.74rem; color: #2E7D32; font-weight: 500;">● Gemini 3.8 Flash &bull; Ataskaitų & Klientų pagalba</span>
-                </div>
-            </div>
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button type="button" class="floating-ai-head-btn" onclick="switchTab('ai'); toggleFloatingAiDrawer();" title="Atverti pilną AI langą">⛶</button>
-                <button type="button" class="floating-ai-head-btn" onclick="toggleFloatingAiDrawer()" title="Uždaryti">✕</button>
-            </div>
-        </div>
-
-        <div class="floating-ai-body">
-            <!-- Quick Action Chips -->
-            <div class="floating-ai-chips">
-                <button type="button" class="floating-ai-chip" onclick="quickAiAction('vmi_update')">📊 Pakeisti VMI ataskaitą</button>
-                <button type="button" class="floating-ai-chip" onclick="quickAiAction('recalc_taxes')">🧮 Perskaičiuoti mokesčius</button>
-                <button type="button" class="floating-ai-chip" onclick="quickAiAction('quarter_summary')">📝 III Ketvirčio suvestinė</button>
-                <button type="button" class="floating-ai-chip" onclick="quickAiAction('prices')">📈 Kainodaros patarimai</button>
-            </div>
-
-            <!-- Output Message Stream -->
-            <div id="floating-ai-messages" class="floating-ai-messages">
-                <div class="floating-ai-bubble bot">
-                    Sveiki! Aš esu <strong>DP.PORTFOLIO AI Asistentas</strong>. Galiu padėti akimirksniu:
-                    <ul style="margin: 6px 0 0 16px; padding: 0; font-size: 0.88rem; line-height: 1.5;">
-                        <li>Pakeisti arba patikslinti VMI bei finansines ataskaitas</li>
-                        <li>Perskaičiuoti mokesčius (GPM 5%, PSD 6,98%, VSD 12,52%)</li>
-                        <li>Generuoti ketvirčių ar metines suvestines</li>
-                        <li>Paruošti profesionalius atsakymus klientams</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Output Actions -->
-            <div id="floating-ai-actions-bar" style="display: none; padding: 8px 14px; background: #FAFBFB; border-top: 1px solid #eee; gap: 8px; justify-content: flex-end;">
-                <button type="button" class="admin-btn-outline" style="padding: 5px 12px; font-size: 0.75rem;" onclick="copyFloatingAiResponse()">📋 Kopijuoti</button>
-                <button type="button" class="admin-btn" style="padding: 5px 12px; font-size: 0.75rem; background: #2E7D32;" onclick="applyFloatingAiToNotes()">✅ Taikyti į VMI ataskaitą</button>
-            </div>
-
-            <!-- Input Box -->
-            <div class="floating-ai-input-wrap">
-                <textarea id="floating-ai-input" rows="2" placeholder="Pvz.: Pakeisk ataskaitos pastabas, perskaičiuok mokesčius..." onkeydown="handleFloatingAiKey(event)"></textarea>
-                <button type="button" id="floating-ai-send-btn" onclick="sendFloatingAiMessage()" title="Siųsti užklausą">
-                    ➤
-                </button>
             </div>
         </div>
     </div>

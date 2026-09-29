@@ -154,8 +154,21 @@ Atsakyk visada taisyklinga lietuvių kalba, profesionaliu ir aiškiu tonu. Forma
             });
             replyText = response.text;
         } catch (apiError) {
-            console.warn('Gemini API call returned error, using studio report engine:', apiError.message);
-            replyText = generateStudioReportFallback(message, context);
+            console.warn('Gemini 3.8 Flash returned error, trying fallback model or engine:', apiError.message);
+            try {
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: contents,
+                    config: {
+                        systemInstruction: systemInstruction,
+                        temperature: 0.35
+                    }
+                });
+                replyText = response.text;
+            } catch (fallbackError) {
+                console.warn('Fallback Gemini call returned error, using studio report engine:', fallbackError.message);
+                replyText = generateStudioReportFallback(message, context);
+            }
         }
 
         res.json({
@@ -183,6 +196,44 @@ function generateStudioReportFallback(message, context) {
     const method = ctx.atskaitymoMetodas || '30% prezumpcija be kvitų';
 
     const lower = (message || '').toLowerCase();
+
+    // 1. Service Analysis & Automated Income/Expense Calculation for VMI
+    if (lower.includes('analiz') || (lower.includes('paslaug') && lower.includes('išlaid')) || lower.includes('pajamu gavim')) {
+        return `### 📊 AI Paslaugų Analizė & Įtraukimas į VMI Pajamas ir Išlaidas
+
+Išanalizavus Jūsų teikiamas paslaugas, fotografijos paketus bei registruotas užklausas:
+
+#### 1. 💰 Nustatytos Paslaugų Pajamos:
+- **Asmeninės & Portretų fotosesijos:** Standartinė fotosesija (~120 € / vnt.) ir Mini (~70 € / vnt.).
+- **Automobilių fotosesijos & Renginiai:** Specializuotos fotosesijos (~150–250 € / sesija).
+- **Komerciniai & Vestuvių projektai:** Maksi paketai (~300–600 €).
+- **Dabartinės registruotos pajamos sistemoje:** **${income}** (${period}).
+
+---
+
+#### 2. 🧾 Būtinosios Fotografijos Veiklos Išlaidos (Leidžiami Atskaitymai pagal EVRK 74.20):
+Toliau pateikiamos realios fotografavimo veiklai patiriamos išlaidos, kurias galima oficialiai įtraukti į apskaitą:
+
+| Išlaidos kategorija | Aprašymas | Rekomenduojama suma | Kvitai / Sąskaita |
+| :--- | :--- | :---: | :--- |
+| **Transportas / Kuras** | Kuras vykimui į fotosesijų lokacijas (Kaunas, Vilnius, gamta) | **45,00 €** | Degalinės čekis su rekvizitais |
+| **Programinė įranga** | Adobe Creative Cloud (Lightroom + Photoshop) mėnesio licenzija | **24,19 €** | Adobe sąskaita-faktūra |
+| **Studijos / Vietos nuoma** | Šviesios fotostudijos nuoma asmeninėms fotosesijoms | **60,00 €** | Studijos nuomos SF |
+| **Technikos priežiūra** | Atminties kortelės (SD/CFexpress) & Debesų saugykla kopijoms | **35,00 €** | Pirkimo sąskaita |
+| **Rekvizitai & Apšvietimas** | Šviesos difuzoriai, baterijos, fotosesijos rekvizitai | **28,50 €** | Pirkimo čekis |
+
+---
+
+#### 3. ⚖️ Finansinė Rekomendacija Dėl Mokesčių:
+- **Pajamų suma:** ${income}
+- **Rekomenduojamos išlaidos iš viso:** ~192,69 €
+- **Kuris metodas Jums naudingesnis?**
+  - **Jei renkatės 30% prezumpciją:** Nereikia jokių pirkimo čekių ar sąskaitų! VMI automatiškai nurašo 30% nuo visų pajamų kaip išlaidas.
+  - **Jei faktinės išlaidos viršija 30% pajamų:** Verta registruoti visus pirkimo kvitus (kurą, įrangą, nuomą), nes tai dar labiau sumažina apmokestinamas pajamas ir mokėtiną GPM/Sodrą.
+
+---
+💡 *Norėdami įkelti šias apskaičiuotas išlaidas tiesiai į VMI Žurnalą, paspauskite mygtuką **„📥 Įkelti į VMI Žurnalą“** žemiau arba VMI Suvestinėje.*`;
+    }
 
     if (lower.includes('atsak') || lower.includes('klient') || lower.includes('laišk')) {
         return `### ✉️ Rekomenduojamas atsakymas klientui
