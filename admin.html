@@ -420,6 +420,388 @@
         .sheets-table th { background: #113939; color: #ffffff; padding: 10px 14px; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 2; white-space: nowrap; }
         .sheets-table td { padding: 9px 14px; border-bottom: 1px solid rgba(17,57,57,0.06); border-right: 1px solid rgba(17,57,57,0.04); color: var(--text-color); white-space: nowrap; }
         .sheets-table tr:hover td { background: rgba(17,57,57,0.02); }
+
+        /* Quick Settings & Controls Toolbar */
+        .admin-quick-toolbar {
+            background: #ffffff;
+            padding: 14px 22px;
+            border-radius: 8px;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(17, 57, 57, 0.02);
+        }
+        .quick-tool-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quick-tool-label {
+            font-family: var(--font-heading);
+            font-size: 0.76rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(26, 43, 43, 0.7);
+            font-weight: 600;
+        }
+        .quick-status-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            background: #FAFBFB;
+            transition: all 0.25s ease;
+        }
+        .quick-status-toggle.active {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-color: #A5D6A7;
+            font-weight: 600;
+        }
+        .quick-status-toggle.inactive {
+            background: #FFEBEE;
+            color: #C62828;
+            border-color: #FFCDD2;
+        }
+        .quick-status-toggle .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .quick-period-btn {
+            background: #FAFBFB;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-family: var(--font-heading);
+            font-size: 0.76rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-period-btn:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+        .quick-period-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Floating AI Assistant Drawer Styles */
+        .floating-ai-launcher {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%);
+            color: #ffffff;
+            padding: 11px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(17, 57, 57, 0.35);
+            z-index: 2500;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            user-select: none;
+        }
+        .floating-ai-launcher:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(17, 57, 57, 0.45);
+        }
+        .ai-spark-icon { font-size: 1.15rem; }
+        .ai-launcher-text { font-family: var(--font-heading); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+        .ai-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+        .floating-ai-drawer {
+            position: fixed;
+            bottom: 82px;
+            right: 24px;
+            width: 440px;
+            max-width: calc(100vw - 32px);
+            height: 580px;
+            max-height: calc(100vh - 110px);
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(17, 57, 57, 0.25);
+            border: 1px solid rgba(17, 57, 57, 0.12);
+            display: flex;
+            flex-direction: column;
+            z-index: 2501;
+            transform: translateY(20px) scale(0.96);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+        .floating-ai-drawer.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .floating-ai-header {
+            padding: 13px 18px;
+            background: #F4F6F5;
+            border-bottom: 1px solid rgba(17, 57, 57, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .floating-ai-head-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .floating-ai-head-btn:hover { background: rgba(17, 57, 57, 0.08); color: #113939; }
+        .floating-ai-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        .floating-ai-chips {
+            display: flex;
+            gap: 6px;
+            padding: 9px 14px;
+            overflow-x: auto;
+            background: #FAFBFB;
+            border-bottom: 1px solid rgba(17, 57, 57, 0.06);
+            white-space: nowrap;
+        }
+        .floating-ai-chip {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.15);
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-heading);
+            letter-spacing: 0.5px;
+        }
+        .floating-ai-chip:hover {
+            background: #113939;
+            color: #ffffff;
+            border-color: #113939;
+        }
+        .floating-ai-messages {
+            flex: 1;
+            padding: 14px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #ffffff;
+        }
+        .floating-ai-bubble {
+            max-width: 90%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            line-height: 1.55;
+            word-break: break-word;
+        }
+        .floating-ai-bubble.bot {
+            align-self: flex-start;
+            background: #F4F6F5;
+            color: #1a2b2b;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+            border-top-left-radius: 2px;
+        }
+        .floating-ai-bubble.user {
+            align-self: flex-end;
+            background: #113939;
+            color: #ffffff;
+            border-top-right-radius: 2px;
+        }
+        .floating-ai-bubble table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 0.82rem;
+        }
+        .floating-ai-bubble th, .floating-ai-bubble td {
+            padding: 4px 6px;
+            border: 1px solid #ddd;
+        }
+        .floating-ai-bubble th { background: #113939; color: #fff; }
+        .floating-ai-input-wrap {
+            padding: 10px 14px;
+            border-top: 1px solid rgba(17, 57, 57, 0.08);
+            background: #FAFBFB;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        .floating-ai-input-wrap textarea {
+            flex: 1;
+            border: 1px solid rgba(17, 57, 57, 0.2);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            line-height: 1.4;
+            max-height: 80px;
+        }
+        .floating-ai-input-wrap textarea:focus {
+            border-color: #113939;
+            box-shadow: 0 0 0 2px rgba(17, 57, 57, 0.08);
+        }
+        #floating-ai-send-btn {
+            background: #113939;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        #floating-ai-send-btn:hover { background: #0B2525; }
+
+        .ai-pulse-btn {
+            background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(17, 57, 57, 0.2);
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .ai-pulse-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(17, 57, 57, 0.3);
+            background: linear-gradient(135deg, #0e2e2e 0%, #174848 100%);
+        }
+
+        /* AI Assistant Tab Components */
+        .ai-prompt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .ai-prompt-card {
+            background: #FAFBFB;
+            border: 1px solid rgba(17, 57, 57, 0.1);
+            border-radius: 6px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: left;
+        }
+        .ai-prompt-card:hover {
+            background: #ffffff;
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 18px rgba(17, 57, 57, 0.08);
+            transform: translateY(-2px);
+        }
+        .ai-prompt-card strong {
+            font-family: var(--font-heading);
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+        }
+        .ai-prompt-card span {
+            font-size: 0.82rem;
+            color: #667;
+            line-height: 1.4;
+        }
+        .ai-response-box {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.12);
+            border-radius: 8px;
+            padding: 24px 28px;
+            box-shadow: 0 4px 20px rgba(17, 57, 57, 0.04);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+        .ai-response-box pre {
+            background: #f4f6f5;
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .ai-response-box table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .ai-response-box th {
+            background: #113939;
+            color: #ffffff;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .ai-response-box td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        .ai-response-box h1, .ai-response-box h2, .ai-response-box h3, .ai-response-box h4 {
+            color: #113939;
+            font-family: var(--font-heading);
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -495,45 +877,49 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <button type="button" id="toggle-updates-banner-btn" class="admin-btn-outline" style="padding: 9px 16px; font-size: 0.78rem;">
-                    📢 Naujienos
+                <button type="button" id="open-ai-assistant-header-btn" class="ai-pulse-btn" onclick="switchTab('ai')">
+                    ✨ AI Asistentas
                 </button>
                 <button id="logout-btn-inner" class="logout-btn-header">Atsijungti</button>
             </div>
         </div>
 
-        <!-- 📢 Pranešimas apie Naujausius Sistemos Pakeitimus (numatyta paslėpta, kad netrukdytų) -->
-        <div id="system-updates-banner" class="request-card" style="display: none; background: linear-gradient(135deg, #FAFBFB 0%, #F0F6F5 100%); border-left: 5px solid var(--accent-color); padding: 24px 28px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(17,57,57,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 280px;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <span style="background: var(--accent-color); color: #fff; font-size: 0.72rem; padding: 4px 10px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📢 Naujausi Sistemos Pakeitimai</span>
-                        <span style="font-size: 0.8rem; color: #888;">Patobulintas valdymas & spartusis išsaugojimas</span>
-                    </div>
-                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 14px 0; font-size: 1.25rem;">
-                        Kas pasikeitė valdymo sistemoje ir svetainėje?
-                    </h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; font-family: var(--font-body); font-size: 0.92rem; color: rgba(26, 43, 43, 0.85); line-height: 1.55;">
-                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
-                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">⚡ Spartusis išsaugojimas (Save only) be klaidų:</strong>
-                            Pakeitus užsakymo statusą ar datą, vienu paspaudimu išsaugokite duomenis. Jokių įkyrių langų ar sintaksės klaidų – rodomas švelnus pranešimas.
-                        </div>
-                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
-                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">🔍 Gyva paieška ir filtrų mygtukai:</strong>
-                            Akimirksniu filtruokite užsakymus pagal būseną (Nauji, Patvirtinti, Apmokėti, Atlikti) arba raskite klientą pagal vardą, telefoną ar el. paštą.
-                        </div>
-                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
-                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">📞 Tiesioginiai kontaktų mygtukai:</strong>
-                            Kortelėje spustelėkite ant telefono numerio tiesioginiam skambučiui, WhatsApp / Telegram žinutei arba Instagram profilio atidarymui.
-                        </div>
-                        <div style="background: #ffffff; padding: 14px 16px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
-                            <strong style="color: var(--accent-color); display: block; margin-bottom: 4px;">🎨 Švari, minimalistinė poraštė:</strong>
-                            Pašalintos visos perteklines poraštės dalys, palikta tik gryna prabangi autorių teisių ir kalbų eilutė su solidžia firminio miško akcento spalva.
-                        </div>
-                    </div>
+        <!-- ⚡ Greitojo Valdymo & Nustatymų Juosta -->
+        <div class="admin-quick-toolbar">
+            <div class="quick-tool-item">
+                <span class="quick-tool-label">🌟 Atsiliepimai svetainėje:</span>
+                <button type="button" id="quick-toggle-reviews-btn" class="quick-status-toggle active" onclick="toggleReviewsVisibilityQuick()">
+                    <span class="dot"></span> <span id="quick-reviews-status-text">Rodoma</span>
+                </button>
+            </div>
+            <div class="quick-tool-item">
+                <span class="quick-tool-label">📊 VMI Laikotarpis:</span>
+                <div style="display: inline-flex; gap: 5px;">
+                    <button type="button" class="quick-period-btn active" id="btn-period-2026" onclick="setQuickPeriod('2026')">2026 m.</button>
+                    <button type="button" class="quick-period-btn" id="btn-period-Q1" onclick="setQuickPeriod('2026-Q1')">Q1</button>
+                    <button type="button" class="quick-period-btn" id="btn-period-Q2" onclick="setQuickPeriod('2026-Q2')">Q2</button>
+                    <button type="button" class="quick-period-btn" id="btn-period-Q3" onclick="setQuickPeriod('2026-Q3')">Q3</button>
+                    <button type="button" class="quick-period-btn" id="btn-period-Q4" onclick="setQuickPeriod('2026-Q4')">Q4</button>
+                    <button type="button" class="quick-period-btn" id="btn-period-ALL" onclick="setQuickPeriod('ALL')">Visi</button>
                 </div>
-                <button type="button" onclick="document.getElementById('system-updates-banner').style.display='none'" class="admin-btn-outline" style="padding: 6px 14px; font-size: 0.75rem; white-space: nowrap; border-radius: 4px;">✕ Paslėpti</button>
+            </div>
+            <div class="quick-tool-item">
+                <span class="quick-tool-label">🧾 Išlaidų metodas:</span>
+                <div style="display: inline-flex; gap: 5px;">
+                    <button type="button" class="quick-period-btn active" id="btn-method-flat30" onclick="setQuickDeductionMethod('flat30')">30% prezumpcija</button>
+                    <button type="button" class="quick-period-btn" id="btn-method-actual" onclick="setQuickDeductionMethod('actual')">Faktinės išlaidos</button>
+                </div>
+            </div>
+            <div class="quick-tool-item">
+                <span class="quick-tool-label">📗 Sheets:</span>
+                <button type="button" class="admin-btn-outline" style="padding: 5px 12px; font-size: 0.76rem;" onclick="syncSingleTabWithConfirm('vmi')">
+                    🔄 Sinchronizuoti
+                </button>
+            </div>
+            <div class="quick-tool-item" style="margin-left: auto;">
+                <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 7px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="triggerVmiAiAssistant('general')">
+                    ✨ AI Keisti / Analizuoti Ataskaitą
+                </button>
             </div>
         </div>
 
@@ -555,6 +941,7 @@
             <button class="tab-btn" data-tab="vmi" id="tab-btn-vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
             <button class="tab-btn" data-tab="team" id="tab-btn-team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
             <button class="tab-btn" data-tab="sheets" id="tab-btn-sheets" onclick="switchTab('sheets')">📗 Google Sheets <span id="badge-sheets" style="display:none; background:#2E7D32; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">✓</span></button>
+            <button class="tab-btn" data-tab="ai" id="tab-btn-ai" onclick="switchTab('ai')">✨ AI Asistentas <span style="background: linear-gradient(135deg, #113939, #2A5C5C); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; margin-left: 4px;">Gemini</span></button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -629,9 +1016,6 @@
                                 ✓ Rodoma svetainėje
                             </span>
                         </div>
-                        <p style="font-family: var(--font-body); font-size: 0.95rem; color: #666; margin: 0; max-width: 650px; line-height: 1.5;">
-                            Šis mygtukas įjungia arba visiškai paslepia „Atsiliepimai“ skiltį svetainės lankytojams (services.html ir tfp-booking.html puslapiuose).
-                        </p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <button type="button" id="toggle-section-visibility-btn" class="admin-btn" style="min-width: 220px; padding: 12px 22px; font-size: 0.85rem;">
@@ -642,8 +1026,7 @@
             </div>
 
             <div class="request-card" style="margin-bottom: 30px; border-top: 4px solid var(--accent-color);">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-top: 0; margin-bottom: 8px;">Pridėti Naują Atsiliepimą</h3>
-                <p style="font-family: var(--font-body); font-size: 0.95rem; color: #666; margin-bottom: 22px;">Kai po fotosesijos paprašote atsiliepimo, čia įkelkite kliento žodžius ir nuorodą. Jis automatiškai pasirodys svetainėje.</p>
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-top: 0; margin-bottom: 16px;">Pridėti Naują Atsiliepimą</h3>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 18px;">
                     <div>
@@ -781,6 +1164,9 @@
                     <button type="button" class="admin-btn" id="open-expense-modal-btn" style="padding: 10px 18px; font-size: 0.8rem;">
                         + Registruoti Išlaidą
                     </button>
+                    <button type="button" class="admin-btn" id="btn-vmi-ai-assist" onclick="triggerVmiAiAssistant()" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 10px 18px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;">
+                        ✨ AI Keisti / Generuoti Ataskaitą
+                    </button>
                     <button type="button" class="admin-btn-outline" id="print-vmi-btn" style="padding: 10px 18px; font-size: 0.8rem;">
                         🖨️ Spausdinti VMI Žurnalą
                     </button>
@@ -822,17 +1208,30 @@
                 </div>
             </div>
 
-            <!-- Tax Formula Clarification Accordion -->
-            <div class="request-card" style="margin-bottom: 25px; padding: 18px 24px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.08);">
-                <div style="font-size: 0.88rem; line-height: 1.6; color: rgba(26,43,43,0.8);">
-                    <strong>💡 Kaip apskaičiuojami individualios veiklos mokesčiai (EVRK 74.20):</strong>
-                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 6px;">
-                        <span>&bull; <strong>GPM:</strong> 5% (taikant mokesčio kreditą iki 20 000 € apmokestinamųjų pajamų)</span>
-                        <span>&bull; <strong>PSD:</strong> 6,98% nuo 90% apmokestinamųjų pajamų</span>
-                        <span>&bull; <strong>VSD:</strong> 12,52% nuo 90% apmokestinamųjų pajamų</span>
-                        <span>&bull; <strong>30% prezumpcija:</strong> nereikia kaupti čekių – automatiškai atskaitomi 30% nuo apyvartos.</span>
+            <!-- Oficiali VMI Deklaracijos Suvestinė & Pastabos (Editable & AI Controlled) -->
+            <div class="request-card" style="margin-bottom: 25px; padding: 22px 26px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-left: 5px solid #113939;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 4px 0; font-size: 1.12rem;">
+                            📝 Oficiali VMI Deklaracijos Suvestinė & Pastabos
+                        </h3>
+                        <p style="font-size: 0.85rem; color: #666; margin: 0;">
+                            Tekstas VMI deklaracijai ir pajamų-išlaidų žurnalo paaiškinimams. AI asistentas gali akimirksniu atnaujinti šį tekstą.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 8px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="triggerVmiAiAssistant('summary')">
+                            ✨ AI Atnaujinti Suvestinę
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="copyVmiReportNotes()">
+                            📋 Kopijuoti
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="saveVmiReportNotes()">
+                            💾 Išsaugoti
+                        </button>
                     </div>
                 </div>
+                <textarea id="vmi-custom-report-notes" rows="4" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 85px; font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; background: #ffffff;" placeholder="Čia rodoma AI sugeneruota ar Jūsų redaguota ataskaitos suvestinė, VMI deklaracijos pastabos, mokesčių apskaičiavimai..."></textarea>
             </div>
 
             <!-- VMI Journal Table -->
@@ -917,21 +1316,18 @@
         <!-- 📗 Google Sheets Integracijos Tab -->
         <div id="sheets-tab" class="tab-content">
             <!-- Header Banner -->
-            <div class="request-card" style="margin-bottom: 25px; padding: 26px 28px; background: linear-gradient(135deg, #FAFBFB 0%, #F0F6F5 100%); border-left: 5px solid #2E7D32;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 280px;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                            <span style="background: #2E7D32; color: #ffffff; font-size: 0.72rem; padding: 4px 10px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📗 Google Sheets & Drive API</span>
+            <div class="request-card" style="margin-bottom: 22px; padding: 18px 24px; background: #FAFBFB; border-left: 5px solid #2E7D32;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 260px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                            <span style="background: #2E7D32; color: #ffffff; font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📗 Google Sheets & Drive API</span>
                             <span id="sheets-connection-badge" class="sheets-status-badge disconnected">⚪ Tikrinama prieiga</span>
                         </div>
-                        <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 400;">
+                        <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.25rem; font-weight: 400;">
                             Google Sheets Sinchronizavimas & Duomenų Eksportas
                         </h2>
-                        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.75); margin: 0; line-height: 1.6; max-width: 780px;">
-                            Sinchronizuokite TFP užklausas, mokamas fotosesijas, klientų žinutes ir VMI individualios veiklos apskaitos duomenis tiesiai į savo asmeninę „Google Sheets“ skaičiuoklę vienu paspaudimu.
-                        </p>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                    <div style="display: flex; flex-direction: column; gap: 6px; align-items: flex-end;">
                         <button type="button" id="sheets-connect-google-btn" class="gsi-material-button">
                           <div class="gsi-material-button-state"></div>
                           <div class="gsi-material-button-content-wrapper">
@@ -1160,6 +1556,178 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- 🤖 AI Asistentas (Gemini 3.8 Flash) Tab -->
+        <div id="ai-tab" class="tab-content">
+            <!-- Header Card -->
+            <div class="request-card" style="margin-bottom: 22px; padding: 20px 24px; background: #FAFBFB; border-left: 5px solid #113939;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                            <span style="background: #113939; color: #ffffff; font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">✨ Gemini 3.8 Flash AI</span>
+                            <span class="sheets-status-badge connected">● Pasirengęs padėti</span>
+                        </div>
+                        <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.25rem; font-weight: 400;">
+                            Išmanusis Studijos Asistentas & Ataskaitų Valdymas
+                        </h2>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="admin-btn-outline" onclick="loadCurrentStatsIntoAiPrompt()" style="padding: 9px 15px; font-size: 0.8rem;">
+                            📥 Įkelti naujausius VMI duomenis
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Prompt Cards -->
+            <div class="ai-prompt-grid">
+                <div class="ai-prompt-card" onclick="runAiQuickPrompt('vmi_audit')">
+                    <strong>📊 1. Analizuoti ir koreguoti VMI ataskaitą</strong>
+                    <span>Išanalizuoja visas pajamas, 30% prezumpciją, GPM/PSD/VSD mokesčius ir pateikia ataskaitos optimizavimo santrauką.</span>
+                </div>
+                <div class="ai-prompt-card" onclick="runAiQuickPrompt('quarter_summary')">
+                    <strong>📝 2. Generuoti ketvirčio / mėnesio suvestinę</strong>
+                    <span>Paruošia oficialią ataskaitą su pajamų šaltiniais, kvitų poreikiu ir grynosiomis pajamomis.</span>
+                </div>
+                <div class="ai-prompt-card" onclick="runAiQuickPrompt('expense_advice')">
+                    <strong>🧾 3. Išlaidų ir sąnaudų optimizavimas</strong>
+                    <span>Palygina 30% prezumpciją su faktinėmis išlaidomis ir pataria, kuris būdas finansiškai naudingesnis.</span>
+                </div>
+                <div class="ai-prompt-card" onclick="runAiQuickPrompt('client_reply')">
+                    <strong>✉️ 4. Kliento atsakymo / pasiūlymo ruošimas</strong>
+                    <span>Suformuluoja mandagų, profesionalų fotosesijos patvirtinimo ar kainos pasiūlymo laišką.</span>
+                </div>
+            </div>
+
+            <!-- Prompt Input & Controls Card -->
+            <div class="request-card" style="margin-bottom: 25px; padding: 24px;">
+                <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <label for="ai-user-prompt" class="field-label" style="margin-bottom: 0;">
+                        Jūsų nurodymas arba klausimas AI Asistentui:
+                    </label>
+                    <div style="display: flex; gap: 14px; align-items: center;">
+                        <label style="font-size: 0.85rem; color: #555; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                            <input type="checkbox" id="ai-include-context" checked>
+                            Įtraukti dabartinius studijos duomenis (VMI pajamos, užsakymai)
+                        </label>
+                    </div>
+                </div>
+                
+                <textarea id="ai-user-prompt" rows="3" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 80px; font-family: var(--font-body); font-size: 0.98rem; padding: 14px; line-height: 1.5;" placeholder="Pvz.: „Pakeisk ataskaitą į III ketvirčio oficialią suvestinę: pridėk paaiškinimą apie fotografavimo paslaugas ir perskaičiuok mokesčius“ arba „Paruošk atsakymą klientui dėl savaitgalio fotosesijos“..."></textarea>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="quick-period-btn" onclick="appendPromptText('Pakeisk ataskaitos pastabas ir išryškink grynąjį pelną.')">
+                            + Pakeisti pastabas
+                        </button>
+                        <button type="button" class="quick-period-btn" onclick="appendPromptText('Paskaičiuok kiek mokesčių (GPM 5%, PSD 6.98%, VSD 12.52%) reikia sumokėti.')">
+                            + Mokesčių skaičiavimas
+                        </button>
+                        <button type="button" class="quick-period-btn" onclick="appendPromptText('Paruošk oficialų VMI žurnalo tekstą spausdinimui.')">
+                            + VMI spaudos tekstas
+                        </button>
+                    </div>
+                    <button type="button" id="btn-submit-ai-prompt" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 12px 28px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;">
+                        <span>🚀 Vykdyti / Generuoti</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Response Box Card -->
+            <div class="request-card" id="ai-response-container" style="display: none; padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(17,57,57,0.08); padding-bottom: 14px; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.2rem;">✨</span>
+                        <h3 style="margin: 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px;">
+                            AI Asistento Pasiūlymas / Ataskaita
+                        </h3>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="admin-btn-outline" style="padding: 7px 14px; font-size: 0.78rem;" onclick="copyAiResponse()">
+                            📋 Kopijuoti
+                        </button>
+                        <button type="button" class="admin-btn" style="padding: 7px 14px; font-size: 0.78rem; background: #2E7D32;" onclick="applyAiReportToNotes()">
+                            ✅ Taikyti į VMI Žurnalą
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="padding: 7px 14px; font-size: 0.78rem;" onclick="downloadAiReport()">
+                            📥 Atsisiųsti (.txt)
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="padding: 7px 10px; font-size: 0.78rem;" onclick="clearAiResponse()" title="Išvalyti">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-loading-spinner" style="display: none; text-align: center; padding: 40px 20px;">
+                    <div class="loader" style="margin: 0 auto 15px auto;"></div>
+                    <p style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); font-size: 0.9rem;">
+                        Gemini AI apdoroja duomenis ir ruošia ataskaitą...
+                    </p>
+                </div>
+
+                <div id="ai-rendered-output" class="ai-response-box" style="white-space: pre-wrap; font-family: var(--font-body);"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🤖 Floating AI Assistant Drawer / Quick Panel (Accessible on any tab) -->
+    <div id="floating-ai-launcher" class="floating-ai-launcher" onclick="toggleFloatingAiDrawer()" title="AI Asistentas (Gemini 3.8 Flash)">
+        <span class="ai-spark-icon">✨</span>
+        <span class="ai-launcher-text">AI Asistentas</span>
+        <span class="ai-pulse-dot"></span>
+    </div>
+
+    <div id="floating-ai-drawer" class="floating-ai-drawer">
+        <div class="floating-ai-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.2rem;">✨</span>
+                <div>
+                    <h4 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;">AI Asistentas</h4>
+                    <span style="font-size: 0.74rem; color: #2E7D32; font-weight: 500;">● Gemini 3.8 Flash &bull; Ataskaitų & Klientų pagalba</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="floating-ai-head-btn" onclick="switchTab('ai'); toggleFloatingAiDrawer();" title="Atverti pilną AI langą">⛶</button>
+                <button type="button" class="floating-ai-head-btn" onclick="toggleFloatingAiDrawer()" title="Uždaryti">✕</button>
+            </div>
+        </div>
+
+        <div class="floating-ai-body">
+            <!-- Quick Action Chips -->
+            <div class="floating-ai-chips">
+                <button type="button" class="floating-ai-chip" onclick="quickAiAction('vmi_update')">📊 Pakeisti VMI ataskaitą</button>
+                <button type="button" class="floating-ai-chip" onclick="quickAiAction('recalc_taxes')">🧮 Perskaičiuoti mokesčius</button>
+                <button type="button" class="floating-ai-chip" onclick="quickAiAction('quarter_summary')">📝 III Ketvirčio suvestinė</button>
+                <button type="button" class="floating-ai-chip" onclick="quickAiAction('prices')">📈 Kainodaros patarimai</button>
+            </div>
+
+            <!-- Output Message Stream -->
+            <div id="floating-ai-messages" class="floating-ai-messages">
+                <div class="floating-ai-bubble bot">
+                    Sveiki! Aš esu <strong>DP.PORTFOLIO AI Asistentas</strong>. Galiu padėti akimirksniu:
+                    <ul style="margin: 6px 0 0 16px; padding: 0; font-size: 0.88rem; line-height: 1.5;">
+                        <li>Pakeisti arba patikslinti VMI bei finansines ataskaitas</li>
+                        <li>Perskaičiuoti mokesčius (GPM 5%, PSD 6,98%, VSD 12,52%)</li>
+                        <li>Generuoti ketvirčių ar metines suvestines</li>
+                        <li>Paruošti profesionalius atsakymus klientams</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Output Actions -->
+            <div id="floating-ai-actions-bar" style="display: none; padding: 8px 14px; background: #FAFBFB; border-top: 1px solid #eee; gap: 8px; justify-content: flex-end;">
+                <button type="button" class="admin-btn-outline" style="padding: 5px 12px; font-size: 0.75rem;" onclick="copyFloatingAiResponse()">📋 Kopijuoti</button>
+                <button type="button" class="admin-btn" style="padding: 5px 12px; font-size: 0.75rem; background: #2E7D32;" onclick="applyFloatingAiToNotes()">✅ Taikyti į VMI ataskaitą</button>
+            </div>
+
+            <!-- Input Box -->
+            <div class="floating-ai-input-wrap">
+                <textarea id="floating-ai-input" rows="2" placeholder="Pvz.: Pakeisk ataskaitos pastabas, perskaičiuok mokesčius..." onkeydown="handleFloatingAiKey(event)"></textarea>
+                <button type="button" id="floating-ai-send-btn" onclick="sendFloatingAiMessage()" title="Siųsti užklausą">
+                    ➤
+                </button>
             </div>
         </div>
     </div>
@@ -1662,6 +2230,7 @@
             if (tab === 'vmi') loadVmiSummary();
             if (tab === 'team') loadTeamMembers();
             if (tab === 'sheets') initGoogleSheetsTab();
+            if (tab === 'ai') initAiAssistantTab();
         };
 
         // Unified Dashboard Stats calculation
@@ -1859,6 +2428,9 @@
                         </button>
                         <button type="button" class="admin-btn-outline" onclick="prepareTFP('${data.id}')">
                             ✉️ Paruošti laišką
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('tfp', '${data.id}')">
+                            ✨ AI Atsakyti
                         </button>
                         <button type="button" class="admin-btn-delete" onclick="deleteDocRecord('tfp_requests', '${data.id}')">
                             Ištrinti
@@ -2060,6 +2632,9 @@
                         </button>
                         <button type="button" class="admin-btn-outline" onclick="prepareService('${data.id}')">
                             ✉️ Paruošti laišką
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('srv', '${data.id}')">
+                            ✨ AI Atsakyti
                         </button>
                         <button type="button" class="admin-btn-delete" onclick="deleteDocRecord('service_requests', '${data.id}')">
                             Ištrinti
@@ -2380,7 +2955,10 @@
                         </div>
                     </div>
                     <div class="req-actions" style="margin-top: 15px;">
-                        <a href="mailto:${data.email}?subject=Atsakymas:%20${encodeURIComponent(data.subject || 'DP.PORTFOLIO Užklausa')}" class="admin-btn" style="text-decoration: none; display: inline-block;">✉️ Rašyti atsakymą per Gmail</a>
+                        <a href="mailto:${data.email}?subject=Atsakymas:%20${encodeURIComponent(data.subject || 'DP.PORTFOLIO Užklausa')}" class="admin-btn" style="text-decoration: none; display: inline-block;">✉️ Rašyti per Gmail</a>
+                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('contact', '${data.id}')">
+                            ✨ AI Atsakyti
+                        </button>
                         <button type="button" class="admin-btn-outline" onclick="toggleContactStatus('${data.id}', '${data.status || 'New'}')">
                             ${isNew ? '✓ Pasižymėti kaip atsakytą' : '↺ Grąžinti į naujas'}
                         </button>
@@ -3970,6 +4548,465 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
         document.getElementById('btn-fetch-sheet-preview')?.addEventListener('click', () => {
             loadSheetPreview();
         });
+
+        // ==============================================================================
+        // ⚡ GREITIEJI NUSTATYMAI IR PERIODŲ / METODŲ VALDYMAS
+        // ==============================================================================
+        window.setQuickPeriod = (period) => {
+            const filterEl = document.getElementById('vmi-period-filter');
+            if (filterEl) {
+                filterEl.value = period;
+            }
+            document.querySelectorAll('[id^="btn-period-"]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const suffix = period === 'ALL' ? 'ALL' : period.replace('2026-', '').replace('2026', '2026');
+            const activeBtn = document.getElementById('btn-period-' + suffix);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (typeof recalculateAndRenderVmi === 'function') {
+                recalculateAndRenderVmi();
+            }
+            showToast(`📊 Nustatytas laikotarpis: ${period === 'ALL' ? 'Visi laikai' : period}`);
+        };
+
+        window.setQuickDeductionMethod = (method) => {
+            const filterEl = document.getElementById('vmi-deduction-method');
+            if (filterEl) {
+                filterEl.value = method;
+            }
+            document.getElementById('btn-method-flat30')?.classList.toggle('active', method === 'flat30');
+            document.getElementById('btn-method-actual')?.classList.toggle('active', method === 'actual');
+
+            if (typeof recalculateAndRenderVmi === 'function') {
+                recalculateAndRenderVmi();
+            }
+            showToast(`🧾 Nustatytas metodas: ${method === 'flat30' ? '30% prezumpcija' : 'Faktinės išlaidos'}`);
+        };
+
+        window.saveVmiReportNotes = () => {
+            const notes = document.getElementById('vmi-custom-report-notes')?.value || '';
+            localStorage.setItem('dp_vmi_custom_report_notes', notes);
+            showToast("✓ VMI ataskaitos pastabos sėkmingai išsaugotos!");
+        };
+
+        window.copyVmiReportNotes = () => {
+            const notes = document.getElementById('vmi-custom-report-notes')?.value || '';
+            if (!notes) {
+                showToast("Pastabų laukas tuščias", "error");
+                return;
+            }
+            navigator.clipboard.writeText(notes).then(() => {
+                showToast("📋 Ataskaitos tekstas nukopijuotas į iškarpinę!");
+            }).catch(() => {
+                showToast("Nepavyko nukopijuoti", "error");
+            });
+        };
+
+        // Load saved notes on startup
+        try {
+            const savedNotes = localStorage.getItem('dp_vmi_custom_report_notes');
+            if (savedNotes) {
+                const el = document.getElementById('vmi-custom-report-notes');
+                if (el) el.value = savedNotes;
+            }
+        } catch(e) {}
+
+        // ==============================================================================
+        // 🤖 AI ASISTENTAS (GEMINI 3.8 FLASH) & ATASKAITŲ VALDYMAS
+        // ==============================================================================
+        function buildStudioAiContext() {
+            const vmiPeriod = document.getElementById('vmi-period-filter')?.value || '2026';
+            const vmiMethod = document.getElementById('vmi-deduction-method')?.value || 'flat30';
+            const income = document.getElementById('vmi-kpi-income')?.innerText || '0 €';
+            const deductions = document.getElementById('vmi-kpi-deductions')?.innerText || '0 €';
+            const taxable = document.getElementById('vmi-kpi-taxable')?.innerText || '0 €';
+            const taxes = document.getElementById('vmi-kpi-taxes')?.innerText || '0 €';
+            const taxesSub = document.getElementById('vmi-kpi-taxes-sub')?.innerText || '';
+            const net = document.getElementById('vmi-kpi-net')?.innerText || '0 €';
+            const notes = document.getElementById('vmi-custom-report-notes')?.value || '';
+
+            const tfpCount = (window._adminCache?.tfp || []).length;
+            const tfpNew = (window._adminCache?.tfp || []).filter(r => r.status === 'New' || !r.status).length;
+            const srvCount = (window._adminCache?.services || []).length;
+            const srvNew = (window._adminCache?.services || []).filter(r => r.status === 'Pending' || !r.status).length;
+            const contactsNew = (window._adminCache?.contacts || []).filter(r => r.status === 'New' || !r.status).length;
+
+            return {
+                veikla: "Dominik Šuškevič, DP.PORTFOLIO (EVRK 74.20 Fotografavimo veikla pagal IV pažymą)",
+                laikotarpis: vmiPeriod,
+                atskaitymoMetodas: vmiMethod === 'flat30' ? '30% pajamų prezumpcija be kvitų' : 'Faktinės įrodytos išlaidos',
+                pajamos: income,
+                atskaitymai: deductions,
+                apmokestinamosPajamos: taxable,
+                mokesciaiIsViso: taxes,
+                mokesciuDetale: taxesSub,
+                grynasisPelnas: net,
+                esamosAtaskaitosPastabos: notes,
+                statistika: {
+                    tfpUzklausosViso: tfpCount,
+                    tfpNaujos: tfpNew,
+                    paslaugosViso: srvCount,
+                    paslaugosNaujos: srvNew,
+                    naujosZinutes: contactsNew
+                }
+            };
+        }
+
+        let latestAiResponseText = '';
+
+        window.loadCurrentStatsIntoAiPrompt = () => {
+            const ctx = buildStudioAiContext();
+            const text = `Remiantis dabartiniais studijos duomenimis (${ctx.laikotarpis}, pajamos: ${ctx.pajamos}, atskaitymai: ${ctx.atskaitymai}, mokesčiai: ${ctx.mokesciaiIsViso}, grynasis uždarbis: ${ctx.grynasisPelnas}):\nPrašau pakeisti ataskaitą į išsamią oficialią ketvirčio suvestinę su paaiškinimais VMI.`;
+            const promptEl = document.getElementById('ai-user-prompt');
+            if (promptEl) {
+                promptEl.value = text;
+                promptEl.focus();
+            }
+            showToast("📥 Naujausi VMI duomenys įkelti į užklausos lauką!");
+        };
+
+        window.appendPromptText = (txt) => {
+            const promptEl = document.getElementById('ai-user-prompt');
+            if (promptEl) {
+                if (promptEl.value && !promptEl.value.endsWith(' ')) promptEl.value += ' ';
+                promptEl.value += txt;
+                promptEl.focus();
+            }
+        };
+
+        window.runAiQuickPrompt = (type) => {
+            let prompt = '';
+            if (type === 'vmi_audit') {
+                prompt = 'Išanalizuok dabartinę VMI pajamų ir mokesčių ataskaitą, perskaičiuok visus mokesčius (GPM 5%, PSD 6,98%, VSD 12,52%) ir pateik ataskaitos optimizavimo santrauką.';
+            } else if (type === 'quarter_summary') {
+                prompt = 'Pakeisk ir suformuluok oficialią III ketvirčio (arba pasirinkto laikotarpio) individualios veiklos ataskaitos suvestinę su konkrečiais skaičiais ir pastabomis VMI deklaracijai.';
+            } else if (type === 'expense_advice') {
+                prompt = 'Palygink 30% prezumpcijos metodą su faktinėmis išlaidomis pagal studijos pajamas ir pateik aiškią rekomendaciją, kuris metodas labiau apsimoka finansiškai.';
+            } else if (type === 'client_reply') {
+                prompt = 'Paruošk profesionalų, mandagų fotosesijos patvirtinimo el. laišką klientui su data, avanso informacija (50%) ir patarimais pasiruošimui.';
+            }
+            const promptEl = document.getElementById('ai-user-prompt');
+            if (promptEl) promptEl.value = prompt;
+            submitAiPrompt(prompt);
+        };
+
+        window.triggerVmiAiAssistant = (mode = 'summary') => {
+            let prompt = '';
+            if (mode === 'summary') {
+                prompt = 'Pakeisk ir atnaujink oficialią VMI ataskaitos suvestinę: apskaičiuok gautų pajamų sumą, atskaitymus, GPM, PSD, VSD mokesčius ir suformuluok oficialų tekstą deklaracijai.';
+            } else {
+                prompt = 'Išanalizuok visas studijos pajamas ir pateik ataskaitos suvestinę bei pasiūlymus ataskaitos patikslinimui.';
+            }
+            toggleFloatingAiDrawer(true);
+            const input = document.getElementById('floating-ai-input');
+            if (input) {
+                input.value = prompt;
+                sendFloatingAiMessage();
+            }
+        };
+
+        async function submitAiPrompt(overridePrompt) {
+            const prompt = overridePrompt || document.getElementById('ai-user-prompt')?.value?.trim();
+            if (!prompt) {
+                alert("Prašome įrašyti klausimą arba nurodymą AI asistentui.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-ai-prompt');
+            const spinner = document.getElementById('ai-loading-spinner');
+            const outputEl = document.getElementById('ai-rendered-output');
+            const container = document.getElementById('ai-response-container');
+            const includeContext = document.getElementById('ai-include-context')?.checked !== false;
+
+            if (container) container.style.display = 'block';
+            if (spinner) spinner.style.display = 'block';
+            if (outputEl) outputEl.innerHTML = '';
+            if (btn) { btn.disabled = true; btn.innerHTML = '<span>⏳ Gemini AI mąsto...</span>'; }
+
+            try {
+                const ctx = includeContext ? buildStudioAiContext() : null;
+                const response = await fetch('/api/ai-assistant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: prompt, context: ctx })
+                });
+
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.error || 'AI atsakymo klaida');
+                }
+
+                latestAiResponseText = data.reply;
+                renderMarkdownText(outputEl, data.reply);
+                showToast("✨ AI ataskaita sėkmingai sugeneruota!");
+            } catch (err) {
+                console.error("AI Assistant error:", err);
+                if (outputEl) {
+                    outputEl.innerHTML = `<div style="color: #C62828; padding: 15px; background: #FFEBEE; border-radius: 6px;"><strong>Klaida:</strong> ${err.message || 'Nepavyko susisiekti su AI asistentu'}</div>`;
+                }
+                showToast("AI klaida: " + err.message, "error");
+            } finally {
+                if (spinner) spinner.style.display = 'none';
+                if (btn) { btn.disabled = false; btn.innerHTML = '<span>🚀 Vykdyti / Generuoti</span>'; }
+            }
+        }
+
+        document.getElementById('btn-submit-ai-prompt')?.addEventListener('click', () => submitAiPrompt());
+        document.getElementById('ai-user-prompt')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                submitAiPrompt();
+            }
+        });
+
+        window.copyAiResponse = () => {
+            if (!latestAiResponseText) {
+                showToast("Nėra teksto kopijavimui", "error");
+                return;
+            }
+            navigator.clipboard.writeText(latestAiResponseText).then(() => {
+                showToast("📋 AI tekstas nukopijuotas į iškarpinę!");
+            });
+        };
+
+        window.applyAiReportToNotes = () => {
+            if (!latestAiResponseText) {
+                showToast("Pirmiausia sugeneruokite ataskaitą", "error");
+                return;
+            }
+            const notesEl = document.getElementById('vmi-custom-report-notes');
+            if (notesEl) {
+                notesEl.value = latestAiResponseText;
+                localStorage.setItem('dp_vmi_custom_report_notes', latestAiResponseText);
+            }
+            switchTab('vmi');
+            showToast("✅ AI ataskaitos suvestinė pritaikyta į VMI Žurnalą!");
+        };
+
+        window.downloadAiReport = () => {
+            if (!latestAiResponseText) {
+                showToast("Nėra teksto atsisiuntimui", "error");
+                return;
+            }
+            const blob = new Blob([latestAiResponseText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `DP_PORTFOLIO_VMI_Ataskaita_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("📥 Ataskaita parsiųsta!");
+        };
+
+        window.clearAiResponse = () => {
+            const container = document.getElementById('ai-response-container');
+            const outputEl = document.getElementById('ai-rendered-output');
+            if (container) container.style.display = 'none';
+            if (outputEl) outputEl.innerHTML = '';
+            latestAiResponseText = '';
+        };
+
+        // ==============================================================================
+        // 💬 SKRAIDANTIS (FLOATING) AI ASISTENTO VALDYMAS VISUOSE PUSLAPIUOSE
+        // ==============================================================================
+        let latestFloatingAiText = '';
+
+        window.toggleFloatingAiDrawer = (forceState) => {
+            const drawer = document.getElementById('floating-ai-drawer');
+            if (!drawer) return;
+            if (typeof forceState === 'boolean') {
+                drawer.classList.toggle('open', forceState);
+            } else {
+                drawer.classList.toggle('open');
+            }
+            if (drawer.classList.contains('open')) {
+                const input = document.getElementById('floating-ai-input');
+                if (input) setTimeout(() => input.focus(), 150);
+            }
+        };
+
+        window.quickAiAction = (action) => {
+            let prompt = '';
+            if (action === 'vmi_update') {
+                prompt = 'Pakeisk ir atnaujink VMI ataskaitą: pateik aiškią gautų pajamų, 30% atskaitymų ir mokesčių santrauką.';
+            } else if (action === 'recalc_taxes') {
+                prompt = 'Perskaičiuok mokesčius: kiek reikia mokėti GPM 5%, PSD 6,98% ir VSD 12,52% pagal dabartines pajamas?';
+            } else if (action === 'quarter_summary') {
+                prompt = 'Paruošk III ketvirčio oficialią suvestinę VMI pajamų-išlaidų žurnalo deklaravimui.';
+            } else if (action === 'prices') {
+                prompt = 'Pateik trumpas rekomendacijas dėl fotosesijų kainodaros optimizavimo ir pelningumo didinimo.';
+            } else if (action === 'client_reply_latest') {
+                prompt = 'Paruošk mandagų ir reprezentatyvų atsakymo el. laišką klientui dėl datos derinimo ir fotosesijos užsakymo.';
+            }
+            const input = document.getElementById('floating-ai-input');
+            if (input) {
+                input.value = prompt;
+                sendFloatingAiMessage();
+            }
+        };
+
+        window.handleFloatingAiKey = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendFloatingAiMessage();
+            }
+        };
+
+        window.sendFloatingAiMessage = async () => {
+            const input = document.getElementById('floating-ai-input');
+            const message = input?.value?.trim();
+            if (!message) return;
+
+            const msgsBox = document.getElementById('floating-ai-messages');
+            const sendBtn = document.getElementById('floating-ai-send-btn');
+            const actionsBar = document.getElementById('floating-ai-actions-bar');
+
+            // Add user message bubble
+            const userBubble = document.createElement('div');
+            userBubble.className = 'floating-ai-bubble user';
+            userBubble.innerText = message;
+            msgsBox.appendChild(userBubble);
+            input.value = '';
+            msgsBox.scrollTop = msgsBox.scrollHeight;
+
+            // Add loading bot bubble
+            const botBubble = document.createElement('div');
+            botBubble.className = 'floating-ai-bubble bot';
+            botBubble.innerHTML = '<em>✨ Gemini AI galvoja ir ruošia atsakymą...</em>';
+            msgsBox.appendChild(botBubble);
+            msgsBox.scrollTop = msgsBox.scrollHeight;
+
+            if (sendBtn) sendBtn.disabled = true;
+
+            try {
+                const ctx = buildStudioAiContext();
+                const res = await fetch('/api/ai-assistant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, context: ctx })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Klaida');
+
+                latestFloatingAiText = data.reply;
+                renderMarkdownText(botBubble, data.reply);
+                if (actionsBar) actionsBar.style.display = 'flex';
+                msgsBox.scrollTop = msgsBox.scrollHeight;
+            } catch (err) {
+                botBubble.innerHTML = `<span style="color:#C62828;">Klaida: ${err.message || 'Nepavyko gauti atsakymo'}</span>`;
+            } finally {
+                if (sendBtn) sendBtn.disabled = false;
+            }
+        };
+
+        window.copyFloatingAiResponse = () => {
+            if (!latestFloatingAiText) return;
+            navigator.clipboard.writeText(latestFloatingAiText).then(() => {
+                showToast("📋 Atsakymas nukopijuotas!");
+            });
+        };
+
+        window.applyFloatingAiToNotes = () => {
+            if (!latestFloatingAiText) return;
+            const notesEl = document.getElementById('vmi-custom-report-notes');
+            if (notesEl) {
+                notesEl.value = latestFloatingAiText;
+                localStorage.setItem('dp_vmi_custom_report_notes', latestFloatingAiText);
+            }
+            switchTab('vmi');
+            showToast("✅ AI ataskaita pritaikyta į VMI žurnalą!");
+        };
+
+        window.askAiToReplyToClient = (type, id) => {
+            let item = null;
+            if (type === 'tfp') {
+                item = (window._adminCache?.tfp || []).find(r => r.id === id);
+            } else if (type === 'srv') {
+                item = (window._adminCache?.services || []).find(r => r.id === id);
+            } else if (type === 'contact') {
+                item = (window._adminCache?.contacts || []).find(r => r.id === id);
+            }
+
+            if (!item) {
+                showToast("Kliento duomenys nerasti", "error");
+                return;
+            }
+
+            let prompt = '';
+            if (type === 'tfp') {
+                prompt = `Paruošk mandagų ir draugišką atsakymą TFP modeliui/klientui.
+Klientas: ${item.name || 'Modelis'}
+El. paštas: ${item.email || ''}
+Instagram: ${item.instagram || ''}
+Fotosesijos idėja: ${item.idea || ''}
+Papildoma informacija: ${item.extra_info || ''}
+Pasiūlyk konkrečią datą ar lokaciją ir paklausk, ar tinka laikas.`;
+            } else if (type === 'srv') {
+                prompt = `Paruošk oficialų ir reprezentatyvų el. laišką klientui dėl mokamos fotosesijos užsakymo.
+Klientas: ${item.clientName || 'Klientas'}
+Paslauga: ${item.serviceName || 'Fotosesija'}
+Pageidaujama data: ${item.preferredDate || ''} ${item.preferredTime || ''}
+Lokacija: ${item.location || ''}
+Kaina: ${item.finalPrice || ''} € (Avansas: ${item.depositAmount || ''} €)
+Kliento lūkesčiai: ${item.additionalInformation || ''}
+Pateik pilną, paruoštą siuntimui tekstą su mandagiu pasveikinimu, patvirtinimu ir avanso instrukcija.`;
+            } else {
+                prompt = `Paruošk mandagų atsakymą į gautą užklausą iš svetainės kontaktų formos.
+Siuntėjas: ${item.name || 'Klientas'}
+El. paštas: ${item.email || ''}
+Tema: ${item.subject || ''}
+Žinutė: ${item.message || ''}
+Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
+            }
+
+            toggleFloatingAiDrawer(true);
+            const input = document.getElementById('floating-ai-input');
+            if (input) {
+                input.value = prompt;
+                sendFloatingAiMessage();
+            }
+        };
+
+        // Simple Markdown Renderer
+        function renderMarkdownText(container, text) {
+            if (!container || !text) return;
+            let safe = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
+            // Tables
+            safe = safe.replace(/\n\|(.+)\|\n\|[-:| ]+\|\n((?:\|.+\|\n?)+)/g, (match, header, body) => {
+                const ths = header.split('|').map(c => `<th>${c.trim()}</th>`).join('');
+                const rows = body.trim().split('\n').map(row => {
+                    const tds = row.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1).map(c => `<td>${c.trim()}</td>`).join('');
+                    return `<tr>${tds}</tr>`;
+                }).join('');
+                return `<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>`;
+            });
+
+            // Headers
+            safe = safe.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            safe = safe.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            safe = safe.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+            // Bold & Italic
+            safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            safe = safe.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+            // Bullet points
+            safe = safe.replace(/^\s*[-*]\s+(.*$)/gim, '<li>$1</li>');
+            safe = safe.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+            // Line breaks
+            safe = safe.replace(/\n\n/g, '<p></p>');
+            safe = safe.replace(/\n/g, '<br>');
+
+            container.innerHTML = safe;
+        }
     </script>
 </body>
 </html>

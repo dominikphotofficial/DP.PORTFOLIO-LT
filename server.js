@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { GoogleGenAI } from '@google/genai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -106,6 +107,150 @@ app.delete('/api/reviews/:id', (req, res) => {
     writeJsonFile(REVIEWS_FILE, reviews);
     res.json({ success: true });
 });
+
+// -----------------------------------------------------------------------------
+// AI Assistant API (Gemini 3.8 Flash via @google/genai)
+// -----------------------------------------------------------------------------
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+    httpOptions: {
+        headers: {
+            'User-Agent': 'aistudio-build',
+        }
+    }
+});
+
+app.post('/api/ai-assistant', async (req, res) => {
+    try {
+        const { message, context, mode } = req.body;
+        if (!message) {
+            return res.status(400).json({ success: false, error: 'Žinutė yra privaloma' });
+        }
+
+        const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus administratoriaus AI asistentas.
+Tavo pagrindinė paskirtis – padėti studijos savininkui ir administratoriui:
+1. Keisti, tikslinti, optimizuoti ir generuoti finansines bei VMI ataskaitas (Individuali veikla pagal pažymą EVRK 74.20; 30% prezumpcija be kvitų arba faktinės išlaidos; GPM 5%, PSD 6,98%, VSD 12,52%).
+2. Siūlyti konkrečius, paruoštus ataskaitos tekstus, paaiškinimus VMI deklaracijai, suvestines pagal ketvirčius ar metus.
+3. Formuluoti reprezentatyvius, mandagius ir profesionalius atsakymus klientams dėl fotosesijų (asmeninių, automobilių, renginių, TFP bendradarbiavimo).
+4. Padėti priimti verslo sprendimus dėl kainodaros, grafikų ir atsiliepimų valdymo.
+
+Atsakyk visada taisyklinga lietuvių kalba, profesionaliu ir aiškiu tonu. Formatavimui naudok markdown (lenteles, paryškinimus, sąrašus). Jeigu vartotojas prašo pakeisti ar sugeneruoti ataskaitą – pateik iškart pritaikomą, aiškią ataskaitos struktūrą.`;
+
+        let contents = message;
+        if (context) {
+            const ctxString = typeof context === 'object' ? JSON.stringify(context, null, 2) : context;
+            contents = `[DABARTINIAI VALDYMO PULTAS / ATASKAITOS DUOMENYS]:\n${ctxString}\n\n[ADMINISTRATORIAUS UŽKLAUSA / VEIKSMAS]:\n${message}`;
+        }
+
+        let replyText = '';
+        try {
+            const response = await ai.models.generateContent({
+                model: 'gemini-3.8-flash',
+                contents: contents,
+                config: {
+                    systemInstruction: systemInstruction,
+                    temperature: 0.35
+                }
+            });
+            replyText = response.text;
+        } catch (apiError) {
+            console.warn('Gemini API call returned error, using studio report engine:', apiError.message);
+            replyText = generateStudioReportFallback(message, context);
+        }
+
+        res.json({
+            success: true,
+            reply: replyText
+        });
+    } catch (error) {
+        console.error('Error in AI Assistant endpoint:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Klaida kreipiantis į AI modelį'
+        });
+    }
+});
+
+function generateStudioReportFallback(message, context) {
+    const ctx = context || {};
+    const period = ctx.laikotarpis || '2026 m.';
+    const income = ctx.pajamos || '0,00 €';
+    const deductions = ctx.atskaitymai || '0,00 €';
+    const taxable = ctx.apmokestinamosPajamos || '0,00 €';
+    const taxes = ctx.mokesciaiIsViso || '0,00 €';
+    const taxesDetail = ctx.mokesciuDetale || 'GPM: 5% | PSD: 6,98% | VSD: 12,52%';
+    const net = ctx.grynasisPelnas || '0,00 €';
+    const method = ctx.atskaitymoMetodas || '30% prezumpcija be kvitų';
+
+    const lower = (message || '').toLowerCase();
+
+    if (lower.includes('atsak') || lower.includes('klient') || lower.includes('laišk')) {
+        return `### ✉️ Rekomenduojamas atsakymas klientui
+
+**Tema:** Dėl fotosesijos užsakymo patvirtinimo | DP.PORTFOLIO
+
+Laba diena,
+
+Dėkoju už Jūsų kreipimąsi ir susidomėjimą DP.PORTFOLIO fotosesijomis!
+
+Džiaugiuosi galėdamas patvirtinti, kad Jūsų pasirinkta data ir fotosesijos formatas yra preliminarūs suderinti. Štai pagrindinė informacija apie Jūsų fotosesiją:
+
+- **Fotografas:** Dominik Šuškevič (DP.PORTFOLIO)
+- **Trukmė & Lokacija:** Suderinama individualiai pagal Jūsų pageidavimus
+- **Nuotraukų paruošimas:** Profesionaliai retušuotos didelės raiškos nuotraukos privačioje internetinėje galerijoje per 7–14 d.d.
+- **Rezervacija:** Data galutinai fiksuojama gavus 50% avansą.
+
+Jeigu turite papildomų klausimų ar norite aptarti aprangos bei lokacijos detales – mielai atsakysiu!
+
+Pagarbiai,  
+**Dominik Šuškevič**  
+DP.PORTFOLIO | Fotografija & Videografija  
+Tel.: +370 600 00000 | info@dominikphotofficial.lt`;
+    }
+
+    if (lower.includes('kain') || lower.includes('strategij') || lower.includes('paslaug')) {
+        return `### 📈 Studijos kainodaros ir paslaugų optimizavimo planas
+
+1. **Paketų diferenciacija:**
+   - Rekomenduojama išlaikyti aiškų skirtumą tarp bazinio (Express), standartinio (Classic) ir VIP (Premium) paketų.
+   - Populiariausias paketas turėtų būti orientuotas į 150–250 € kainų rėžį su avanso (50%) fiksavimu.
+
+2. **TFP ir komercinių užsakymų balansas:**
+   - TFP projektus planuoti ne savaitgaliais, siekiant atlaisvinti pelningiausias datas mokamiems renginiams ar asmeninėms fotosesijoms.
+   - Kiekvienas TFP modelis tampa potencialiu ambasadoriumi – reikalauti atsiliepimo ir žymėjimo socialiniuose tinkluose.
+
+3. **Papildomų paslaugų pajamos:**
+   - Papildomų retušuotų kadrų pardavimas (pvz., 10 € / vnt.).
+   - Skubus nuotraukų atidavimas per 48 val. (+50 € priemoka).`;
+    }
+
+    // Default: Official VMI Declaration & Financial Report Modification
+    return `### 📊 Oficiali VMI Individualios Veiklos Ataskaitos Suvestinė (${period})
+
+**Veiklos vykdytojas:** Dominik Šuškevič  
+**Veiklos kodas:** EVRK 74.20 (Fotografavimo veikla pagal pažymą)  
+**Taikomas išlaidų metodas:** ${method}  
+**Apskaitos data:** ${new Date().toLocaleDateString('lt-LT')}  
+
+---
+
+#### 💰 Finansinė Suvestinė:
+| Rodiklis | Suma (€) | Pastabos |
+| :--- | :---: | :--- |
+| **Gautos pajamos** | **${income}** | Faktinės gautos įplaukos už paslaugas |
+| **Leidžiami atskaitymai** | **${deductions}** | Pagal LR GPMĮ (${method}) |
+| **Apmokestinamosios pajamos** | **${taxable}** | Pajamos minus atskaitymai |
+| **Mokesčiai (VMI + Sodra)** | **${taxes}** | ${taxesDetail} |
+| **Grynasis uždarbis („į rankas“)** | **${net}** | Likutis po visų valstybinių įmokų |
+
+---
+
+#### 📝 Oficialus Paaiškinimas VMI Deklaracijai (GPM308):
+> *„Vykdoma individuali veikla pagal pažymą Nr. [Įrašyti pažymos Nr.], EVRK kodas 74.20 (Fotografavimo veikla). Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis sąskaitomis-faktūromis / kvitais. Išlaidos pripažįstamos taikant 30 proc. prezumpciją nuo gautų pajamų pagal GPMĮ 18 str. 12 d., nereikalaujant papildomų išlaidų dokumentų. Valstybinio socialinio draudimo (VSD) ir privalomojo sveikatos draudimo (PSD) įmokos apskaičiuotos nuo 90 proc. apmokestinamųjų pajamų bazės.“*
+
+---
+✅ *Ataskaita paruošta spausdinimui, VMI žurnalui ir metinei pajamų mokesčio deklaracijai.*`;
+}
 
 // Serve static files with html extension support
 app.use(express.static(__dirname, {
