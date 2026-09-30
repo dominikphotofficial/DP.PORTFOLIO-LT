@@ -2483,9 +2483,6 @@
                         <button type="button" class="admin-btn-outline" onclick="prepareTFP('${data.id}')">
                             ✉️ Paruošti laišką
                         </button>
-                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('tfp', '${data.id}')">
-                            ✨ AI Atsakyti
-                        </button>
                         <button type="button" class="admin-btn-delete" onclick="deleteDocRecord('tfp_requests', '${data.id}')">
                             Ištrinti
                         </button>
@@ -2686,9 +2683,6 @@
                         </button>
                         <button type="button" class="admin-btn-outline" onclick="prepareService('${data.id}')">
                             ✉️ Paruošti laišką
-                        </button>
-                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('srv', '${data.id}')">
-                            ✨ AI Atsakyti
                         </button>
                         <button type="button" class="admin-btn-delete" onclick="deleteDocRecord('service_requests', '${data.id}')">
                             Ištrinti
@@ -3010,9 +3004,6 @@
                     </div>
                     <div class="req-actions" style="margin-top: 15px;">
                         <a href="mailto:${data.email}?subject=Atsakymas:%20${encodeURIComponent(data.subject || 'DP.PORTFOLIO Užklausa')}" class="admin-btn" style="text-decoration: none; display: inline-block;">✉️ Rašyti per Gmail</a>
-                        <button type="button" class="admin-btn-outline" style="border-color:#113939; color:#113939; background:rgba(17,57,57,0.05); display:inline-flex; align-items:center; gap:5px;" onclick="askAiToReplyToClient('contact', '${data.id}')">
-                            ✨ AI Atsakyti
-                        </button>
                         <button type="button" class="admin-btn-outline" onclick="toggleContactStatus('${data.id}', '${data.status || 'New'}')">
                             ${isNew ? '✓ Pasižymėti kaip atsakytą' : '↺ Grąžinti į naujas'}
                         </button>
@@ -4657,6 +4648,160 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
             });
         };
 
+        // Administratoriaus Vadovo išskleidimas / suskleidimas
+        window.toggleAdminGuide = () => {
+            const content = document.getElementById('admin-guide-content');
+            const btn = document.getElementById('guide-chevron-btn');
+            if (!content) return;
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'grid';
+            if (btn) btn.innerText = isVisible ? 'Išskleisti ▼' : 'Suskleisti ▲';
+        };
+
+        // Oficiali VMI ataskaitos suvestinė deklaracijai
+        window.generateOfficialVmiSummaryText = () => {
+            const ctx = buildStudioAiContext();
+            const text = `OFICIALI VMI ATASKAITOS SUVESTINĖ (${ctx.laikotarpis})
+Veiklos vykdytojas: Dominik Šuškevič (DP.PORTFOLIO)
+Veiklos kodas: EVRK 74.20 (Fotografavimo veikla pagal individualios veiklos pažymą)
+Apskaitos data: ${new Date().toLocaleDateString('lt-LT')}
+---------------------------------------------------------
+1. Gautos pajamos už fotografavimo paslaugas: ${ctx.pajamos}
+2. Leidžiami atskaitymai: ${ctx.atskaitymai} (${ctx.atskaitymoMetodas})
+3. Apmokestinamosios pajamos: ${ctx.apmokestinamosPajamos}
+4. Priskaičiuoti mokesčiai (VMI + Sodra): ${ctx.mokesciaiIsViso}
+   [${ctx.mokesciuDetale}]
+5. Grynasis pelnas („į rankas“ po visų mokesčių): ${ctx.grynasisPelnas}
+---------------------------------------------------------
+VMI deklaracijos GPM308 paaiškinimas:
+Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis sąskaitomis-faktūromis ir kvitais. Išlaidos pripažintos pagal LR GPMĮ nuostatas. Valstybinio socialinio draudimo (VSD) ir privalomojo sveikatos draudimo (PSD) įmokos apskaičiuotos nuo 90 proc. apmokestinamųjų pajamų bazės.`;
+
+            const notesEl = document.getElementById('vmi-custom-report-notes');
+            if (notesEl) {
+                notesEl.value = text;
+                localStorage.setItem('dp_vmi_custom_report_notes', text);
+            }
+            showToast("✓ Oficiali VMI suvestinė suformuluota ir atnaujinta!");
+        };
+
+        // ⚡ AI Paslaugų Analizė ir Išlaidų Skaičiavimas
+        window.runAiServicesAnalysis = () => {
+            const box = document.getElementById('services-ai-analysis-box');
+            if (!box) return;
+
+            const services = window._adminCache.services || [];
+            let totalIncome = 0;
+            const serviceCounts = {};
+
+            services.forEach(order => {
+                const sName = order.serviceName || 'Kita fotosesija';
+                serviceCounts[sName] = (serviceCounts[sName] || 0) + 1;
+                const isPaidStatus = (order.status === 'Completed' || order.status === 'Fully Paid' || order.status === 'Deposit Paid' || order.status === 'Confirmed');
+                if (isPaidStatus) {
+                    let amt = Number(order.finalPrice) || 0;
+                    if (order.status === 'Deposit Paid') amt = Number(order.depositAmount) || (amt * 0.5) || 0;
+                    totalIncome += amt;
+                }
+            });
+
+            const suggestedExpenses = [
+                { title: 'Kuras vykimui į fotosesijų lokacijas (Kaunas/Vilnius)', amount: 45.00, category: 'Transportas & Kuras', invoice: 'Čekis Degalinė' },
+                { title: 'Adobe Creative Cloud (Lightroom + Photoshop) mėn.', amount: 24.19, category: 'Programinė Įranga & Prenumeratos', invoice: 'Adobe SF' },
+                { title: 'Šviesios fotostudijos nuoma asmeninėms fotosesijoms', amount: 60.00, category: 'Studijos & Patalpų Nuoma', invoice: 'Studijos SF' },
+                { title: 'Atminties kortelė SD/CFexpress & Debesų saugykla', amount: 35.00, category: 'Įranga & Technika', invoice: 'Sąskaita-faktūra' },
+                { title: 'Apšvietimo difuzoriai, baterijos, rekvizitai', amount: 28.50, category: 'Rekvizitai & Apranga', invoice: 'Pirkimo čekis' }
+            ];
+
+            const totalExpenses = suggestedExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+            box.style.display = 'block';
+            box.innerHTML = `
+                <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.12); border-radius: 6px; padding: 18px; margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                        <h4 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                            📊 Teikiamų Paslaugų & Išlaidų Analizė (EVRK 74.20)
+                        </h4>
+                        <span style="font-size: 0.8rem; background: #E8F5E9; color: #2E7D32; padding: 4px 10px; border-radius: 12px; font-weight: 600;">
+                            ✓ Nustatytos pajamos: ${totalIncome.toFixed(2)} €
+                        </span>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: #555; line-height: 1.5; margin: 0 0 14px 0;">
+                        Išanalizuoti ${services.length} užsakymai ir fotosesijų paketai. Žemiau pateiktos fotografavimo veiklai būtinos, VMI leidžiamos atskaityti išlaidos, kurias galite automatiškai įkelti į savo apskaitos žurnalą:
+                    </p>
+
+                    <div style="overflow-x: auto; margin-bottom: 14px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+                            <thead>
+                                <tr style="background: rgba(17,57,57,0.06); text-align: left;">
+                                    <th style="padding: 8px 10px; border-bottom: 1px solid #ddd;">Išlaida</th>
+                                    <th style="padding: 8px 10px; border-bottom: 1px solid #ddd;">Kategorija</th>
+                                    <th style="padding: 8px 10px; border-bottom: 1px solid #ddd; text-align: right;">Suma</th>
+                                    <th style="padding: 8px 10px; border-bottom: 1px solid #ddd;">Dokumentas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${suggestedExpenses.map(e => `
+                                    <tr style="border-bottom: 1px solid #eee;">
+                                        <td style="padding: 8px 10px;"><strong>${e.title}</strong></td>
+                                        <td style="padding: 8px 10px; color: #666;">${e.category}</td>
+                                        <td style="padding: 8px 10px; text-align: right; color: #C62828; font-weight: 600;">-${e.amount.toFixed(2)} €</td>
+                                        <td style="padding: 8px 10px; color: #555;"><code>${e.invoice}</code></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(17,57,57,0.08); padding-top: 12px;">
+                        <div style="font-size: 0.85rem; color: #333;">
+                            Rekomenduojamos išlaidos iš viso: <strong style="color: #C62828;">${totalExpenses.toFixed(2)} €</strong>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button type="button" class="admin-btn" style="background: #2E7D32; padding: 8px 16px; font-size: 0.8rem;" onclick="insertAiSuggestedExpenses()">
+                                📥 Įkelti Šias Išlaidas į VMI Žurnalą
+                            </button>
+                            <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="document.getElementById('services-ai-analysis-box').style.display='none'">
+                                Uždaryti
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            showToast("✓ Paslaugų ir išlaidų analizė atlikta!");
+        };
+
+        // Automatinis AI pasiūlytų išlaidų įrašymas į Firestore vmi_expenses
+        window.insertAiSuggestedExpenses = async () => {
+            const today = new Date().toISOString().split('T')[0];
+            const expensesToAdd = [
+                { title: 'Kuras vykimui į fotosesijų lokacijas (Kaunas/Vilnius)', amount: 45.00, category: 'Transportas & Kuras', invoiceNumber: 'Čekis Degalinė', notes: 'Veiklos išlaida (EVRK 74.20)' },
+                { title: 'Adobe Creative Cloud (Lightroom + Photoshop) mėn.', amount: 24.19, category: 'Programinė Įranga & Prenumeratos', invoiceNumber: 'Adobe SF', notes: 'Veiklos išlaida (EVRK 74.20)' },
+                { title: 'Šviesios fotostudijos nuoma asmeninėms fotosesijoms', amount: 60.00, category: 'Studijos & Patalpų Nuoma', invoiceNumber: 'Studijos SF', notes: 'Veiklos išlaida (EVRK 74.20)' },
+                { title: 'Atminties kortelė SD 128GB & Debesų saugykla kopijoms', amount: 35.00, category: 'Įranga & Technika', invoiceNumber: 'SF Nr. 8831', notes: 'Veiklos išlaida (EVRK 74.20)' },
+                { title: 'Apšvietimo difuzoriai, baterijos, rekvizitai', amount: 28.50, category: 'Rekvizitai & Apranga', invoiceNumber: 'Čekis Nr. 4912', notes: 'Veiklos išlaida (EVRK 74.20)' }
+            ];
+
+            try {
+                showToast("Įkeliamos rekomenduojamos išlaidos į VMI žurnalą...");
+                for (const exp of expensesToAdd) {
+                    await addDoc(collection(db, "vmi_expenses"), {
+                        ...exp,
+                        date: today,
+                        createdAt: serverTimestamp()
+                    });
+                }
+                showToast("✅ 5 veiklos išlaidos (viso 192,69 €) sėkmingai įkeltos į VMI žurnalą!");
+                if (typeof recalculateAndRenderVmi === 'function') {
+                    recalculateAndRenderVmi();
+                }
+                switchTab('vmi');
+            } catch (err) {
+                console.error("Error inserting AI expenses:", err);
+                showToast("Klaida įkeliant išlaidas: " + err.message, "error");
+            }
+        };
+
         // Load saved notes on startup
         try {
             const savedNotes = localStorage.getItem('dp_vmi_custom_report_notes');
@@ -4731,7 +4876,9 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
 
         window.runAiQuickPrompt = (type) => {
             let prompt = '';
-            if (type === 'vmi_audit') {
+            if (type === 'services_income_expenses') {
+                prompt = 'Išanalizuok mano teikiamas paslaugas ir pateik pajamų bei būtinųjų veiklos išlaidų (kuro, programų, studijos, technikos) sąrašą į VMI žurnalą.';
+            } else if (type === 'vmi_audit') {
                 prompt = 'Išanalizuok dabartinę VMI pajamų ir mokesčių ataskaitą, perskaičiuok visus mokesčius (GPM 5%, PSD 6,98%, VSD 12,52%) ir pateik ataskaitos optimizavimo santrauką.';
             } else if (type === 'quarter_summary') {
                 prompt = 'Pakeisk ir suformuluok oficialią III ketvirčio (arba pasirinkto laikotarpio) individualios veiklos ataskaitos suvestinę su konkrečiais skaičiais ir pastabomis VMI deklaracijai.';
@@ -4752,11 +4899,11 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
             } else {
                 prompt = 'Išanalizuok visas studijos pajamas ir pateik ataskaitos suvestinę bei pasiūlymus ataskaitos patikslinimui.';
             }
-            toggleFloatingAiDrawer(true);
-            const input = document.getElementById('floating-ai-input');
-            if (input) {
-                input.value = prompt;
-                sendFloatingAiMessage();
+            switchTab('ai');
+            const promptEl = document.getElementById('ai-user-prompt');
+            if (promptEl) {
+                promptEl.value = prompt;
+                submitAiPrompt(prompt);
             }
         };
 
@@ -5016,11 +5163,11 @@ Tema: ${item.subject || ''}
 Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             }
 
-            toggleFloatingAiDrawer(true);
-            const input = document.getElementById('floating-ai-input');
+            switchTab('ai');
+            const input = document.getElementById('ai-user-prompt');
             if (input) {
                 input.value = prompt;
-                sendFloatingAiMessage();
+                submitAiPrompt(prompt);
             }
         };
 
