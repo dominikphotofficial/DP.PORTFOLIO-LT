@@ -111,14 +111,19 @@ app.delete('/api/reviews/:id', (req, res) => {
 // -----------------------------------------------------------------------------
 // AI Assistant API (Gemini 3.8 Flash via @google/genai)
 // -----------------------------------------------------------------------------
-const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    httpOptions: {
-        headers: {
-            'User-Agent': 'aistudio-build',
+let ai = null;
+try {
+    ai = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        httpOptions: {
+            headers: {
+                'User-Agent': 'aistudio-build',
+            }
         }
-    }
-});
+    });
+} catch (initErr) {
+    console.warn("GoogleGenAI init error:", initErr);
+}
 
 app.post('/api/ai-assistant', async (req, res) => {
     try {
@@ -127,14 +132,14 @@ app.post('/api/ai-assistant', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Žinutė yra privaloma' });
         }
 
-        const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus administratoriaus AI asistentas.
+        const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus administratoriaus AI asistentas ir padėjėjas.
 Tavo pagrindinė paskirtis – padėti studijos savininkui ir administratoriui:
 1. Keisti, tikslinti, optimizuoti ir generuoti finansines bei VMI ataskaitas (Individuali veikla pagal pažymą EVRK 74.20; 30% prezumpcija be kvitų arba faktinės išlaidos; GPM 5%, PSD 6,98%, VSD 12,52%).
 2. Siūlyti konkrečius, paruoštus ataskaitos tekstus, paaiškinimus VMI deklaracijai, suvestines pagal ketvirčius ar metus.
 3. Formuluoti reprezentatyvius, mandagius ir profesionalius atsakymus klientams dėl fotosesijų (asmeninių, automobilių, renginių, TFP bendradarbiavimo).
-4. Padėti priimti verslo sprendimus dėl kainodaros, grafikų ir atsiliepimų valdymo.
+4. Padėti priimti verslo sprendimus dėl kainodaros, grafikų ir veiklos išlaidų (kuras, studija, programos, technika).
 
-Atsakyk visada taisyklinga lietuvių kalba, profesionaliu ir aiškiu tonu. Formatavimui naudok markdown (lenteles, paryškinimus, sąrašus). Jeigu vartotojas prašo pakeisti ar sugeneruoti ataskaitą – pateik iškart pritaikomą, aiškią ataskaitos struktūrą.`;
+Atsakyk visada taisyklinga lietuvių kalba, profesionaliu, draugišku ir aiškiu tonu. Formatavimui naudok markdown (lenteles, paryškinimus, sąrašus).`;
 
         let contents = message;
         if (context) {
@@ -143,21 +148,10 @@ Atsakyk visada taisyklinga lietuvių kalba, profesionaliu ir aiškiu tonu. Forma
         }
 
         let replyText = '';
-        try {
-            const response = await ai.models.generateContent({
-                model: 'gemini-3.8-flash',
-                contents: contents,
-                config: {
-                    systemInstruction: systemInstruction,
-                    temperature: 0.35
-                }
-            });
-            replyText = response.text;
-        } catch (apiError) {
-            console.warn('Gemini 3.8 Flash returned error, trying fallback model or engine:', apiError.message);
+        if (ai) {
             try {
                 const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
+                    model: 'gemini-3.8-flash',
                     contents: contents,
                     config: {
                         systemInstruction: systemInstruction,
@@ -165,21 +159,41 @@ Atsakyk visada taisyklinga lietuvių kalba, profesionaliu ir aiškiu tonu. Forma
                     }
                 });
                 replyText = response.text;
-            } catch (fallbackError) {
-                console.warn('Fallback Gemini call returned error, using studio report engine:', fallbackError.message);
-                replyText = generateStudioReportFallback(message, context);
+            } catch (apiError) {
+                console.warn('Gemini 3.8 Flash returned error, trying fallback model or engine:', apiError.message);
+                try {
+                    const response = await ai.models.generateContent({
+                        model: 'gemini-2.5-flash',
+                        contents: contents,
+                        config: {
+                            systemInstruction: systemInstruction,
+                            temperature: 0.35
+                        }
+                    });
+                    replyText = response.text;
+                } catch (fallbackError) {
+                    console.warn('Fallback Gemini call returned error, using studio report engine:', fallbackError.message);
+                    replyText = generateStudioReportFallback(message, context);
+                }
             }
+        } else {
+            replyText = generateStudioReportFallback(message, context);
         }
 
-        res.json({
+        if (!replyText) {
+            replyText = generateStudioReportFallback(message, context);
+        }
+
+        return res.json({
             success: true,
             reply: replyText
         });
     } catch (error) {
         console.error('Error in AI Assistant endpoint:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message || 'Klaida kreipiantis į AI modelį'
+        const fallbackText = generateStudioReportFallback(req.body?.message, req.body?.context);
+        return res.json({
+            success: true,
+            reply: fallbackText
         });
     }
 });
@@ -303,6 +317,11 @@ Tel.: +370 600 00000 | info@dominikphotofficial.lt`;
 ✅ *Ataskaita paruošta spausdinimui, VMI žurnalui ir metinei pajamų mokesčio deklaracijai.*`;
 }
 
+// API 404 handler - prevents returning HTML for API requests
+app.use('/api', (req, res) => {
+    res.status(404).json({ success: false, error: `API maršrutas nerastas: ${req.method} ${req.originalUrl}` });
+});
+
 // Serve static files with html extension support
 app.use(express.static(__dirname, {
     extensions: ['html', 'htm']
@@ -313,7 +332,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 404 fallback to index.html
+// Global API error handler
+app.use((err, req, res, next) => {
+    console.error('Express global error:', err);
+    if (req.originalUrl && req.originalUrl.startsWith('/api')) {
+        return res.status(500).json({ success: false, error: err.message || 'Serverio klaida' });
+    }
+    next(err);
+});
+
+// 404 fallback to index.html for frontend HTML pages
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'index.html'));
 });
