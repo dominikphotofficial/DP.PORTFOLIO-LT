@@ -219,6 +219,52 @@ function generateStudioReportFallback(message, context) {
 
     const lower = (message || '').toLowerCase();
 
+    // 0. Testinis VMI Pajamų Žurnalas + Kvitas + Sutartis viename
+    if ((lower.includes('vmi') || lower.includes('sheet') || lower.includes('spausdin') || lower.includes('atspausdin')) && (lower.includes('kvit') || lower.includes('sutart'))) {
+        return `### 📊 TESTINIS VMI PAJAMŲ ŽURNALAS IR OFICIALŪS DOKUMENTAI (A4 SPAUSDINIMUI)
+
+Paruošiau Jums pilną testinį **VMI Pajamų ir Išlaidų žurnalo** vaizdą, pritaikytą A4 spausdinimui, bei oficialią **Sąskaitą-faktūrą / Kvitą** ir **Fotografavimo sutartį**.
+
+---
+
+#### 1. 🖨️ Kaip atrodys atspausdintas VMI Žurnalas (EVRK 74.20):
+Atspausdintame A4 lape suformuota oficiali LR Finansų ministro patvirtinta forma:
+- **Veiklos vykdytojas:** Dominik Šuškevič (Fotografavimo veikla, EVRK 74.20)
+- **Apskaitos laikotarpis:** 2026 m. | **Metodas:** 30% prezumpcija be kvitų
+- **Operacijų lentelė:** 9 testinės operacijos (fotosesijos, studijos nuoma, kuras, Adobe CC)
+- **Finansiniai rezultatai:**
+  - 💰 **Gautos pajamos:** **880,00 €**
+  - 🧾 **Leidžiami atskaitymai (30% prezumpcija):** **264,00 €** *(faktinės išlaidos: 164,19 €)*
+  - 🏛 **Apmokestinamosios pajamos:** **616,00 €**
+  - ⚖️ **Priskaičiuoti mokesčiai (VMI + Sodra):** **138,91 €** *(GPM 5%: 30,80 € | PSD 6,98%: 38,70 € | VSD 12,52%: 69,41 €)*
+  - 💵 **Grynasis pelnas („į rankas“):** **741,09 €**
+- **Oficialus deklaracijos paaiškinimas ir parašų zonos** apačioje.
+
+---
+
+#### 2. 🧾 Paruoštas Pinigų Priėmimo Kvitas / Sąskaita-Faktūra:
+- **Serija DP Nr. 2026-001**
+- **Teikėjas:** Dominik Šuškevič, EVRK 74.20, Banko sąskaita: \`LT867300010171188764\` (Swedbank)
+- **Paslauga:** Individuali / Renginio fotosesija (kaina: 150,00 €, gautas 50% avansas: 75,00 €, mokėtinas likutis: 75,00 €)
+- **Suma žodžiais:** Vienas šimtas penkiasdešimt eurų 00 ct. (Likusi suma: septyniasdešimt penki eurai 00 ct.)
+- **Teisinis pagrindas:** Ne PVM mokėtojas pagal LR PVMĮ 71 str.
+
+---
+
+#### 3. 📜 Paruošta Fotografavimo Paslaugų ir Autorinė Sutartis:
+- **Sutarties Nr. DP-2026/01**
+- Šalys: Fotografas Dominik Šuškevič ir Užsakovas
+- 1. Sutarties dalykas (fotosesijos tipas, vieta, trukmė, Wfolio privati galerija su slaptažodžiu)
+- 2. Kaina ir atsiskaitymo tvarka (150 €, 50% avansas datos rezervacijai)
+- 3. Rezultato atidavimo terminai (7–14 d.d.)
+- 4. Autorinės teisės ir nuotraukų naudojimas (portfolio teisės)
+- 5. Datos perkėlimo sąlygos ir parašai
+
+---
+
+💡 *Paspauskite žemiau esančius mygtukus, kad atidarytumėte švarų A4 spausdinimo langą arba atsisiųstumėte testinį Excel (.csv) failą!*`;
+    }
+
     // 1. Service Analysis & Automated Income/Expense Calculation for VMI
     if (lower.includes('analiz') || (lower.includes('paslaug') && lower.includes('išlaid')) || lower.includes('pajamu gavim')) {
         return `### 📊 AI Paslaugų Analizė & Įtraukimas į VMI Pajamas ir Išlaidas
@@ -279,6 +325,88 @@ Pagarbiai,
 **Dominik Šuškevič**  
 DP.PORTFOLIO | Fotografija & Videografija  
 Tel.: +370 600 00000 | info@dominikphotofficial.lt`;
+    }
+
+    // 4. Pinigų Priėmimo Kvitas / Sąskaita-Faktūra
+    if (lower.includes('kvit') || lower.includes('sąskait') || lower.includes('faktūr') || lower.includes('invoice') || lower.includes('receipt')) {
+        return `### 🧾 SĄSKAITA-FAKTŪRA / PINIGŲ PRIĖMIMO KVITAS
+**Serija DP Nr. 2026-001**
+**Išrašymo data:** ${new Date().toLocaleDateString('lt-LT')}
+**Apmokėjimo būdas:** Bankinis pavedimas / Grynieji
+
+---
+
+#### 📌 Šalys ir rekvizitai:
+| Paslaugų teikėjas (Fotografas) | Pirkėjas (Užsakovas) |
+| :--- | :--- |
+| **Dominik Šuškevič** (DP.PORTFOLIO) | **Vardas Pavardė:** [Kliento vardas / Įmonė] |
+| **Veiklos rūšis:** EVRK 74.20 Fotografavimo veikla | **Asmens / Įmonės kodas:** [Kodas / A.k.] |
+| **Individualios veiklos pažyma:** EVRK 74.20 | **Adresas / Miestas:** Kaunas / Vilnius |
+| **El. paštas:** dominikphotofficial.lt@gmail.com | **El. paštas:** [klientas@elpastas.lt] |
+| **Banko sąskaita (IBAN):** \`LT867300010171188764\` (Swedbank) | **Telefonas:** [+370 600 00000] |
+
+---
+
+#### 📸 Teikiamos paslaugos:
+| Eil. Nr. | Paslaugos pavadinimas & aprašymas | Kiekis | Kaina (€) | Suma (€) |
+| :---: | :--- | :---: | :---: | :---: |
+| 1 | **Individuali / Renginio fotosesija** (trukmė: 2 val., 25 retušuotos didelės raiškos nuotraukos privačioje Wfolio internetinėje galerijoje) | 1 kompl. | 150,00 € | **150,00 €** |
+| 2 | *Iš jų gautas avansas (50%) rezervacijai fiksuoti:* | 1 | -75,00 € | -75,00 € |
+| | **Mokėtina galutinė suma:** | | | **75,00 €** |
+
+**Suma žodžiais:** Vienas šimtas penkiasdešimt eurų 00 ct. (Likusi mokėti suma: septyniasdešimt penki eurai 00 ct).  
+*PVM netaikomas remiantis LR PVMĮ 71 str. nuostatomis (Ne PVM mokėtojas).*
+
+---
+
+#### ✍️ Parašai:
+- **Sąskaitą išrašė:** Dominik Šuškevič ________________________
+- **Sąskaitą gavo (Pirkėjas):** ________________________`;
+    }
+
+    // 5. Fotografavimo Paslaugų Teikimo Sutartis
+    if (lower.includes('sutart') || lower.includes('contract') || lower.includes('agreement')) {
+        return `### 📜 FOTOGRAFAVIMO PASLAUGŲ TEIKIMO SUTARTIS
+**Sutarties Nr. DP-2026/01**  
+**Sudarymo data ir vieta:** ${new Date().toLocaleDateString('lt-LT')}, Kaunas / Vilnius
+
+---
+
+**Dominik Šuškevič**, vykdantis individualią fotografavimo veiklą pagal pažymą (EVRK 74.20), el. p. dominikphotofficial.lt@gmail.com (toliau – **Fotografas**), ir  
+**[Užsakovo Vardas Pavardė]**, a.k. [Asmens kodas], gyv. [Adresas], tel. [Telefonas] (toliau – **Užsakovas**),  
+kartu vadinami **Šalimis**, sudarė šią Fotografavimo paslaugų teikimo sutartį:
+
+#### 1. SUTARTIES DALYKAS
+1.1. Fotografas įsipareigoja suteikti Užsakovui profesionalias fotografavimo paslaugas:  
+- **Fotosesijos tipas:** Asmeninė / Renginių / Automobilių fotosesija.  
+- **Numatoma data ir laikas:** [Įrašyti fotosesijos datą ir laiką].  
+- **Lokacija:** Suderinama individualiai (Kaunas / Vilnius / Studija).  
+- **Rezultatas:** Ne mažiau kaip 25 autorinės retušuotos didelės raiškos nuotraukos, pateikiamos saugioje privačioje internetinėje „Wfolio“ galerijoje.
+
+#### 2. KAINA IR ATSISKAITYMO TVARKA
+2.1. Bendra fotosesijos kaina – **150,00 €** (vienas šimtas penkiasdešimt eurų).  
+2.2. Sutarties pasirašymo metu Užsakovas sumoka **50% avansą (75,00 €)** į Fotografo sąskaitą \`LT867300010171188764\`. Avansas patvirtina datos rezervaciją.  
+2.3. Likusi sumos dalis (75,00 €) sumokama fotosesijos dieną arba prieš galutinių nuotraukų perdavimą.
+
+#### 3. NUOTRAUKŲ ATIDAVIMO TERMINAI
+3.1. Fotografas įsipareigoja paruošti ir perduoti retušuotas nuotraukas per **7–14 darbo dienų** nuo fotosesijos dienos.  
+3.2. Užsakovas gauna privačią nuorodą į galeriją, kurioje nuotraukos saugomos ne mažiau kaip 6 mėnesius.
+
+#### 4. AUTORINĖS TEISĖS IR PRIVATUMAS
+4.1. Turtinės ir neturtinės autorinės teisės į nuotraukas priklauso Fotografui. Užsakovas įgyja teisę naudoti nuotraukas asmeniniais nekomerciniais tikslais.  
+4.2. Užsakovas [ sutinka / nesutinka ], kad atrinktos nuotraukos būtų publikuojamos Fotografo portfolio bei socialiniuose tinkluose (@dominikphotofficial).
+
+#### 5. FORCE MAJEURE IR DATOS KEITIMAS
+5.1. Dėl blogų oro sąlygų ar ligos fotosesijos data gali būti nemokamai perkelta į kitą abiem Šalims tinkamą dieną.
+
+---
+
+#### 6. ŠALIŲ REKVIZITAI IR PARAŠAI:
+| Fotografas | Užsakovas |
+| :--- | :--- |
+| **Dominik Šuškevič (DP.PORTFOLIO)** | **[Užsakovo Vardas Pavardė]** |
+| IV Pažyma EVRK 74.20 | Asmens kodas: _______________ |
+| Parašas: ____________________ | Parašas: ____________________ |`;
     }
 
     if (lower.includes('kain') || lower.includes('strategij') || lower.includes('paslaug')) {
