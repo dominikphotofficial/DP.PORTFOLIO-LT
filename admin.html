@@ -5289,7 +5289,10 @@ Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis s�
                     data = JSON.parse(responseText);
                 } catch (parseError) {
                     console.error("AI API JSON parse error:", responseText);
-                    throw new Error("Serverio atsakymas buvo netinkamo formato. Bandykite dar kartą.");
+                    if (!response.ok) {
+                        throw new Error(`Serverio ryšio klaida (būsena ${response.status}). Bandykite dar kartą po kelių sekundžių.`);
+                    }
+                    throw new Error("Serverio ryšio klaida. Bandykite dar kartą.");
                 }
 
                 if (!data || !data.success) {

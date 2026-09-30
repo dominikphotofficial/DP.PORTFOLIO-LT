@@ -109,7 +109,7 @@ app.delete('/api/reviews/:id', (req, res) => {
 });
 
 // -----------------------------------------------------------------------------
-// AI Assistant API (Gemini 3.8 Flash via @google/genai)
+// AI Assistant API (Gemini 3.1 Flash Lite via @google/genai)
 // -----------------------------------------------------------------------------
 let ai = null;
 try {
@@ -123,6 +123,22 @@ try {
     });
 } catch (initErr) {
     console.warn("GoogleGenAI init error:", initErr);
+}
+
+async function callModelWithTimeout(genAi, modelName, contents, systemInstruction, timeoutMs = 8000) {
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms for ${modelName}`)), timeoutMs)
+    );
+    const apiPromise = genAi.models.generateContent({
+        model: modelName,
+        contents: contents,
+        config: {
+            systemInstruction: systemInstruction,
+            temperature: 0.35
+        }
+    });
+    const response = await Promise.race([apiPromise, timeoutPromise]);
+    return response.text;
 }
 
 app.post('/api/ai-assistant', async (req, res) => {
@@ -149,31 +165,23 @@ Atsakyk visada taisyklinga lietuvių kalba, profesionaliu, draugišku ir aiškiu
 
         let replyText = '';
         if (ai) {
+            // Priority 1: gemini-3.1-flash-lite (fast, responsive, reliable)
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3.8-flash',
-                    contents: contents,
-                    config: {
-                        systemInstruction: systemInstruction,
-                        temperature: 0.35
-                    }
-                });
-                replyText = response.text;
-            } catch (apiError) {
-                console.warn('Gemini 3.8 Flash returned error, trying fallback model or engine:', apiError.message);
+                replyText = await callModelWithTimeout(ai, 'gemini-3.1-flash-lite', contents, systemInstruction, 7000);
+            } catch (err1) {
+                console.warn('gemini-3.1-flash-lite error or timeout, trying gemini-flash-latest:', err1.message);
+                // Priority 2: gemini-flash-latest
                 try {
-                    const response = await ai.models.generateContent({
-                        model: 'gemini-2.5-flash',
-                        contents: contents,
-                        config: {
-                            systemInstruction: systemInstruction,
-                            temperature: 0.35
-                        }
-                    });
-                    replyText = response.text;
-                } catch (fallbackError) {
-                    console.warn('Fallback Gemini call returned error, using studio report engine:', fallbackError.message);
-                    replyText = generateStudioReportFallback(message, context);
+                    replyText = await callModelWithTimeout(ai, 'gemini-flash-latest', contents, systemInstruction, 7000);
+                } catch (err2) {
+                    console.warn('gemini-flash-latest error or timeout, trying gemini-3.8-flash:', err2.message);
+                    // Priority 3: gemini-3.8-flash
+                    try {
+                        replyText = await callModelWithTimeout(ai, 'gemini-3.8-flash', contents, systemInstruction, 7000);
+                    } catch (err3) {
+                        console.warn('All live Gemini calls failed or timed out, generating studio report fallback:', err3.message);
+                        replyText = generateStudioReportFallback(message, context);
+                    }
                 }
             }
         } else {
