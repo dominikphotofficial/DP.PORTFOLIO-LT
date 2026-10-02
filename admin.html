@@ -6,6 +6,7 @@
     <title>DP Administracija</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --status-new: #E08700;
@@ -330,16 +331,6 @@
         .field-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 8px; font-weight: 600; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        @media print {
-            body { background: #ffffff !important; }
-            #main-header, .tabs, .admin-header-bar, .vmi-filter-bar, .req-actions, #logout-btn, button, .admin-btn { display: none !important; }
-            .vmi-print-header { display: block !important; margin-bottom: 20px; }
-            .admin-container { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
-            .tab-content { display: none !important; }
-            #vmi-tab { display: block !important; }
-            .vmi-table th, .vmi-table td { border: 1px solid #333 !important; font-size: 10pt !important; padding: 6px !important; }
-        }
 
         @media (max-width: 900px) {
             .req-body { grid-template-columns: 1fr; gap: 20px; }
@@ -1278,43 +1269,59 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 6mm 8mm;
+                margin: 8mm 10mm;
             }
             html, body {
                 background: #ffffff !important;
                 color: #000000 !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
                 height: auto !important;
-                min-height: 0 !important;
+                min-height: auto !important;
+                max-height: none !important;
                 overflow: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            /* Paslėpti visus elementus body lygyje išskyrus spausdinimo modalą - pašalina tuščius puslapius */
+            /* Paslėpti visus nereikalingus foninius puslapio elementus */
             body > *:not(#document-print-modal) {
                 display: none !important;
             }
             #document-print-modal {
                 display: block !important;
                 position: static !important;
+                inset: auto !important;
                 width: 100% !important;
                 max-width: 100% !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                background: transparent !important;
+                background: #ffffff !important;
                 box-shadow: none !important;
                 border: none !important;
                 overflow: visible !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                transform: none !important;
             }
             .modal-content.doc-preview-modal-content {
                 display: block !important;
                 position: static !important;
                 width: 100% !important;
                 max-width: 100% !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 box-shadow: none !important;
                 border: none !important;
-                background: transparent !important;
+                background: #ffffff !important;
+                overflow: visible !important;
+                transform: none !important;
             }
             .doc-preview-header,
             .doc-preview-tabs,
@@ -1332,7 +1339,9 @@
             .dashboard-stats,
             .admin-btn,
             .admin-btn-outline,
-            .admin-btn-delete {
+            .admin-btn-delete,
+            #admin-quick-owner-login-btn,
+            .auth-divider {
                 display: none !important;
             }
             .doc-paper-wrap {
@@ -1340,6 +1349,9 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 background: transparent !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
                 overflow: visible !important;
             }
             #print-document-container.doc-a4-sheet {
@@ -1348,22 +1360,76 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 min-height: 0 !important;
+                height: auto !important;
+                max-height: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 box-shadow: none !important;
                 border: none !important;
                 background: #ffffff !important;
                 box-sizing: border-box !important;
+                overflow: visible !important;
             }
-            /* 1 lapo fiksavimas kvitams ir sutartims */
+            /* 1 lapo garantija kvitams, sąskaitoms ir sutartims - neleidžia išskaidyti į 2 lapus */
             .single-page-doc {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                height: 260mm !important; /* Tiksliai telpa į 1 A4 lapą (297mm - 16mm paraštės = 281mm) */
+                max-height: 262mm !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+                page-break-before: avoid !important;
+                break-before: avoid !important;
                 page-break-after: avoid !important;
                 break-after: avoid !important;
-                max-height: 100% !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
-            .doc-table-avoid-break tr {
+            .single-page-doc * {
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .single-page-doc table {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                border-collapse: collapse !important;
+                width: 100% !important;
+            }
+            .single-page-doc tr,
+            .single-page-doc td,
+            .single-page-doc th {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .single-page-doc h1,
+            .single-page-doc h2,
+            .single-page-doc h3,
+            .single-page-doc h4 {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            /* Daugiapusis VMI žurnalas su tvarkingomis antraštėmis */
+            .vmi-journal-doc {
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .vmi-journal-doc table {
+                page-break-inside: auto !important;
+                border-collapse: collapse !important;
+                width: 100% !important;
+            }
+            .vmi-journal-doc thead {
+                display: table-header-group !important;
+            }
+            .vmi-journal-doc tfoot {
+                display: table-footer-group !important;
+            }
+            .vmi-journal-doc tr {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
@@ -2426,11 +2492,14 @@
                         </p>
                     </div>
                 </div>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button type="button" class="admin-btn" style="background: #2E7D32; padding: 9px 18px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px;" onclick="triggerDocumentPrint()">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="downloadDocumentPdf()">
+                        📥 Atsisiųsti PDF Failą
+                    </button>
+                    <button type="button" class="admin-btn" style="background: #2E7D32; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(46,125,50,0.25);" onclick="triggerDocumentPrint()">
                         🖨️ Spausdinti / PDF
                     </button>
-                    <button type="button" class="admin-btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 9px 15px; font-size: 0.84rem;" onclick="closeDocumentPrintModal()">
+                    <button type="button" class="admin-btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 9px 14px; font-size: 0.84rem;" onclick="closeDocumentPrintModal()">
                         ✕ Uždaryti
                     </button>
                 </div>
@@ -4122,7 +4191,23 @@
                     toggleSectionBtn.style.background = 'var(--accent-color)';
                 }
             }
+            const quickBtn = document.getElementById('quick-toggle-reviews-btn');
+            const quickText = document.getElementById('quick-reviews-status-text');
+            if (quickBtn) quickBtn.classList.toggle('active', visible);
+            if (quickText) quickText.innerText = visible ? 'Rodoma' : 'Paslėpta';
         }
+
+        window.toggleReviewsVisibilityQuick = async () => {
+            const nextState = !isReviewsSectionVisible;
+            updateSectionVisibilityUI(nextState);
+            try {
+                await setReviewsVisibility(nextState);
+                showToast(nextState ? "🌟 Atsiliepimų skiltis rodoma svetainėje" : "✕ Atsiliepimų skiltis paslėpta");
+            } catch(e) {
+                console.error("Error setting review section visibility:", e);
+                showToast("Klaida keičiant atsiliepimų matomumą", "error");
+            }
+        };
 
         // Subscribe to visibility with dual-sync (file + firestore)
         subscribeReviewsVisibility((visible) => {
@@ -4625,7 +4710,11 @@
 
         // Print VMI Journal
         document.getElementById('print-vmi-btn')?.addEventListener('click', () => {
-            window.print();
+            if (typeof window.openDocumentPrintModal === 'function') {
+                window.openDocumentPrintModal('vmi_journal');
+            } else {
+                window.print();
+            }
         });
 
         // Export VMI CSV
@@ -6316,6 +6405,43 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             if (modal) modal.classList.remove('active');
         };
 
+        window.downloadDocumentPdf = () => {
+            const container = document.getElementById('print-document-container');
+            if (!container) return;
+
+            let docName = 'Dokumentas-DP-2026.pdf';
+            if (activeDocType === 'invoice') docName = 'Saskaita-Faktura-DP-2026.pdf';
+            else if (activeDocType === 'contract') docName = 'Fotografavimo-Sutartis-DP-2026.pdf';
+            else if (activeDocType === 'vmi_journal') docName = 'VMI-Pajamu-Zurnalas-2026.pdf';
+
+            const paperWrap = document.querySelector('.doc-paper-wrap');
+            const wasEditing = paperWrap?.classList.contains('editable-mode');
+            if (wasEditing && paperWrap) paperWrap.classList.remove('editable-mode');
+
+            showToast("⏳ Ruošiamas PDF failas... Atsisiuntimas prasidės automatiškai.");
+
+            if (typeof window.html2pdf !== 'undefined') {
+                const opt = {
+                    margin: [8, 10, 8, 10],
+                    filename: docName,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, logging: false },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+
+                window.html2pdf().set(opt).from(container).save().then(() => {
+                    showToast("✓ PDF dokumentas sėkmingai išsaugotas ir atsisiųstas!", "success");
+                    if (wasEditing && paperWrap) paperWrap.classList.add('editable-mode');
+                }).catch((err) => {
+                    console.warn("html2pdf notice:", err);
+                    window.triggerDocumentPrint();
+                });
+            } else {
+                window.triggerDocumentPrint();
+            }
+        };
+
         window.triggerDocumentPrint = () => {
             const origTitle = document.title;
             let docName = 'Dokumentas-A4';
@@ -6523,7 +6649,7 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             `).join('');
 
             container.innerHTML = `
-                <div style="font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 9.5pt; line-height: 1.5;">
+                <div class="vmi-journal-doc" style="font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 9.5pt; line-height: 1.5;">
                     <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #113939; padding-bottom: 12px;">
                         <div style="font-size: 8.5pt; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;">
                             Lietuvos Respublikos Finansų ministro patvirtinta forma (EVRK 74.20)
