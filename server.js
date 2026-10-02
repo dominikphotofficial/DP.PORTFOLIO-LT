@@ -141,12 +141,19 @@ async function callModelWithTimeout(genAi, modelName, contents, systemInstructio
     return response.text;
 }
 
-app.post('/api/ai-assistant', async (req, res) => {
+app.all(['/api/ai-assistant', '/api/ai-assistant/'], async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     try {
-        const { message, context, mode } = req.body;
-        if (!message) {
-            return res.status(400).json({ success: false, error: 'Žinutė yra privaloma' });
-        }
+        const message = req.body?.message || req.query?.message || 'Pateik finansinę ir VMI ataskaitos suvestinę';
+        const context = req.body?.context || req.query?.context || null;
+        const mode = req.body?.mode || req.query?.mode || null;
 
         const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus administratoriaus AI asistentas ir padėjėjas.
 Tavo pagrindinė paskirtis – padėti studijos savininkui ir administratoriui:
