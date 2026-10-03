@@ -614,29 +614,37 @@ export function getGalleryHtml(lang, url) {
     `;
 }
 
-export function getReceiptHtml(lang, url) {
+export function getReceiptHtml(lang, url, fileName = 'Dokumentas.pdf') {
     const safeLang = texts[lang] ? lang : 'lt';
     const t = texts[safeLang].receipt;
 
     return `
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #F7FAF9; border: 2px dashed #2A5C5C; border-radius: 6px;">
             <tr>
-                <td align="center" style="padding: 26px 22px; text-align: center;">
+                <td align="center" style="padding: 24px 22px; text-align: center;">
+                    <div style="font-size: 26px; line-height: 1; margin-bottom: 8px;">📎</div>
                     <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 6px;">
                         ${t.title}
                     </div>
-                    <p style="margin: 0 0 18px 0; font-size: 13px; color: #607272; line-height: 1.6;">
-                        ${t.desc}
+                    <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
+                        ${t.desc}<br>
+                        <strong style="color: #113939;">Failas: ${fileName}</strong> (taip pat tiesiogiai prisegtas prie šio el. laiško priedų)
                     </p>
+                    ${url ? `
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                         <tr>
                             <td align="center" style="background-color: #2A5C5C; border-radius: 4px; box-shadow: 0 4px 12px rgba(42,92,92,0.2);">
-                                <a href="${url}" target="_blank" style="display: inline-block; padding: 12px 30px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                <a href="${url}" target="_blank" style="display: inline-block; padding: 11px 28px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
                                     ${t.btn}
                                 </a>
                             </td>
                         </tr>
                     </table>
+                    ` : `
+                    <div style="display: inline-block; padding: 7px 16px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 4px; color: #1b5e20; font-size: 12px; font-weight: 600;">
+                        ✓ PDF dokumentas tiesiogiai prisegtas el. pašto prieduose
+                    </div>
+                    `}
                 </td>
             </tr>
         </table>

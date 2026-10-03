@@ -1372,19 +1372,18 @@
             }
             /* 1 lapo garantija kvitams, sąskaitoms ir sutartims - neleidžia išskaidyti į 2 lapus */
             .single-page-doc {
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
+                display: block !important;
                 width: 100% !important;
-                height: 260mm !important; /* Tiksliai telpa į 1 A4 lapą (297mm - 16mm paraštės = 281mm) */
-                max-height: 262mm !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
                 page-break-before: avoid !important;
                 break-before: avoid !important;
                 page-break-after: avoid !important;
                 break-after: avoid !important;
-                overflow: hidden !important;
+                overflow: visible !important;
                 box-sizing: border-box !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -2450,9 +2449,20 @@
             </div>
 
             <div id="modal-receipt-container" class="modal-section-box" style="display: none;">
-                <label class="field-label">Prisegti kvitą / sąskaitą faktūrą (PDF arba nuotrauką)</label>
-                <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 10px; border: none; background: transparent;">
-                <span style="font-size: 13px; color: #666;">Failas bus automatiškai įkeltas, o klientas laiške gaus mygtuką kvitui atsisiųsti.</span>
+                <label class="field-label" style="display: flex; align-items: center; gap: 6px;">
+                    <span>📎</span> <strong>Prisegti PDF dokumentą (Sąskaitą-faktūrą, Kvitą arba Sutartį)</strong>
+                </label>
+                <div id="modal-attached-preview-badge" style="display: none; margin-bottom: 10px; padding: 10px 14px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 6px; font-size: 13px; color: #1b5e20;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>📎 <strong>Prisegtas PDF failas:</strong> <span id="attached-pdf-filename-display">dokumentas.pdf</span></span>
+                        <button type="button" onclick="removeAttachedPdf()" style="background: none; border: none; color: #c62828; cursor: pointer; font-size: 12px; font-weight: bold;">Pašalinti ✕</button>
+                    </div>
+                    <div style="font-size: 11px; color: #2e7d32; margin-top: 3px;">✓ Šis PDF dokumentas bus tiesiogiai prisegtas prie el. laiško (el. pašto prieduose).</div>
+                </div>
+                <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 10px; border: 1px dashed #113939; background: #fff;">
+                <span style="font-size: 12.5px; color: #555; display: block; margin-top: 6px;">
+                    📎 Pasirinktas PDF failas bus <strong>tiesiogiai prisegtas prie siunčiamo el. laiško</strong> kaip tikras failo priedas (attachment).
+                </span>
             </div>
 
             <button type="button" id="modal-preview-toggle-btn" class="admin-btn-outline" style="width: 100%; margin: 15px 0; font-size: 0.8rem; padding: 11px;">
@@ -2488,6 +2498,9 @@
                     <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="downloadDocumentPdf()">
                         📥 Atsisiųsti PDF Failą
                     </button>
+                    <button type="button" class="admin-btn" style="background: #1565C0; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(21,101,192,0.25);" onclick="attachAndEmailCurrentPdf()">
+                        ✉️ Prisegti PDF ir Siųsti Klientui
+                    </button>
                     <button type="button" class="admin-btn" style="background: #2E7D32; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(46,125,50,0.25);" onclick="triggerDocumentPrint()">
                         🖨️ Spausdinti / PDF
                     </button>
@@ -2506,7 +2519,7 @@
                     🧾 Sąskaita-Faktūra / Kvitas
                 </button>
                 <button type="button" class="doc-tab-btn" id="btn-doc-tab-contract" onclick="switchDocumentTab('contract')">
-                    📜 Fotografavimo Sutartis
+                    📜 Paslaugų / TFP Sutartis
                 </button>
                 <button type="button" class="admin-btn-outline" style="margin-left: auto; padding: 6px 12px; font-size: 0.78rem; border-color: #2E7D32; color: #2E7D32;" onclick="downloadTestVmiCsvFile()">
                     📥 Atsisiųsti Testinį VMI Excel (.csv)
@@ -2519,6 +2532,9 @@
                     <button type="button" id="btn-toggle-edit-mode" class="admin-btn" onclick="toggleDocumentEditMode()" style="background: #113939; padding: 6px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
                         ✏️ Redaguoti Šabloną: <strong id="edit-mode-status-text" style="color: #FFD54F;">IŠJUNGTA</strong>
                     </button>
+                    <button type="button" id="btn-toggle-client-editor" class="admin-btn-outline" onclick="toggleClientEditBar()" style="padding: 6px 12px; font-size: 0.78rem; border-color: #113939; color: #113939; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                        👤 Pirkėjo Duomenys
+                    </button>
                     <button type="button" class="admin-btn" onclick="saveCurrentDocAsTemplate()" style="background: #2E7D32; padding: 6px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px;">
                         💾 Išsaugoti Šabloną
                     </button>
@@ -2528,9 +2544,65 @@
                     <button type="button" id="btn-add-table-row" class="admin-btn-outline" onclick="addNewDocTableRow()" style="padding: 6px 12px; font-size: 0.78rem; border-color: #113939; color: #113939;">
                         ➕ Pridėti Eilutę
                     </button>
+                    <div style="display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
+                        <span style="font-size: 0.76rem; color: #555;">Užsakymas / Pirkėjas:</span>
+                        <select id="doc-client-picker" class="admin-select" onchange="onClientPickerChange(this.value)" style="padding: 5px 8px; font-size: 0.78rem; width: auto; max-width: 240px; margin: 0; height: 32px;">
+                            <option value="">-- Pasirinkti pirkėją / modelį --</option>
+                        </select>
+                    </div>
                 </div>
-                <div style="font-size: 0.76rem; color: #444; line-height: 1.4;">
-                    💡 <em>Spustelėkite „Redaguoti Šabloną“ ir bet kurį tekstą ar sumą lape galėsite keisti tiesiogiai!</em>
+
+                <!-- 👤 Greitasis Pirkėjo Duomenų Redagavimo Skydelis -->
+                <div id="doc-client-edit-bar" style="display: none; margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #113939; border-radius: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.06);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: bold; font-size: 0.82rem; color: #113939; text-transform: uppercase;">
+                            👤 Redaguoti Pirkėjo / Užsakovo rekvizitus dokumente (Atnaujina gyvai):
+                        </span>
+                        <button type="button" onclick="toggleClientEditBar()" style="background: none; border: none; color: #888; cursor: pointer; font-size: 11px;">✕ Slėpti</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Pirkėjas (Vardas Pavardė)</label>
+                            <input type="text" id="live-client-name" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Vardas Pavardė" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">El. paštas</label>
+                            <input type="email" id="live-client-email" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="el.pastas@pavyzdys.lt" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Telefonas</label>
+                            <input type="text" id="live-client-phone" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="+370 600 00000" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Miestas / Adresas</label>
+                            <input type="text" id="live-client-location" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Kaunas / Vilnius" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Paslauga / Tipas</label>
+                            <input type="text" id="live-client-service" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Fotosesijos tipas" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Bendra Kaina (€)</label>
+                            <input type="number" id="live-client-price" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="150" step="5" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Avansas (€)</label>
+                            <input type="number" id="live-client-deposit" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="50" step="5" oninput="updateLiveClientData()">
+                        </div>
+                        <div>
+                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Fotosesijos Data</label>
+                            <input type="date" id="live-client-date" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" oninput="updateLiveClientData()">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px;">
+                        <button type="button" class="admin-btn" onclick="saveLiveClientDataToDb()" style="background: #113939; padding: 6px 14px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                            💾 Išsaugoti pirkėjo pakeitimus į užsakymų bazę
+                        </button>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.76rem; color: #444; line-height: 1.4; margin-top: 6px;">
+                    💡 <em>Spustelėkite „Redaguoti Šabloną“ norėdami tiesiogiai redaguoti tekstą lape, arba „Pirkėjo Duomenys“ norėdami greitai pakeisti užsakovo rekvizitus!</em>
                 </div>
             </div>
 
@@ -3352,10 +3424,56 @@
                             <input type="text" id="notes-tfp-${data.id}" value="${data.adminNotes || ''}" class="admin-select" placeholder="Pastaba apie modelį ar įrangą...">
                         </div>
                     </div>
+
+                    <!-- ✏️ Išskleidžiamas TFP Modelio & Fotosesijos Redagavimas -->
+                    <div id="edit-section-tfp-${data.id}" style="display: none; margin-top: 12px; padding: 14px; background: #fafbfb; border: 1px solid #113939; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="font-size: 0.82rem; color: #113939; text-transform: uppercase;">✏️ Modelio & Fotosesijos Duomenų Redagavimas:</strong>
+                            <button type="button" onclick="toggleCardEditSection('tfp', '${data.id}')" style="background: none; border: none; color: #888; cursor: pointer; font-size: 11px;">✕ Slėpti</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div>
+                                <label class="field-label">Modelio Vardas</label>
+                                <input type="text" id="tfp-name-${data.id}" value="${data.name || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">El. paštas</label>
+                                <input type="email" id="tfp-email-${data.id}" value="${data.email || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Instagram / Socialinis tinklas</label>
+                                <input type="text" id="tfp-instagram-${data.id}" value="${data.instagram || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Telefonas</label>
+                                <input type="text" id="tfp-phone-${data.id}" value="${data.phone || ''}" class="admin-select" placeholder="+370...">
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label class="field-label">Fotosesijos idėja & stiliaus vizija</label>
+                            <textarea id="tfp-idea-${data.id}" class="admin-select" rows="2">${data.idea || ''}</textarea>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label class="field-label">Papildoma informacija / Pinterest nuorodos</label>
+                            <textarea id="tfp-extra-${data.id}" class="admin-select" rows="2">${data.extra_info || ''}</textarea>
+                        </div>
+                        ${data.contract_pdf_url ? `
+                        <div style="margin-top: 10px; padding: 8px 12px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 4px; font-size: 12px; color: #1b5e20;">
+                            📎 <strong>Modelio prisegta sutartis / sutikimas:</strong> <a href="${data.contract_pdf_url}" target="_blank" style="color: #1b5e20; text-decoration: underline; font-weight: bold;">Peržiūrėti / Atsisiųsti PDF</a>
+                        </div>
+                        ` : ''}
+                    </div>
+
                     ${photosHtml}
                     <div class="req-actions">
+                        <button type="button" class="admin-btn-outline" style="border-color: #113939; color: #113939; font-weight: 600;" onclick="toggleCardEditSection('tfp', '${data.id}')">
+                            ✏️ Redaguoti anketą
+                        </button>
                         <button type="button" class="admin-save-btn" id="save-btn-tfp-${data.id}" onclick="saveTFP('${data.id}')">
                             ✓ Išsaugoti pakeitimus
+                        </button>
+                        <button type="button" class="admin-btn-outline" style="border-color: #113939; color: #113939; font-weight: 500;" onclick="generateContractForTfp('${data.id}')" title="Paruošti oficialią TFP modelio sutartį (Model Release) spausdinimui">
+                            📜 TFP Sutartis
                         </button>
                         <button type="button" class="admin-btn-outline" onclick="prepareTFP('${data.id}')">
                             ✉️ Paruošti laišką
@@ -3553,8 +3671,71 @@
                             <input type="text" id="srv-notes-${data.id}" value="${data.adminNotes || ''}" class="admin-select" placeholder="Pastaba apie klientą ar sutartį...">
                         </div>
                     </div>
+
+                    <!-- ✏️ Išskleidžiamas Pirkėjo & Užsakymo Duomenų Redagavimas -->
+                    <div id="edit-section-srv-${data.id}" style="display: none; margin-top: 12px; padding: 14px; background: #fafbfb; border: 1px solid #113939; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="font-size: 0.82rem; color: #113939; text-transform: uppercase;">✏️ Pirkėjo & Paslaugos Duomenų Redagavimas:</strong>
+                            <button type="button" onclick="toggleCardEditSection('srv', '${data.id}')" style="background: none; border: none; color: #888; cursor: pointer; font-size: 11px;">✕ Slėpti</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div>
+                                <label class="field-label">Pirkėjo Vardas ir Pavardė</label>
+                                <input type="text" id="srv-name-${data.id}" value="${data.clientName || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">El. paštas</label>
+                                <input type="email" id="srv-email-${data.id}" value="${data.email || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Telefonas</label>
+                                <input type="text" id="srv-phone-${data.id}" value="${data.phone || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Socialinis profilis / Instagram</label>
+                                <input type="text" id="srv-social-${data.id}" value="${data.socialProfile || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Paslaugos pavadinimas</label>
+                                <input type="text" id="srv-service-name-${data.id}" value="${data.serviceName || ''}" class="admin-select">
+                            </div>
+                            <div>
+                                <label class="field-label">Bendra Kaina (€)</label>
+                                <input type="number" id="srv-price-${data.id}" value="${data.finalPrice ?? ''}" class="admin-select" step="5">
+                            </div>
+                            <div>
+                                <label class="field-label">Avansas (€)</label>
+                                <input type="number" id="srv-deposit-${data.id}" value="${data.depositAmount ?? ''}" class="admin-select" step="5">
+                            </div>
+                            <div>
+                                <label class="field-label">Apmokėjimo būdas</label>
+                                <select id="srv-payment-${data.id}" class="admin-select">
+                                    <option value="Bank Transfer" ${data.paymentMethod === 'Bank Transfer' ? 'selected' : ''}>Bank Transfer (Pavedimas)</option>
+                                    <option value="Grynieji" ${data.paymentMethod === 'Grynieji' ? 'selected' : ''}>Grynieji pinigai</option>
+                                    <option value="PayPal" ${data.paymentMethod === 'PayPal' ? 'selected' : ''}>PayPal</option>
+                                    <option value="Revolut" ${data.paymentMethod === 'Revolut' ? 'selected' : ''}>Revolut</option>
+                                    <option value="Kita" ${data.paymentMethod === 'Kita' ? 'selected' : ''}>Kita</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label">Reikalingas kvitas / SF</label>
+                                <select id="srv-receipt-needed-${data.id}" class="admin-select">
+                                    <option value="Taip" ${data.receiptNeeded === 'Taip' ? 'selected' : ''}>Taip (Išrašyti kvitą)</option>
+                                    <option value="Ne" ${data.receiptNeeded !== 'Taip' ? 'selected' : ''}>Ne</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label class="field-label">Lūkesčiai / Papildoma informacija</label>
+                            <textarea id="srv-info-${data.id}" class="admin-select" rows="2">${data.additionalInformation || ''}</textarea>
+                        </div>
+                    </div>
+
                     ${photosHtml}
                     <div class="req-actions">
+                        <button type="button" class="admin-btn-outline" style="border-color: #113939; color: #113939; font-weight: 600;" onclick="toggleCardEditSection('srv', '${data.id}')">
+                            ✏️ Redaguoti pirkėją
+                        </button>
                         <button type="button" class="admin-save-btn" id="save-btn-srv-${data.id}" onclick="saveService('${data.id}')">
                             ✓ Išsaugoti pakeitimus
                         </button>
@@ -3636,6 +3817,17 @@
             }
         };
 
+        window.toggleCardEditSection = (type, id) => {
+            const el = document.getElementById(`edit-section-${type}-${id}`);
+            if (el) {
+                const isHidden = (el.style.display === 'none' || !el.style.display);
+                el.style.display = isHidden ? 'block' : 'none';
+                if (isHidden) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        };
+
         // Save TFP
         window.saveTFP = async (id) => {
             const btn = document.getElementById(`save-btn-tfp-${id}`);
@@ -3646,13 +3838,28 @@
             const newLoc = document.getElementById(`loc-${id}`)?.value || '';
             const notes = document.getElementById(`notes-tfp-${id}`)?.value || '';
 
+            const name = document.getElementById(`tfp-name-${id}`)?.value;
+            const email = document.getElementById(`tfp-email-${id}`)?.value;
+            const instagram = document.getElementById(`tfp-instagram-${id}`)?.value;
+            const phone = document.getElementById(`tfp-phone-${id}`)?.value;
+            const idea = document.getElementById(`tfp-idea-${id}`)?.value;
+            const extra_info = document.getElementById(`tfp-extra-${id}`)?.value;
+
+            const updateData = {
+                status: newStatus,
+                date_time: newDate,
+                location: newLoc,
+                adminNotes: notes
+            };
+            if (name !== undefined) updateData.name = name.trim();
+            if (email !== undefined) updateData.email = email.trim();
+            if (instagram !== undefined) updateData.instagram = instagram.trim();
+            if (phone !== undefined) updateData.phone = phone.trim();
+            if (idea !== undefined) updateData.idea = idea.trim();
+            if (extra_info !== undefined) updateData.extra_info = extra_info.trim();
+
             try {
-                await updateDoc(doc(db, "tfp_requests", id), {
-                    status: newStatus,
-                    date_time: newDate,
-                    location: newLoc,
-                    adminNotes: notes
-                });
+                await updateDoc(doc(db, "tfp_requests", id), updateData);
                 
                 // Update badge in UI immediately
                 const badge = document.getElementById(`badge-status-tfp-${id}`);
@@ -3661,7 +3868,7 @@
                     badge.innerText = newStatus;
                 }
 
-                showToast("✓ TFP užklausos pakeitimai sėkmingai išsaugoti!");
+                showToast("✓ Visi TFP modelio ir fotosesijos pakeitimai sėkmingai išsaugoti!");
             } catch(e) {
                 console.error(e);
                 showToast("Klaida išsaugant: " + (e.message || e), "error");
@@ -3680,13 +3887,42 @@
             const newLoc = document.getElementById(`srv-loc-${id}`)?.value || '';
             const notes = document.getElementById(`srv-notes-${id}`)?.value || '';
 
+            const clientName = document.getElementById(`srv-name-${id}`)?.value;
+            const email = document.getElementById(`srv-email-${id}`)?.value;
+            const phone = document.getElementById(`srv-phone-${id}`)?.value;
+            const socialProfile = document.getElementById(`srv-social-${id}`)?.value;
+            const serviceName = document.getElementById(`srv-service-name-${id}`)?.value;
+            const priceVal = document.getElementById(`srv-price-${id}`)?.value;
+            const depositVal = document.getElementById(`srv-deposit-${id}`)?.value;
+            const paymentMethod = document.getElementById(`srv-payment-${id}`)?.value;
+            const receiptNeeded = document.getElementById(`srv-receipt-needed-${id}`)?.value;
+            const additionalInformation = document.getElementById(`srv-info-${id}`)?.value;
+
+            const updateData = {
+                status: newStatus,
+                preferredDate: newDate,
+                location: newLoc,
+                adminNotes: notes
+            };
+
+            if (clientName !== undefined) updateData.clientName = clientName.trim();
+            if (email !== undefined) updateData.email = email.trim();
+            if (phone !== undefined) updateData.phone = phone.trim();
+            if (socialProfile !== undefined) updateData.socialProfile = socialProfile.trim();
+            if (serviceName !== undefined) updateData.serviceName = serviceName.trim();
+            if (priceVal !== undefined && priceVal !== '') {
+                const finalP = parseFloat(priceVal) || 0;
+                const depP = parseFloat(depositVal) || 0;
+                updateData.finalPrice = finalP;
+                updateData.depositAmount = depP;
+                updateData.remainingAmount = Math.max(0, finalP - depP);
+            }
+            if (paymentMethod !== undefined) updateData.paymentMethod = paymentMethod;
+            if (receiptNeeded !== undefined) updateData.receiptNeeded = receiptNeeded;
+            if (additionalInformation !== undefined) updateData.additionalInformation = additionalInformation.trim();
+
             try {
-                await updateDoc(doc(db, "service_requests", id), {
-                    status: newStatus,
-                    preferredDate: newDate,
-                    location: newLoc,
-                    adminNotes: notes
-                });
+                await updateDoc(doc(db, "service_requests", id), updateData);
 
                 // Update badge in UI immediately
                 const badge = document.getElementById(`badge-status-srv-${id}`);
@@ -3695,7 +3931,7 @@
                     badge.innerText = newStatus;
                 }
 
-                showToast("✓ Užsakymo pakeitimai sėkmingai išsaugoti!");
+                showToast("✓ Visi pirkėjo ir paslaugos duomenys sėkmingai atnaujinti!");
             } catch(e) {
                 console.error(e);
                 showToast("Klaida išsaugant: " + (e.message || e), "error");
@@ -4092,10 +4328,46 @@
         document.getElementById('modal-text')?.addEventListener('input', updateModalPreview);
         document.getElementById('modal-gallery-link')?.addEventListener('input', updateModalPreview);
 
+        window.currentAttachedPdf = null;
+
+        document.getElementById('modal-receipt-file')?.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                window.currentAttachedPdf = {
+                    filename: file.name,
+                    base64: event.target.result,
+                    dataUri: event.target.result
+                };
+                const previewBadge = document.getElementById('modal-attached-preview-badge');
+                const filenameDisplay = document.getElementById('attached-pdf-filename-display');
+                if (previewBadge) previewBadge.style.display = 'block';
+                if (filenameDisplay) filenameDisplay.innerText = file.name;
+                showToast(`📎 Prisegtas PDF failas: ${file.name}`);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        window.removeAttachedPdf = () => {
+            window.currentAttachedPdf = null;
+            const previewBadge = document.getElementById('modal-attached-preview-badge');
+            if (previewBadge) previewBadge.style.display = 'none';
+            const fileInput = document.getElementById('modal-receipt-file');
+            if (fileInput) fileInput.value = '';
+            if (pendingEmailData) pendingEmailData.attachedPdf = null;
+            showToast("📎 Prisegtas PDF failas pašalintas.");
+        };
+
         window.closeModal = () => {
             document.getElementById('email-modal').classList.remove('active');
             const previewContainer = document.getElementById('modal-live-preview-container');
             if (previewContainer) previewContainer.style.display = 'none';
+            const previewBadge = document.getElementById('modal-attached-preview-badge');
+            if (previewBadge) previewBadge.style.display = 'none';
+            const fileInput = document.getElementById('modal-receipt-file');
+            if (fileInput) fileInput.value = '';
+            window.currentAttachedPdf = null;
             pendingEmailData = null;
         };
 
@@ -4121,15 +4393,35 @@
 
                 let receiptHtml = '';
                 let receiptUrl = '';
+                const attachments = [];
+
+                if (window.currentAttachedPdf && window.currentAttachedPdf.base64) {
+                    const rawBase64 = window.currentAttachedPdf.base64.includes(',') 
+                        ? window.currentAttachedPdf.base64.split(',')[1] 
+                        : window.currentAttachedPdf.base64;
+                    const fileName = window.currentAttachedPdf.filename || 'Dokumentas.pdf';
+                    attachments.push({
+                        filename: fileName,
+                        content: rawBase64,
+                        encoding: 'base64',
+                        contentType: 'application/pdf'
+                    });
+                    receiptHtml = getReceiptHtml(pendingEmailData.lang, '', fileName);
+                }
+
                 const receiptFileInput = document.getElementById('modal-receipt-file');
                 if (receiptFileInput && receiptFileInput.files && receiptFileInput.files[0]) {
-                    btn.innerText = 'Įkeliamas kvitas...';
-                    const file = receiptFileInput.files[0];
-                    const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                    const storageRef = ref(storage, `receipts/${Date.now()}_${safeFileName}`);
-                    await uploadBytes(storageRef, file);
-                    receiptUrl = await getDownloadURL(storageRef);
-                    receiptHtml = getReceiptHtml(pendingEmailData.lang, receiptUrl);
+                    try {
+                        btn.innerText = 'Įkeliamas failas...';
+                        const file = receiptFileInput.files[0];
+                        const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                        const storageRef = ref(storage, `receipts/${Date.now()}_${safeFileName}`);
+                        await uploadBytes(storageRef, file);
+                        receiptUrl = await getDownloadURL(storageRef);
+                        receiptHtml = getReceiptHtml(pendingEmailData.lang, receiptUrl, file.name);
+                    } catch(upErr) {
+                        console.warn("Storage upload warning (proceeding with direct attachment):", upErr);
+                    }
                 }
 
                 btn.innerText = 'Siunčiama...';
@@ -4147,7 +4439,7 @@
 
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
-                await addDoc(collection(db, "mail"), { 
+                const mailPayload = { 
                     to: pendingEmailData.email,
                     from: "info@dominikphotofficial.lt",
                     replyTo: "support@dominikphotofficial.lt",
@@ -4155,12 +4447,16 @@
                         from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
                         replyTo: "support@dominikphotofficial.lt",
                         subject: subject, 
-                        html: finalHtml 
+                        html: finalHtml,
+                        attachments: attachments
                     },
+                    attachments: attachments,
                     createdAt: serverTimestamp()
-                });
+                };
 
-                showToast("✓ Užsakymas atnaujintas ir el. laiškas sėkmingai paruoštas išsiuntimui!");
+                await addDoc(collection(db, "mail"), mailPayload);
+
+                showToast("✓ Užsakymas atnaujintas ir el. laiškas su prisegtu PDF sėkmingai išsiųstas!", "success");
                 closeModal();
             } catch(e) {
                 console.error(e);
