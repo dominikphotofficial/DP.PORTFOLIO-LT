@@ -23,90 +23,72 @@
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <style>
         .legal-container {
-            max-width: 900px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 150px 24px 100px 24px;
+            padding: 120px 24px 70px 24px;
         }
         .legal-header {
-            text-align: center;
-            margin-bottom: 50px;
+            text-align: left;
+            margin-bottom: 35px;
+            border-bottom: 2px solid #113939;
+            padding-bottom: 18px;
         }
         .legal-title {
-            font-family: var(--font-heading);
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: var(--accent-color);
+            font-family: 'Jost', -apple-system, sans-serif;
+            font-size: clamp(2rem, 3.5vw, 2.7rem);
+            color: #113939;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
             font-weight: 400;
         }
         .legal-subtitle {
-            font-size: 0.95rem;
-            color: #667;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
+            font-size: 0.92rem;
+            color: #555555;
+            letter-spacing: 0.5px;
+            margin: 0;
+            font-family: 'Josefin Sans', sans-serif;
         }
-        .legal-badge {
-            display: inline-block;
-            background: rgba(17, 57, 57, 0.08);
-            color: var(--accent-color);
-            font-size: 0.8rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .legal-card {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: clamp(30px, 4vw, 55px);
-            box-shadow: 0 10px 40px rgba(17, 57, 57, 0.04);
-            border: 1px solid rgba(17, 57, 57, 0.08);
-            margin-bottom: 30px;
+        .legal-body {
+            color: #1a2b2b;
+            font-family: 'Josefin Sans', -apple-system, sans-serif;
         }
         .legal-section {
-            margin-bottom: 40px;
-        }
-        .legal-section:last-child {
-            margin-bottom: 0;
+            margin-bottom: 32px;
         }
         .legal-h2 {
-            font-family: var(--font-heading);
-            font-size: 1.35rem;
-            color: var(--accent-color);
-            margin-bottom: 16px;
-            letter-spacing: 1.5px;
+            font-family: 'Jost', -apple-system, sans-serif;
+            font-size: 1.25rem;
+            color: #113939;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(17, 57, 57, 0.1);
-            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(17, 57, 57, 0.15);
+            padding-bottom: 6px;
         }
         .legal-p {
-            font-family: var(--font-body);
+            font-family: 'Josefin Sans', -apple-system, sans-serif;
             font-size: 1.02rem;
-            color: rgba(26, 43, 43, 0.85);
-            line-height: 1.8;
-            margin-bottom: 16px;
+            color: #222222;
+            line-height: 1.75;
+            margin-bottom: 14px;
         }
         .legal-list {
-            margin: 12px 0 18px 24px;
-            color: rgba(26, 43, 43, 0.85);
-            font-family: var(--font-body);
-            line-height: 1.8;
+            margin: 10px 0 16px 20px;
+            color: #222222;
+            font-family: 'Josefin Sans', -apple-system, sans-serif;
+            line-height: 1.75;
             font-size: 1rem;
         }
         .legal-list li {
             margin-bottom: 8px;
         }
-        .legal-highlight-box {
-            background: #F4F7F6;
-            border-left: 4px solid var(--accent-color);
-            padding: 18px 22px;
-            border-radius: 0 6px 6px 0;
-            margin: 20px 0;
+        .legal-contacts-plain {
+            margin: 14px 0;
+            padding: 4px 0;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #222222;
         }
         .footer-legal-links {
             display: flex;
@@ -124,13 +106,13 @@
         .footer-legal-links a:hover {
             color: var(--accent-color);
         }
+        * {
+            animation: none !important;
+            transition: none !important;
+        }
     </style>
 </head>
 <body>
-    <div id="preloader" data-nosnippet>
-        <div class="loader"></div>
-    </div>
-
     <header id="main-header">
         <a href="index.html" class="logo">
             <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
@@ -166,24 +148,22 @@
     </div>
 
     <main class="legal-container">
-        <div class="legal-header fade-in-up">
-            <span class="legal-badge">BDAR / GDPR Atitiktis</span>
+        <div class="legal-header">
             <h1 class="legal-title">Privatumo Politika</h1>
-            <p class="legal-subtitle">Galioja nuo 2026 m. sausio 1 d. &bull; Paskutinį kartą atnaujinta: 2026.09.29</p>
-            <div class="divider"></div>
+            <p class="legal-subtitle">BDAR / GDPR Atitiktis &bull; Galioja nuo 2026 m. sausio 1 d. &bull; Paskutinį kartą atnaujinta: 2026 m. spalis</p>
         </div>
 
-        <div class="legal-card fade-in-up">
+        <div class="legal-body">
             <!-- 1. Duomenų valdytojas -->
             <section class="legal-section">
                 <h2 class="legal-h2">1. Duomenų Valdytojas</h2>
                 <p class="legal-p">
                     Ši privatumo politika nustato, kaip <strong>DP.PORTFOLIO</strong> (valdoma <strong>Dominik Šuškevič</strong>, individuali fotografijos veikla pagal pažymą, Kaunas, Lietuva, toliau – „Duomenų valdytojas“, „Mes“) renka, naudoja, saugo ir apsaugo Jūsų asmens duomenis, Jums naudojantis interneto svetaine <em>dominikphotofficial.lt</em>, užpildant rezervacijos formas ar bendraujant el. ryšio priemonėmis.
                 </p>
-                <div class="legal-highlight-box">
+                <div class="legal-contacts-plain">
                     <strong>Duomenų valdytojo kontaktai:</strong><br>
                     Dominik Šuškevič (DP | CORPORATION)<br>
-                    El. paštas: <a href="mailto:dominikphotofficial.lt@gmail.com" style="color: var(--accent-color); font-weight: 600;">dominikphotofficial.lt@gmail.com</a><br>
+                    El. paštas: <a href="mailto:support@dominikphotofficial.lt" style="color: #113939; font-weight: 600;">support@dominikphotofficial.lt</a> / <a href="mailto:info@dominikphotofficial.lt" style="color: #113939; font-weight: 600;">info@dominikphotofficial.lt</a><br>
                     Veiklos vieta: Kaunas, Lietuva
                 </div>
             </section>

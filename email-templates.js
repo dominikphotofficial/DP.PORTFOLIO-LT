@@ -10,7 +10,8 @@ const BRAND = {
     websiteUrl: "https://portfolio.dominikphotofficial.lt",
     instagramUrl: "https://instagram.com/dominikphotofficial",
     instagramHandle: "@dominikphotofficial",
-    email: "dominikphotofficial.lt@gmail.com",
+    email: "info@dominikphotofficial.lt",
+    supportEmail: "support@dominikphotofficial.lt",
     iban: "LT867300010171188764",
     recipientName: "DOMINIK ŠUŠKEVIČ",
     colors: {

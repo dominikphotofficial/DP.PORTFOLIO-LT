@@ -1454,20 +1454,13 @@
         <h2 style="font-family: var(--font-heading); margin-bottom: 8px; font-weight: 400; letter-spacing: 2.5px; color: var(--accent-color); text-transform: uppercase;">
             Administracija
         </h2>
-        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.7); margin-bottom: 20px;">
+        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.7); margin-bottom: 25px;">
             Prisijunkite prie DP.PORTFOLIO valdymo skydo
         </p>
 
-        <!-- 👑 1-Click Greitasis Savininko Prisijungimas -->
-        <button type="button" id="admin-quick-owner-login-btn" class="admin-btn" style="width: 100%; margin-bottom: 20px; padding: 14px; background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(17,57,57,0.25);">
-            👑 Prisijungti kaip Savininkas (Dominik)
-        </button>
-
-        <div class="auth-divider">ARBA SU EL. PAŠTU IR SLAPTAŽODŽIU</div>
-
         <div style="text-align: left; margin-bottom: 16px;">
             <label class="field-label">El. pašto adresas</label>
-            <input type="email" id="admin-email" class="admin-select" value="dominikphotofficial.lt@gmail.com" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required>
+            <input type="email" id="admin-email" class="admin-select" value="support@dominikphotofficial.lt" placeholder="support@dominikphotofficial.lt" style="margin-top: 0;" required>
         </div>
 
         <div style="text-align: left; margin-bottom: 22px;">
@@ -1480,11 +1473,10 @@
         </button>
 
         <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
-            🔑 Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą
+            🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
         </button>
 
         <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 15px;"></div>
-
 
         <div class="auth-divider">ARBA SU GOOGLE PASKYRA</div>
         <button id="admin-login-google-btn" class="gsi-material-button" style="width: 100%;">
@@ -2576,7 +2568,14 @@
             getSheetValues
         } from './google-sheets-service.js';
 
-        const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
+        const ADMIN_EMAIL = "support@dominikphotofficial.lt"; 
+        const OWNER_EMAILS = [
+            "support@dominikphotofficial.lt",
+            "dominikphotofficial.lt@gmail.com",
+            "dominik.suskevic@gmail.com",
+            "info@dominikphotofficial.lt"
+        ];
+        const isOwnerAccount = (em) => Boolean(em && OWNER_EMAILS.includes(em.toLowerCase().trim())); 
 
         const authSection = document.getElementById('auth-section');
         const dashboardSection = document.getElementById('dashboard-section');
@@ -2639,7 +2638,7 @@
             const isManager = (role === 'manager');
 
             // Only actual owner (Dominik) gets the role preview switch dropdown
-            const isRealOwner = (session.email && (session.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || session.email.toLowerCase() === "dominik.suskevic@gmail.com"));
+            const isRealOwner = (session.email && isOwnerAccount(session.email));
             if (previewContainer) {
                 previewContainer.style.display = isRealOwner ? 'inline-block' : 'none';
                 const select = document.getElementById('role-preview-select');
@@ -2915,7 +2914,7 @@
             if (user) {
                 updateSheetsAuthStatus(user);
                 const userEmail = (user.email || "").toLowerCase();
-                const isOwner = (userEmail === ADMIN_EMAIL.toLowerCase() || userEmail === "dominik.suskevic@gmail.com");
+                const isOwner = isOwnerAccount(userEmail);
 
                 if (isOwner) {
                     unlockDashboard({
@@ -3029,7 +3028,7 @@
             const email = emailInput?.value.trim() || '';
             const pass = passInput?.value || '';
 
-            const isOwnerEmail = email.toLowerCase() === ADMIN_EMAIL.toLowerCase() || email.toLowerCase() === "dominik.suskevic@gmail.com";
+            const isOwnerEmail = isOwnerAccount(email);
 
             if (!email) {
                 if (authFeedback) {
@@ -4032,10 +4031,21 @@
 
             try {
                 const docRef = await addDoc(collection(db, "mail"), {
-                    to: "dominikphotofficial.lt@gmail.com",
+                    to: "info@dominikphotofficial.lt",
+                    from: "info@dominikphotofficial.lt",
+                    replyTo: "support@dominikphotofficial.lt",
                     message: {
-                        subject: "🧪 DP.PORTFOLIO Testinis Trigger Email Patikrinimas",
-                        html: `<div style="font-family: Arial; padding: 20px;"><h2>DP.PORTFOLIO Testas</h2><p>Jei gavote šį laišką, „Trigger Email from Firestore“ plėtinys veikia nepriekaištingai!</p><p>Laikas: ${new Date().toLocaleString('lt-LT')}</p></div>`
+                        from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
+                        replyTo: "support@dominikphotofficial.lt",
+                        subject: "🧪 DP.PORTFOLIO Brevo SMTP Trigger Email Patikrinimas",
+                        html: `<div style="font-family: Arial, sans-serif; padding: 25px; background: #ffffff; color: #113939; border-top: 4px solid #113939;">
+                            <h2 style="margin: 0 0 10px 0;">DP.PORTFOLIO &bull; Brevo SMTP Patikrinimas</h2>
+                            <p><strong>Siuntėjas (Trigger):</strong> info@dominikphotofficial.lt<br>
+                            <strong>Paskyros el. paštas (Auth):</strong> support@dominikphotofficial.lt<br>
+                            <strong>Gavėjas:</strong> info@dominikphotofficial.lt</p>
+                            <p style="color: #2E7D32; font-weight: bold;">✓ Jei gavote šį laišką, „Trigger Email from Firestore“ per Brevo SMTP veikia nepriekaištingai!</p>
+                            <p style="color: #777; font-size: 12px;">Išsiuntimo laikas: ${new Date().toLocaleString('lt-LT')}</p>
+                        </div>`
                     },
                     createdAt: serverTimestamp()
                 });
@@ -4138,8 +4148,15 @@
                 await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
 
                 await addDoc(collection(db, "mail"), { 
-                    to: pendingEmailData.email, 
-                    message: { subject: subject, html: finalHtml },
+                    to: pendingEmailData.email,
+                    from: "info@dominikphotofficial.lt",
+                    replyTo: "support@dominikphotofficial.lt",
+                    message: { 
+                        from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
+                        replyTo: "support@dominikphotofficial.lt",
+                        subject: subject, 
+                        html: finalHtml 
+                    },
                     createdAt: serverTimestamp()
                 });
 
@@ -6418,23 +6435,67 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             const wasEditing = paperWrap?.classList.contains('editable-mode');
             if (wasEditing && paperWrap) paperWrap.classList.remove('editable-mode');
 
-            showToast("⏳ Ruošiamas PDF failas... Atsisiuntimas prasidės automatiškai.");
+            showToast("⏳ Ruošiamas tikslus A4 formato PDF... Prašome palaukti.");
 
             if (typeof window.html2pdf !== 'undefined') {
+                // Klonuojame dokumentą į izoliuotą A4 konteinerį (tikslus 794px plotis = 210mm @ 96DPI)
+                // Tai garantuoja, kad PDF stilius bus identiškas peržiūrai nepriklausomai nuo ekrano raiškos ar slinkties
+                const clone = container.cloneNode(true);
+                clone.classList.remove('editable-mode');
+                clone.style.width = '794px';
+                clone.style.maxWidth = '794px';
+                clone.style.minHeight = activeDocType === 'vmi_journal' ? 'auto' : '1080px';
+                clone.style.boxShadow = 'none';
+                clone.style.border = 'none';
+                clone.style.background = '#ffffff';
+                clone.style.color = '#111111';
+                clone.style.boxSizing = 'border-box';
+                clone.style.margin = '0 auto';
+                
+                if (activeDocType === 'vmi_journal') {
+                    clone.style.padding = '18px 22px';
+                } else if (activeDocType === 'contract') {
+                    clone.style.padding = '22px 28px';
+                } else {
+                    clone.style.padding = '26px 30px';
+                }
+
+                // Pašaliname redagavimo atributus klone
+                clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'fixed';
+                wrapper.style.left = '-9999px';
+                wrapper.style.top = '0';
+                wrapper.style.width = '794px';
+                wrapper.style.background = '#ffffff';
+                wrapper.appendChild(clone);
+                document.body.appendChild(wrapper);
+
                 const opt = {
-                    margin: [8, 10, 8, 10],
+                    margin: 0,
                     filename: docName,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, logging: false },
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        logging: false,
+                        width: 794,
+                        windowWidth: 794,
+                        scrollY: 0,
+                        scrollX: 0
+                    },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    pagebreak: { mode: ['css', 'legacy'] }
                 };
 
-                window.html2pdf().set(opt).from(container).save().then(() => {
-                    showToast("✓ PDF dokumentas sėkmingai išsaugotas ir atsisiųstas!", "success");
+                window.html2pdf().set(opt).from(clone).save().then(() => {
+                    showToast("✓ PDF dokumentas sėkmingai sugeneruotas ir atsisiųstas!", "success");
+                    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
                     if (wasEditing && paperWrap) paperWrap.classList.add('editable-mode');
                 }).catch((err) => {
-                    console.warn("html2pdf notice:", err);
+                    console.warn("html2pdf fallback notice:", err);
+                    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
                     window.triggerDocumentPrint();
                 });
             } else {
@@ -6981,27 +7042,39 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 9px;">
+                    <div style="margin-bottom: 6px;">
                         <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">5. NENUGALIMA JĖGA IR DATOS KEITIMAS</strong>
                         <div style="margin-top: 2px; padding-left: 8px;">
                             5.1. Dėl blogų oro sąlygų ar ligos fotosesijos data gali būti vieną kartą nemokamai perkelta į kitą abiem Šalims tinkamą datą.
                         </div>
                     </div>
 
+                    <!-- Tėvų sutikimas -->
+                    <div style="margin-bottom: 7px; background: #fafbfb; border: 1px solid #d5dbdb; padding: 5px 8px; border-radius: 3px;">
+                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">6. TĖVŲ SUTIKIMAS</strong>
+                        <div style="margin-top: 2px; font-size: 7.4pt; line-height: 1.35; color: #222;">
+                            Fotografas Dominik Šuškevič yra nepilnametis ir individualią veiklą vykdo turėdamas savo mamos Dianos Ruolytės sutikimą. Diana Ruolytė sutinka, kad Dominik Šuškevič sudarytų šią paslaugų teikimo sutartį ir pagal ją teiktų fotografavimo / videografijos paslaugas.<br>
+                            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 7.4pt;">
+                                <span>Diana Ruolytė: ________________________</span>
+                                <span>Data: ________________________</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Parašai -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 14px; padding: 0 8px; border-top: 1px solid #ccc; padding-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; padding: 0 8px; border-top: 1px solid #ccc; padding-top: 6px;">
                         <div>
                             <div>FOTOGRAFAS:</div>
                             <div style="margin-top: 2px; font-weight: bold;">Dominik Šuškevič (DP.PORTFOLIO)</div>
                             <div style="font-size: 7.5pt; color: #555;">Individuali veikla EVRK 74.20</div>
-                            <div style="margin-top: 18px; border-bottom: 1px solid #000; width: 190px;"></div>
+                            <div style="margin-top: 15px; border-bottom: 1px solid #000; width: 190px;"></div>
                             <div style="font-size: 7.2pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                         <div>
                             <div>UŽSAKOVAS:</div>
                             <div style="margin-top: 2px; font-weight: bold;">${clientName}</div>
                             <div style="font-size: 7.5pt; color: #555;">${clientPhone} &bull; ${clientEmail}</div>
-                            <div style="margin-top: 18px; border-bottom: 1px solid #000; width: 190px;"></div>
+                            <div style="margin-top: 15px; border-bottom: 1px solid #000; width: 190px;"></div>
                             <div style="font-size: 7.2pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                     </div>

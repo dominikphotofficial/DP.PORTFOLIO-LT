@@ -406,9 +406,13 @@ kartu vadinami **Šalimis**, sudarė šią Fotografavimo paslaugų teikimo sutar
 #### 5. FORCE MAJEURE IR DATOS KEITIMAS
 5.1. Dėl blogų oro sąlygų ar ligos fotosesijos data gali būti nemokamai perkelta į kitą abiem Šalims tinkamą dieną.
 
+#### 6. TĖVŲ SUTIKIMAS
+Fotografas Dominik Šuškevič yra nepilnametis ir individualią veiklą vykdo turėdamas savo mamos Dianos Ruolytės sutikimą. Diana Ruolytė sutinka, kad Dominik Šuškevič sudarytų šią paslaugų teikimo sutartį ir pagal ją teiktų fotografavimo / videografijos paslaugas.  
+**Diana Ruolytė:** __________________ &nbsp;&nbsp;&nbsp;&nbsp; **Data:** __________________
+
 ---
 
-#### 6. ŠALIŲ REKVIZITAI IR PARAŠAI:
+#### 7. ŠALIŲ REKVIZITAI IR PARAŠAI:
 | Fotografas | Užsakovas |
 | :--- | :--- |
 | **Dominik Šuškevič (DP.PORTFOLIO)** | **[Užsakovo Vardas Pavardė]** |

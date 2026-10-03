@@ -247,7 +247,11 @@
 
                         await addDoc(collection(db, "mail"), {
                             to: emailVal,
+                            from: "info@dominikphotofficial.lt",
+                            replyTo: "support@dominikphotofficial.lt",
                             message: {
+                                from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
+                                replyTo: "support@dominikphotofficial.lt",
                                 subject: "Gauta Jūsų žinutė | DP.PORTFOLIO",
                                 html: ackHtml
                             }
