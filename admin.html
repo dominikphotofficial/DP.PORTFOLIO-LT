@@ -2004,6 +2004,42 @@
             <div id="team-members-list" class="team-grid">
                 <!-- Loaded via JS -->
             </div>
+
+            <!-- 🛡️ Vartotojų Veiksmų Registras & Auditas (Audit Log) -->
+            <div class="request-card" style="margin-top: 35px; padding: 24px; background: #ffffff; border: 1px solid rgba(17,57,57,0.12); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #113939; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; font-weight: 700;">Sistemos Saugumas & Sekimas</div>
+                        <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: #113939; margin: 3px 0 0 0; font-size: 1.25rem;">
+                            🛡️ Vartotojų Veiksmų Registras (Audit Log)
+                        </h3>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="text" id="audit-log-search-input" class="admin-select" placeholder="🔍 Ieškoti veiksmų / naudotojo..." style="font-size: 0.8rem; padding: 6px 12px; margin: 0; min-width: 240px; height: 34px;" oninput="filterAuditLogsTable()">
+                        <button type="button" class="admin-btn" onclick="loadAuditLogs()" style="font-size: 0.8rem; padding: 6px 14px; background: #113939; height: 34px;">
+                            Atnaujinti 🔄
+                        </button>
+                    </div>
+                </div>
+                <p style="font-size: 0.86rem; color: #555; margin: 0 0 16px 0; line-height: 1.5;">
+                    Šiame registre realiu laiku fiksuojami visi administratorių ir pakviestų komandos narių veiksmai: užsakymų būsenos pokyčiai, pirkėjo duomenų atnaujinimai, sutarčių/sąskaitų generavimas, el. laiškų siuntimas bei VMI žurnalo korekcijos.
+                </p>
+                <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid #E8ECEB; border-radius: 6px;">
+                    <table class="audit-log-table" style="width: 100%; border-collapse: collapse; font-size: 0.83rem;">
+                        <thead style="position: sticky; top: 0; z-index: 2; background: #FAFBFB;">
+                            <tr style="border-bottom: 2px solid #113939; text-align: left;">
+                                <th style="padding: 10px 14px; width: 155px; color: #113939;">Data & Laikas</th>
+                                <th style="padding: 10px 14px; width: 190px; color: #113939;">Vartotojas</th>
+                                <th style="padding: 10px 14px; width: 160px; color: #113939;">Kategorija</th>
+                                <th style="padding: 10px 14px; color: #113939;">Atliktas Veiksmas / Detalės</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-log-tbody">
+                            <tr><td colspan="4" style="text-align: center; padding: 25px; color: #888;">Kraunamas veiksmų registras...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- 📗 Google Sheets Integracijos Tab -->
@@ -2449,20 +2485,33 @@
             </div>
 
             <div id="modal-receipt-container" class="modal-section-box" style="display: none;">
-                <label class="field-label" style="display: flex; align-items: center; gap: 6px;">
-                    <span>📎</span> <strong>Prisegti PDF dokumentą (Sąskaitą-faktūrą, Kvitą arba Sutartį)</strong>
+                <label class="field-label" style="display: flex; align-items: center; justify-content: space-between;">
+                    <span>📎 <strong>Prisegti PDF dokumentą prie šio el. laiško</strong></span>
+                    <span style="font-size: 11px; color: #113939; font-weight: bold; background: #e0f2f1; padding: 2px 8px; border-radius: 4px;">AUTOMATINIS PRIEDAS</span>
                 </label>
-                <div id="modal-attached-preview-badge" style="display: none; margin-bottom: 10px; padding: 10px 14px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 6px; font-size: 13px; color: #1b5e20;">
+                
+                <div id="modal-attached-preview-badge" style="display: none; margin-bottom: 12px; padding: 10px 14px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 6px; font-size: 13px; color: #1b5e20;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span>📎 <strong>Prisegtas PDF failas:</strong> <span id="attached-pdf-filename-display">dokumentas.pdf</span></span>
                         <button type="button" onclick="removeAttachedPdf()" style="background: none; border: none; color: #c62828; cursor: pointer; font-size: 12px; font-weight: bold;">Pašalinti ✕</button>
                     </div>
-                    <div style="font-size: 11px; color: #2e7d32; margin-top: 3px;">✓ Šis PDF dokumentas bus tiesiogiai prisegtas prie el. laiško (el. pašto prieduose).</div>
+                    <div style="font-size: 11px; color: #2e7d32; margin-top: 3px;">✓ Šis PDF dokumentas bus tiesiogiai prisegtas prie el. laiško kaip tikras PDF failo priedas (attachment).</div>
                 </div>
-                <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 10px; border: 1px dashed #113939; background: #fff;">
-                <span style="font-size: 12.5px; color: #555; display: block; margin-top: 6px;">
-                    📎 Pasirinktas PDF failas bus <strong>tiesiogiai prisegtas prie siunčiamo el. laiško</strong> kaip tikras failo priedas (attachment).
-                </span>
+
+                <!-- Greiti vieno paspaudimo PDF generavimo ir prisegimo mygtukai -->
+                <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+                    <button type="button" class="admin-btn" style="padding: 7px 13px; font-size: 0.76rem; background: #113939;" onclick="attachGeneratedPdfToCurrentEmail('invoice')">
+                        🧾 Sugeneruoti ir prisegti Sąskaitą / Kvitą (PDF)
+                    </button>
+                    <button type="button" class="admin-btn" style="padding: 7px 13px; font-size: 0.76rem; background: #113939;" onclick="attachGeneratedPdfToCurrentEmail('contract')">
+                        📜 Sugeneruoti ir prisegti Sutartį (PDF)
+                    </button>
+                </div>
+
+                <div style="border-top: 1px dashed #ccc; padding-top: 8px; margin-top: 6px;">
+                    <label style="font-size: 11.5px; color: #666; display: block; margin-bottom: 4px;">Arba pasirinkite PDF failą iš kompiuterio:</label>
+                    <input type="file" id="modal-receipt-file" accept="application/pdf,image/*" class="admin-select" style="padding: 8px; border: 1px dashed #113939; background: #fff; font-size: 12px;">
+                </div>
             </div>
 
             <button type="button" id="modal-preview-toggle-btn" class="admin-btn-outline" style="width: 100%; margin: 15px 0; font-size: 0.8rem; padding: 11px;">
@@ -2621,7 +2670,7 @@
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-        import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml } from './email-templates.js';
+        import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml, EMAIL_CONFIG, buildInvitationEmail, buildPasswordResetInstructionEmail } from './email-templates.js';
         import {
             authenticateGoogleSheets,
             getCachedToken,
@@ -2684,6 +2733,108 @@
 
         // Session & Role management
         let currentAdminSession = null;
+
+        // ==============================================================================
+        // 🛡️ VARTOTOJŲ VEIKSMŲ SEKIMAS IR REGISTRAS (AUDIT LOG SYSTEM)
+        // ==============================================================================
+        window._auditLogCache = [];
+
+        window.logAdminAction = async (actionType, description, details = {}) => {
+            try {
+                const user = auth.currentUser;
+                const userEmail = user?.email || ADMIN_EMAIL;
+                const userName = user?.displayName || (isOwnerAccount(userEmail) ? 'Dominik Šuškevič' : userEmail.split('@')[0]);
+
+                await addDoc(collection(db, "audit_logs"), {
+                    actionType, // 'order_update', 'buyer_edit', 'invoice_generated', 'contract_generated', 'member_invite', 'email_sent', 'vmi_update', 'ai_action', 'member_status'
+                    description,
+                    details: details || {},
+                    userEmail,
+                    userName,
+                    timestamp: serverTimestamp()
+                });
+            } catch(err) {
+                console.warn("Audit logging warning:", err);
+            }
+        };
+
+        window.loadAuditLogs = () => {
+            const tbody = document.getElementById('audit-log-tbody');
+            if (!tbody) return;
+
+            const q = query(collection(db, "audit_logs"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const logs = [];
+                snapshot.forEach(docSnap => {
+                    logs.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                window._auditLogCache = logs;
+                renderAuditLogsTable(logs);
+            }, (err) => {
+                console.warn("Audit logs listener warning:", err);
+                if (tbody) tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: #888;">Veiksmų registras pasiekiamas tik prisijungus administratoriui.</td></tr>`;
+            });
+        };
+
+        function renderAuditLogsTable(logs) {
+            const tbody = document.getElementById('audit-log-tbody');
+            if (!tbody) return;
+
+            if (!logs || logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 25px; color: #888;">Veiksmų žurnale kol kas nėra įrašų.</td></tr>';
+                return;
+            }
+
+            const typeBadges = {
+                order_update: '<span class="status-badge" style="background:#e3f2fd; color:#1565c0; font-weight:600;">Užsakymas</span>',
+                buyer_edit: '<span class="status-badge" style="background:#fff8e1; color:#f57f17; font-weight:600;">Pirkėjo rekvizitai</span>',
+                invoice_generated: '<span class="status-badge" style="background:#e8f5e9; color:#2e7d32; font-weight:600;">Sąskaita-Faktūra</span>',
+                contract_generated: '<span class="status-badge" style="background:#f3e5f5; color:#7b1fa2; font-weight:600;">Sutartis</span>',
+                member_invite: '<span class="status-badge" style="background:#e0f2f1; color:#00695c; font-weight:600;">Naujas narys</span>',
+                member_status: '<span class="status-badge" style="background:#fce4ec; color:#c2185b; font-weight:600;">Nario būsena</span>',
+                password_reset: '<span class="status-badge" style="background:#fff3e0; color:#e65100; font-weight:600;">Slaptažodis</span>',
+                email_sent: '<span class="status-badge" style="background:#ede7f6; color:#4527a0; font-weight:600;">El. laiškas</span>',
+                vmi_update: '<span class="status-badge" style="background:#e8eaf6; color:#283593; font-weight:600;">VMI Žurnalas</span>',
+                pdf_download: '<span class="status-badge" style="background:#e0f2f1; color:#00796b; font-weight:600;">PDF Eksportas</span>',
+                ai_action: '<span class="status-badge" style="background:#e0f7fa; color:#00838f; font-weight:600;">AI Asistentas</span>'
+            };
+
+            let html = '';
+            logs.forEach(log => {
+                const timeStr = log.timestamp?.toDate 
+                    ? log.timestamp.toDate().toLocaleString('lt-LT')
+                    : (log.timestamp ? new Date(log.timestamp).toLocaleString('lt-LT') : 'Ką tik');
+                const badge = typeBadges[log.actionType] || `<span class="status-badge" style="background:#f5f5f5; color:#333;">${log.actionType || 'Veiksmas'}</span>`;
+
+                html += `
+                    <tr style="border-bottom: 1px solid #E8ECEB; transition: background 0.15s ease;">
+                        <td style="padding: 10px 14px; font-family: monospace; font-size: 0.8rem; color: #555;">${timeStr}</td>
+                        <td style="padding: 10px 14px;">
+                            <strong style="color: #113939; font-size: 0.84rem;">${log.userName || 'Admin'}</strong>
+                            <div style="font-size: 0.74rem; color: #777;">${log.userEmail || ''}</div>
+                        </td>
+                        <td style="padding: 10px 14px;">${badge}</td>
+                        <td style="padding: 10px 14px; color: #222; font-size: 0.84rem; line-height: 1.45;">
+                            ${log.description || '-'}
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        window.filterAuditLogsTable = () => {
+            const queryVal = (document.getElementById('audit-log-search-input')?.value || '').toLowerCase().trim();
+            if (!queryVal) {
+                renderAuditLogsTable(window._auditLogCache || []);
+                return;
+            }
+            const filtered = (window._auditLogCache || []).filter(item => {
+                const combined = `${item.userName || ''} ${item.userEmail || ''} ${item.actionType || ''} ${item.description || ''}`.toLowerCase();
+                return combined.includes(queryVal);
+            });
+            renderAuditLogsTable(filtered);
+        };
 
         // Toggle Updates Banner
         document.getElementById('toggle-updates-banner-btn')?.addEventListener('click', () => {
@@ -2907,6 +3058,7 @@
             loadMailDiagnostics();
             loadVmiSummary();
             loadTeamMembers();
+            loadAuditLogs();
             loadSheetsSettings();
         }
 
@@ -3232,7 +3384,7 @@
             if (target) target.classList.add('active');
 
             if (tab === 'vmi') loadVmiSummary();
-            if (tab === 'team') loadTeamMembers();
+            if (tab === 'team') { loadTeamMembers(); loadAuditLogs(); }
             if (tab === 'sheets') initGoogleSheetsTab();
         };
 
@@ -3724,6 +3876,14 @@
                                     <option value="Ne" ${data.receiptNeeded !== 'Taip' ? 'selected' : ''}>Ne</option>
                                 </select>
                             </div>
+                            <div>
+                                <label class="field-label">Asmens / Įmonės kodas (SF/Sutarčiai)</label>
+                                <input type="text" id="srv-code-${data.id}" value="${data.clientCode || ''}" class="admin-select" placeholder="pvz. 39801010000 / 300123456">
+                            </div>
+                            <div>
+                                <label class="field-label">Pirkėjo Adresas / Miestas (SF/Sutarčiai)</label>
+                                <input type="text" id="srv-address-${data.id}" value="${data.clientAddress || ''}" class="admin-select" placeholder="pvz. Vilniaus g. 10, Kaunas">
+                            </div>
                         </div>
                         <div style="margin-top: 10px;">
                             <label class="field-label">Lūkesčiai / Papildoma informacija</label>
@@ -3896,6 +4056,8 @@
             const depositVal = document.getElementById(`srv-deposit-${id}`)?.value;
             const paymentMethod = document.getElementById(`srv-payment-${id}`)?.value;
             const receiptNeeded = document.getElementById(`srv-receipt-needed-${id}`)?.value;
+            const clientCode = document.getElementById(`srv-code-${id}`)?.value;
+            const clientAddress = document.getElementById(`srv-address-${id}`)?.value;
             const additionalInformation = document.getElementById(`srv-info-${id}`)?.value;
 
             const updateData = {
@@ -3908,6 +4070,8 @@
             if (clientName !== undefined) updateData.clientName = clientName.trim();
             if (email !== undefined) updateData.email = email.trim();
             if (phone !== undefined) updateData.phone = phone.trim();
+            if (clientCode !== undefined) updateData.clientCode = clientCode.trim();
+            if (clientAddress !== undefined) updateData.clientAddress = clientAddress.trim();
             if (socialProfile !== undefined) updateData.socialProfile = socialProfile.trim();
             if (serviceName !== undefined) updateData.serviceName = serviceName.trim();
             if (priceVal !== undefined && priceVal !== '') {
@@ -3930,6 +4094,18 @@
                     badge.className = `status-badge ${getCleanClass(newStatus)}`;
                     badge.innerText = newStatus;
                 }
+
+                // Užregistruojame pirkėjo duomenų pakeitimus audito žurnale
+                logAdminAction('buyer_edit', `Atnaujinti pirkėjo duomenys: ${updateData.clientName || 'Klientas'} (${updateData.serviceName || 'Paslauga'})`, {
+                    orderId: id,
+                    clientName: updateData.clientName,
+                    email: updateData.email,
+                    phone: updateData.phone,
+                    clientCode: updateData.clientCode,
+                    clientAddress: updateData.clientAddress,
+                    finalPrice: updateData.finalPrice,
+                    depositAmount: updateData.depositAmount
+                });
 
                 showToast("✓ Visi pirkėjo ir paslaugos duomenys sėkmingai atnaujinti!");
             } catch(e) {
@@ -3987,7 +4163,12 @@
             } else {
                 document.getElementById('modal-link-container').style.display = 'none';
             }
-            document.getElementById('modal-receipt-container').style.display = 'none';
+            // Visada leidžiame prisegti PDF (Sutartį arba Kvitą) prie TFP el. laiškų
+            document.getElementById('modal-receipt-container').style.display = 'block';
+            if (!window.currentAttachedPdf) {
+                const badge = document.getElementById('modal-attached-preview-badge');
+                if (badge) badge.style.display = 'none';
+            }
 
             pendingEmailData = { collection: 'tfp_requests', id, email: item.email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
             const previewContainer = document.getElementById('modal-live-preview-container');
@@ -4038,14 +4219,48 @@
                 document.getElementById('modal-link-container').style.display = 'none';
             }
 
-            if (newStatus === 'Deposit Paid' || newStatus === 'Fully Paid' || newStatus === 'Completed' || newStatus === 'Confirmed') {
-                document.getElementById('modal-receipt-container').style.display = 'block';
-                document.getElementById('modal-receipt-file').value = '';
-            } else {
-                document.getElementById('modal-receipt-container').style.display = 'none';
+            // Visada leidžiame prisegti PDF prie paslaugų laiškų
+            document.getElementById('modal-receipt-container').style.display = 'block';
+            if (!window.currentAttachedPdf) {
+                const badge = document.getElementById('modal-attached-preview-badge');
+                if (badge) badge.style.display = 'none';
             }
 
             pendingEmailData = { collection: 'service_requests', id, email: item.email, newStatus, newDate, newLoc, boxHtml: content.boxHtml, lang };
+            const previewContainer = document.getElementById('modal-live-preview-container');
+            if (previewContainer) previewContainer.style.display = 'none';
+            document.getElementById('email-modal').classList.add('active');
+        };
+
+        // Universalus el. laiško modal lango atidarymas (su iš anksto prisegtu PDF priedu)
+        window.openEmailModal = (config) => {
+            if (!config) return;
+            const lang = config.lang || 'lt';
+            document.getElementById('modal-subject').value = config.subject || `DP.PORTFOLIO | Pranešimas dėl fotosesijos`;
+            document.getElementById('modal-greeting').value = config.greeting || `Sveiki, ${config.name || 'kliente'}!`;
+            document.getElementById('modal-text').value = config.text || `Siunčiame Jums sugeneruotą dokumentą.`;
+
+            document.getElementById('modal-link-container').style.display = 'none';
+            document.getElementById('modal-receipt-container').style.display = 'block';
+
+            if (window.currentAttachedPdf) {
+                const badge = document.getElementById('modal-attached-preview-badge');
+                const filenameDisplay = document.getElementById('attached-pdf-filename-display');
+                if (badge) badge.style.display = 'block';
+                if (filenameDisplay) filenameDisplay.innerText = window.currentAttachedPdf.filename || 'dokumentas.pdf';
+            }
+
+            pendingEmailData = {
+                collection: config.collection || 'service_requests',
+                id: config.id || 'manual',
+                email: config.email,
+                newStatus: config.newStatus || 'Confirmed',
+                newDate: config.newDate || new Date().toISOString().split('T')[0],
+                newLoc: config.newLoc || 'Kaunas',
+                boxHtml: config.boxHtml || '',
+                lang: lang
+            };
+
             const previewContainer = document.getElementById('modal-live-preview-container');
             if (previewContainer) previewContainer.style.display = 'none';
             document.getElementById('email-modal').classList.add('active');
@@ -4269,10 +4484,10 @@
                 const docRef = await addDoc(collection(db, "mail"), {
                     to: "info@dominikphotofficial.lt",
                     from: "info@dominikphotofficial.lt",
-                    replyTo: "support@dominikphotofficial.lt",
+                    replyTo: "info@dominikphotofficial.lt",
                     message: {
                         from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
-                        replyTo: "support@dominikphotofficial.lt",
+                        replyTo: "info@dominikphotofficial.lt",
                         subject: "🧪 DP.PORTFOLIO Brevo SMTP Trigger Email Patikrinimas",
                         html: `<div style="font-family: Arial, sans-serif; padding: 25px; background: #ffffff; color: #113939; border-top: 4px solid #113939;">
                             <h2 style="margin: 0 0 10px 0;">DP.PORTFOLIO &bull; Brevo SMTP Patikrinimas</h2>
@@ -4442,10 +4657,10 @@
                 const mailPayload = { 
                     to: pendingEmailData.email,
                     from: "info@dominikphotofficial.lt",
-                    replyTo: "support@dominikphotofficial.lt",
+                    replyTo: "info@dominikphotofficial.lt", // Visi klientų atsakymai nukreipiami į pagrindinį info@ paštą
                     message: { 
                         from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
-                        replyTo: "support@dominikphotofficial.lt",
+                        replyTo: "info@dominikphotofficial.lt",
                         subject: subject, 
                         html: finalHtml,
                         attachments: attachments
@@ -4455,6 +4670,14 @@
                 };
 
                 await addDoc(collection(db, "mail"), mailPayload);
+
+                // Fiksuojame veiksmą audit žurnale
+                logAdminAction('email_sent', `Išsiųstas laiškas gavėjui ${pendingEmailData.email} (Tema: „${subject}“)${attachments.length > 0 ? ' su prisegtu PDF priedu' : ''}`, {
+                    recipient: pendingEmailData.email,
+                    subject,
+                    orderId: pendingEmailData.id,
+                    hasAttachments: attachments.length > 0
+                });
 
                 showToast("✓ Užsakymas atnaujintas ir el. laiškas su prisegtu PDF sėkmingai išsiųstas!", "success");
                 closeModal();
@@ -5108,6 +5331,9 @@
                     const m = docSnap.data();
                     const id = docSnap.id;
                     const isActive = m.active !== false;
+                    const statusText = !isActive ? 'Pristabdytas' : (m.status === 'invited' || !m.lastLoginAt ? 'Pakviestas' : 'Aktyvus');
+                    const statusColor = !isActive ? '#C2185B' : (m.status === 'invited' || !m.lastLoginAt ? '#1976D2' : '#2E7D32');
+                    const statusBg = !isActive ? '#FCE4EC' : (m.status === 'invited' || !m.lastLoginAt ? '#E3F2FD' : '#E8F5E9');
 
                     let roleBadgeClass = 'role-manager';
                     let roleTitle = 'Vadybininkas';
@@ -5121,9 +5347,14 @@
                     html += `
                         <div class="team-member-card" style="border-left: 4px solid ${isActive ? 'var(--accent-color)' : '#999'};">
                             <div>
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px;">
                                     <div>
-                                        <strong style="font-size: 1.15rem; color: var(--accent-color);">${m.name || 'Komandos narys'}</strong>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <strong style="font-size: 1.15rem; color: var(--accent-color);">${m.name || 'Komandos narys'}</strong>
+                                            <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 12px; background: ${statusBg}; color: ${statusColor}; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;">
+                                                ● ${statusText}
+                                            </span>
+                                        </div>
                                         <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">
                                             <a href="mailto:${m.email}" style="color: #113939; text-decoration: underline;">${m.email || 'Nenurodytas el. paštas'}</a>
                                         </div>
@@ -5133,14 +5364,17 @@
                                 
                                 <div style="margin: 12px 0; background: #FAFBFB; padding: 12px 14px; border-radius: 6px; border: 1px solid #E8ECEB;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span style="font-size: 0.8rem; color: #555; font-weight: 500;">Prieiga su slaptažodžiu:</span>
-                                        <span style="font-size: 0.75rem; color: #2E7D32; font-weight: 600;">✓ El. pašto nuoroda</span>
+                                        <span style="font-size: 0.8rem; color: #555; font-weight: 600;">Vartotojo Prieiga & Slaptažodis:</span>
+                                        <span style="font-size: 0.75rem; color: #666;">Registruota: ${m.createdAt?.toDate ? m.createdAt.toDate().toLocaleDateString('lt-LT') : 'Naujas'}</span>
                                     </div>
                                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                        <button type="button" class="admin-btn" style="padding: 7px 12px; font-size: 0.72rem; flex: 1;" onclick="sendMemberPasswordReset('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
-                                            ✉️ Siųsti slaptažodžio nuorodą
+                                        <button type="button" class="admin-btn" style="padding: 7px 11px; font-size: 0.72rem; flex: 1; min-width: 140px; background: #113939;" onclick="resendMemberInvite('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}', '${m.role || 'manager'}')">
+                                            ✉️ Siųsti pakvietimą su instrukcija
                                         </button>
-                                        <button type="button" class="admin-btn-outline" style="padding: 7px 12px; font-size: 0.72rem;" onclick="copyInviteInstructions('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
+                                        <button type="button" class="admin-btn-outline" style="padding: 7px 11px; font-size: 0.72rem;" onclick="sendMemberPasswordReset('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
+                                            🔑 „Pamiršote slaptažodį?“
+                                        </button>
+                                        <button type="button" class="admin-btn-outline" style="padding: 7px 11px; font-size: 0.72rem;" onclick="copyInviteInstructions('${m.email}', '${(m.name || '').replace(/'/g, "\\'")}')">
                                             📋 Kopijuoti instrukciją
                                         </button>
                                     </div>
@@ -5154,9 +5388,9 @@
 
                             <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 12px; margin-top: 12px; display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
                                 <button type="button" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="toggleMemberActive('${id}', ${isActive})">
-                                    ${isActive ? 'Pristabdyti' : 'Aktyvuoti'}
+                                    ${isActive ? 'Pristabdyti prieigą' : 'Aktyvuoti prieigą'}
                                 </button>
-                                <button type="button" class="admin-btn-delete" style="padding: 6px 12px; font-size: 0.75rem;" onclick="deleteTeamMember('${id}')">
+                                <button type="button" class="admin-btn-delete" style="padding: 6px 12px; font-size: 0.75rem;" onclick="deleteTeamMember('${id}', '${(m.name || '').replace(/'/g, "\\'")}')">
                                     Pašalinti
                                 </button>
                             </div>
@@ -5168,20 +5402,92 @@
             }, (err) => console.warn("Team listener error:", err));
         }
 
-        // Siųsti slaptažodžio nustatymo nuorodą tiesiai į nario el. paštą
+        // Išsiųsti pakvietimo laišką su instrukcija
+        window.resendMemberInvite = async (email, name, role) => {
+            if (!email) {
+                alert("Šis komandos narys neturi nurodyto el. pašto adreso.");
+                return;
+            }
+
+            if (!confirm(`Ar norite išsiųsti oficialų pakvietimo laišką su prisijungimo instrukcija į „${email}“ (${name})?`)) {
+                return;
+            }
+
+            try {
+                const roleLabels = {
+                    superadmin: 'Super Administratorius',
+                    manager: 'Vadybininkas / Asistentas',
+                    photographer: 'Fotografas / Partneris',
+                    accountant: 'Buhalteris'
+                };
+                const roleName = roleLabels[role] || role;
+                const loginUrl = window.location.origin + window.location.pathname;
+
+                // Siunčiame per transakcinį support@ paštą kaip NO-REPLY (be replyTo)
+                await addDoc(collection(db, "mail"), {
+                    to: email,
+                    from: "support@dominikphotofficial.lt",
+                    // replyTo NENAUDOJAMAS autentiškumo patvirtinimams (NO-REPLY)
+                    message: {
+                        from: "DP.PORTFOLIO Sistemos Prieiga <support@dominikphotofficial.lt>",
+                        subject: "Kvietimas prisijungti prie DP.PORTFOLIO valdymo sistemos",
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #111111; border-radius: 4px; background: #ffffff; color: #111111;">
+                                <div style="text-align: center; border-bottom: 2px solid #111111; padding-bottom: 15px; margin-bottom: 20px;">
+                                    <h2 style="color: #111111; margin: 0; text-transform: uppercase; letter-spacing: 2px;">DP.PORTFOLIO</h2>
+                                    <p style="color: #555555; font-size: 13px; margin: 5px 0 0 0;">Dominik Šuškevič Fotografija & Kinematografija</p>
+                                </div>
+                                <div style="line-height: 1.6; font-size: 14px;">
+                                    <p>Sveiki, <strong>${name}</strong>,</p>
+                                    <p>Administratorius suteikė Jums prieigą prie <strong>DP.PORTFOLIO</strong> vidinio valdymo skydo su role: <strong>${roleName}</strong>.</p>
+                                    <p>Jūsų autorizuotas el. pašto adresas: <strong>${email}</strong>.</p>
+                                    
+                                    <div style="background: #f9f9f9; padding: 16px 18px; border: 1px solid #333333; margin: 20px 0;">
+                                        <strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">📋 Instrukcija: kaip susikurti slaptažodį ir prisijungti:</strong>
+                                        <ol style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8;">
+                                            <li>Atidarykite valdymo skydo nuorodą: <a href="${loginUrl}" style="color: #000000; font-weight: bold; text-decoration: underline;">${loginUrl}</a></li>
+                                            <li>Prisijungimo lange spustelėkite mygtuką <strong>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</strong>.</li>
+                                            <li>Įveskite savo el. paštą <code>${email}</code> ir paspauskite „Siųsti“.</li>
+                                            <li>Gausite saugią nuorodą, per kurią susikursite savo asmeninį slaptažodį.</li>
+                                        </ol>
+                                    </div>
+
+                                    <div style="text-align: center; margin: 25px 0;">
+                                        <a href="${loginUrl}" style="display: inline-block; background: #000000; color: #ffffff; padding: 12px 28px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Atidaryti DP.PORTFOLIO Valdymo Skydą</a>
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px solid #333333; margin-top: 25px; padding-top: 15px; font-size: 11px; color: #666666; text-align: center;">
+                                    Šis laiškas išsiųstas iš automatinės DP.PORTFOLIO sistemos (support@dominikphotofficial.lt). Į šį laišką neatsakykite (NO-REPLY). Visi klausimai – info@dominikphotofficial.lt.
+                                </div>
+                            </div>
+                        `
+                    },
+                    createdAt: serverTimestamp()
+                });
+
+                logAdminAction('member_invite', `Išsiųstas pakvietimo laiškas su instrukcija nariui: ${name} (${email})`, { email, name, role });
+                alert(`✓ Kvietimo laiškas su aiškia instrukcija sėkmingai išsiųstas į ${email}!`);
+            } catch(e) {
+                console.error("resendMemberInvite error:", e);
+                alert("Klaida siunčiant kvietimą: " + (e.message || e));
+            }
+        };
+
+        // Siųsti slaptažodžio nustatymo nuorodą tiesiai į nario el. paštą (tik pagal atskirą užklausą)
         window.sendMemberPasswordReset = async (email, name) => {
             if (!email) {
                 alert("Šis komandos narys neturi nurodyto el. pašto adreso.");
                 return;
             }
 
-            if (!confirm(`Ar norite išsiųsti slaptažodžio nustatymo nuorodą į „${email}“ (${name})?`)) {
+            if (!confirm(`Ar norite išsiųsti „Pamiršote slaptažodį?“ atstatymo nuorodą į „${email}“ (${name})?`)) {
                 return;
             }
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                alert(`✓ Slaptažodžio nustatymo nuoroda sėkmingai išsiųsta į ${email}! Narys gavęs laišką paspaus nuorodą ir susikurs savo slaptažodį.`);
+                logAdminAction('password_reset', `Išsiųstas slaptažodžio atstatymo laiškas nariui: ${name} (${email})`, { email, name });
+                alert(`✓ Slaptažodžio atstatymo nuoroda sėkmingai išsiųsta į ${email}! Narys gavęs laišką paspaus nuorodą ir atstatys slaptažodį.`);
             } catch(e) {
                 console.error("sendMemberPasswordReset error:", e);
                 alert("Klaida siunčiant nuorodą: " + (e.message || e));
@@ -5210,15 +5516,17 @@ Kaip prisijungti:
         window.toggleMemberActive = async (id, currentActive) => {
             try {
                 await updateDoc(doc(db, "admin_team", id), { active: !currentActive });
+                logAdminAction('member_status', `Pakeista nario prieigos būsena į: ${!currentActive ? 'Aktyvus' : 'Pristabdytas'} (ID: ${id})`, { memberId: id, active: !currentActive });
             } catch(e) {
                 alert("Klaida keičiant būseną: " + (e.message || e));
             }
         };
 
-        window.deleteTeamMember = async (id) => {
-            if (confirm("Ar tikrai norite pašalinti šį narį iš komandos? Jis nebegalės prisijungti prie valdymo skydo.")) {
+        window.deleteTeamMember = async (id, name) => {
+            if (confirm(`Ar tikrai norite pašalinti narį „${name || id}“ iš komandos? Jis nebegalės prisijungti prie valdymo skydo.`)) {
                 try {
                     await deleteDoc(doc(db, "admin_team", id));
+                    logAdminAction('member_status', `Pašalintas komandos narys: ${name || id}`, { memberId: id, name });
                 } catch(e) {
                     alert("Klaida trinant narį: " + (e.message || e));
                 }
@@ -5240,7 +5548,7 @@ Kaip prisijungti:
             }
         });
 
-        // Išsaugoti komandos narį ir išsiųsti slaptažodžio nuorodą
+        // Išsaugoti komandos narį ir išsiųsti pakvietimo laišką su instrukcija
         document.getElementById('save-team-member-btn')?.addEventListener('click', async () => {
             const name = document.getElementById('member-name').value.trim();
             const email = document.getElementById('member-email').value.trim().toLowerCase();
@@ -5267,30 +5575,23 @@ Kaip prisijungti:
 
             const btn = document.getElementById('save-team-member-btn');
             btn.disabled = true;
-            btn.innerText = 'Saugoma ir siunčiama nuoroda...';
+            btn.innerText = 'Saugoma ir siunčiamas kvietimas...';
 
             try {
-                // 1. Save member to Firestore admin_team
-                await addDoc(collection(db, "admin_team"), {
+                // 1. Išsaugome narį į Firestore admin_team su statusu „invited“
+                const docRef = await addDoc(collection(db, "admin_team"), {
                     name,
                     email,
                     role,
                     permissions,
                     active: true,
+                    status: 'invited',
                     createdAt: serverTimestamp(),
                     lastInviteSentAt: serverTimestamp()
                 });
 
-                // 2. Send Firebase Auth Password Reset Email
-                let resetSent = false;
-                try {
-                    await sendPasswordResetEmail(auth, email);
-                    resetSent = true;
-                } catch(resetErr) {
-                    console.warn("sendPasswordResetEmail notice:", resetErr);
-                }
-
-                // 3. Queue branded notification in Firestore mail collection
+                // 2. Siunčiame OFICIALŲ PAKVIETIMO LAIŠKĄ su aiškia instrukcija (NE paprastą „Reset password“)
+                // Iš support@ NO-REPLY adreso (be Reply-To)
                 try {
                     const roleLabels = {
                         superadmin: 'Super Administratorius',
@@ -5303,32 +5604,38 @@ Kaip prisijungti:
 
                     await addDoc(collection(db, "mail"), {
                         to: email,
+                        from: "support@dominikphotofficial.lt",
+                        // replyTo NENAUDOJAMAS autentiškumo patvirtinimams (NO-REPLY)
                         message: {
+                            from: "DP.PORTFOLIO Sistemos Prieiga <support@dominikphotofficial.lt>",
                             subject: "Kvietimas prisijungti prie DP.PORTFOLIO valdymo sistemos",
                             html: `
-                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e0e0e0; border-radius: 8px; background: #ffffff;">
-                                    <div style="text-align: center; margin-bottom: 20px;">
-                                        <h2 style="color: #113939; margin: 0; text-transform: uppercase; letter-spacing: 2px;">DP.PORTFOLIO</h2>
-                                        <p style="color: #666; font-size: 13px; margin: 5px 0 0 0;">Dominik Šuškevič Fotografija & Kinematografija</p>
+                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #111111; border-radius: 4px; background: #ffffff; color: #111111;">
+                                    <div style="text-align: center; border-bottom: 2px solid #111111; padding-bottom: 15px; margin-bottom: 20px;">
+                                        <h2 style="color: #111111; margin: 0; text-transform: uppercase; letter-spacing: 2px;">DP.PORTFOLIO</h2>
+                                        <p style="color: #555555; font-size: 13px; margin: 5px 0 0 0;">Dominik Šuškevič Fotografija & Kinematografija</p>
                                     </div>
-                                    <div style="border-top: 2px solid #113939; padding-top: 20px; color: #333; line-height: 1.6;">
+                                    <div style="line-height: 1.6; font-size: 14px;">
                                         <p>Sveiki, <strong>${name}</strong>,</p>
-                                        <p>Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo kaip: <span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-weight: bold;">${roleName}</span>.</p>
-                                        <p>Prisijungimui naudokite savo el. pašto adresą: <strong>${email}</strong>.</p>
-                                        <div style="background: #fafbfb; padding: 16px; border-radius: 6px; border: 1px solid #e8eceb; margin: 20px 0;">
-                                            <strong>Norėdami nustatyti arba susikurti savo slaptažodį:</strong>
-                                            <ol style="margin: 8px 0 0 0; padding-left: 20px;">
-                                                <li>Atidarykite valdymo skydą: <a href="${loginUrl}" style="color: #113939; font-weight: bold;">${loginUrl}</a></li>
-                                                <li>Spustelėkite <em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em></li>
-                                                <li>Įveskite savo el. paštą <strong>${email}</strong> ir nustatykite norimą slaptažodį.</li>
+                                        <p>Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo kaip: <strong>${roleName}</strong>.</p>
+                                        <p>Prisijungimo el. pašto adresas: <strong>${email}</strong>.</p>
+                                        
+                                        <div style="background: #f9f9f9; padding: 16px 18px; border: 1px solid #333333; margin: 20px 0;">
+                                            <strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">📋 Instrukcija: kaip susikurti slaptažodį ir pradėti darbą:</strong>
+                                            <ol style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8;">
+                                                <li>Atidarykite valdymo skydo nuorodą: <a href="${loginUrl}" style="color: #000000; font-weight: bold; text-decoration: underline;">${loginUrl}</a></li>
+                                                <li>Prisijungimo lange spustelėkite mygtuką <strong>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</strong>.</li>
+                                                <li>Įveskite savo el. paštą <code>${email}</code> ir paspauskite „Siųsti“.</li>
+                                                <li>Gausite patvirtinimo el. laišką, per kurį susikursite savo slaptažodį.</li>
                                             </ol>
                                         </div>
-                                        <div style="text-align: center; margin-top: 25px;">
-                                            <a href="${loginUrl}" style="display: inline-block; background: #113939; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Atidaryti Valdymo Skydą</a>
+
+                                        <div style="text-align: center; margin: 25px 0;">
+                                            <a href="${loginUrl}" style="display: inline-block; background: #000000; color: #ffffff; padding: 12px 28px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Atidaryti Valdymo Skydą</a>
                                         </div>
                                     </div>
-                                    <div style="border-top: 1px solid #eee; margin-top: 30px; padding-top: 15px; font-size: 12px; color: #888; text-align: center;">
-                                        © 2026 DP.PORTFOLIO. Dominik Šuškevič.
+                                    <div style="border-top: 1px solid #333333; margin-top: 25px; padding-top: 15px; font-size: 11px; color: #666666; text-align: center;">
+                                        Šis laiškas išsiųstas iš automatinės sistemos (support@dominikphotofficial.lt). Į šį laišką neatsakykite (NO-REPLY). Visi klausimai – info@dominikphotofficial.lt.
                                     </div>
                                 </div>
                             `
@@ -5339,9 +5646,12 @@ Kaip prisijungti:
                     console.warn("Mail queue invite error:", mailErr);
                 }
 
-                alert(`✓ Komandos narys „${name}“ sėkmingai pridėtas!
-Slaptažodžio nustatymo nuoroda ir kvietimas išsiųsti į el. paštą: ${email}.
-Narys galės susikurti savo slaptažodį ir prisijungti.`);
+                // 3. Fiksuojame veiksmą audit žurnale
+                logAdminAction('member_invite', `Pakviestas naujas komandos narys: ${name} (${email}) su role: ${role}`, { email, name, role, memberId: docRef.id });
+
+                alert(`✓ Komandos narys „${name}“ sėkmingai pakviestas!
+Pakvietimo laiškas su aiškia instrukcija išsiųstas į: ${email}.
+Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
 
                 closeTeamMemberModal();
             } catch(e) {
@@ -5349,7 +5659,7 @@ Narys galės susikurti savo slaptažodį ir prisijungti.`);
                 alert("Klaida pridedant narį: " + (e.message || e));
             } finally {
                 btn.disabled = false;
-                btn.innerText = 'Išsaugoti ir Siųsti Slaptažodžio Nuorodą';
+                btn.innerText = 'Išsaugoti ir Siųsti Pakvietimą';
             }
         });
 
@@ -6213,11 +6523,95 @@ Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis s�
             showToast("✨ AI padėjėjas paruošė atsakymą!");
         }
 
+        // Vykdyti AI asistento dokumento atnaujinimo veiksmą
+        window.applyAiDocumentUpdates = (docType, updates) => {
+            if (!updates) return;
+            activeDocType = docType || activeDocType || 'contract';
+            activeDocCustomData = Object.assign(activeDocCustomData || {}, updates);
+            
+            // Atnaujiname ir aktyvios formos arba atminties užsakymą, jei yra sutampantis ID
+            if (activeDocCustomData.id && activeDocCustomData.id !== 'manual') {
+                const item = (window._adminCache?.services || []).find(o => o.id === activeDocCustomData.id);
+                if (item) Object.assign(item, updates);
+            }
+            
+            openDocumentPrintModal(activeDocType, activeDocCustomData);
+            logAdminAction('ai_action', `AI asistentas atliko tiesioginį ${activeDocType === 'contract' ? 'sutarties' : 'sąskaitos'} duomenų atnaujinimą`, {
+                docType: activeDocType,
+                updates
+            });
+            showToast(`✓ AI asistentas sėkmingai atnaujino ${activeDocType === 'contract' ? 'sutarties' : 'sąskaitos'} duomenis!`, "success");
+        };
+
+        // Vykdyti AI asistento išlaidų įtraukimą į VMI žurnalą
+        window.applyAiVmiExpense = async (expense) => {
+            if (!expense) return;
+            const newExp = {
+                title: expense.title || 'Veiklos išlaida',
+                amount: parseFloat(expense.amount) || 0,
+                category: expense.category || 'Kuras / Transportas',
+                date: expense.date || new Date().toISOString().split('T')[0],
+                invoiceNumber: expense.invoiceNumber || ('ČEK-' + Math.floor(100 + Math.random() * 900)),
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "vmi_expenses"), newExp);
+                logAdminAction('vmi_update', `AI asistentas įtraukė išlaidą į VMI žurnalą: ${newExp.title} (${newExp.amount.toFixed(2)} €)`, newExp);
+                showToast(`✓ AI asistentas sėkmingai įtraukė išlaidą „${newExp.title}“ (${newExp.amount.toFixed(2)} €) į VMI žurnalą!`, "success");
+                if (typeof calculateVmiSummary === 'function') calculateVmiSummary();
+            } catch(err) {
+                console.warn("VMI expense add error, falling back locally:", err);
+                if (!window.customVmiExpenses) window.customVmiExpenses = [];
+                window.customVmiExpenses.push(newExp);
+                logAdminAction('vmi_update', `AI asistentas įtraukė išlaidą (lokaliai): ${newExp.title}`, newExp);
+                showToast(`✓ Išlaida „${newExp.title}“ įtraukta į VMI registrą!`, "success");
+                if (typeof calculateVmiSummary === 'function') calculateVmiSummary();
+            }
+        };
+
         // Prijungti interaktyvius veiksmų mygtukus prie AI atsakymo
         function attachAiMessageActionButtons(botMsgEl, text) {
             const actionsWrap = document.createElement('div');
             actionsWrap.className = 'ai-msg-actions';
             
+            // Tikriname, ar AI pateikė tiesioginio veiksmo JSON bloką (sutarčių redagavimui ar VMI išlaidoms)
+            const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) {
+                try {
+                    const actionObj = JSON.parse(jsonMatch[1]);
+                    if (actionObj.system_action === 'update_document' && actionObj.updates) {
+                        const execBtn = document.createElement('button');
+                        execBtn.type = 'button';
+                        execBtn.className = 'ai-msg-act-btn';
+                        execBtn.style.background = '#113939';
+                        execBtn.style.color = '#ffffff';
+                        execBtn.style.fontWeight = 'bold';
+                        execBtn.style.padding = '8px 14px';
+                        execBtn.innerText = `⚡ Tiesiogiai atnaujinti ${actionObj.docType === 'contract' ? 'sutartį' : 'sąskaitą'}`;
+                        execBtn.onclick = () => {
+                            applyAiDocumentUpdates(actionObj.docType, actionObj.updates);
+                        };
+                        actionsWrap.appendChild(execBtn);
+                    } else if (actionObj.system_action === 'add_vmi_expense' && actionObj.expense) {
+                        const addExpBtn = document.createElement('button');
+                        addExpBtn.type = 'button';
+                        addExpBtn.className = 'ai-msg-act-btn';
+                        addExpBtn.style.background = '#2E7D32';
+                        addExpBtn.style.color = '#ffffff';
+                        addExpBtn.style.fontWeight = 'bold';
+                        addExpBtn.style.padding = '8px 14px';
+                        addExpBtn.innerText = `📥 Įtraukti išlaidą į VMI žurnalą (${actionObj.expense.amount || ''} €)`;
+                        addExpBtn.onclick = () => {
+                            applyAiVmiExpense(actionObj.expense);
+                        };
+                        actionsWrap.appendChild(addExpBtn);
+                    }
+                } catch(e) {
+                    // Not a json action
+                }
+            }
+
             const copyBtn = document.createElement('button');
             copyBtn.type = 'button';
             copyBtn.className = 'ai-msg-act-btn';
@@ -6245,7 +6639,7 @@ Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis s�
             }
 
             // Sutarties mygtukas
-            if (lower.includes('sutart') || lower.includes('autorin') || lower.includes('dalykas') || lower.includes('fotografavim')) {
+            if (lower.includes('sutart') || lower.includes('autorin') || lower.includes('dalykas') || lower.includes('fotografavim') || lower.includes('tfp')) {
                 const printContractBtn = document.createElement('button');
                 printContractBtn.type = 'button';
                 printContractBtn.className = 'ai-msg-act-btn';
@@ -6318,6 +6712,86 @@ Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais bei išrašytomis s�
             const method = ctx.atskaitymoMetodas || '30% pajamų prezumpcija be kvitų';
 
             const lower = (message || '').toLowerCase();
+
+            // 0. Tiesioginis sutarčių ir sąskaitų duomenų pakeitimas / redagavimas
+            if (lower.includes('pakeisk') || lower.includes('redaguok') || lower.includes('atnaujink') || lower.includes('įrašyk') || lower.includes('pataisyk') || lower.includes('nustatyk')) {
+                const isInvoice = lower.includes('sąskait') || lower.includes('kvit') || lower.includes('faktūr') || lower.includes('sf');
+                const docType = isInvoice ? 'invoice' : 'contract';
+                const updates = {};
+
+                const nameMatch = message.match(/(?:vard[ąa]|klient[ąa]|užsakov[ąa])\s+(?:į\s+)?([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+\s+[A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+)/i);
+                if (nameMatch) updates.clientName = nameMatch[1].trim();
+
+                const priceMatch = message.match(/(?:kain[ąa]|sum[ąa]|vert[ęe])\s+(?:į\s+)?(\d+(?:[.,]\d+)?)/i);
+                if (priceMatch) updates.finalPrice = parseFloat(priceMatch[1].replace(',', '.'));
+
+                const depMatch = message.match(/(?:avans[ąa])\s+(?:į\s+)?(\d+(?:[.,]\d+)?)/i);
+                if (depMatch) updates.depositAmount = parseFloat(depMatch[1].replace(',', '.'));
+
+                const dateMatch = message.match(/(?:dat[ąa]|dien[ąa])\s+(?:į\s+)?(\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}[-/.]\d{1,2}[-/.]\d{4})/i);
+                if (dateMatch) updates.preferredDate = dateMatch[1];
+
+                const locMatch = message.match(/(?:viet[ąa]|lokacij[ąa]|miest[ąa])\s+(?:į\s+)?([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+(?:\s+[A-ZĄČĘĖĮŠŲŪŽa-ząčęėįšųūž]+)?)/i);
+                if (locMatch && !locMatch[1].toLowerCase().includes('sutart') && !locMatch[1].toLowerCase().includes('kain')) {
+                    updates.location = locMatch[1].trim();
+                }
+
+                if (Object.keys(updates).length === 0) {
+                    updates.clientName = "Klientas (atnaujinta)";
+                }
+
+                const updatesFormatted = Object.entries(updates)
+                    .map(([k, v]) => `- **${k === 'clientName' ? 'Kliento vardas' : (k === 'finalPrice' ? 'Kaina' : (k === 'depositAmount' ? 'Avansas' : (k === 'preferredDate' ? 'Data' : (k === 'location' ? 'Vieta' : k))))}:** ${v}${typeof v === 'number' ? ' €' : ''}`)
+                    .join('\n');
+
+                return `### ⚡ DOKUMENTO DUOMENŲ ATNAUJINIMAS
+Atlikau Jūsų nurodytus pakeitimus **${docType === 'contract' ? 'Fotografavimo sutartyje' : 'Sąskaitoje-faktūroje'}**:
+
+${updatesFormatted}
+
+Visi duomenys paruošti perkėlimui į oficialų A4 šabloną. Spustelėkite mygtuką **„⚡ Tiesiogiai atnaujinti ${docType === 'contract' ? 'sutartį' : 'sąskaitą'}“** žemiau, kad pamatytumėte atnaujintą dokumentą!
+
+\`\`\`json
+{
+  "system_action": "update_document",
+  "docType": "${docType}",
+  "updates": ${JSON.stringify(updates, null, 2)}
+}
+\`\`\``;
+            }
+
+            // 0.5. Išlaidų įtraukimas į VMI žurnalą pagal administratoriaus nurodymą
+            if ((lower.includes('įtrauk') || lower.includes('pridėk') || lower.includes('registruok')) && (lower.includes('išlaid') || lower.includes('kur') || lower.includes('ček') || lower.includes('sf') || lower.includes('eur'))) {
+                const amountMatch = message.match(/(\d+(?:[.,]\d+)?)\s*(?:€|eur)/i) || message.match(/(?:išlaid[ąa]|sum[ąa]|kain[ąa])\s+(\d+(?:[.,]\d+)?)/i);
+                const amount = amountMatch ? parseFloat(amountMatch[1].replace(',', '.')) : 45.00;
+                const title = lower.includes('kur') ? 'Kuras vykimui į fotosesijas' : (lower.includes('studij') ? 'Fotostudijos nuoma' : 'Fotografijos veiklos išlaida');
+                const cat = lower.includes('kur') ? 'Kuras / Transportas' : (lower.includes('studij') ? 'Studijos nuoma' : 'Kita / Įranga');
+                const checkMatch = message.match(/(?:čekis|kvitas|sf|sąskaita)\s+([A-Z0-9_-]+)/i);
+                const checkNr = checkMatch ? checkMatch[1] : 'ČEK-' + Math.floor(100 + Math.random() * 900);
+
+                return `### 📥 VMI IŠLAIDOS REGISTRAVIMAS
+Užregistruoju Jūsų nurodytą išlaidą į **VMI Pajamų ir Išlaidų Apskaitos Žurnalą (EVRK 74.20)**:
+- **Išlaidos pavadinimas:** ${title}
+- **Suma:** **${amount.toFixed(2)} €**
+- **Kategorija:** ${cat}
+- **Dokumentas / Čekio Nr.:** ${checkNr}
+- **Data:** ${new Date().toLocaleDateString('lt-LT')}
+
+Spustelėkite mygtuką **„📥 Įtraukti išlaidą į VMI žurnalą“** žemiau, kad ši suma automatiškai atsirastų apskaitos lentelėje!
+
+\`\`\`json
+{
+  "system_action": "add_vmi_expense",
+  "expense": {
+    "title": "${title}",
+    "amount": ${amount},
+    "category": "${cat}",
+    "date": "${new Date().toISOString().split('T')[0]}",
+    "invoiceNumber": "${checkNr}"
+  }
+}
+\`\`\``;
+            }
 
             // 1. Testinis VMI failas + Kvitas / Sutartis viename
             if ((lower.includes('vmi') || lower.includes('sheet') || lower.includes('fail') || lower.includes('spausdin') || lower.includes('atspausdin')) && (lower.includes('kvit') || lower.includes('sutart') || lower.includes('paruošt') || lower.includes('modifik') || lower.includes('redag'))) {
@@ -6759,17 +7233,24 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                 // Pašaliname redagavimo atributus klone
                 clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
 
+                // Ištaisyta PDF generavimo / nuskaitymo klaida:
+                // Vietoje left: -9999px (kuris iškraipydavo html2canvas nuskaitymą ir rodydavo tik mažą dalį),
+                // dedame į nematoma sluoksnį z-index: -9999 prie (0, 0) koordinačių su fiksuotu A4 pločiu
                 const wrapper = document.createElement('div');
                 wrapper.style.position = 'fixed';
-                wrapper.style.left = '-9999px';
+                wrapper.style.left = '0';
                 wrapper.style.top = '0';
                 wrapper.style.width = '794px';
                 wrapper.style.background = '#ffffff';
+                wrapper.style.zIndex = '-9999';
+                wrapper.style.pointerEvents = 'none';
+                wrapper.style.overflow = 'visible';
+                wrapper.style.visibility = 'visible';
                 wrapper.appendChild(clone);
                 document.body.appendChild(wrapper);
 
                 const opt = {
-                    margin: 0,
+                    margin: [6, 6, 6, 6],
                     filename: docName,
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
@@ -6782,11 +7263,12 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                         scrollX: 0
                     },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['css', 'legacy'] }
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
                 };
 
                 window.html2pdf().set(opt).from(clone).save().then(() => {
                     showToast("✓ PDF dokumentas sėkmingai sugeneruotas ir atsisiųstas!", "success");
+                    logAdminAction('pdf_download', `Atsisiųstas A4 PDF: ${docName}`, { docType: activeDocType, docName });
                     if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
                     if (wasEditing && paperWrap) paperWrap.classList.add('editable-mode');
                 }).catch((err) => {
@@ -6796,6 +7278,109 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                 });
             } else {
                 window.triggerDocumentPrint();
+            }
+        };
+
+        // Automatiškai sugeneruoti PDF ir prisegti prie el. laiško siuntimo formos
+        window.attachAndEmailCurrentPdf = async () => {
+            const container = document.getElementById('print-document-container');
+            if (!container) return;
+
+            let docName = 'Dokumentas-DP-2026.pdf';
+            if (activeDocType === 'invoice') docName = 'Saskaita-Faktura-DP-2026.pdf';
+            else if (activeDocType === 'contract') docName = 'Fotografavimo-Sutartis-DP-2026.pdf';
+            else if (activeDocType === 'vmi_journal') docName = 'VMI-Pajamu-Zurnalas-2026.pdf';
+
+            showToast("⏳ Ruošiamas PDF priedas el. laiškui...");
+
+            if (typeof window.html2pdf === 'undefined') {
+                showToast("PDF generatorius neprieinamas. Prašome naudoti spausdinimo funkciją.", "error");
+                return;
+            }
+
+            const clone = container.cloneNode(true);
+            clone.classList.remove('editable-mode');
+            clone.style.width = '794px';
+            clone.style.maxWidth = '794px';
+            clone.style.minHeight = activeDocType === 'vmi_journal' ? 'auto' : '1080px';
+            clone.style.boxShadow = 'none';
+            clone.style.border = 'none';
+            clone.style.background = '#ffffff';
+            clone.style.color = '#000000';
+            clone.style.boxSizing = 'border-box';
+            clone.style.margin = '0 auto';
+            clone.style.padding = '22px 28px';
+            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'fixed';
+            wrapper.style.left = '0';
+            wrapper.style.top = '0';
+            wrapper.style.width = '794px';
+            wrapper.style.background = '#ffffff';
+            wrapper.style.zIndex = '-9999';
+            wrapper.style.pointerEvents = 'none';
+            wrapper.style.overflow = 'visible';
+            wrapper.style.visibility = 'visible';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
+            const opt = {
+                margin: [6, 6, 6, 6],
+                filename: docName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false, width: 794, windowWidth: 794, scrollY: 0, scrollX: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            try {
+                const pdfDataUri = await window.html2pdf().set(opt).from(clone).outputPdf('datauristring');
+                if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+
+                const rawBase64 = pdfDataUri.includes(',') ? pdfDataUri.split(',')[1] : pdfDataUri;
+
+                window.currentAttachedPdf = {
+                    filename: docName,
+                    base64: rawBase64,
+                    dataUri: pdfDataUri
+                };
+
+                const previewBadge = document.getElementById('modal-attached-preview-badge');
+                const filenameDisplay = document.getElementById('attached-pdf-filename-display');
+                if (previewBadge) previewBadge.style.display = 'block';
+                if (filenameDisplay) filenameDisplay.innerText = docName;
+
+                closeDocumentPrintModal();
+
+                if (activeDocCustomData && (activeDocCustomData.clientEmail || activeDocCustomData.email)) {
+                    const clientMail = activeDocCustomData.clientEmail || activeDocCustomData.email;
+                    const clientName = activeDocCustomData.clientName || activeDocCustomData.name || 'Klientas';
+                    
+                    if (typeof openEmailModal === 'function') {
+                        openEmailModal({
+                            id: activeDocCustomData.id || 'manual',
+                            collection: 'services_requests',
+                            email: clientMail,
+                            name: clientName,
+                            lang: activeDocCustomData.language || 'lt',
+                            newStatus: activeDocCustomData.status || 'Confirmed',
+                            newDate: activeDocCustomData.preferredDate || new Date().toISOString().split('T')[0],
+                            newLoc: activeDocCustomData.location || 'Kaunas',
+                            boxHtml: `
+                                <div style="background:#f9f9f9; padding:15px; border:1px solid #000; margin:15px 0;">
+                                    <strong>Prisegtas dokumentas:</strong> ${docName}<br>
+                                    <span style="font-size:12px; color:#555;">Dokumentas sugeneruotas A4 formatu ir automatiškai prisegtas prie šio laiško kaip PDF priedas.</span>
+                                </div>
+                            `
+                        });
+                    }
+                }
+
+                showToast(`✓ PDF dokumentas (${docName}) sėkmingai sugeneruotas ir prisegtas prie el. laiško priedų!`, "success");
+            } catch(e) {
+                console.error("attachAndEmailCurrentPdf error:", e);
+                if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+                showToast("Klaida prisegant PDF: " + e.message, "error");
             }
         };
 
@@ -6991,71 +7576,78 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
 
             const tableHtml = rowsToRender.map((r, i) => `
                 <tr>
-                    <td style="text-align: center; border: 1px solid #333; padding: 6px;">${i + 1}</td>
-                    <td style="text-align: center; border: 1px solid #333; padding: 6px;">${r.date}</td>
-                    <td style="text-align: center; border: 1px solid #333; padding: 6px;"><code style="font-size: 8.5pt;">${r.doc}</code></td>
-                    <td style="border: 1px solid #333; padding: 6px;">${r.desc}</td>
-                    <td style="text-align: right; border: 1px solid #333; padding: 6px; font-weight: bold; color: ${r.income > 0 ? '#1b5e20' : '#888'};">
+                    <td style="text-align: center; border: 1px solid #000000; padding: 6px;">${i + 1}</td>
+                    <td style="text-align: center; border: 1px solid #000000; padding: 6px;">${r.date}</td>
+                    <td style="text-align: center; border: 1px solid #000000; padding: 6px;"><code style="font-size: 8.5pt; font-family: monospace;">${r.doc}</code></td>
+                    <td style="border: 1px solid #000000; padding: 6px;">${r.desc}</td>
+                    <td style="text-align: right; border: 1px solid #000000; padding: 6px; font-weight: bold;">
                         ${r.income > 0 ? '+' + r.income.toFixed(2) + ' €' : '-'}
                     </td>
-                    <td style="text-align: right; border: 1px solid #333; padding: 6px; color: ${r.expense > 0 ? '#b71c1c' : '#888'};">
+                    <td style="text-align: right; border: 1px solid #000000; padding: 6px;">
                         ${r.expense > 0 ? '-' + r.expense.toFixed(2) + ' €' : '-'}
                     </td>
-                    <td style="text-align: center; border: 1px solid #333; padding: 6px; font-size: 8.5pt; color: #555;">${r.method}</td>
+                    <td style="text-align: center; border: 1px solid #000000; padding: 6px; font-size: 8.5pt;">${r.method}</td>
                 </tr>
             `).join('');
 
             container.innerHTML = `
-                <div class="vmi-journal-doc" style="font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 9.5pt; line-height: 1.5;">
-                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #113939; padding-bottom: 12px;">
-                        <div style="font-size: 8.5pt; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;">
-                            Lietuvos Respublikos Finansų ministro patvirtinta forma (EVRK 74.20)
+                <div class="vmi-journal-doc" style="font-family: Arial, Helvetica, sans-serif; color: #000000; font-size: 9.5pt; line-height: 1.45; background: #ffffff;">
+                    <!-- Vieningas B&W Antraštės Šablonas -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000000; padding-bottom: 10px; margin-bottom: 14px;">
+                        <div>
+                            <h1 style="margin: 0; font-size: 18pt; letter-spacing: 2px; color: #000000; text-transform: uppercase; font-weight: bold;">
+                                DP.PORTFOLIO
+                            </h1>
+                            <div style="font-size: 8pt; color: #333333; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 3px;">
+                                Dominik Šuškevič Fotografija &bull; EVRK 74.20
+                            </div>
                         </div>
-                        <h2 style="font-size: 14pt; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px; color: #113939;">
-                            Individualios Veiklos Pajamų ir Išlaidų Apskaitos Žurnalas
-                        </h2>
-                        <div style="font-size: 9.5pt; line-height: 1.5; color: #222;">
-                            <strong>Veiklos vykdytojas:</strong> Dominik Šuškevič &bull; 
-                            <strong>Veiklos kodas:</strong> EVRK 74.20 (Fotografavimo veikla)<br>
-                            <strong>Apskaitos laikotarpis:</strong> 2026 m. (Visi metai) &bull; 
-                            <strong>Veiklos vykdymo vieta:</strong> Kaunas / Vilnius / Visa Lietuva
+                        <div style="text-align: right;">
+                            <h2 style="margin: 0 0 3px 0; font-size: 11pt; text-transform: uppercase; letter-spacing: 0.8px; color: #000000;">
+                                Individualios Veiklos Pajamų ir Išlaidų Žurnalas
+                            </h2>
+                            <div style="font-size: 8.5pt; color: #333333;">
+                                Laikotarpis: <strong>2026 m. (Visi metai)</strong> &bull; Spausdinimo data: <strong>${new Date().toLocaleDateString('lt-LT')}</strong>
+                            </div>
                         </div>
                     </div>
 
-                    <div style="font-size: 8.5pt; color: #444; margin-bottom: 14px; background: #fafbfb; border: 1px solid #d5dbdb; padding: 8px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                        <span><strong>Taikomas apskaitos metodas:</strong> 30% pajamų prezumpcija (LR GPMĮ 18 str. 12 d.) su faktiškai registruojamomis ūkinėmis operacijomis.</span>
-                        <span>Spausdinimo data: <strong>${new Date().toLocaleDateString('lt-LT')}</strong></span>
+                    <!-- Rekvizitai (B&W) -->
+                    <div style="border: 1px solid #000000; padding: 8px 12px; margin-bottom: 14px; font-size: 8.5pt; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: #ffffff;">
+                        <div><strong>Veiklos vykdytojas:</strong> Dominik Šuškevič &bull; <strong>Veiklos kodas:</strong> EVRK 74.20 (Fotografavimo veikla) &bull; <strong>Vieta:</strong> Kaunas / Vilnius</div>
+                        <div><strong>Metodas:</strong> 30% prezumpcija pagal LR GPMĮ 18 str. 12 d.</div>
                     </div>
 
-                    <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 18px;">
+                    <!-- Lentelė -->
+                    <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 16px;">
                         <thead>
-                            <tr style="background: #eef2f2; text-align: center;">
-                                <th style="width: 30px; border: 1px solid #333; padding: 6px;">Nr.</th>
-                                <th style="width: 75px; border: 1px solid #333; padding: 6px;">Data</th>
-                                <th style="width: 95px; border: 1px solid #333; padding: 6px;">Dokumento Nr.</th>
-                                <th style="border: 1px solid #333; padding: 6px; text-align: left;">Ūkinės operacijos turinys (Klientas / Paslauga / Išlaida)</th>
-                                <th style="width: 85px; border: 1px solid #333; padding: 6px; text-align: right;">Pajamos (€)</th>
-                                <th style="width: 85px; border: 1px solid #333; padding: 6px; text-align: right;">Išlaidos (€)</th>
-                                <th style="width: 110px; border: 1px solid #333; padding: 6px;">Atsiskaitymo būdas</th>
+                            <tr style="background: #f0f0f0; text-align: center; color: #000000;">
+                                <th style="width: 30px; border: 1px solid #000000; padding: 6px;">Nr.</th>
+                                <th style="width: 80px; border: 1px solid #000000; padding: 6px;">Data</th>
+                                <th style="width: 95px; border: 1px solid #000000; padding: 6px;">Dokumento Nr.</th>
+                                <th style="border: 1px solid #000000; padding: 6px; text-align: left;">Ūkinės operacijos turinys (Klientas / Paslauga / Išlaida)</th>
+                                <th style="width: 85px; border: 1px solid #000000; padding: 6px; text-align: right;">Pajamos (€)</th>
+                                <th style="width: 85px; border: 1px solid #000000; padding: 6px; text-align: right;">Išlaidos (€)</th>
+                                <th style="width: 110px; border: 1px solid #000000; padding: 6px;">Atsiskaitymo būdas</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${tableHtml}
                         </tbody>
                         <tfoot>
-                            <tr style="background: #eef2f2; font-weight: bold; border-top: 2px solid #113939;">
-                                <td colspan="4" style="border: 1px solid #333; padding: 8px; text-align: right;">BENDRA SUMA IŠ VISO:</td>
-                                <td style="border: 1px solid #333; padding: 8px; text-align: right; color: #1b5e20;">+${totalIncome.toFixed(2)} €</td>
-                                <td style="border: 1px solid #333; padding: 8px; text-align: right; color: #b71c1c;">-${totalExpenses.toFixed(2)} €</td>
-                                <td style="border: 1px solid #333; padding: 8px; text-align: center;">${rowsToRender.length} įrašų</td>
+                            <tr style="background: #f0f0f0; font-weight: bold; border-top: 2px solid #000000; color: #000000;">
+                                <td colspan="4" style="border: 1px solid #000000; padding: 8px; text-align: right;">BENDRA SUMA IŠ VISO:</td>
+                                <td style="border: 1px solid #000000; padding: 8px; text-align: right;">+${totalIncome.toFixed(2)} €</td>
+                                <td style="border: 1px solid #000000; padding: 8px; text-align: right;">-${totalExpenses.toFixed(2)} €</td>
+                                <td style="border: 1px solid #000000; padding: 8px; text-align: center;">${rowsToRender.length} įrašų</td>
                             </tr>
                         </tfoot>
                     </table>
 
-                    <!-- Suvestinė ir Mokesčių Skaičiavimas -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; font-size: 8.5pt;">
-                        <div style="border: 1px solid #333; padding: 10px 12px; background: #fafafa;">
-                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase; color: #113939;">
+                    <!-- Suvestinė B&W -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; font-size: 8.5pt;">
+                        <div style="border: 1px solid #000000; padding: 10px 12px; background: #ffffff;">
+                            <div style="font-weight: bold; border-bottom: 1px solid #000000; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase;">
                                 1. Pajamos ir Leidžiami Atskaitymai
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
@@ -7064,20 +7656,20 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
                                 <span>Leidžiami atskaitymai (30% prezumpcija):</span>
-                                <span style="color:#b71c1c;">-${deductions30.toFixed(2)} €</span>
+                                <strong>-${deductions30.toFixed(2)} €</strong>
                             </div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px; color: #666; font-size: 8pt;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px; color: #555555; font-size: 8pt;">
                                 <span>(Faktinės įrodytos išlaidos su kvitais:</span>
                                 <span>${totalExpenses.toFixed(2)} €)</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #aaa; padding-top: 4px; margin-top: 4px; font-weight: bold;">
+                            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #000000; padding-top: 4px; margin-top: 4px; font-weight: bold;">
                                 <span>Apmokestinamosios pajamos:</span>
                                 <span>${taxable.toFixed(2)} €</span>
                             </div>
                         </div>
 
-                        <div style="border: 1px solid #333; padding: 10px 12px; background: #fafafa;">
-                            <div style="font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase; color: #113939;">
+                        <div style="border: 1px solid #000000; padding: 10px 12px; background: #ffffff;">
+                            <div style="font-weight: bold; border-bottom: 1px solid #000000; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase;">
                                 2. Priskaičiuoti Mokesčiai (VMI + Sodra)
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
@@ -7092,40 +7684,40 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                                 <span>Sodros VSD (12,52% nuo 90% bazės):</span>
                                 <span>${vsd.toFixed(2)} €</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #aaa; padding-top: 4px; margin-top: 4px; font-weight: bold; color: #b71c1c;">
+                            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #000000; padding-top: 4px; margin-top: 4px; font-weight: bold;">
                                 <span>Mokesčiai iš viso:</span>
                                 <span>${taxesTotal.toFixed(2)} €</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 4px; margin-top: 4px; font-weight: bold; color: #113939; font-size: 9pt;">
+                            <div style="display: flex; justify-content: space-between; border-top: 1px solid #000000; padding-top: 4px; margin-top: 4px; font-weight: bold; font-size: 9pt;">
                                 <span>Grynasis pelnas („į rankas“):</span>
                                 <span>${netProfit.toFixed(2)} €</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Deklaracijos paaiškinimas -->
-                    <div style="font-size: 8pt; color: #444; line-height: 1.45; border: 1px solid #bbb; padding: 8px 12px; margin-bottom: 24px; background: #fff;">
-                        <strong>VMI Deklaracijos (GPM308) pastaba:</strong> Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais, kvitais ir sąskaitomis-faktūromis. Veiklos vykdytojas pasirenka taikyti 30 proc. atskaitymų prezumpciją be atskiro pirkimo dokumentų kaupimo pagal LR GPMĮ 18 str. 12 dalį.
+                    <!-- Deklaracijos pastaba -->
+                    <div style="font-size: 8pt; color: #333333; line-height: 1.4; border: 1px solid #000000; padding: 8px 12px; margin-bottom: 20px; background: #ffffff;">
+                        <strong>VMI Deklaracijos pastaba:</strong> Visi apskaitos žurnalo įrašai pagrįsti banko pavedimais, kvitais ir sąskaitomis-faktūromis. Taikoma 30 proc. atskaitymų prezumpcija pagal LR GPMĮ 18 str. 12 dalį.
                     </div>
 
-                    <!-- Parašai -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 25px; padding: 0 10px; font-size: 9pt;">
+                    <!-- Parašai B&W -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; padding: 0 10px; font-size: 8.5pt;">
                         <div>
                             <div>Veiklos vykdytojas: <strong>Dominik Šuškevič</strong></div>
-                            <div style="margin-top: 25px; border-bottom: 1px solid #000; width: 220px;"></div>
-                            <div style="font-size: 8pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
+                            <div style="margin-top: 22px; border-bottom: 1px solid #000000; width: 220px;"></div>
+                            <div style="font-size: 7.5pt; color: #555555; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                         <div>
                             <div>Data: <strong>${new Date().toLocaleDateString('lt-LT')}</strong></div>
-                            <div style="margin-top: 25px; border-bottom: 1px solid #000; width: 180px;"></div>
-                            <div style="font-size: 8pt; color: #666; text-align: center; margin-top: 2px;">(vieta: Kaunas)</div>
+                            <div style="margin-top: 22px; border-bottom: 1px solid #000000; width: 180px;"></div>
+                            <div style="font-size: 7.5pt; color: #555555; text-align: center; margin-top: 2px;">(vieta: Kaunas)</div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        // 2. RENDER SĄSKAITA-FAKTŪRA / KVITAS (A4 - TIKSLIAI 1 LAPAS)
+        // 2. RENDER SĄSKAITA-FAKTŪRA / KVITAS (VIENINGAS JUODAI-BALTAS B&W A4 STANDARTAS)
         function renderInvoiceDoc(container, customData) {
             const data = customData || {};
             const clientName = data.clientName || 'Karolina V.';
@@ -7141,34 +7733,34 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             const seriesNr = '2026-' + (data.id ? data.id.slice(0, 4).toUpperCase() : '001');
 
             container.innerHTML = `
-                <div class="single-page-doc" style="font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 8.5pt; line-height: 1.4; max-width: 100%; box-sizing: border-box;">
-                    <!-- Antraštė -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2.5px solid #113939; padding-bottom: 10px; margin-bottom: 12px;">
+                <div class="single-page-doc" style="font-family: Arial, Helvetica, sans-serif; color: #000000; font-size: 8.5pt; line-height: 1.4; max-width: 100%; box-sizing: border-box; background: #ffffff;">
+                    <!-- Vieningas B&W Antraštės Šablonas -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000000; padding-bottom: 10px; margin-bottom: 12px;">
                         <div>
-                            <h1 style="margin: 0; font-family: 'Times New Roman', serif; font-size: 19pt; letter-spacing: 2px; color: #113939; text-transform: uppercase;">
+                            <h1 style="margin: 0; font-size: 18pt; letter-spacing: 2px; color: #000000; text-transform: uppercase; font-weight: bold;">
                                 DP.PORTFOLIO
                             </h1>
-                            <div style="font-size: 8pt; color: #666; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 2px;">
-                                Fotografija & Videografija &bull; Dominik Šuškevič
+                            <div style="font-size: 8pt; color: #333333; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 3px;">
+                                Dominik Šuškevič Fotografija &bull; EVRK 74.20
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <h2 style="margin: 0 0 2px 0; font-size: 12pt; text-transform: uppercase; letter-spacing: 0.8px; color: #113939;">
+                            <h2 style="margin: 0 0 2px 0; font-size: 11pt; text-transform: uppercase; letter-spacing: 0.8px; color: #000000;">
                                 SĄSKAITA-FAKTŪRA / KVITAS
                             </h2>
-                            <div style="font-size: 10pt; font-weight: bold; color: #1b5e20;">
+                            <div style="font-size: 9.5pt; font-weight: bold; color: #000000;">
                                 Serija DP Nr. ${seriesNr}
                             </div>
-                            <div style="font-size: 8.5pt; color: #555; margin-top: 2px;">
-                                Išrašymo data: <strong>${invoiceDate}</strong> &bull; Būdas: <strong>Pavedimas / Grynieji</strong>
+                            <div style="font-size: 8pt; color: #333333; margin-top: 2px;">
+                                Išrašymo data: <strong>${invoiceDate}</strong> &bull; Būdas: <strong>Bankinis pavedimas</strong>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Rekvizitai -->
+                    <!-- Rekvizitai (B&W 2-column) -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; font-size: 8.5pt;">
-                        <div style="background: #fafbfb; border: 1px solid #d5dbdb; padding: 8px 10px; border-radius: 4px; line-height: 1.4;">
-                            <div style="font-weight: bold; color: #113939; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.5px; margin-bottom: 4px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">
+                        <div style="background: #ffffff; border: 1px solid #000000; padding: 8px 10px; line-height: 1.4;">
+                            <div style="font-weight: bold; color: #000000; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.5px; margin-bottom: 4px; border-bottom: 1px solid #000000; padding-bottom: 3px;">
                                 PASLAUGŲ TEIKĖJAS (FOTOGRAFAS):
                             </div>
                             <div>
@@ -7179,15 +7771,17 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                             </div>
                         </div>
 
-                        <div style="background: #fafbfb; border: 1px solid #d5dbdb; padding: 8px 10px; border-radius: 4px; line-height: 1.4;">
-                            <div style="font-weight: bold; color: #113939; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.5px; margin-bottom: 4px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">
+                        <div style="background: #ffffff; border: 1px solid #000000; padding: 8px 10px; line-height: 1.4;">
+                            <div style="font-weight: bold; color: #000000; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.5px; margin-bottom: 4px; border-bottom: 1px solid #000000; padding-bottom: 3px;">
                                 PIRKĖJAS (UŽSAKOVAS):
                             </div>
                             <div>
                                 <strong>${clientName}</strong><br>
+                                ${data.clientCode ? `Asmens / Įmonės kodas: <strong>${data.clientCode}</strong><br>` : ''}
+                                ${data.clientAddress ? `Adresas: ${data.clientAddress}<br>` : ''}
                                 El. paštas: ${clientEmail}<br>
                                 Telefonas: ${clientPhone}<br>
-                                Miestas / Data: ${clientLocation} &bull; ${serviceDate}
+                                Miestas / Fotosesijos data: ${clientLocation} &bull; ${serviceDate}
                             </div>
                         </div>
                     </div>
@@ -7195,183 +7789,217 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                     <!-- Paslaugų lentelė -->
                     <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 12px;">
                         <thead>
-                            <tr style="background: #eef2f2; text-align: left;">
-                                <th style="width: 30px; text-align: center; border: 1px solid #444; padding: 6px;">Nr.</th>
-                                <th style="border: 1px solid #444; padding: 6px;">Paslaugos pavadinimas ir detalizacija</th>
-                                <th style="width: 50px; text-align: center; border: 1px solid #444; padding: 6px;">Kiekis</th>
-                                <th style="width: 80px; text-align: right; border: 1px solid #444; padding: 6px;">Kaina (€)</th>
-                                <th style="width: 85px; text-align: right; border: 1px solid #444; padding: 6px;">Suma (€)</th>
+                            <tr style="background: #f0f0f0; text-align: left; color: #000000;">
+                                <th style="width: 30px; text-align: center; border: 1px solid #000000; padding: 6px;">Nr.</th>
+                                <th style="border: 1px solid #000000; padding: 6px;">Paslaugos pavadinimas ir detalizacija</th>
+                                <th style="width: 50px; text-align: center; border: 1px solid #000000; padding: 6px;">Kiekis</th>
+                                <th style="width: 80px; text-align: right; border: 1px solid #000000; padding: 6px;">Kaina (€)</th>
+                                <th style="width: 85px; text-align: right; border: 1px solid #000000; padding: 6px;">Suma (€)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px solid #444; padding: 7px; text-align: center;">1</td>
-                                <td style="border: 1px solid #444; padding: 7px;">
+                                <td style="border: 1px solid #000000; padding: 7px; text-align: center;">1</td>
+                                <td style="border: 1px solid #000000; padding: 7px;">
                                     <strong>${serviceName}</strong><br>
-                                    <span style="font-size: 8pt; color: #555;">
+                                    <span style="font-size: 8pt; color: #444444;">
                                         Fotosesijos data: ${serviceDate} &bull; Lokacija: ${clientLocation}<br>
                                         Paketas: autorinis retušas, didelės raiškos nuotraukos privačioje internetinėje „Wfolio“ galerijoje.
                                     </span>
                                 </td>
-                                <td style="border: 1px solid #444; padding: 7px; text-align: center;">1 vnt.</td>
-                                <td style="border: 1px solid #444; padding: 7px; text-align: right;"><span id="inv-item-price">${finalPrice.toFixed(2)} €</span></td>
-                                <td style="border: 1px solid #444; padding: 7px; text-align: right; font-weight: bold;"><span id="inv-item-total">${finalPrice.toFixed(2)} €</span></td>
+                                <td style="border: 1px solid #000000; padding: 7px; text-align: center;">1 vnt.</td>
+                                <td style="border: 1px solid #000000; padding: 7px; text-align: right;"><span id="inv-item-price">${finalPrice.toFixed(2)} €</span></td>
+                                <td style="border: 1px solid #000000; padding: 7px; text-align: right; font-weight: bold;"><span id="inv-item-total">${finalPrice.toFixed(2)} €</span></td>
                             </tr>
                             ${depositAmount > 0 ? `
                             <tr style="background: #fafafa;">
-                                <td style="border: 1px solid #444; padding: 6px; text-align: center;">2</td>
-                                <td style="border: 1px solid #444; padding: 6px; color: #555;">
+                                <td style="border: 1px solid #000000; padding: 6px; text-align: center;">2</td>
+                                <td style="border: 1px solid #000000; padding: 6px; color: #444444;">
                                     <em>Gautas išankstinis apmokėjimas (avansas datos rezervacijai)</em>
                                 </td>
-                                <td style="border: 1px solid #444; padding: 6px; text-align: center;">1 vnt.</td>
-                                <td style="border: 1px solid #444; padding: 6px; text-align: right; color: #1b5e20;">-<span id="inv-deposit-sub">${depositAmount.toFixed(2)} €</span></td>
-                                <td style="border: 1px solid #444; padding: 6px; text-align: right; color: #1b5e20;">-<span id="inv-deposit-val">${depositAmount.toFixed(2)} €</span></td>
+                                <td style="border: 1px solid #000000; padding: 6px; text-align: center;">1 vnt.</td>
+                                <td style="border: 1px solid #000000; padding: 6px; text-align: right;">-<span id="inv-deposit-sub">${depositAmount.toFixed(2)} €</span></td>
+                                <td style="border: 1px solid #000000; padding: 6px; text-align: right; font-weight: bold;">-<span id="inv-deposit-val">${depositAmount.toFixed(2)} €</span></td>
                             </tr>
                             ` : ''}
                         </tbody>
                         <tfoot>
-                            <tr style="background: #fafafa; font-weight: bold;">
-                                <td colspan="4" style="border: 1px solid #444; padding: 6px 8px; text-align: right;">Bendra paslaugų vertė:</td>
-                                <td style="border: 1px solid #444; padding: 6px 8px; text-align: right;"><span id="inv-total-val">${finalPrice.toFixed(2)} €</span></td>
+                            <tr style="background: #ffffff; font-weight: bold;">
+                                <td colspan="4" style="border: 1px solid #000000; padding: 6px 8px; text-align: right;">Bendra paslaugų vertė:</td>
+                                <td style="border: 1px solid #000000; padding: 6px 8px; text-align: right;"><span id="inv-total-val">${finalPrice.toFixed(2)} €</span></td>
                             </tr>
                             ${depositAmount > 0 ? `
-                            <tr style="background: #fafafa;">
-                                <td colspan="4" style="border: 1px solid #444; padding: 5px 8px; text-align: right; color: #1b5e20;">Sumokėtas avansas:</td>
-                                <td style="border: 1px solid #444; padding: 5px 8px; text-align: right; color: #1b5e20;">-<span id="inv-deposit-summary">${depositAmount.toFixed(2)} €</span></td>
+                            <tr style="background: #ffffff;">
+                                <td colspan="4" style="border: 1px solid #000000; padding: 5px 8px; text-align: right;">Sumokėtas avansas:</td>
+                                <td style="border: 1px solid #000000; padding: 5px 8px; text-align: right;">-<span id="inv-deposit-summary">${depositAmount.toFixed(2)} €</span></td>
                             </tr>
                             ` : ''}
-                            <tr style="background: #eef2f2; font-size: 9.5pt; font-weight: bold;">
-                                <td colspan="4" style="border: 1px solid #444; padding: 7px 8px; text-align: right; color: #113939;">MOKĖTINA GALUTINĖ SUMA:</td>
-                                <td style="border: 1px solid #444; padding: 7px 8px; text-align: right; color: #113939;"><span id="inv-remaining-val">${remainingAmount.toFixed(2)} €</span></td>
+                            <tr style="background: #f0f0f0; font-size: 9.5pt; font-weight: bold; border-top: 2px solid #000000;">
+                                <td colspan="4" style="border: 1px solid #000000; padding: 7px 8px; text-align: right; color: #000000;">MOKĖTINA GALUTINĖ SUMA:</td>
+                                <td style="border: 1px solid #000000; padding: 7px 8px; text-align: right; color: #000000;"><span id="inv-remaining-val">${remainingAmount.toFixed(2)} €</span></td>
                             </tr>
                         </tfoot>
                     </table>
 
                     <div style="font-size: 8.2pt; margin-bottom: 16px; line-height: 1.45;">
                         <div><strong>Suma žodžiais:</strong> <span id="inv-words-val">${numberToLithuanianWords(remainingAmount > 0 ? remainingAmount : finalPrice)}</span></div>
-                        <div style="color: #666; font-size: 8pt; margin-top: 2px;">
+                        <div style="color: #444444; font-size: 8pt; margin-top: 2px;">
                             PVM netaikomas pagal Lietuvos Respublikos PVM įstatymo 71 straipsnio nuostatas (Ne PVM mokėtojas).
                         </div>
-                        <div style="color: #333; font-size: 8pt; margin-top: 2px;">
+                        <div style="color: #000000; font-size: 8pt; margin-top: 2px;">
                             Mokėjimo paskirtis banko pavedimui: <strong>Sąskaita DP-${seriesNr}, ${clientName}</strong>
                         </div>
                     </div>
 
-                    <!-- Parašai -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; padding: 0 8px; font-size: 8.5pt;">
+                    <!-- Parašai B&W -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 22px; padding: 0 8px; font-size: 8.5pt;">
                         <div>
                             <div>Sąskaitą išrašė: <strong>Dominik Šuškevič</strong></div>
-                            <div style="margin-top: 22px; border-bottom: 1px solid #000; width: 200px;"></div>
-                            <div style="font-size: 7.5pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
+                            <div style="margin-top: 22px; border-bottom: 1px solid #000000; width: 200px;"></div>
+                            <div style="font-size: 7.5pt; color: #555555; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                         <div>
                             <div>Sąskaitą gavo (Pirkėjas): <strong>${clientName}</strong></div>
-                            <div style="margin-top: 22px; border-bottom: 1px solid #000; width: 200px;"></div>
-                            <div style="font-size: 7.5pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
+                            <div style="margin-top: 22px; border-bottom: 1px solid #000000; width: 200px;"></div>
+                            <div style="font-size: 7.5pt; color: #555555; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        // 3. RENDER FOTOGRAFAVIMO SUTARTIS (A4 - TIKSLIAI 1 LAPAS)
+        // 3. RENDER FOTOGRAFAVIMO SUTARTIS (VIENINGAS JUODAI-BALTAS B&W A4 STANDARTAS: STANDARTINĖ ARBA TFP MODEL RELEASE)
         function renderContractDoc(container, customData) {
             const data = customData || {};
-            const clientName = data.clientName || 'Karolina V.';
-            const clientEmail = data.clientEmail || 'klientas@pavyzdys.lt';
-            const clientPhone = data.clientPhone || '+370 600 12345';
+            const isTfp = data.isTfp === true || (data.serviceName && data.serviceName.toLowerCase().includes('tfp')) || !!data.idea;
+            const clientName = data.clientName || (isTfp ? 'Modelis' : 'Karolina V.');
+            const clientEmail = data.clientEmail || data.email || 'klientas@pavyzdys.lt';
+            const clientPhone = data.clientPhone || data.phone || '+370 600 12345';
+            const clientCode = data.clientCode || '';
+            const clientAddress = data.clientAddress || '';
             const clientLocation = data.location || 'Kaunas, Lietuva';
-            const serviceName = data.serviceName || 'Individuali / Portretinė fotosesija';
-            const finalPrice = Number(data.finalPrice) || 150.00;
-            const depositAmount = Number(data.depositAmount) || 75.00;
+            const serviceName = data.serviceName || (isTfp ? 'TFP Fotosesija / Model Release' : 'Individuali / Portretinė fotosesija');
+            const finalPrice = isTfp ? 0 : (Number(data.finalPrice) || 150.00);
+            const depositAmount = isTfp ? 0 : (Number(data.depositAmount) || 75.00);
             const remainingAmount = Math.max(0, finalPrice - depositAmount);
-            const serviceDate = data.preferredDate || new Date().toISOString().split('T')[0];
-            const contractNr = (data.id ? data.id.slice(0, 4).toUpperCase() : '01');
+            const serviceDate = data.preferredDate || data.date_time || new Date().toISOString().split('T')[0];
+            const contractNr = (data.id ? data.id.slice(0, 4).toUpperCase() : (isTfp ? 'TFP-01' : '01'));
+            const ideaText = data.idea ? `<br>&bull; <strong>Suderinta vizija / idėja:</strong> ${data.idea}` : '';
 
             container.innerHTML = `
-                <div class="single-page-doc" style="font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 8pt; line-height: 1.36; max-width: 100%; box-sizing: border-box;">
-                    <div style="text-align: center; border-bottom: 2px solid #113939; padding-bottom: 8px; margin-bottom: 10px;">
-                        <h2 style="font-size: 11.5pt; margin: 0 0 3px 0; text-transform: uppercase; letter-spacing: 0.8px; color: #113939;">
-                            Fotografavimo Paslaugų Teikimo ir Autorinė Sutartis
-                        </h2>
-                        <div style="font-size: 8pt; font-weight: bold; color: #555;">
-                            Sutarties Nr. DP-2026/${contractNr} &bull; Data: ${new Date().toLocaleDateString('lt-LT')} &bull; Vieta: Kaunas / Vilnius
+                <div class="single-page-doc" style="font-family: Arial, Helvetica, sans-serif; color: #000000; font-size: 8pt; line-height: 1.36; max-width: 100%; box-sizing: border-box; background: #ffffff;">
+                    <!-- Vieningas B&W Antraštės Šablonas -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 10px;">
+                        <div>
+                            <h1 style="margin: 0; font-size: 17pt; letter-spacing: 2px; color: #000000; text-transform: uppercase; font-weight: bold;">
+                                DP.PORTFOLIO
+                            </h1>
+                            <div style="font-size: 7.5pt; color: #333333; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 2px;">
+                                Dominik Šuškevič Fotografija &bull; EVRK 74.20
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <h2 style="margin: 0 0 2px 0; font-size: 10.5pt; text-transform: uppercase; letter-spacing: 0.8px; color: #000000;">
+                                ${isTfp ? 'TFP Fotografavimo ir Model Release Sutartis' : 'Fotografavimo Paslaugų ir Autorinė Sutartis'}
+                            </h2>
+                            <div style="font-size: 8pt; font-weight: bold; color: #000000;">
+                                Sutarties Nr. DP-${isTfp ? 'TFP-' : ''}2026/${contractNr} &bull; Data: ${new Date().toLocaleDateString('lt-LT')}
+                            </div>
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 8px; text-align: justify; line-height: 1.35;">
-                        <strong>Dominik Šuškevič</strong>, vykdantis individualią fotografavimo veiklą pagal pažymą (EVRK 74.20), el. p. dominikphotofficial.lt@gmail.com, banko sąskaita LT867300010171188764 (toliau – <strong>Fotografas</strong>), ir <strong>${clientName}</strong>, el. p. ${clientEmail}, tel. ${clientPhone}, gyv. ${clientLocation} (toliau – <strong>Užsakovas</strong>), kartu vadinami <strong>Šalimis</strong>, sudarė šią Sutartį:
+                    <div style="margin-bottom: 8px; text-align: justify; line-height: 1.35; font-size: 7.8pt;">
+                        <strong>Dominik Šuškevič</strong>, vykdantis individualią fotografavimo veiklą pagal pažymą (EVRK 74.20), el. p. dominikphotofficial.lt@gmail.com, banko sąskaita LT867300010171188764 (toliau – <strong>Fotografas</strong>), ir <strong>${clientName}</strong>${clientCode ? `, a.k./kodas: ${clientCode}` : ''}${clientAddress ? `, gyv. ${clientAddress}` : (clientLocation ? `, gyv. ${clientLocation}` : '')}, el. p. ${clientEmail}, tel. ${clientPhone} (toliau – <strong>${isTfp ? 'Modelis' : 'Užsakovas'}</strong>), kartu vadinami <strong>Šalimis</strong>, sudarė šią Sutartį:
                     </div>
 
-                    <div style="margin-bottom: 7px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">1. SUTARTIES DALYKAS</strong>
+                    <div style="margin-bottom: 6px;">
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.8pt;">1. SUTARTIES DALYKAS</strong>
                         <div style="margin-top: 2px; padding-left: 8px;">
+                            ${isTfp ? `
+                            1.1. Šalys susitaria dėl autorinės TFP (Time For Print / Mainai) fotosesijos abipusiam profesinio portfolio tobulinimui.<br>
+                            &bull; <strong>Formatas:</strong> ${serviceName} &bull; <strong>Numatyta data:</strong> ${serviceDate} &bull; <strong>Lokacija:</strong> ${clientLocation}
+                            ${ideaText}<br>
+                            &bull; <strong>Rezultatas:</strong> Ne mažiau kaip 25 autorinės retušuotos didelės raiškos nuotraukos privačioje internetinėje „Wfolio“ galerijoje.
+                            ` : `
                             1.1. Fotografas įsipareigoja pagal Užsakovo pageidavimus suteikti profesionalias fotografavimo paslaugas:<br>
                             &bull; <strong>Tipas:</strong> ${serviceName} &bull; <strong>Data:</strong> ${serviceDate} &bull; <strong>Lokacija:</strong> ${clientLocation}<br>
                             &bull; <strong>Rezultatas:</strong> Ne mažiau kaip 25 autorinės retušuotos didelės raiškos nuotraukos privačioje internetinėje „Wfolio“ galerijoje.
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 7px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">2. KAINA IR ATSISKAITYMO SĄLYGOS</strong>
-                        <div style="margin-top: 2px; padding-left: 8px;">
-                            2.1. Bendra fotosesijos kaina – <strong><span id="ctr-price-val">${finalPrice.toFixed(2)} €</span></strong> (<span id="ctr-words-val">${numberToLithuanianWords(finalPrice)}</span>).<br>
-                            2.2. Sutarties sudarymo metu Užsakovas sumoka <strong><span id="ctr-deposit-val">${depositAmount.toFixed(2)} €</span></strong> avansą į sąskaitą \`LT867300010171188764\` datos rezervacijai fiksuoti.<br>
-                            2.3. Likusi sumos dalis (<strong><span id="ctr-remaining-val">${remainingAmount.toFixed(2)} €</span></strong>) sumokama fotosesijos dieną arba prieš galutinių nuotraukų atidavimą.
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 7px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">3. NUOTRAUKŲ ATIDAVIMO TERMINAI</strong>
-                        <div style="margin-top: 2px; padding-left: 8px;">
-                            3.1. Fotografas paruošia ir perduoda retušuotas nuotraukas per <strong>7–14 darbo dienų</strong> nuo fotosesijos dienos.<br>
-                            3.2. Užsakovas gauna privačią nuorodą į „Wfolio“ galeriją (saugoma 6 mėn.). Neapdoroti „RAW“ failai nėra perduodami.
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 7px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">4. AUTORINĖS TEISĖS IR PRIVATUMAS</strong>
-                        <div style="margin-top: 2px; padding-left: 8px;">
-                            4.1. Turtinės ir neturtinės autorinės teisės į sukurtas fotografijas priklauso Fotografui pagal LR Autorių teisių ir gretutinių teisių įstatymą.<br>
-                            4.2. Užsakovas įgyja teisę naudoti nuotraukas asmeniniais nekomerciniais tikslais (spausdinimui, asmeniniams socialiniams tinklams).<br>
-                            4.3. Užsakovas patvirtina sutikimą, kad atrinktos nuotraukos būtų publikuojamos Fotografo profesiniame portfolio (@dominikphotofficial).
+                            `}
                         </div>
                     </div>
 
                     <div style="margin-bottom: 6px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">5. NENUGALIMA JĖGA IR DATOS KEITIMAS</strong>
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.8pt;">2. ${isTfp ? 'SĄLYGOS IR KŪRYBINIAI MAINAI (TFP)' : 'KAINA IR ATSISKAITYMO SĄLYGOS'}</strong>
+                        <div style="margin-top: 2px; padding-left: 8px;">
+                            ${isTfp ? `
+                            2.1. Ši sutartis vykdoma <strong>TFP (Time For Print) principu</strong> – piniginis atlygis nėra mokamas (0,00 €). Abi Šalys investuoja savo laiką, įgūdžius ir kūrybą.<br>
+                            2.2. Už atliktą modelio darbą Fotografas neatlygintinai perduoda Modeliui skaitmenines nuotraukas, o Modelis suteikia Fotografui teisę naudoti nuotraukas reprezentaciniais tikslais.<br>
+                            2.3. Modelis įsipareigoja atvykti į fotosesiją laiku, pasirengęs suderintą aprangą bei įvaizdį.
+                            ` : `
+                            2.1. Bendra fotosesijos kaina – <strong><span id="ctr-price-val">${finalPrice.toFixed(2)} €</span></strong> (<span id="ctr-words-val">${numberToLithuanianWords(finalPrice)}</span>).<br>
+                            2.2. Sutarties sudarymo metu Užsakovas sumoka <strong><span id="ctr-deposit-val">${depositAmount.toFixed(2)} €</span></strong> avansą į sąskaitą \`LT867300010171188764\` datos rezervacijai fiksuoti.<br>
+                            2.3. Likusi sumos dalis (<strong><span id="ctr-remaining-val">${remainingAmount.toFixed(2)} €</span></strong>) sumokama fotosesijos dieną arba prieš galutinių nuotraukų atidavimą.
+                            `}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 6px;">
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.8pt;">3. NUOTRAUKŲ ATIDAVIMO TERMINAI</strong>
+                        <div style="margin-top: 2px; padding-left: 8px;">
+                            3.1. Fotografas paruošia ir perduoda retušuotas nuotraukas per <strong>7–14 darbo dienų</strong> nuo fotosesijos dienos.<br>
+                            3.2. ${isTfp ? 'Modelis' : 'Užsakovas'} gauna privačią nuorodą į „Wfolio“ galeriją (saugoma 6 mėn.). Neapdoroti „RAW“ failai nėra perduodami.
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 6px;">
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.8pt;">4. ${isTfp ? 'MODEL RELEASE & AUTORINĖS TEISĖS' : 'AUTORINĖS TEISĖS IR PRIVATUMAS'}</strong>
+                        <div style="margin-top: 2px; padding-left: 8px;">
+                            ${isTfp ? `
+                            4.1. Modelis suteikia Fotografui neatšaukiamą teisę naudoti sukurtas nuotraukas Fotografo profesiniame portfolio, interneto svetainėje, parodose bei socialiniuose tinkluose (@dominikphotofficial).<br>
+                            4.2. Modelis turi teisę naudoti nuotraukas savo asmeniniam portfolio ir socialiniams tinklams, pažymėdamas autorių: <em>Foto: @dominikphotofficial</em>.<br>
+                            4.3. Nuotraukų perleidimas tretiesiems komerciniams asmenims be raštiško Fotografo sutikimo yra draudžiamas.
+                            ` : `
+                            4.1. Turtinės ir neturtinės autorinės teisės į sukurtas fotografijas priklauso Fotografui pagal LR Autorių teisių ir gretutinių teisių įstatymą.<br>
+                            4.2. Užsakovas įgyja teisę naudoti nuotraukas asmeniniais nekomerciniais tikslais (spausdinimui, asmeniniams socialiniams tinklams).<br>
+                            4.3. Užsakovas patvirtina sutikimą, kad atrinktos nuotraukos būtų publikuojamos Fotografo profesiniame portfolio (@dominikphotofficial).
+                            `}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 6px;">
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.8pt;">5. NENUGALIMA JĖGA IR DATOS KEITIMAS</strong>
                         <div style="margin-top: 2px; padding-left: 8px;">
                             5.1. Dėl blogų oro sąlygų ar ligos fotosesijos data gali būti vieną kartą nemokamai perkelta į kitą abiem Šalims tinkamą datą.
                         </div>
                     </div>
 
                     <!-- Tėvų sutikimas -->
-                    <div style="margin-bottom: 7px; background: #fafbfb; border: 1px solid #d5dbdb; padding: 5px 8px; border-radius: 3px;">
-                        <strong style="color: #113939; text-transform: uppercase; font-size: 7.8pt;">6. TĖVŲ SUTIKIMAS</strong>
-                        <div style="margin-top: 2px; font-size: 7.4pt; line-height: 1.35; color: #222;">
-                            Fotografas Dominik Šuškevič yra nepilnametis ir individualią veiklą vykdo turėdamas savo mamos Dianos Ruolytės sutikimą. Diana Ruolytė sutinka, kad Dominik Šuškevič sudarytų šią paslaugų teikimo sutartį ir pagal ją teiktų fotografavimo / videografijos paslaugas.<br>
-                            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 7.4pt;">
+                    <div style="margin-bottom: 6px; background: #ffffff; border: 1px solid #000000; padding: 5px 8px;">
+                        <strong style="color: #000000; text-transform: uppercase; font-size: 7.6pt;">6. TĖVŲ SUTIKIMAS</strong>
+                        <div style="margin-top: 2px; font-size: 7.3pt; line-height: 1.3; color: #000000;">
+                            Fotografas Dominik Šuškevič yra nepilnametis ir individualią veiklą vykdo turėdamas savo mamos Dianos Ruolytės sutikimą. Diana Ruolytė sutinka, kad Dominik Šuškevič sudarytų šią sutartį ir pagal ją teiktų fotografavimo paslaugas.<br>
+                            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 7.3pt;">
                                 <span>Diana Ruolytė: ________________________</span>
                                 <span>Data: ________________________</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Parašai -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; padding: 0 8px; border-top: 1px solid #ccc; padding-top: 6px;">
+                    <!-- Parašai B&W -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 6px; padding: 0 8px; border-top: 1px solid #000000; padding-top: 6px;">
                         <div>
-                            <div>FOTOGRAFAS:</div>
-                            <div style="margin-top: 2px; font-weight: bold;">Dominik Šuškevič (DP.PORTFOLIO)</div>
-                            <div style="font-size: 7.5pt; color: #555;">Individuali veikla EVRK 74.20</div>
-                            <div style="margin-top: 15px; border-bottom: 1px solid #000; width: 190px;"></div>
-                            <div style="font-size: 7.2pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
+                            <div style="font-size: 7.5pt; font-weight: bold;">FOTOGRAFAS:</div>
+                            <div style="margin-top: 1px; font-weight: bold; font-size: 7.8pt;">Dominik Šuškevič (DP.PORTFOLIO)</div>
+                            <div style="font-size: 7.2pt; color: #444444;">Individuali veikla EVRK 74.20</div>
+                            <div style="margin-top: 14px; border-bottom: 1px solid #000000; width: 190px;"></div>
+                            <div style="font-size: 7pt; color: #555555; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                         <div>
-                            <div>UŽSAKOVAS:</div>
-                            <div style="margin-top: 2px; font-weight: bold;">${clientName}</div>
-                            <div style="font-size: 7.5pt; color: #555;">${clientPhone} &bull; ${clientEmail}</div>
-                            <div style="margin-top: 15px; border-bottom: 1px solid #000; width: 190px;"></div>
-                            <div style="font-size: 7.2pt; color: #666; text-align: center; margin-top: 2px;">(parašas)</div>
+                            <div style="font-size: 7.5pt; font-weight: bold;">${isTfp ? 'MODELIS:' : 'UŽSAKOVAS:'}</div>
+                            <div style="margin-top: 1px; font-weight: bold; font-size: 7.8pt;">${clientName}</div>
+                            <div style="font-size: 7.2pt; color: #444444;">${clientPhone} &bull; ${clientEmail}</div>
+                            <div style="margin-top: 14px; border-bottom: 1px solid #000000; width: 190px;"></div>
+                            <div style="font-size: 7pt; color: #555555; text-align: center; margin-top: 2px;">(parašas)</div>
                         </div>
                     </div>
                 </div>
@@ -7398,6 +8026,140 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             }
             openDocumentPrintModal('contract', item);
             showToast(`📜 Paruošta sutartis klientui: ${item.clientName || 'Klientas'}`);
+        };
+
+        // TFP Užklausos pagrindu generuojama TFP sutartis (Model Release)
+        window.generateContractForTfp = (tfpId) => {
+            const item = (window._adminCache?.tfp || []).find(r => r.id === tfpId);
+            if (!item) {
+                showToast("TFP užklausa nerasta", "error");
+                return;
+            }
+            const tfpContractData = {
+                id: item.id,
+                isTfp: true,
+                clientName: item.name || 'Modelis',
+                clientEmail: item.email || '',
+                clientPhone: item.phone || '',
+                socialProfile: item.instagram || '',
+                serviceName: 'TFP Fotosesija / Model Release',
+                preferredDate: item.date_time || new Date().toISOString().split('T')[0],
+                location: item.location || 'Kaunas / Vilnius',
+                idea: item.idea || 'Autorinė fotosesija portfolio plėtrai',
+                extra_info: item.extra_info || '',
+                finalPrice: 0.00,
+                depositAmount: 0.00,
+                remainingAmount: 0.00
+            };
+            openDocumentPrintModal('contract', tfpContractData);
+            showToast(`📜 Paruošta TFP sutartis (Model Release): ${item.name || 'Modelis'}`);
+        };
+
+        // Sugeneruoti ir tiesiogiai prisegti PDF prie atidaryto el. laiško modal lango
+        window.attachGeneratedPdfToCurrentEmail = async (docType = 'invoice') => {
+            if (!pendingEmailData) {
+                showToast("Pirmiausia atidarykite el. laiško langą", "error");
+                return;
+            }
+
+            let docData = null;
+            if (pendingEmailData.collection === 'tfp_requests') {
+                const item = (window._adminCache?.tfp || []).find(r => r.id === pendingEmailData.id);
+                docData = {
+                    id: pendingEmailData.id,
+                    isTfp: true,
+                    clientName: item?.name || 'Modelis',
+                    clientEmail: pendingEmailData.email || item?.email || '',
+                    clientPhone: item?.phone || '',
+                    socialProfile: item?.instagram || '',
+                    serviceName: 'TFP Fotosesija / Model Release',
+                    preferredDate: pendingEmailData.newDate || item?.date_time || new Date().toISOString().split('T')[0],
+                    location: pendingEmailData.newLoc || item?.location || 'Kaunas / Vilnius',
+                    idea: item?.idea || '',
+                    extra_info: item?.extra_info || '',
+                    finalPrice: 0.00,
+                    depositAmount: 0.00,
+                    remainingAmount: 0.00
+                };
+            } else {
+                const item = (window._adminCache?.services || []).find(r => r.id === pendingEmailData.id);
+                docData = item ? { ...item } : {
+                    id: pendingEmailData.id,
+                    clientName: 'Klientas',
+                    clientEmail: pendingEmailData.email,
+                    preferredDate: pendingEmailData.newDate,
+                    location: pendingEmailData.newLoc,
+                    serviceName: 'Individuali fotosesija',
+                    finalPrice: 150,
+                    depositAmount: 75
+                };
+            }
+
+            let docName = docType === 'contract' 
+                ? (docData.isTfp ? 'TFP-Sutartis-Model-Release-DP.pdf' : 'Fotografavimo-Sutartis-DP-2026.pdf') 
+                : 'Saskaita-Faktura-DP-2026.pdf';
+
+            showToast(`⏳ Generuojamas ${docName} priedas...`);
+
+            if (typeof window.html2pdf === 'undefined') {
+                showToast("PDF generatorius neprieinamas. Prašome naudoti spausdinimą.", "error");
+                return;
+            }
+
+            const tempContainer = document.createElement('div');
+            tempContainer.style.width = '794px';
+            tempContainer.style.maxWidth = '794px';
+            tempContainer.style.background = '#ffffff';
+            tempContainer.style.color = '#000000';
+            tempContainer.style.padding = '22px 28px';
+
+            if (docType === 'contract') {
+                renderContractDoc(tempContainer, docData);
+            } else {
+                renderInvoiceDoc(tempContainer, docData);
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'fixed';
+            wrapper.style.left = '0';
+            wrapper.style.top = '0';
+            wrapper.style.width = '794px';
+            wrapper.style.background = '#ffffff';
+            wrapper.style.zIndex = '-9999';
+            wrapper.style.pointerEvents = 'none';
+            wrapper.style.overflow = 'visible';
+            wrapper.appendChild(tempContainer);
+            document.body.appendChild(wrapper);
+
+            const opt = {
+                margin: [6, 6, 6, 6],
+                filename: docName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false, width: 794, windowWidth: 794, scrollY: 0, scrollX: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            try {
+                const pdfDataUri = await window.html2pdf().set(opt).from(tempContainer).outputPdf('datauristring');
+                if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+
+                const rawBase64 = pdfDataUri.includes(',') ? pdfDataUri.split(',')[1] : pdfDataUri;
+                window.currentAttachedPdf = {
+                    filename: docName,
+                    base64: rawBase64,
+                    dataUri: pdfDataUri
+                };
+
+                const previewBadge = document.getElementById('modal-attached-preview-badge');
+                const filenameDisplay = document.getElementById('attached-pdf-filename-display');
+                if (previewBadge) previewBadge.style.display = 'block';
+                if (filenameDisplay) filenameDisplay.innerText = docName;
+                showToast(`✓ PDF failas (${docName}) sėkmingai sugeneruotas ir prisegtas kaip el. laiško priedas!`, "success");
+            } catch(e) {
+                console.error("attachGeneratedPdfToCurrentEmail error:", e);
+                if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
+                showToast("Klaida generuojant PDF priedą: " + (e.message || e), "error");
+            }
         };
 
         // Atsisiųsti oficialų testinį VMI pajamų žurnalo failą Excel (.csv su UTF-8 BOM)

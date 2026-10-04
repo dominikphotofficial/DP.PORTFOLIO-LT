@@ -118,6 +118,20 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["title", "amount", "date"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "Registry of administrative actions, edits, status updates and system activity",
+      "type": "object",
+      "properties": {
+        "userEmail": { "type": "string", "maxLength": 120 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "actionType": { "type": "string", "maxLength": 60 },
+        "description": { "type": "string", "maxLength": 500 },
+        "details": { "type": "object" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actionType", "description"]
     }
   },
   "firestore": {
@@ -148,6 +162,10 @@
     "/vmi_expenses/{expenseId}": {
       "schema": "VmiExpense",
       "description": "Documented tax expenses for individual activity accounting"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Chronological audit trail of user actions and administrative changes"
     }
   }
 }

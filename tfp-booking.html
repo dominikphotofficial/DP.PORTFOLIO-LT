@@ -652,6 +652,25 @@
                             <textarea id="tfp-extra" name="extra_info" class="form-control" rows="2" placeholder="Pinterest lenta, Instagram nuoroda ar kiti pastebėjimai..."></textarea>
                         </div>
 
+                        <!-- TFP Sutartis & Model Release Sutikimas -->
+                        <div class="tfp-contract-card" style="margin: 20px 0 25px 0; background: #fafbfb; border: 1px solid #d5dbdb; border-radius: 8px; padding: 18px 20px; font-size: 0.9rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                <div style="font-weight: 700; color: #113939; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                    <span>📜</span> Oficiali TFP Sutartis & Model Release
+                                </div>
+                                <button type="button" onclick="window.openTfpContractTermsModal()" style="background: none; border: 1px solid #113939; color: #113939; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">
+                                    Peržiūrėti Sąlygas &rarr;
+                                </button>
+                            </div>
+                            <p style="margin: 0 0 12px 0; color: #555; font-size: 0.84rem; line-height: 1.5;">
+                                TFP (Time For Print) bendradarbiavimas vykdomas abipusiu kūrybiniu pagrindu: modelis gauna profesionaliai retušuotas didelės raiškos nuotraukas (Wfolio privačioje galerijoje per 7–14 d.d.), o fotografas įgyja teisę naudoti nuotraukas savo profesiniame portfolio.
+                            </p>
+                            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; color: #222; font-size: 0.86rem; line-height: 1.45; font-weight: 500;">
+                                <input type="checkbox" id="tfp-contract-agree" name="contract_agreed" required style="margin-top: 3px; accent-color: #113939; width: 18px; height: 18px; cursor: pointer;">
+                                <span>Patvirtinu, kad perskaičiau ir <strong>sutinku su oficialia TFP sutartimi</strong>, autorinių teisių ir Model Release sąlygomis. *</span>
+                            </label>
+                        </div>
+
                         <button type="submit" id="submit-btn" class="submit-tfp-btn">
                             <span>Siųsti Registraciją</span>
                         </button>
@@ -950,6 +969,7 @@
                     location: document.getElementById('tfp-location').value.trim(),
                     idea: document.getElementById('tfp-idea').value.trim(),
                     extra_info: document.getElementById('tfp-extra').value.trim(),
+                    contractAgreed: document.getElementById('tfp-contract-agree')?.checked || false,
                     reference_photos: uploadedUrls,
                     language: lang,
                     status: 'New',
@@ -963,10 +983,10 @@
                     await addDoc(collection(db, "mail"), {
                         to: requestData.email,
                         from: "info@dominikphotofficial.lt",
-                        replyTo: "support@dominikphotofficial.lt",
+                        replyTo: "info@dominikphotofficial.lt",
                         message: { 
                             from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
-                            replyTo: "support@dominikphotofficial.lt",
+                            replyTo: "info@dominikphotofficial.lt",
                             subject: emailData.subject, 
                             html: emailData.html 
                         },
@@ -1009,6 +1029,63 @@
                 alert("Nepavyko pateikti registracijos: " + (error.message || error));
             }
         });
+
+        // TFP Sutarties Modal Valdymas
+        window.openTfpContractTermsModal = () => {
+            const m = document.getElementById('tfp-terms-modal');
+            if (m) m.style.display = 'flex';
+        };
+
+        window.closeTfpContractTermsModal = () => {
+            const m = document.getElementById('tfp-terms-modal');
+            if (m) m.style.display = 'none';
+        };
+    </script>
+
+    <!-- Modal: TFP Sutartis & Model Release -->
+    <div id="tfp-terms-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
+        <div style="background: #ffffff; width: 100%; max-width: 680px; max-height: 85vh; border-radius: 8px; overflow-y: auto; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; color: #111; line-height: 1.5; font-size: 13.5px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #113939; padding-bottom: 12px; margin-bottom: 16px;">
+                <h3 style="margin: 0; color: #113939; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">
+                    📜 TFP Sutartis & Model Release Sąlygos
+                </h3>
+                <button type="button" onclick="closeTfpContractTermsModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; line-height: 1;">&times;</button>
+            </div>
+            
+            <div style="margin-bottom: 14px; font-size: 12px; color: #555; background: #fafafa; padding: 8px 12px; border-radius: 4px; border: 1px solid #eee;">
+                Fotografas: <strong>Dominik Šuškevič</strong> (DP.PORTFOLIO) &bull; EVRK 74.20 Fotografavimo veikla &bull; Kaunas, Lietuva
+            </div>
+
+            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">1. Sutarties Dalykas ir Sąlygos</h4>
+            <p style="margin: 0 0 10px 0;">
+                TFP (Time for Print) – tai kūrybinis bendradarbiavimas tarp modelio ir fotografo. Abi šalys neatlygintinai skiria savo laiką ir kūrybines pastangas bendram fotosesijos projektui realizuoti.
+            </p>
+
+            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">2. Rezultato Perdavimas</h4>
+            <p style="margin: 0 0 10px 0;">
+                Fotografas įsipareigoja atrinkti, profesionaliai retušuoti ir perduoti modeliui ne mažiau kaip <strong>25 didelės raiškos skaitmenines nuotraukas</strong> privačioje internetinėje „Wfolio“ galerijoje per <strong>7–14 darbo dienų</strong> po fotosesijos. Neapdoroti „RAW“ failai nėra perduodami.
+            </p>
+
+            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">3. Autorinės Teisės ir Nuotraukų Naudojimas (Model Release)</h4>
+            <p style="margin: 0 0 10px 0;">
+                &bull; Turtinės ir neturtinės autorinės teisės į sukurtas fotografijas priklauso fotografui Dominik Šuškevič.<br>
+                &bull; Modelis gauna neterminuotą teisę naudoti nuotraukas asmeniniais nekomerciniais tikslais (asmeniniams socialiniams tinklams, asmeniniam modelio portfolio), žymint fotografą: <strong>@dominikphotofficial</strong>.<br>
+                &bull; Fotografas įgyja teisę publikuoti nuotraukas savo profesiniame portfolio, parodose ir socialiniuose tinkluose.<br>
+                &bull; Nei viena šalis neturi teisės parduoti nuotraukų tretiesiems asmenims ar fotobankams (Stock) be atskiro raštiško susitarimo.
+            </p>
+
+            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">4. Laikas ir Datos Perkėlimas</h4>
+            <p style="margin: 0 0 16px 0;">
+                Dėl nepalankių oro sąlygų ar nenumatytų aplinkybių fotosesijos data suderinama ir perkeliama į kitą abiem pusėms tinkamą dieną be jokių baudų ar atskaitymų.
+            </p>
+
+            <div style="text-align: right; border-top: 1px solid #eee; padding-top: 16px; margin-top: 20px;">
+                <button type="button" onclick="closeTfpContractTermsModal()" style="background: #113939; color: #ffffff; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">
+                    Supratau ir Sutinku
+                </button>
+            </div>
+        </div>
+    </div>
     </script>
 </body>
 </html>

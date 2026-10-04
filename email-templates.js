@@ -673,3 +673,124 @@ export function buildEmail(templateType, lang, data = {}) {
     const html = buildFinalHtml(greeting, text, boxHtml, '', '');
     return { subject, html };
 }
+
+// ==============================================================================
+// 📬 EL. PAŠTO ADRESŲ IR TRANSAKCINĖS LOGIKOS KONFIGŪRACIJA (Pagal reikalavimus)
+// ==============================================================================
+export const EMAIL_CONFIG = {
+    // 1. Transakcinis / Sisteminis el. paštas (NO-REPLY)
+    // Naudojamas tik autentiškumo patvirtinimams: slaptažodžio atstatymui, el. pašto patvirtinimui, pakvietimams.
+    // Reply-To antraštė NETURI būti nukreipta į support@dominikphotofficial.lt.
+    system: {
+        email: "support@dominikphotofficial.lt",
+        from: "DP.PORTFOLIO Sistema <support@dominikphotofficial.lt>",
+        replyTo: "info@dominikphotofficial.lt", // Klientų atsakymai nukreipiami į info@, o support veikia kaip no-reply
+        noReplyNote: "Šis el. laiškas yra išsiųstas automatiškai iš sisteminio adreso (NO-REPLY). Į šį laišką neatsakykite tiesiogiai."
+    },
+    // 2. Pagrindinis / Pagalbos el. paštas
+    // Naudojamas visiems kitiems pranešimams: užsakymų patvirtinimams, sisteminėms užklausoms ir tiesioginiam bendravimui.
+    // Visi klientų atsakymai ir užklausos eina į šią dėžutę.
+    general: {
+        email: "info@dominikphotofficial.lt",
+        from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
+        replyTo: "info@dominikphotofficial.lt"
+    }
+};
+
+// 💌 Naujo komandos nario / administratoriaus pakvietimo laiškas (Onboarding Flow)
+export function buildInvitationEmail({ name, email, role, loginUrl }) {
+    const roleLabels = {
+        superadmin: 'Super Administratorius',
+        manager: 'Vadybininkas / Asistentas',
+        photographer: 'Fotografas / Partneris',
+        accountant: 'Buhalteris'
+    };
+    const roleName = roleLabels[role] || role || 'Komandos narys';
+    const targetUrl = loginUrl || BRAND.websiteUrl + '/admin.html';
+
+    const subject = `Kvietimas prisijungti prie DP.PORTFOLIO komandos sistemos`;
+    const greeting = `Sveiki, ${name}!`;
+    const text = `Džiaugiamės galėdami pranešti, kad Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo.`;
+
+    const boxHtml = `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+            <tr>
+                <td style="padding: 24px;">
+                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Paskyros Duomenys & Suteikta Rolė
+                    </div>
+                    <p style="margin: 0 0 8px 0; font-size: 14px; color: #1A2B2B;">
+                        <strong>Prisijungimo el. paštas:</strong> <code style="background: #eef2f2; padding: 2px 6px; border-radius: 3px; font-weight: bold; color: #113939;">${email}</code><br>
+                        <strong>Suteiktos teisės / Rolė:</strong> <span style="display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; margin-top: 4px;">${roleName}</span>
+                    </p>
+                    <div style="border-top: 1px solid #E8ECEB; padding-top: 16px; margin-top: 16px;">
+                        <strong style="color: #113939; font-size: 14px;">Kaip pirmą kartą susikurti savo slaptažodį:</strong>
+                        <ol style="margin: 10px 0 0 0; padding-left: 20px; font-size: 13.5px; color: #4A5568; line-height: 1.6;">
+                            <li>Spustelėkite žemiau esantį mygtuką <strong>„Atidaryti Valdymo Skydą“</strong> arba atverkite nuorodą savo naršyklėje.</li>
+                            <li>Prisijungimo lange paspauskite mygtuką: <br><em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em>.</li>
+                            <li>Įveskite savo el. paštą <strong>${email}</strong> ir el. paštu gausite nuorodą savo asmeninio slaptažodžio susikūrimui.</li>
+                            <li>Susikūrę slaptažodį galėsite iškart saugiai prisijungti prie DP.PORTFOLIO sistemos.</li>
+                        </ol>
+                    </div>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 24px auto 8px auto;">
+                        <tr>
+                            <td align="center" style="background-color: #113939; border-radius: 4px; box-shadow: 0 4px 15px rgba(17,57,57,0.18);">
+                                <a href="${targetUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                    Atidaryti Valdymo Skydą &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div style="font-size: 12px; color: #718096; line-height: 1.5; background: #EDF2F7; padding: 10px 14px; border-radius: 4px; margin-top: 16px;">
+            ℹ️ ${EMAIL_CONFIG.system.noReplyNote} Kilus klausimams susisiekite su administratoriumi: <a href="mailto:${EMAIL_CONFIG.general.email}" style="color: #113939; font-weight: bold;">${EMAIL_CONFIG.general.email}</a>.
+        </div>
+    `;
+
+    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
+    return { subject, html };
+}
+
+// 🔑 Slaptažodžio priminimo / nustatymo pakartotinis pranešimas
+export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
+    const targetUrl = loginUrl || BRAND.websiteUrl + '/admin.html';
+    const subject = `DP.PORTFOLIO | Slaptažodžio nustatymo instrukcija`;
+    const greeting = `Sveiki, ${name || 'kolega'}!`;
+    const text = `Pagal Jūsų užklausą siunčiame instrukciją, kaip atstatyti arba susikurti savo slaptažodį prisijungimui prie DP.PORTFOLIO valdymo skydo.`;
+
+    const boxHtml = `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+            <tr>
+                <td style="padding: 24px;">
+                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Slaptažodžio Atstatymo Žingsniai
+                    </div>
+                    <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #2D3748; line-height: 1.65;">
+                        <li>Atidarykite prisijungimo puslapį: <a href="${targetUrl}" target="_blank" style="color: #113939; font-weight: bold;">${targetUrl}</a></li>
+                        <li>Spustelėkite mygtuką <em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em></li>
+                        <li>Įrašykite savo autorizuotą el. paštą: <strong>${email}</strong></li>
+                        <li>Patikrinkite savo pašto dėžutę ir paspauskite gautą saugią nuorodą naujam slaptažodžiui įvesti.</li>
+                    </ol>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 22px auto 6px auto;">
+                        <tr>
+                            <td align="center" style="background-color: #113939; border-radius: 4px;">
+                                <a href="${targetUrl}" target="_blank" style="display: inline-block; padding: 13px 30px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                    Eiti į Prisijungimo Langą &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div style="font-size: 12px; color: #718096; line-height: 1.5; background: #EDF2F7; padding: 10px 14px; border-radius: 4px; margin-top: 16px;">
+            ℹ️ ${EMAIL_CONFIG.system.noReplyNote}
+        </div>
+    `;
+
+    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
+    return { subject, html };
+}
+

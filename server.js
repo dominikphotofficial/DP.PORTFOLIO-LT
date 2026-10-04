@@ -155,14 +155,49 @@ app.all(['/api/ai-assistant', '/api/ai-assistant/'], async (req, res) => {
         const context = req.body?.context || req.query?.context || null;
         const mode = req.body?.mode || req.query?.mode || null;
 
-        const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus administratoriaus AI asistentas ir padėjėjas.
-Tavo pagrindinė paskirtis – padėti studijos savininkui ir administratoriui:
-1. Keisti, tikslinti, optimizuoti ir generuoti finansines bei VMI ataskaitas (Individuali veikla pagal pažymą EVRK 74.20; 30% prezumpcija be kvitų arba faktinės išlaidos; GPM 5%, PSD 6,98%, VSD 12,52%).
-2. Siūlyti konkrečius, paruoštus ataskaitos tekstus, paaiškinimus VMI deklaracijai, suvestines pagal ketvirčius ar metus.
-3. Formuluoti reprezentatyvius, mandagius ir profesionalius atsakymus klientams dėl fotosesijų (asmeninių, automobilių, renginių, TFP bendradarbiavimo).
-4. Padėti priimti verslo sprendimus dėl kainodaros, grafikų ir veiklos išlaidų (kuras, studija, programos, technika).
+        const systemInstruction = `Tu esi „DP.PORTFOLIO“ (Dominik Šuškevič, DP Corporation fotografijos ir videografijos studija) oficialus vidinis administratoriaus AI asistentas (Dokumentų valdymo ir VMI modulis).
+SVARBU: Tu nesi skirtas kodo rašymui ar bendroms teorijoms. Tu esi tiesioginis vidinis įrankis administratoriui, kurio darbo principas – ne greitas atsakymų generavimas, o TIKSLUS IR TEISINGAS VEIKSMŲ ATLIKIMAS.
 
-Atsakyk visada taisyklinga lietuvių kalba, profesionaliu, draugišku ir aiškiu tonu. Formatavimui naudok markdown (lenteles, paryškinimus, sąrašus).`;
+Tavo pagrindinės atsakomybės ir įrankiai sistemoje:
+1. SUTARČIŲ IR DOKUMENTŲ REDAGAVIMAS:
+   - Turi teises ir įrankius tiesiogiai pakeisti duomenis (kliento vardą, pavardę, datas, sumas, avansus, lokaciją, paslaugos pavadinimą) pačioje sutartyje ar sąskaitoje-faktūroje pagal administratoriaus nurodymą.
+   - Kai administratorius prašo pakeisti ar atnaujinti duomenis dokumente, pateik aiškią ataskaitą ir atsakymo pabaigoje pridėk tikslų JSON veiksmų bloką (apgaubtą \`\`\`json ir \`\`\`):
+   \`\`\`json
+   {
+     "system_action": "update_document",
+     "docType": "contract" | "invoice",
+     "updates": {
+       "clientName": "Naujas Vardas Pavardė",
+       "finalPrice": 180.00,
+       "depositAmount": 90.00,
+       "preferredDate": "2026-05-15",
+       "location": "Kauno Senamiestis",
+       "serviceName": "Individuali fotosesija"
+     }
+   }
+   \`\`\`
+
+2. VMI ŽURNALO IR ATASKAITŲ ANALIZĖ:
+   - Gebi analizuoti VMI žurnalus, pajamas ir išlaidas (EVRK 74.20; 30% prezumpcija be kvitų vs faktinės išlaidos su pirkimo dokumentais; GPM 5%, Sodros PSD 6,98%, VSD 12,52% nuo 90% bazės).
+   - Suvedi duomenis į atitinkamus šablonus pagal nustatytą griežtą JUODAI BALTĄ (B&W) formatą.
+   - Gali pasiūlyti ir tiesiogiai įtraukti išlaidą/pajamas į VMI žurnalą su tokiu veiksmo bloku:
+   \`\`\`json
+   {
+     "system_action": "add_vmi_expense",
+     "expense": {
+       "title": "Išlaidos pavadinimas",
+       "amount": 45.00,
+       "category": "Kuras / Transportas",
+       "date": "2026-03-10",
+       "invoiceNumber": "ČEK-001"
+     }
+   }
+   \`\`\`
+
+3. ATSAKYMAI KLIENTAMS:
+   - Formuluok oficialius, mandagius ir reprezentatyvius el. laiškus klientams dėl užsakymų, TFP projektų ir sąskaitų.
+
+Atsakyk visada taisyklinga lietuvių kalba, profesionaliu, griežtu ir dalykišku tonu. Visi spaudos dokumentai turi atitikti griežtą juodai baltą (B&W) formatą.`;
 
         let contents = message;
         if (context) {
@@ -226,6 +261,49 @@ function generateStudioReportFallback(message, context) {
 
     const lower = (message || '').toLowerCase();
 
+    // 0. Tiesus sutarčių ir sąskaitų duomenų redagavimas (AI Asistento įrankis)
+    if (lower.includes('pakeisk') || lower.includes('atnaujink') || lower.includes('nustatyk') || lower.includes('redaguok') || (lower.includes('vard') && (lower.includes('sutart') || lower.includes('sąskait')))) {
+        const isContract = lower.includes('sutart') || lower.includes('agreement') || lower.includes('contract');
+        const docName = isContract ? 'Fotografavimo Sutartyje' : 'Sąskaitoje-Faktūroje / Kvite';
+        const docType = isContract ? 'contract' : 'invoice';
+
+        // Extract possible fields
+        let extractedName = null;
+        const nameMatch = message.match(/(?:vard[aą|as]|klient[aą|as])[:\s]+([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+\s+[A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+)/i);
+        if (nameMatch) extractedName = nameMatch[1];
+
+        let extractedPrice = null;
+        const priceMatch = message.match(/(?:kain[aą]|sum[aą]|mok[eė]ti)[:\s]*([0-9]+(?:[.,][0-9]{1,2})?)/i);
+        if (priceMatch) extractedPrice = parseFloat(priceMatch[1].replace(',', '.'));
+
+        let extractedDate = null;
+        const dateMatch = message.match(/(\d{4}-\d{2}-\d{2})/);
+        if (dateMatch) extractedDate = dateMatch[1];
+
+        const updates = {};
+        if (extractedName) updates.clientName = extractedName;
+        if (extractedPrice !== null) {
+            updates.finalPrice = extractedPrice;
+            updates.depositAmount = Math.round((extractedPrice / 2) * 100) / 100;
+        }
+        if (extractedDate) updates.preferredDate = extractedDate;
+
+        return `### ⚡ DOKUMENTO DUOMENŲ PAKEITIMAS VYKDYMAS
+
+Administratoriaus nurodymu tiesiogiai atnaujinu duomenis dokumente **${docName}**:
+- **Dokumentas:** ${isContract ? '📜 Fotografavimo Sutartis' : '🧾 Sąskaita-Faktūra / Kvitas'}
+${extractedName ? `- **Užsakovas / Pirkėjas:** **${extractedName}**\n` : ''}${extractedPrice !== null ? `- **Nauja suma:** **${extractedPrice.toFixed(2)} €** (Avansas 50%: ${(extractedPrice / 2).toFixed(2)} €)\n` : ''}${extractedDate ? `- **Fotosesijos data:** **${extractedDate}**\n` : ''}
+Pakeitimai automatiškai pritaikyti prie atidaryto dokumento peržiūros ir A4 spausdinimo šablono.
+
+\`\`\`json
+{
+  "system_action": "update_document",
+  "docType": "${docType}",
+  "updates": ${JSON.stringify(Object.keys(updates).length > 0 ? updates : { clientName: "Jonas Jonaitis", finalPrice: 160.00, depositAmount: 80.00, preferredDate: "2026-05-20" })}
+}
+\`\`\``;
+    }
+
     // 0. Testinis VMI Pajamų Žurnalas + Kvitas + Sutartis viename
     if ((lower.includes('vmi') || lower.includes('sheet') || lower.includes('spausdin') || lower.includes('atspausdin')) && (lower.includes('kvit') || lower.includes('sutart'))) {
         return `### 📊 TESTINIS VMI PAJAMŲ ŽURNALAS IR OFICIALŪS DOKUMENTAI (A4 SPAUSDINIMUI)
@@ -272,8 +350,88 @@ Atspausdintame A4 lape suformuota oficiali LR Finansų ministro patvirtinta form
 💡 *Paspauskite žemiau esančius mygtukus, kad atidarytumėte švarų A4 spausdinimo langą arba atsisiųstumėte testinį Excel (.csv) failą!*`;
     }
 
-    // 1. Service Analysis & Automated Income/Expense Calculation for VMI
-    if (lower.includes('analiz') || (lower.includes('paslaug') && lower.includes('išlaid')) || lower.includes('pajamu gavim')) {
+        // 0. Tiesioginis sutarčių ir sąskaitų redagavimas pagal administratoriaus nurodymą
+        if (lower.includes('pakeisk') || lower.includes('redaguok') || lower.includes('atnaujink') || lower.includes('įrašyk') || lower.includes('pataisyk') || lower.includes('nustatyk')) {
+            const isInvoice = lower.includes('sąskait') || lower.includes('kvit') || lower.includes('faktūr') || lower.includes('sf');
+            const docType = isInvoice ? 'invoice' : 'contract';
+            const updates = {};
+
+            const nameMatch = message.match(/(?:vard[ąa]|klient[ąa]|užsakov[ąa])\s+(?:į\s+)?([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+\s+[A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+)/i);
+            if (nameMatch) updates.clientName = nameMatch[1].trim();
+
+            const priceMatch = message.match(/(?:kain[ąa]|sum[ąa]|vert[ęe])\s+(?:į\s+)?(\d+(?:[.,]\d+)?)/i);
+            if (priceMatch) updates.finalPrice = parseFloat(priceMatch[1].replace(',', '.'));
+
+            const depMatch = message.match(/(?:avans[ąa])\s+(?:į\s+)?(\d+(?:[.,]\d+)?)/i);
+            if (depMatch) updates.depositAmount = parseFloat(depMatch[1].replace(',', '.'));
+
+            const dateMatch = message.match(/(?:dat[ąa]|dien[ąa])\s+(?:į\s+)?(\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|\d{1,2}[-/.]\d{1,2}[-/.]\d{4})/i);
+            if (dateMatch) updates.preferredDate = dateMatch[1];
+
+            const locMatch = message.match(/(?:viet[ąa]|lokacij[ąa]|miest[ąa])\s+(?:į\s+)?([A-ZĄČĘĖĮŠŲŪŽ][a-ząčęėįšųūž]+(?:\s+[A-ZĄČĘĖĮŠŲŪŽa-ząčęėįšųūž]+)?)/i);
+            if (locMatch && !locMatch[1].toLowerCase().includes('sutart') && !locMatch[1].toLowerCase().includes('kain')) {
+                updates.location = locMatch[1].trim();
+            }
+
+            if (Object.keys(updates).length === 0) {
+                updates.clientName = "Klientas (atnaujinta)";
+            }
+
+            const updatesFormatted = Object.entries(updates)
+                .map(([k, v]) => `- **${k === 'clientName' ? 'Kliento vardas' : (k === 'finalPrice' ? 'Kaina' : (k === 'depositAmount' ? 'Avansas' : (k === 'preferredDate' ? 'Data' : (k === 'location' ? 'Vieta' : k))))}:** ${v}${typeof v === 'number' ? ' €' : ''}`)
+                .join('\n');
+
+            return `### ⚡ DOKUMENTO DUOMENŲ ATNAUJINIMAS
+Atlikau Jūsų nurodytus pakeitimus **${docType === 'contract' ? 'Fotografavimo sutartyje' : 'Sąskaitoje-faktūroje'}**:
+
+${updatesFormatted}
+
+Visi duomenys paruošti perkėlimui į oficialų A4 šabloną. Spustelėkite mygtuką **„⚡ Tiesiogiai atnaujinti ${docType === 'contract' ? 'sutartį' : 'sąskaitą'}“** žemiau, kad pamatytumėte atnaujintą dokumentą!
+
+\`\`\`json
+{
+  "system_action": "update_document",
+  "docType": "${docType}",
+  "updates": ${JSON.stringify(updates, null, 2)}
+}
+\`\`\``;
+        }
+
+        // 0.5. Išlaidų įtraukimas į VMI žurnalą
+        if ((lower.includes('įtrauk') || lower.includes('pridėk') || lower.includes('registruok')) && (lower.includes('išlaid') || lower.includes('kur') || lower.includes('ček') || lower.includes('sf') || lower.includes('eur'))) {
+            const amountMatch = message.match(/(\d+(?:[.,]\d+)?)\s*(?:€|eur)/i) || message.match(/(?:išlaid[ąa]|sum[ąa]|kain[ąa])\s+(\d+(?:[.,]\d+)?)/i);
+            const amount = amountMatch ? parseFloat(amountMatch[1].replace(',', '.')) : 45.00;
+            const title = lower.includes('kur') ? 'Kuras vykimui į fotosesijas' : (lower.includes('studij') ? 'Fotostudijos nuoma' : 'Fotografijos veiklos išlaida');
+            const cat = lower.includes('kur') ? 'Kuras / Transportas' : (lower.includes('studij') ? 'Studijos nuoma' : 'Kita / Įranga');
+            const checkMatch = message.match(/(?:čekis|kvitas|sf|sąskaita)\s+([A-Z0-9_-]+)/i);
+            const checkNr = checkMatch ? checkMatch[1] : 'ČEK-' + Math.floor(100 + Math.random() * 900);
+
+            return `### 📥 VMI IŠLAIDOS REGISTRAVIMAS
+Užregistruoju Jūsų nurodytą išlaidą į **VMI Pajamų ir Išlaidų Apskaitos Žurnalą (EVRK 74.20)**:
+- **Išlaidos pavadinimas:** ${title}
+- **Suma:** **${amount.toFixed(2)} €**
+- **Kategorija:** ${cat}
+- **Dokumentas / Čekio Nr.:** ${checkNr}
+- **Data:** ${new Date().toLocaleDateString('lt-LT')}
+
+Spustelėkite mygtuką **„📥 Įtraukti išlaidą į VMI žurnalą“** žemiau, kad ši suma automatiškai atsirastų apskaitos lentelėje!
+
+\`\`\`json
+{
+  "system_action": "add_vmi_expense",
+  "expense": {
+    "title": "${title}",
+    "amount": ${amount},
+    "category": "${cat}",
+    "date": "${new Date().toISOString().split('T')[0]}",
+    "invoiceNumber": "${checkNr}"
+  }
+}
+\`\`\``;
+        }
+
+        // 1. Service Analysis & Automated Income/Expense Calculation for VMI
+        if (lower.includes('analiz') || (lower.includes('paslaug') && lower.includes('išlaid')) || lower.includes('pajamu gavim')) {
         return `### 📊 AI Paslaugų Analizė & Įtraukimas į VMI Pajamas ir Išlaidas
 
 Išanalizavus Jūsų teikiamas paslaugas, fotografijos paketus bei registruotas užklausas:
