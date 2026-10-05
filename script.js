@@ -139,6 +139,48 @@ window.addEventListener('error', (event) => {
         console.error('Full Error:', err);
         console.groupEnd();
     };
+
+    // ==============================================================================
+    // 🔍 Pre-Write Operation State & Auth Diagnostics Logger
+    // Explicitly logs auth.currentUser and Firestore connection before database writes
+    // ==============================================================================
+    window.logPreWriteState = function(operationName, collectionName, payload = {}) {
+        let storedSession = null;
+        try {
+            const raw = localStorage.getItem('dp_admin_session');
+            storedSession = raw ? JSON.parse(raw) : null;
+        } catch(e) {}
+
+        const currentFirebaseUser = window.firebaseAuthInstance?.currentUser || null;
+
+        const authState = {
+            hasLiveFirebaseUser: Boolean(currentFirebaseUser),
+            firebaseUid: currentFirebaseUser?.uid || 'None',
+            firebaseEmail: currentFirebaseUser?.email || 'None',
+            isAnonymous: currentFirebaseUser?.isAnonymous || false,
+            storedAdminEmail: storedSession?.email || 'None',
+            storedAdminRole: storedSession?.role || 'None',
+            effectiveIdentity: currentFirebaseUser?.email || storedSession?.email || 'Anonymous/Unauthenticated'
+        };
+
+        const dbStatus = {
+            databaseId: 'ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce',
+            targetCollection: collectionName,
+            operation: operationName,
+            isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+            activeAuthDomain: window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 'dominikphotofficial.lt'
+        };
+
+        console.group(`%c[Firestore Pre-Write State Verification: ${operationName}]`, 'color: #004D40; font-weight: bold; font-size: 12px;');
+        console.log('Target Collection:', collectionName);
+        console.log('Effective User Identity:', authState.effectiveIdentity);
+        console.log('Live Firebase Auth State (auth.currentUser):', authState);
+        console.log('Database Connection Info:', dbStatus);
+        console.log('Operation Payload Summary:', payload);
+        console.groupEnd();
+
+        return { authState, dbStatus };
+    };
 })();
 
 // Centralized Analytics (GA4) & Unified Album Footer dynamic loaders

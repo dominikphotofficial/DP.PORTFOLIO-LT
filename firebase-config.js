@@ -27,6 +27,7 @@ export const googleProvider = new GoogleAuthProvider();
 
 // 🩺 Diagnostic logging to guarantee injected auth config
 if (typeof window !== 'undefined') {
+    window.firebaseAuthInstance = auth;
     window.__FIREBASE_INITIALIZED_CONFIG__ = {
         projectId: firebaseConfig.projectId,
         authDomain: firebaseConfig.authDomain,
