@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import https from 'https';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
@@ -10,6 +11,40 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3000;
 const HOST = '0.0.0.0';
+
+// 🔒 Firebase Auth System Endpoints Proxy (/__/auth/*: /handler, /iframe, /action, etc.)
+// Seamlessly proxies custom domain Firebase Auth requests to the Firebase backend so custom domain OAuth & Action URLs work 100%
+app.all('/__/auth/*', (req, res) => {
+    const targetPath = req.originalUrl;
+    const options = {
+        hostname: 'tfp-form.firebaseapp.com',
+        port: 443,
+        path: targetPath,
+        method: req.method,
+        headers: {
+            ...req.headers,
+            host: 'tfp-form.firebaseapp.com',
+            'x-forwarded-host': req.headers.host || 'dominikphotofficial.lt',
+            'x-forwarded-proto': 'https'
+        }
+    };
+
+    const proxyReq = https.request(options, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        proxyRes.pipe(res);
+    });
+
+    proxyReq.on('error', (err) => {
+        console.error('Firebase Auth proxy error:', err);
+        res.status(502).send('Firebase Auth proxy error');
+    });
+
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+        req.pipe(proxyReq);
+    } else {
+        proxyReq.end();
+    }
+});
 
 app.use(express.json({ limit: '20mb' }));
 

@@ -41,9 +41,11 @@ export function getAuthActionSettings(continuePath = '/admin.html') {
     const isCustom = typeof window !== 'undefined' && 
         window.location.hostname && 
         window.location.hostname.includes('dominikphotofficial.lt');
-    const origin = isCustom ? 'https://portfolio.dominikphotofficial.lt' : (typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://portfolio.dominikphotofficial.lt');
+    const origin = isCustom ? 'https://dominikphotofficial.lt' : (typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://dominikphotofficial.lt');
     return {
         url: `${origin}${continuePath}`,
         handleCodeInApp: true
     };
 }
+
+export const AUTH_ACTION_URL = 'https://dominikphotofficial.lt/__/auth/action';
