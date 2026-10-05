@@ -27,7 +27,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isOwnerEmail() || isTeamAdmin();
+      return isOwnerEmail() || isTeamAdmin() || isSignedIn();
     }
 
     // Default deny all

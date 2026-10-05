@@ -3696,34 +3696,17 @@
 
             } catch(e) {
                 console.error("Login authentication error:", e);
-                if (isOwner) {
-                    const ownerSession = {
-                        name: "Dominik Šuškevič (Savininkas)",
-                        email: email,
-                        role: "superadmin",
-                        permissions: ["all"]
-                    };
-                    initiate2FAFlow(email, ownerSession);
-                    if (authFeedback) {
-                        authFeedback.style.display = 'block';
-                        authFeedback.style.background = '#E8F5E9';
-                        authFeedback.style.color = '#1B5E20';
-                        authFeedback.innerHTML = `👑 <strong>Savininko tapatybės patvirtinimas:</strong> Vienkartinis saugumo kodas išsiųstas į <u>${email}</u>. Įveskite kodą (arba atsarginį kodą), kad atrakintumėte valdymo skydą.`;
-                    }
-                    return;
-                }
-
                 if (authFeedback) {
                     authFeedback.style.display = 'block';
                     authFeedback.style.background = '#FFEBEE';
                     authFeedback.style.color = '#C62828';
                     let errorMsg = 'Neteisingas el. pašto adresas arba slaptažodis.';
                     if (e.code === 'auth/user-not-found') {
-                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Paskyros sukūrimui reikalingas administratoriaus pakvietimas.';
+                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Jei esate savininkas, paspauskite „Pamiršote slaptažodį?“ arba junkitės su 2FA kodu.';
                     } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-                        errorMsg = 'Neteisingas slaptažodis. Jei pamiršote, spauskite nuorodą žemiau.';
+                        errorMsg = 'Neteisingas slaptažodis. Jei pamiršote ar dar nesukūrėte slaptažodžio, paspauskite „🔑 Pamiršote slaptažodį?“ žemiau ir nusistatykite jį, arba paspauskite mygtuką „👑 Savininko patvirtinimas per el. paštą (2FA kodas)“.';
                     } else if (e.code === 'auth/too-many-requests') {
-                        errorMsg = 'Per daug nesėkmingų bandymų. Saugumo sumetimais prisijungimas laikinai užblokuotas. Pabandykite vėliau.';
+                        errorMsg = 'Per daug nesėkmingų bandymų. Saugumo sumetimais prisijungimas laikinai užblokuotas. Pabandykite vėliau arba naudokite 2FA patvirtinimą.';
                     }
                     authFeedback.innerText = errorMsg;
                 }
