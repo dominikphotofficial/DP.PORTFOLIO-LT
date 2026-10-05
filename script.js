@@ -69,11 +69,48 @@ window.addEventListener('error', (event) => {
 })();
 
 // ==============================================================================
-// 🛡️ Firebase & Firestore Permission & Network Error Interceptor
-// Intercepts and logs detailed diagnostics for 'Missing or insufficient permissions'
+// 🛡️ Firebase Authentication & Firestore Granular Diagnostic Wrapper
+// Intercepts all Auth calls and logs granular error details including error code,
+// message, active authDomain, and pinpoint diagnosis for 'Missing or insufficient permissions'
 // ==============================================================================
-(function installFirebaseErrorInterceptor() {
+(function installFirebaseAuthDiagnosticWrapper() {
     if (typeof window === 'undefined') return;
+
+    window.wrapAuthCall = async function(actionName, authFn, contextData = {}) {
+        const activeDomain = window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 
+                             window.__FIREBASE_INITIALIZED_CONFIG__?.authDomain || 
+                             'dominikphotofficial.lt';
+
+        console.group(`%c[Auth Diagnostic Call: ${actionName}]`, 'color: #113939; font-weight: bold; font-size: 12px;');
+        console.log('Action:', actionName);
+        console.log('Active authDomain:', activeDomain);
+        console.log('Current Host:', window.location.hostname);
+        console.log('Context Data:', contextData);
+        console.groupEnd();
+
+        try {
+            const result = await authFn();
+            console.info(`%c[Auth Success: ${actionName}]`, 'color: #2E7D32; font-weight: bold;', result);
+            return result;
+        } catch (err) {
+            const errCode = err?.code || 'unknown_code';
+            const errMsg = err?.message || String(err);
+            const isPermissionError = errMsg.toLowerCase().includes('permission') || errCode.includes('permission');
+
+            console.group(`%c[Auth Diagnostic Error in: ${actionName}]`, 'color: #C62828; font-weight: bold; font-size: 13px;');
+            console.error('Error Code:', errCode);
+            console.error('Error Message:', errMsg);
+            console.error('Active authDomain at failure:', activeDomain);
+            console.error('Is Permission Error:', isPermissionError ? '⚠️ TAIP (Missing or insufficient permissions)' : 'Ne');
+            if (isPermissionError) {
+                console.warn('💡 Diagnostinė įžvalga: „Missing or insufficient permissions“ kyla ne iš pačios Auth tarnybos, o iš Firestore duomenų bazės taisyklių (firestore.rules), kai po prisijungimo bandoma nuskaityti kolekcijas (pvz. tfp_requests, admin_team).');
+            }
+            console.error('Full Error Object:', err);
+            console.error('Stack:', err?.stack || 'N/A');
+            console.groupEnd();
+            throw err;
+        }
+    };
 
     window.addEventListener('unhandledrejection', (event) => {
         const reason = event.reason;
@@ -81,9 +118,12 @@ window.addEventListener('error', (event) => {
         const code = (reason?.code || '').toLowerCase();
 
         if (msg.includes('insufficient permissions') || msg.includes('permission-denied') || code.includes('permission-denied')) {
+            const activeDomain = window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 'dominikphotofficial.lt';
             console.group('%c[Firestore Permission Error Intercepted]', 'color: #D32F2F; font-weight: bold; font-size: 13px;');
             console.error('Error Code:', reason?.code || 'permission-denied');
             console.error('Error Message:', reason?.message || reason);
+            console.error('Active authDomain:', activeDomain);
+            console.warn('💡 Diagnostika: Užklausa į duomenų bazę buvo atmesta dėl teisių stokos. Patikrinkite Firestore taisykles.');
             console.error('Stack Trace:', reason?.stack || 'N/A');
             console.info('Full Error Object:', reason);
             console.groupEnd();
@@ -91,9 +131,11 @@ window.addEventListener('error', (event) => {
     });
 
     window.interceptFirebaseError = function(context, err) {
+        const activeDomain = window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 'dominikphotofficial.lt';
         console.group(`%c[Firebase Error in: ${context}]`, 'color: #C62828; font-weight: bold;');
         console.error('Message:', err?.message || err);
         console.error('Code:', err?.code || 'N/A');
+        console.error('Active authDomain:', activeDomain);
         console.error('Full Error:', err);
         console.groupEnd();
     };
