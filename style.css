@@ -1371,19 +1371,49 @@ header.scrolled {
 }
 
 /* ==============================================================================
-   Refined Minimalist Luxury Footer (White Background, Accent #113939, Side-Aligned)
+   Refined Minimalist Luxury Footer (Unified, Theme-Adaptive, Side-Aligned)
    ============================================================================== */
 .footer-minimal, .footer-premium, footer {
-    background: #ffffff !important;
-    color: #113939 !important;
+    background: #ffffff;
+    color: #113939;
     border-top: 1.5px solid #113939;
-    padding: 24px 24px;
+    padding: 28px 24px;
     margin-top: 80px;
     text-align: left;
     font-family: var(--font-body);
     position: relative;
+    clear: both;
+    width: 100%;
     box-sizing: border-box;
     box-shadow: 0 -4px 20px rgba(17, 57, 57, 0.03);
+}
+
+body.theme-automotive .footer-minimal,
+body.theme-automotive footer {
+    background: #090B0E !important;
+    color: #E2E8F0 !important;
+    border-top: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+}
+
+body.theme-equestrian .footer-minimal,
+body.theme-equestrian footer {
+    background: #0B1914 !important;
+    color: #F1EFEA !important;
+    border-top: 1.5px solid rgba(200, 159, 104, 0.4) !important;
+}
+
+body.theme-cosmic .footer-minimal,
+body.theme-cosmic footer {
+    background: #040714 !important;
+    color: #E0E7FF !important;
+    border-top: 1.5px solid rgba(129, 140, 248, 0.4) !important;
+}
+
+body.theme-heritage .footer-minimal,
+body.theme-heritage footer {
+    background: #14100C !important;
+    color: #F5EBE1 !important;
+    border-top: 1.5px solid rgba(212, 163, 115, 0.4) !important;
 }
 
 .footer-min-container {

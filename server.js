@@ -13,6 +13,26 @@ const HOST = '0.0.0.0';
 
 app.use(express.json({ limit: '20mb' }));
 
+// Subdomain & Custom Domain routing enforcement
+app.use((req, res, next) => {
+    const host = (req.headers.host || '').split(':')[0].toLowerCase();
+    const isCustomDomain = host.includes('dominikphotofficial.lt');
+    const isTargetSubdomain = host === 'portfolio.dominikphotofficial.lt';
+    
+    // If request is on custom domain but not on active subdomain (e.g. apex dominikphotofficial.lt or www), redirect
+    if (isCustomDomain && !isTargetSubdomain) {
+        return res.redirect(301, `https://portfolio.dominikphotofficial.lt${req.originalUrl}`);
+    }
+    
+    // Also if requested path is /admin or /review on custom domain, ensure it resolves under portfolio subdomain
+    if (isCustomDomain && (req.path.startsWith('/admin') || req.path.startsWith('/review'))) {
+        if (!isTargetSubdomain) {
+            return res.redirect(301, `https://portfolio.dominikphotofficial.lt${req.originalUrl}`);
+        }
+    }
+    next();
+});
+
 const VISIBILITY_FILE = path.join(__dirname, 'reviews-visibility.json');
 const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 

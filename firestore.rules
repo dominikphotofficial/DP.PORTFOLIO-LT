@@ -6,12 +6,28 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
-      return isSignedIn();
+    function isNotAnonymous() {
+      return isSignedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
 
-    function isValidId(id) {
-      return id is string && id.size() <= 128;
+    function isOwnerEmail() {
+      return isNotAnonymous() && (
+        request.auth.token.email.lower() == 'support@dominikphotofficial.lt' ||
+        request.auth.token.email.lower() == 'dominikphotofficial.lt@gmail.com' ||
+        request.auth.token.email.lower() == 'dominik.suskevic@gmail.com' ||
+        request.auth.token.email.lower() == 'info@dominikphotofficial.lt'
+      );
+    }
+
+    function isTeamAdmin() {
+      return isNotAnonymous() && (
+        exists(/databases/$(database)/documents/admin_team/$(request.auth.uid)) ||
+        (request.auth.token.admin == true)
+      );
+    }
+
+    function isAdmin() {
+      return isOwnerEmail() || isTeamAdmin();
     }
 
     // Default deny all
@@ -19,59 +35,65 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // TFP Requests: Public can create; Signed-in admin can read, update, delete
+    // TFP Requests: Public can create; Verified admin can read, update, delete
     match /tfp_requests/{requestId} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isAdmin();
     }
 
-    // Service Requests: Public can create; Signed-in admin can read, update, delete
+    // Service Requests: Public can create; Verified admin can read, update, delete
     match /service_requests/{requestId} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isAdmin();
     }
 
-    // Reviews: Public can read; Signed-in users can create, update, delete
+    // Reviews:
+    // Public can read only published/visible reviews
+    // Public can submit pending reviews
+    // Only verified admins can approve (update) or delete
     match /reviews/{reviewId} {
-      allow read: if true;
-      allow write: if true;
+      allow read: if resource == null || resource.data.status == 'published' || resource.data.visible == true || isAdmin();
+      allow create: if request.resource.data.status == 'pending' || isAdmin();
+      allow update, delete: if isAdmin();
     }
 
-    // Settings: Public can read; Anyone/Admin can write
+    // Settings: Public can read; Only verified admin can write
     match /settings/{settingId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if isAdmin();
     }
 
-    // Contact Messages: Public can create; Signed-in admin can read, update, delete
+    // Contact Messages: Public can create; Verified admin can read, update, delete
     match /contact_messages/{messageId} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isAdmin();
     }
 
     // Mail Queue: Public and Admin can create mail records
     match /mail/{mailId} {
       allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow read, update, delete: if isAdmin();
     }
 
-    // Admin Team & RBAC
+    // Admin Team & RBAC: Only verified admin can read, write
     match /admin_team/{memberId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isAdmin();
     }
 
-    // VMI Expenses & Settings
+    // VMI Expenses & Settings: Only verified admin can read, write
     match /vmi_expenses/{expenseId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isAdmin();
     }
 
     // Audit Logs & System Activity Registry
     match /audit_logs/{logId} {
-      allow read, write: if isSignedIn();
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
     }
 
     match /admin_settings/{settingId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if isAdmin();
     }
   }
 }

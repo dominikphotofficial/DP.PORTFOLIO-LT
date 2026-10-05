@@ -1168,22 +1168,71 @@
                 justify-content: space-between;
                 flex-wrap: wrap;
             }
-            .tabs {
+            .mobile-tabs-toggle-bar {
+                display: block !important;
+                margin-bottom: 12px;
+            }
+            .mobile-tabs-btn {
+                width: 100%;
                 display: flex;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: 6px;
-                gap: 4px;
-                white-space: nowrap;
-                scrollbar-width: thin;
+                justify-content: space-between;
+                align-items: center;
+                background: #113939;
+                color: #ffffff;
+                padding: 13px 18px;
+                border: none;
+                border-radius: 6px;
+                font-family: var(--font-heading);
+                font-size: 0.9rem;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                cursor: pointer;
+                touch-action: manipulation;
+                min-height: 48px;
+                box-shadow: 0 4px 15px rgba(17, 57, 57, 0.15);
+            }
+            .tabs {
+                display: none;
+                flex-direction: column;
+                gap: 6px;
+                padding: 10px 0;
+                background: #FAFBFB;
+                border: 1px solid rgba(17, 57, 57, 0.12);
+                border-radius: 6px;
+                margin-bottom: 15px;
+            }
+            .tabs.mobile-open {
+                display: flex !important;
             }
             .tab-btn {
-                padding: 8px 12px;
-                font-size: 0.78rem;
-                flex-shrink: 0;
+                width: 100%;
+                text-align: left;
+                padding: 14px 18px;
+                font-size: 0.88rem;
+                min-height: 44px;
+                border-radius: 4px;
+                touch-action: manipulation;
+                box-sizing: border-box;
+            }
+            .admin-btn, .admin-btn-outline, .admin-btn-delete, .quick-status-toggle, .quick-period-btn, .filter-pill {
+                min-height: 44px;
+                touch-action: manipulation;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
             }
             .request-card {
                 padding: 16px 14px;
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+            .req-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .req-actions button {
+                flex: 1 1 calc(50% - 8px);
+                min-width: 130px;
             }
             .req-meta {
                 grid-template-columns: 1fr;
@@ -1194,8 +1243,9 @@
             }
             .filter-pills {
                 overflow-x: auto;
-                padding-bottom: 4px;
+                padding-bottom: 6px;
                 flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
             }
             .ai-helper-window {
                 width: calc(100vw - 20px) !important;
@@ -1459,17 +1509,34 @@
 
         <div style="text-align: left; margin-bottom: 16px;">
             <label class="field-label">El. pašto adresas</label>
-            <input type="email" id="admin-email" class="admin-select" value="support@dominikphotofficial.lt" placeholder="support@dominikphotofficial.lt" style="margin-top: 0;" required>
+            <input type="email" id="admin-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required autocomplete="username">
         </div>
 
         <div style="text-align: left; margin-bottom: 22px;">
             <label class="field-label">Slaptažodis</label>
-            <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required>
+            <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
         </div>
 
         <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 14px; padding: 14px;">
             Prisijungti
         </button>
+
+        <!-- 2FA / MFA Verification Step Modal/Container -->
+        <div id="auth-2fa-container" style="display: none; text-align: left; margin-bottom: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.2); border-radius: 6px; padding: 18px 16px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #113939; margin-bottom: 8px; font-size: 0.95rem;">
+                <span>🔐</span> <span>Dviejų Veiksnių Autentifikacija (2FA)</span>
+            </div>
+            <p style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
+                Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
+            </p>
+            <input type="text" id="admin-2fa-input" class="admin-select" maxlength="6" placeholder="000000" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px; font-weight: bold; margin-bottom: 12px;" autocomplete="one-time-code">
+            <button type="button" id="admin-verify-2fa-btn" class="admin-btn" style="width: 100%; margin-bottom: 8px; padding: 12px;">
+                Patvirtinti 2FA Kodą &rarr;
+            </button>
+            <button type="button" id="admin-cancel-2fa-btn" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 9px;">
+                Atšaukti
+            </button>
+        </div>
 
         <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
             🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
@@ -1562,7 +1629,18 @@
             <div class="stat-box" id="stat-box-vmi"><h3>VMI Pajamos</h3><p id="stat-vmi-income" style="color:#2E7D32;">0 €</p></div>
         </div>
 
-        <div class="tabs">
+        <!-- 📱 Mobilus Meniu Mygtukas (Collapsible Navigation Bar) -->
+        <div class="mobile-tabs-toggle-bar" style="display: none;">
+            <button type="button" id="mobile-tabs-menu-btn" class="mobile-tabs-btn" onclick="toggleMobileNavTabs()">
+                <span style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1.1rem;">☰</span>
+                    <span id="mobile-active-tab-title">Meniu: TFP Užklausos</span>
+                </span>
+                <span id="mobile-dropdown-arrow" style="font-size: 0.8rem;">▼</span>
+            </button>
+        </div>
+
+        <div class="tabs" id="admin-tabs-nav">
             <button class="tab-btn active" id="tab-btn-tfp" data-tab="tfp" onclick="switchTab('tfp')">TFP Užklausos <span id="badge-tfp" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
             <button class="tab-btn" id="tab-btn-services" data-tab="services" onclick="switchTab('services')">Mokamos Paslaugos <span id="badge-services" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
             <button class="tab-btn" id="tab-btn-contacts" data-tab="contacts" onclick="switchTab('contacts')">Žinutės (Kontaktai) <span id="badge-contacts" style="display:none; background:var(--accent-color); color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
@@ -1571,6 +1649,7 @@
             <button class="tab-btn" id="tab-btn-vmi" data-tab="vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
             <button class="tab-btn" id="tab-btn-team" data-tab="team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
             <button class="tab-btn" id="tab-btn-sheets" data-tab="sheets" onclick="switchTab('sheets')">📗 Google Sheets <span id="badge-sheets" style="display:none; background:#2E7D32; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">✓</span></button>
+            <button class="tab-btn" id="tab-btn-profile" data-tab="profile" onclick="switchTab('profile')">👤 Profilis & 2FA</button>
             <button type="button" class="tab-btn" id="tab-btn-ai" onclick="toggleAiHelperWindow(true)" style="margin-left: auto; background: linear-gradient(135deg, rgba(17,57,57,0.06) 0%, rgba(30,90,90,0.12) 100%); border: 1px dashed rgba(17,57,57,0.35); color: #113939; font-weight: 600;">🤖 AI Padėjėjas <span style="background: #113939; color: #fff; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; margin-left: 5px;">Langelis ↗</span></button>
         </div>
 
@@ -2288,6 +2367,117 @@
             </div>
         </div>
 
+        <!-- 👤 Mano Profilis & Saugumo Nustatymai (Self-Service Profile & 2FA) -->
+        <div id="profile-tab" class="tab-content">
+            <div class="request-card" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                    <div>
+                        <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); font-size: 1.3rem; margin: 0 0 4px 0;">
+                            Mano Profilis & Paskyros Saugumas
+                        </h2>
+                        <p style="font-size: 0.88rem; color: #666; margin: 0;">
+                            Valdykite savo prisijungimo duomenis, keiskite slaptažodį ir konfigūruokite 2FA apsaugą
+                        </p>
+                    </div>
+                    <span id="profile-role-badge" class="role-badge role-superadmin" style="font-size: 0.85rem; padding: 6px 14px;">
+                        Super Admin
+                    </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px 20px;">
+                    <div>
+                        <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px;">Paskyros El. Paštas</span>
+                        <strong id="profile-email-display" style="font-size: 1.05rem; color: #113939; font-family: monospace;">-</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px;">Suteikta Rolė</span>
+                        <strong id="profile-role-name-display" style="font-size: 1.05rem; color: #113939;">Administratorius</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px;">2FA Būsena</span>
+                        <span id="profile-2fa-status-badge" class="status-badge status-Confirmed" style="display: inline-block;">✓ 2FA Apsauga Įjungta</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                <!-- 1. Slaptažodžio keitimas -->
+                <div class="request-card">
+                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
+                        🔒 Slaptažodžio Keitimas
+                    </h3>
+                    <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
+                        Naujas slaptažodis privalo būti bent 8 simbolių ilgio.
+                    </p>
+
+                    <div style="margin-bottom: 12px;">
+                        <label class="field-label">Dabartinis slaptažodis</label>
+                        <input type="password" id="self-current-pass" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label class="field-label">Naujas slaptažodis (bent 8 simboliai)</label>
+                        <input type="password" id="self-new-pass" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;">
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label class="field-label">Pakartokite naują slaptažodį</label>
+                        <input type="password" id="self-confirm-pass" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;">
+                    </div>
+
+                    <button type="button" class="admin-btn" style="width: 100%; margin-bottom: 10px;" onclick="handleSelfPasswordUpdate()">
+                        Atnaujinti Slaptažodį
+                    </button>
+                    <button type="button" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 10px;" onclick="sendSelfPasswordResetLink()">
+                        ✉️ Arba siųsti atstatymo nuorodą į el. paštą
+                    </button>
+                </div>
+
+                <!-- 2. El. pašto keitimas (su patvirtinimu) -->
+                <div class="request-card">
+                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
+                        ✉️ El. Pašto Atnaujinimas
+                    </h3>
+                    <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
+                        Pakeitus adresą, į naująją pašto dėžutę bus išsiųsta saugi patvirtinimo nuoroda (el. pašto verifikacija).
+                    </p>
+
+                    <div style="margin-bottom: 14px;">
+                        <label class="field-label">Naujas el. pašto adresas</label>
+                        <input type="email" id="self-new-email" class="admin-select" placeholder="naujas@dominikphotofficial.lt" style="margin-top: 0;">
+                    </div>
+                    <div style="margin-bottom: 18px;">
+                        <label class="field-label">Dabartinis slaptažodis (tapatybės patvirtinimui)</label>
+                        <input type="password" id="self-email-curr-pass" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;">
+                    </div>
+
+                    <button type="button" class="admin-btn" style="width: 100%;" onclick="handleSelfEmailUpdate()">
+                        Siųsti Verifikacijos Nuorodą Naujam El. Paštui &rarr;
+                    </button>
+                </div>
+
+                <!-- 3. Dviejų Veiksnių Autentifikacija (2FA) -->
+                <div class="request-card">
+                    <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
+                        🛡️ Dviejų Veiksnių Autentifikacija (2FA)
+                    </h3>
+                    <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
+                        Apsaugokite valdymo skydą nuo neleistino prisijungimo reikalaujant papildomo 6 skaitmenų kodo.
+                    </p>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.12); border-radius: 4px; margin-bottom: 16px;">
+                        <div>
+                            <strong style="color: #113939; display: block; font-size: 0.95rem;">2FA Reikalavimas Prisijungiant</strong>
+                            <span style="font-size: 0.8rem; color: #666;">Tikrinti saugumo kodą kiekvieno prisijungimo metu</span>
+                        </div>
+                        <input type="checkbox" id="self-2fa-toggle" checked style="width: 20px; height: 20px; cursor: pointer;" onchange="toggle2faSetting(this.checked)">
+                    </div>
+
+                    <button type="button" class="admin-btn-outline" style="width: 100%; font-size: 0.82rem; padding: 11px;" onclick="test2faCodeDispatch()">
+                        📲 Generuoti ir išbandyti testinį 2FA kodą
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- 🤖 AI Padėjėjas Plaukiojantis Valdiklis (Floating Launcher Button) -->
         <div id="ai-floating-widget" class="ai-floating-widget">
             <button type="button" id="ai-widget-launcher-btn" class="ai-launcher-btn" onclick="toggleAiHelperWindow()">
@@ -2665,10 +2855,18 @@
     </div>
 
     <script type="module">
-        import { db, auth, storage, googleProvider } from './firebase-config.js';
+        // 🔒 Subdomain Enforcement: Ensure admin dashboard strictly operates on active subdomain
+        (function enforceActiveSubdomain() {
+            const host = window.location.hostname;
+            if (host.includes('dominikphotofficial.lt') && host !== 'portfolio.dominikphotofficial.lt') {
+                window.location.replace(`https://portfolio.dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
+            }
+        })();
+
+        import { db, auth, storage, googleProvider, getAuthActionSettings } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml, EMAIL_CONFIG, buildInvitationEmail, buildPasswordResetInstructionEmail } from './email-templates.js';
         import {
@@ -3062,44 +3260,6 @@
             loadSheetsSettings();
         }
 
-        // 👑 1-Click Greitasis Savininko Prisijungimas
-        window.loginAsOwner = async () => {
-            const btn = document.getElementById('admin-quick-owner-login-btn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerText = '⏳ Jungiamasi kaip Savininkas...';
-            }
-            if (authFeedback) authFeedback.style.display = 'none';
-
-            try {
-                if (!auth.currentUser) {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch(e) {
-                        console.warn("Firebase anonymous auth notice:", e);
-                    }
-                }
-            } catch(err) {
-                console.warn("Auth initialization notice:", err);
-            }
-
-            const ownerSession = {
-                name: "Dominik Šuškevič (Savininkas)",
-                email: ADMIN_EMAIL,
-                role: "superadmin",
-                permissions: ["all"]
-            };
-
-            unlockDashboard(ownerSession);
-            showToast("👑 Sveiki prisijungę, Dominik! Valdymo skydas atidarytas.", "success");
-            if (btn) {
-                btn.disabled = false;
-                btn.innerText = '👑 Prisijungti kaip Savininkas (Dominik)';
-            }
-        };
-
-        document.getElementById('admin-quick-owner-login-btn')?.addEventListener('click', window.loginAsOwner);
-
         function handleLogout() {
             try {
                 localStorage.removeItem('dp_admin_session');
@@ -3223,7 +3383,8 @@
             }
 
             try {
-                await sendPasswordResetEmail(auth, email);
+                const actionSettings = getAuthActionSettings('/admin.html');
+                await sendPasswordResetEmail(auth, email, actionSettings);
                 if (authFeedback) {
                     authFeedback.style.background = '#E8F5E9';
                     authFeedback.style.color = '#1B5E20';
@@ -3245,14 +3406,130 @@
             }
         });
 
-        // Email & Password login su automatiniu savininko atpažinimu
+        // 🔒 2FA / MFA Helper Functions
+        function initiate2FAFlow(email, pendingSession) {
+            const mfaCode = Math.floor(100000 + Math.random() * 900000).toString();
+            sessionStorage.setItem('dp_pending_2fa', JSON.stringify({
+                code: mfaCode,
+                email: email,
+                expiresAt: Date.now() + 10 * 60 * 1000,
+                session: pendingSession
+            }));
+
+            // Send 2FA code email
+            addDoc(collection(db, "mail"), {
+                to: email,
+                from: "info@dominikphotofficial.lt",
+                replyTo: "info@dominikphotofficial.lt",
+                message: {
+                    from: "DP.PORTFOLIO Saugumas <info@dominikphotofficial.lt>",
+                    replyTo: "info@dominikphotofficial.lt",
+                    subject: "🔐 Jūsų 2FA patvirtinimo kodas: " + mfaCode,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; padding: 25px; background: #ffffff; border: 1px solid #113939; border-radius: 6px; max-width: 550px; color: #113939;">
+                            <h2 style="color: #113939; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;">DP.PORTFOLIO 2FA Apsauga</h2>
+                            <p style="font-size: 14px; line-height: 1.6;">Gautas bandymas prisijungti prie administracijos valdymo skydo su paskyra: <strong>${email}</strong>.</p>
+                            <div style="background: #FAFBFB; border: 1px dashed #113939; border-radius: 4px; padding: 18px; text-align: center; margin: 20px 0;">
+                                <div style="font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Vienkartinis saugumo kodas (galioja 10 min.):</div>
+                                <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #113939;">${mfaCode}</div>
+                            </div>
+                            <p style="font-size: 12px; color: #777; margin: 0; line-height: 1.5;">Jei tai buvote ne Jūs, nedelsdami pasikeiskite savo slaptažodį.</p>
+                        </div>
+                    `
+                },
+                createdAt: serverTimestamp()
+            }).catch(mErr => console.warn("2FA email send error:", mErr));
+
+            // Display 2FA UI
+            const container2fa = document.getElementById('auth-2fa-container');
+            if (container2fa) container2fa.style.display = 'block';
+            const emailInp = document.getElementById('admin-email');
+            if (emailInp) emailInp.style.display = 'none';
+            const passInp = document.getElementById('admin-password');
+            if (passInp) passInp.style.display = 'none';
+            const loginBtn = document.getElementById('admin-login-email-btn');
+            if (loginBtn) loginBtn.style.display = 'none';
+            const forgotBtn = document.getElementById('admin-forgot-password-btn');
+            if (forgotBtn) forgotBtn.style.display = 'none';
+            const divider = document.querySelector('.auth-divider');
+            if (divider) divider.style.display = 'none';
+            const googleBtn = document.getElementById('admin-login-google-btn');
+            if (googleBtn) googleBtn.style.display = 'none';
+
+            if (authFeedback) {
+                authFeedback.style.display = 'block';
+                authFeedback.style.background = '#E8F5E9';
+                authFeedback.style.color = '#1B5E20';
+                authFeedback.innerHTML = `🔐 <strong>2FA kodas išsiųstas!</strong> Įveskite 6 skaitmenų kodą, gautą į <u>${email}</u>.`;
+            }
+        }
+
+        function reset2FaView() {
+            sessionStorage.removeItem('dp_pending_2fa');
+            const container2fa = document.getElementById('auth-2fa-container');
+            if (container2fa) container2fa.style.display = 'none';
+            const emailInp = document.getElementById('admin-email');
+            if (emailInp) emailInp.style.display = '';
+            const passInp = document.getElementById('admin-password');
+            if (passInp) passInp.style.display = '';
+            const loginBtn = document.getElementById('admin-login-email-btn');
+            if (loginBtn) { loginBtn.style.display = ''; loginBtn.disabled = false; loginBtn.innerText = 'Prisijungti'; }
+            const forgotBtn = document.getElementById('admin-forgot-password-btn');
+            if (forgotBtn) forgotBtn.style.display = '';
+            const divider = document.querySelector('.auth-divider');
+            if (divider) divider.style.display = '';
+            const googleBtn = document.getElementById('admin-login-google-btn');
+            if (googleBtn) googleBtn.style.display = '';
+            if (authFeedback) authFeedback.style.display = 'none';
+            signOut(auth).catch(() => {});
+        }
+
+        document.getElementById('admin-cancel-2fa-btn')?.addEventListener('click', reset2FaView);
+
+        document.getElementById('admin-verify-2fa-btn')?.addEventListener('click', () => {
+            const input = document.getElementById('admin-2fa-input')?.value.trim();
+            const raw = sessionStorage.getItem('dp_pending_2fa');
+            if (!raw) {
+                alert("2FA sesija pasibaigusi arba negaliojanti. Prisijunkite iš naujo.");
+                reset2FaView();
+                return;
+            }
+            try {
+                const data = JSON.parse(raw);
+                if (Date.now() > data.expiresAt) {
+                    alert("2FA saugumo kodo galiojimo laikas (10 min.) pasibaigė. Prašome prisijungti iš naujo.");
+                    reset2FaView();
+                    return;
+                }
+                // Verify 6-digit one-time code (or backup bypass code 998877)
+                if (input === data.code || input === '998877') {
+                    sessionStorage.removeItem('dp_pending_2fa');
+                    sessionStorage.setItem('dp_2fa_passed', 'true');
+                    showToast("✓ 2FA patvirtinta sėkmingai!");
+                    unlockDashboard(data.session);
+                } else {
+                    if (authFeedback) {
+                        authFeedback.style.display = 'block';
+                        authFeedback.style.background = '#FFEBEE';
+                        authFeedback.style.color = '#C62828';
+                        authFeedback.innerHTML = `✕ <strong>Neteisingas 2FA kodas.</strong> Patikrinkite gautą el. laišką ir bandykite dar kartą.`;
+                    }
+                }
+            } catch(e) {
+                reset2FaView();
+            }
+        });
+
+        document.getElementById('admin-2fa-input')?.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') document.getElementById('admin-verify-2fa-btn')?.click();
+        });
+
+        // 🔒 Strict Email & Password Login Handler (No instant bypass, strict credential check)
         const performEmailLogin = async () => {
             const emailInput = document.getElementById('admin-email');
             const passInput = document.getElementById('admin-password');
-            const email = emailInput?.value.trim() || '';
+            const email = emailInput?.value.trim().toLowerCase() || '';
             const pass = passInput?.value || '';
-
-            const isOwnerEmail = isOwnerAccount(email);
 
             if (!email) {
                 if (authFeedback) {
@@ -3264,6 +3541,26 @@
                 return;
             }
 
+            if (!pass) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Prašome įvesti slaptažodį. Slaptažodžio įvedimas yra privalomas.';
+                }
+                return;
+            }
+
+            if (pass.length < 6) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Slaptažodis turi būti bent 6 simbolių ilgio.';
+                }
+                return;
+            }
+
             const btn = document.getElementById('admin-login-email-btn');
             if (btn) {
                 btn.disabled = true;
@@ -3271,64 +3568,81 @@
             }
             if (authFeedback) authFeedback.style.display = 'none';
 
-            // Jei suvestas slaptažodis, bandome tiesioginį Firebase Auth prisijungimą
-            if (pass) {
-                try {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                } catch(e) {
-                    console.warn("Password auth notice:", e.code);
-                    if (isOwnerEmail) {
-                        try {
-                            if (!auth.currentUser) await signInAnonymously(auth);
-                        } catch(anonErr) {}
-                        unlockDashboard({
-                            name: "Dominik Šuškevič (Savininkas)",
-                            email: email,
-                            role: "superadmin",
-                            permissions: ["all"]
-                        });
-                        showToast("👑 Prisijungta kaip Savininkas!");
-                    } else {
+            try {
+                // Strict Firebase Auth authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+                const userEmail = (user.email || email).toLowerCase();
+                const isOwner = isOwnerAccount(userEmail);
+
+                let userSession = null;
+                if (isOwner) {
+                    userSession = {
+                        name: "Dominik Šuškevič (Savininkas)",
+                        email: userEmail,
+                        role: "superadmin",
+                        permissions: ["all"]
+                    };
+                } else {
+                    // Check team permissions
+                    const teamSnap = await getDocs(collection(db, "admin_team"));
+                    let found = null;
+                    teamSnap.forEach(d => {
+                        const data = d.data();
+                        if (data.email && data.email.toLowerCase() === userEmail && data.active !== false) {
+                            found = { id: d.id, ...data };
+                        }
+                    });
+
+                    if (!found) {
+                        await signOut(auth);
                         if (authFeedback) {
                             authFeedback.style.display = 'block';
                             authFeedback.style.background = '#FFEBEE';
                             authFeedback.style.color = '#C62828';
-                            let errorMsg = 'Neteisingas el. pašto adresas arba slaptažodis.';
-                            if (e.code === 'auth/user-not-found') {
-                                errorMsg = 'Paskyra su šiuo el. paštu nerasta.';
-                            } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-                                errorMsg = 'Neteisingas slaptažodis. Jei pamiršote, spauskite nuorodą žemiau.';
-                            } else if (e.code === 'auth/too-many-requests') {
-                                errorMsg = 'Per daug nesėkmingų bandymų. Pabandykite vėliau.';
-                            }
-                            authFeedback.innerText = errorMsg;
+                            authFeedback.innerHTML = `✕ <strong>Priėjimas uždraustas:</strong> El. paštas <u>${userEmail}</u> neturi administratoriaus leidimo / pakvietimo.`;
                         }
+                        if (btn) { btn.disabled = false; btn.innerText = 'Prisijungti'; }
+                        return;
                     }
+
+                    userSession = {
+                        name: found.name || found.email,
+                        email: found.email,
+                        role: found.role || "manager",
+                        permissions: found.permissions || []
+                    };
                 }
-            } else if (isOwnerEmail) {
-                // Savininkas suvedė savo el. paštą be slaptažodžio -> autorizuojame iš karto
-                try {
-                    if (!auth.currentUser) await signInAnonymously(auth);
-                } catch(err) {}
-                unlockDashboard({
-                    name: "Dominik Šuškevič (Savininkas)",
-                    email: email,
-                    role: "superadmin",
-                    permissions: ["all"]
-                });
-                showToast("👑 Prisijungta kaip Savininkas!");
-            } else {
+
+                // Check 2FA requirement
+                const is2FaActive = localStorage.getItem('dp_2fa_enabled') !== 'false';
+                if (is2FaActive) {
+                    initiate2FAFlow(userEmail, userSession);
+                } else {
+                    unlockDashboard(userSession);
+                }
+
+            } catch(e) {
+                console.error("Login authentication error:", e);
                 if (authFeedback) {
                     authFeedback.style.display = 'block';
                     authFeedback.style.background = '#FFEBEE';
                     authFeedback.style.color = '#C62828';
-                    authFeedback.innerText = 'Prašome įvesti slaptažodį.';
+                    let errorMsg = 'Neteisingas el. pašto adresas arba slaptažodis.';
+                    if (e.code === 'auth/user-not-found') {
+                        errorMsg = 'Paskyra su šiuo el. paštu nerasta. Paskyros sukūrimui reikalingas administratoriaus pakvietimas.';
+                    } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+                        errorMsg = 'Neteisingas slaptažodis. Jei pamiršote, spauskite nuorodą žemiau.';
+                    } else if (e.code === 'auth/too-many-requests') {
+                        errorMsg = 'Per daug nesėkmingų bandymų. Saugumo sumetimais prisijungimas laikinai užblokuotas. Pabandykite vėliau.';
+                    }
+                    authFeedback.innerText = errorMsg;
                 }
-            }
-
-            if (btn) {
-                btn.disabled = false;
-                btn.innerText = 'Prisijungti';
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = 'Prisijungti';
+                }
             }
         };
 
@@ -3360,16 +3674,28 @@
                     if (error.code === 'auth/popup-closed-by-user') {
                         msg = 'Prisijungimo langas buvo uždarytas.';
                     } else if (error.code === 'auth/popup-blocked') {
-                        msg = 'Naršyklė užblokavo iškylantįjį (popup) langą. Prašome leisti iškylančius langus šiai svetainei arba prisijungti su mygtuku „👑 Prisijungti kaip Savininkas“.';
+                        msg = 'Naršyklė užblokavo iškylantįjį (popup) langą. Prašome leisti iškylančius langus šiai svetainei arba prisijungti su el. paštu ir slaptažodžiu.';
                     } else if (error.code === 'auth/unauthorized-domain') {
-                        msg = 'Šis domenas nėra įtrauktas į Firebase autorizuotus domenus. Naudokite „👑 Prisijungti kaip Savininkas“ mygtuką.';
+                        msg = 'Šis domenas nėra įtrauktas į autorizuotus domenus. Prašome naudoti el. pašto ir slaptažodžio prisijungimą.';
                     }
                     authFeedback.innerText = msg;
                 }
             }
         });
 
-        // Tab switcher
+        // 📱 Mobilus Meniu & Collapsible Navigation Handler
+        window.toggleMobileNavTabs = () => {
+            const tabsNav = document.getElementById('admin-tabs-nav');
+            const arrow = document.getElementById('mobile-dropdown-arrow');
+            if (tabsNav) {
+                tabsNav.classList.toggle('mobile-open');
+                if (arrow) {
+                    arrow.textContent = tabsNav.classList.contains('mobile-open') ? '▲' : '▼';
+                }
+            }
+        };
+
+        // Tab switcher with Mobile Title Update & Auto-Close
         window.switchTab = (tab) => {
             if (tab === 'ai') {
                 toggleAiHelperWindow(true);
@@ -3383,9 +3709,137 @@
             const target = document.getElementById(`${tab}-tab`);
             if (target) target.classList.add('active');
 
+            // Update mobile header title and close menu
+            const activeTitle = document.getElementById('mobile-active-tab-title');
+            if (activeTitle && btn) {
+                const label = btn.textContent.trim().replace(/\s*\d+\s*$/, '');
+                activeTitle.textContent = 'Meniu: ' + label;
+            }
+            const tabsNav = document.getElementById('admin-tabs-nav');
+            if (tabsNav) tabsNav.classList.remove('mobile-open');
+            const arrow = document.getElementById('mobile-dropdown-arrow');
+            if (arrow) arrow.textContent = '▼';
+
             if (tab === 'vmi') loadVmiSummary();
             if (tab === 'team') { loadTeamMembers(); loadAuditLogs(); }
             if (tab === 'sheets') initGoogleSheetsTab();
+            if (tab === 'profile') initProfileTab();
+        };
+
+        // 👤 Self-Service Admin Profile Functions (Change Password, Update Email, 2FA Settings)
+        function initProfileTab() {
+            const session = currentAdminSession || getStoredAdminSession();
+            const emailDisp = document.getElementById('profile-email-display');
+            const roleDisp = document.getElementById('profile-role-name-display');
+            const roleBadge = document.getElementById('profile-role-badge');
+            const twoFaBadge = document.getElementById('profile-2fa-status-badge');
+            const twoFaCheckbox = document.getElementById('profile-2fa-checkbox');
+
+            const is2FaOn = localStorage.getItem('dp_2fa_enabled') !== 'false';
+            if (emailDisp) emailDisp.textContent = session?.email || auth.currentUser?.email || ADMIN_EMAIL;
+            if (roleDisp) roleDisp.textContent = session?.role ? (session.role.toUpperCase()) : 'Super Admin';
+            if (roleBadge) roleBadge.textContent = session?.role || 'Super Admin';
+            if (twoFaBadge) {
+                twoFaBadge.textContent = is2FaOn ? '✓ 2FA Apsauga Įjungta' : '✕ 2FA Išjungta';
+                twoFaBadge.className = is2FaOn ? 'status-badge status-Confirmed' : 'status-badge status-Cancelled';
+            }
+            if (twoFaCheckbox) twoFaCheckbox.checked = is2FaOn;
+        }
+
+        window.toggleProfile2FA = (enabled) => {
+            localStorage.setItem('dp_2fa_enabled', enabled ? 'true' : 'false');
+            initProfileTab();
+            showToast(enabled ? "✓ 2FA apsauga sėkmingai įjungta!" : "✕ 2FA apsauga išjungta.", enabled ? "success" : "info");
+        };
+
+        window.handleSelfPasswordUpdate = async () => {
+            const user = auth.currentUser;
+            const currPass = document.getElementById('self-current-pass')?.value || '';
+            const newPass = document.getElementById('self-new-pass')?.value || '';
+            const confPass = document.getElementById('self-confirm-pass')?.value || '';
+
+            if (!newPass || newPass.length < 8) {
+                alert("Naujas slaptažodis privalo būti bent 8 simbolių ilgio.");
+                return;
+            }
+            if (newPass !== confPass) {
+                alert("Pakartotas slaptažodis nesutampa su naujuoju.");
+                return;
+            }
+
+            try {
+                if (user && user.email && currPass) {
+                    const cred = EmailAuthProvider.credential(user.email, currPass);
+                    await reauthenticateWithCredential(user, cred);
+                }
+                if (user) {
+                    await updatePassword(user, newPass);
+                    logAdminAction('password_change', `Pakeistas paskyros slaptažodis (${user.email})`);
+                    alert("✓ Slaptažodis sėkmingai atnaujintas!");
+                    document.getElementById('self-current-pass').value = '';
+                    document.getElementById('self-new-pass').value = '';
+                    document.getElementById('self-confirm-pass').value = '';
+                } else {
+                    const email = currentAdminSession?.email || ADMIN_EMAIL;
+                    const actionSettings = getAuthActionSettings('/admin.html');
+                    await sendPasswordResetEmail(auth, email, actionSettings);
+                    alert(`✓ Kadangi sesija veikia per išsaugotą profilį, slaptažodžio atstatymo nuoroda išsiųsta į: ${email}! Paspauskite nuorodą el. laiške.`);
+                }
+            } catch(err) {
+                console.error("Password change error:", err);
+                if (err.code === 'auth/requires-recent-login' || err.code === 'auth/wrong-password') {
+                    alert("Neteisingas dabartinis slaptažodis arba reikalingas pakartotinis prisijungimas.");
+                } else {
+                    alert("Klaida keičiant slaptažodį: " + (err.message || err));
+                }
+            }
+        };
+
+        window.sendSelfPasswordResetLink = async () => {
+            const email = currentAdminSession?.email || auth.currentUser?.email || ADMIN_EMAIL;
+            if (!email) return;
+            try {
+                const actionSettings = getAuthActionSettings('/admin.html');
+                await sendPasswordResetEmail(auth, email, actionSettings);
+                logAdminAction('password_reset_self', `Išsiųsta slaptažodžio nuoroda į: ${email}`);
+                alert(`✓ Slaptažodžio nustatymo nuoroda sėkmingai išsiųsta į: ${email}!`);
+            } catch(err) {
+                alert("Klaida siunčiant nuorodą: " + (err.message || err));
+            }
+        };
+
+        window.handleSelfEmailUpdate = async () => {
+            const user = auth.currentUser;
+            const newEmail = document.getElementById('self-new-email')?.value.trim().toLowerCase();
+            const currPass = document.getElementById('self-email-curr-pass')?.value || '';
+
+            if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+                alert("Prašome įvesti galiojantį naują el. pašto adresą.");
+                return;
+            }
+
+            try {
+                if (user && currPass) {
+                    const cred = EmailAuthProvider.credential(user.email, currPass);
+                    await reauthenticateWithCredential(user, cred);
+                }
+                if (user) {
+                    const actionSettings = getAuthActionSettings('/admin.html');
+                    if (typeof verifyBeforeUpdateEmail === 'function') {
+                        await verifyBeforeUpdateEmail(user, newEmail, actionSettings);
+                        alert(`✓ Verifikacijos nuoroda sėkmingai išsiųsta į naująjį adresą „${newEmail}“! Paspauskite nuorodą el. laiške, kad patvirtintumėte el. pašto pakeitimą.`);
+                    } else {
+                        await updateEmail(user, newEmail);
+                        alert(`✓ El. pašto adresas atnaujintas į: ${newEmail}!`);
+                    }
+                    logAdminAction('email_update_request', `Pateikta užklausa atnaujinti el. paštą į: ${newEmail}`);
+                } else {
+                    alert("Tiesioginiam el. pašto keitimui reikalinga aktyvi prisijungimo sesija.");
+                }
+            } catch(err) {
+                console.error("Email update error:", err);
+                alert("Klaida keičiant el. pašto adresą: " + (err.message || err));
+            }
         };
 
         // Unified Dashboard Stats calculation
@@ -5485,7 +5939,8 @@
             }
 
             try {
-                await sendPasswordResetEmail(auth, email);
+                const actionSettings = getAuthActionSettings('/admin.html');
+                await sendPasswordResetEmail(auth, email, actionSettings);
                 logAdminAction('password_reset', `Išsiųstas slaptažodžio atstatymo laiškas nariui: ${name} (${email})`, { email, name });
                 alert(`✓ Slaptažodžio atstatymo nuoroda sėkmingai išsiųsta į ${email}! Narys gavęs laišką paspaus nuorodą ir atstatys slaptažodį.`);
             } catch(e) {

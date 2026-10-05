@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Palikti Atsiliepimą | DP.PORTFOLIO</title>
+    <meta name="description" content="Pasidalykite savo įspūdžiais po fotosesijos ar kūrybinio projekto su fotografu Dominik Šuškevič.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/review.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
+    <style>
+        .review-page-container {
+            max-width: 680px;
+            margin: 120px auto 60px auto;
+            padding: 0 20px;
+        }
+        .review-card-box {
+            background: #ffffff;
+            border: 1px solid rgba(17, 57, 57, 0.12);
+            border-radius: 8px;
+            padding: 40px 36px;
+            box-shadow: 0 15px 40px rgba(17, 57, 57, 0.05);
+        }
+        .star-rating-widget {
+            display: flex;
+            gap: 10px;
+            font-size: 2.2rem;
+            cursor: pointer;
+            margin-top: 8px;
+            user-select: none;
+        }
+        .star-item {
+            color: #d1d5db;
+            transition: color 0.2s ease, transform 0.15s ease;
+        }
+        .star-item.active, .star-item.hovered {
+            color: #C5A880;
+        }
+        .star-item:hover {
+            transform: scale(1.15);
+        }
+        .form-label {
+            display: block;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .form-input-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid rgba(17, 57, 57, 0.2);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            background: #FAFBFB;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .form-input-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: #ffffff;
+        }
+        .review-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 25px;
+        }
+        .review-submit-btn:hover {
+            background: #1a4f4f;
+            box-shadow: 0 8px 25px rgba(17, 57, 57, 0.2);
+        }
+        .review-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        @media (max-width: 600px) {
+            .review-card-box {
+                padding: 28px 20px;
+            }
+            .review-page-container {
+                margin-top: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header" class="scrolled">
+        <div class="header-container">
+            <a href="index.html" class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></a>
+            <nav class="desktop-nav">
+                <a href="index.html">Darbai</a>
+                <a href="services.html">Paslaugos</a>
+                <a href="tfp-booking.html">TFP Registracija</a>
+                <a href="contacts.html">Kontaktai</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="review-page-container">
+        <div class="review-card-box">
+            <div style="text-align: center; margin-bottom: 28px;">
+                <span class="section-tag" style="color: var(--accent-light);">DP.PORTFOLIO Atsiliepimas</span>
+                <h1 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; color: var(--accent-color); font-size: 1.65rem; margin: 10px 0 8px 0; font-weight: 400;">
+                    Palikite Savo Įvertinimą
+                </h1>
+                <div class="divider" style="margin: 14px auto;"></div>
+                <p style="font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0;">
+                    Jūsų atsiliepimas padeda kitiems klientams ir modeliams atrasti Dominik Šuškevič kūrybą. Dėkojame už Jūsų laiką ir pasitikėjimą!
+                </p>
+            </div>
+
+            <div id="review-success-panel" style="display: none; text-align: center; padding: 35px 20px; background: #FAFBFB; border: 1px solid rgba(17, 57, 57, 0.15); border-radius: 6px;">
+                <div style="font-size: 3rem; color: #2e7d32; line-height: 1; margin-bottom: 14px;">✓</div>
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); font-size: 1.25rem; margin: 0 0 12px 0;">
+                    Nuoširdus Ačiū Už Jūsų Atsiliepimą!
+                </h3>
+                <p style="font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0 0 24px 0;">
+                    Jūsų įvertinimas sėkmingai išsaugotas. Po patvirtinimo jis bus publikuotas DP.PORTFOLIO paslaugų ir rekomendacijų skiltyje.
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <a href="services.html" class="contact-cta-btn btn-paid" style="text-decoration: none; padding: 12px 24px;">Grįžti į Paslaugas</a>
+                    <a href="index.html" class="contact-cta-btn btn-free" style="text-decoration: none; padding: 12px 24px;">Galerija</a>
+                </div>
+            </div>
+
+            <form id="public-review-form">
+                <div style="margin-bottom: 22px;">
+                    <label class="form-label" for="rev-client-name">Jūsų Vardas (arba Inicialai) *</label>
+                    <input type="text" id="rev-client-name" class="form-input-control" placeholder="pvz. Karolina V. arba Mantas" required autocomplete="name">
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label class="form-label">Įvertinimas Žvaigždutėmis *</label>
+                    <div class="star-rating-widget" id="star-picker" role="radiogroup" aria-label="Įvertinimas žvaigždutėmis">
+                        <span class="star-item active" data-rating="1" role="radio" aria-checked="false" tabindex="0">★</span>
+                        <span class="star-item active" data-rating="2" role="radio" aria-checked="false" tabindex="0">★</span>
+                        <span class="star-item active" data-rating="3" role="radio" aria-checked="false" tabindex="0">★</span>
+                        <span class="star-item active" data-rating="4" role="radio" aria-checked="false" tabindex="0">★</span>
+                        <span class="star-item active" data-rating="5" role="radio" aria-checked="true" tabindex="0">★</span>
+                    </div>
+                    <input type="hidden" id="rev-rating" value="5">
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label class="form-label" for="rev-comment">Jūsų Atsiliepimas ir Įspūdžiai *</label>
+                    <textarea id="rev-comment" class="form-input-control" rows="5" placeholder="Kaip praėjo fotosesija? Kaip vertinate atmosferą, bendravimą ir galutinį retušuotų nuotraukų rezultatą?" required style="line-height: 1.6;"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px;">
+                    <div>
+                        <label class="form-label" for="rev-date">Fotosesijos Data *</label>
+                        <input type="date" id="rev-date" class="form-input-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label" for="rev-type">Fotosesijos Tipas</label>
+                        <select id="rev-type" class="form-input-control">
+                            <option value="service" selected>Mokama Fotosesija</option>
+                            <option value="tfp">TFP Projektas (Modelis)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label class="form-label" for="rev-tag">Fotosesijos Tema / Pavadinimas (Neprivaloma)</label>
+                    <input type="text" id="rev-tag" class="form-input-control" placeholder="pvz. Asmeninis portretas Kaune / Poros fotosesija">
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label class="form-label" for="rev-link">Nuoroda į Jūsų Instagram / Profilį (Neprivaloma)</label>
+                    <input type="url" id="rev-link" class="form-input-control" placeholder="https://instagram.com/jusu_profilis">
+                </div>
+
+                <button type="submit" id="submit-review-btn" class="review-submit-btn">
+                    Pateikti Atsiliepimą &rarr;
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & Submissions Handler -->
+    <script type="module">
+        (function enforceActiveSubdomain() {
+            const host = window.location.hostname;
+            if (host.includes('dominikphotofficial.lt') && host !== 'portfolio.dominikphotofficial.lt') {
+                window.location.replace(`https://portfolio.dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
+            }
+        })();
+
+        import { db } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+        // Set default date to today
+        const dateInput = document.getElementById('rev-date');
+        if (dateInput) {
+            dateInput.value = new Date().toISOString().split('T')[0];
+        }
+
+        // Pre-fill from URL params (?name=...&album=...&type=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('name')) {
+            const nameEl = document.getElementById('rev-client-name');
+            if (nameEl) nameEl.value = urlParams.get('name');
+        }
+        if (urlParams.has('album') || urlParams.has('title')) {
+            const tagEl = document.getElementById('rev-tag');
+            if (tagEl) tagEl.value = urlParams.get('album') || urlParams.get('title');
+        }
+        if (urlParams.has('type')) {
+            const typeEl = document.getElementById('rev-type');
+            if (typeEl && (urlParams.get('type') === 'tfp' || urlParams.get('type') === 'service')) {
+                typeEl.value = urlParams.get('type');
+            }
+        }
+
+        // Interactive Star Rating Picker
+        let currentRating = 5;
+        const starItems = document.querySelectorAll('.star-item');
+        const ratingInput = document.getElementById('rev-rating');
+
+        function updateStars(val) {
+            currentRating = val;
+            if (ratingInput) ratingInput.value = val;
+            starItems.forEach(star => {
+                const starVal = parseInt(star.getAttribute('data-rating'), 10);
+                if (starVal <= val) {
+                    star.classList.add('active');
+                    star.setAttribute('aria-checked', starVal === val ? 'true' : 'false');
+                } else {
+                    star.classList.remove('active');
+                    star.setAttribute('aria-checked', 'false');
+                }
+            });
+        }
+
+        starItems.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-rating'), 10);
+                updateStars(val);
+            });
+            star.addEventListener('mouseover', () => {
+                const val = parseInt(star.getAttribute('data-rating'), 10);
+                starItems.forEach(s => {
+                    const sVal = parseInt(s.getAttribute('data-rating'), 10);
+                    s.classList.toggle('hovered', sVal <= val);
+                });
+            });
+            star.addEventListener('mouseout', () => {
+                starItems.forEach(s => s.classList.remove('hovered'));
+            });
+            star.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const val = parseInt(star.getAttribute('data-rating'), 10);
+                    updateStars(val);
+                }
+            });
+        });
+
+        // Form Submit Handler
+        const form = document.getElementById('public-review-form');
+        const submitBtn = document.getElementById('submit-review-btn');
+        const successPanel = document.getElementById('review-success-panel');
+
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const clientName = document.getElementById('rev-client-name')?.value.trim();
+            const rating = parseInt(ratingInput?.value, 10) || 5;
+            const comment = document.getElementById('rev-comment')?.value.trim();
+            const date = document.getElementById('rev-date')?.value || new Date().toISOString().split('T')[0];
+            const type = document.getElementById('rev-type')?.value || 'service';
+            const sessionTag = document.getElementById('rev-tag')?.value.trim() || '';
+            const reviewLink = document.getElementById('rev-link')?.value.trim() || '';
+
+            if (!clientName || !comment) {
+                alert("Prašome užpildyti visus privalomus laukelius.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Siunčiama...';
+
+            const reviewPayload = {
+                clientName,
+                rating,
+                comment,
+                date,
+                type,
+                sessionTag: sessionTag || (type === 'tfp' ? 'TFP fotosesija' : 'Fotosesija'),
+                reviewLink,
+                status: 'pending', // Apsaugota peržiūros būsena (laukia administratoriaus patvirtinimo)
+                visible: false,    // Nepublikuojama, kol administratorius nepatvirtins
+                createdAt: serverTimestamp(),
+                token: urlParams.get('token') || ''
+            };
+
+            try {
+                // 1. Įrašymas į Firestore
+                await addDoc(collection(db, "reviews"), reviewPayload);
+
+                // 2. Local fallback į server.js jei pasiekiama
+                try {
+                    await fetch('/api/reviews', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(reviewPayload)
+                    });
+                } catch(apiErr) {}
+
+                // 3. Analytics sekimas
+                if (window.trackFormSubmission) {
+                    window.trackFormSubmission('review_submission', {
+                        name: clientName,
+                        rating: rating,
+                        type: type
+                    });
+                }
+
+                form.style.display = 'none';
+                successPanel.style.display = 'block';
+                window.scrollTo({ top: successPanel.offsetTop - 100, behavior: 'smooth' });
+            } catch(err) {
+                console.error("Review submission error:", err);
+                alert("Klaida siunčiant atsiliepimą: " + (err.message || err));
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Pateikti Atsiliepimą →';
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

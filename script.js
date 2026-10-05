@@ -5,6 +5,28 @@ window.addEventListener('error', (event) => {
     }
 });
 
+// Centralized Analytics (GA4) & Unified Album Footer dynamic loaders
+(function loadGlobalHelpers() {
+    const isInAlbumsDir = window.location.pathname.includes('/albums/');
+    const pathPrefix = isInAlbumsDir ? '../' : './';
+
+    if (!window.trackPageView && !document.getElementById('dp-analytics-script')) {
+        const sc = document.createElement('script');
+        sc.id = 'dp-analytics-script';
+        sc.src = pathPrefix + 'analytics.js';
+        sc.async = true;
+        document.head.appendChild(sc);
+    }
+
+    if (!window.mountAlbumFooter && !document.getElementById('dp-album-footer-script')) {
+        const scFooter = document.createElement('script');
+        scFooter.id = 'dp-album-footer-script';
+        scFooter.src = pathPrefix + 'album-footer.js';
+        scFooter.async = true;
+        document.head.appendChild(scFooter);
+    }
+})();
+
 // Only initialize Cookiebot on official production domain outside iframe
 if (typeof window !== 'undefined' && 
     window.location.hostname.endsWith('dominikphotofficial.lt') && 
@@ -334,11 +356,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Initial status update
         updateFilterStatus("all", albumCards.length);
+
+        // Track album card clicks
+        albumCards.forEach(card => {
+            card.addEventListener("click", () => {
+                const title = card.querySelector("h2, h3, .album-title")?.innerText?.trim() || card.getAttribute("data-category") || "Album";
+                const link = card.getAttribute("href") || card.querySelector("a")?.getAttribute("href") || "";
+                if (window.trackAlbumOpen) {
+                    window.trackAlbumOpen(link, title);
+                }
+            });
+        });
     }
 
     const tfpForm = document.getElementById('tfp-booking-form');
     if(tfpForm) {
         tfpForm.addEventListener('submit', function(e) {
+            if (window.trackFormSubmission) {
+                window.trackFormSubmission('tfp_booking', { form_name: 'TFP Booking Form' });
+            }
             const submitBtn = tfpForm.querySelector('button');
             submitBtn.disabled = true;
             submitBtn.innerText = 'Siunčiama...';
@@ -349,4 +385,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 1000);
         });
     }
+
+    // Generic form submission tracking
+    document.querySelectorAll("form").forEach(form => {
+        if (form.id === 'tfp-booking-form') return; // already handled
+        form.addEventListener('submit', function() {
+            if (window.trackFormSubmission) {
+                window.trackFormSubmission(form.id || 'general_form', { form_name: form.getAttribute('name') || form.id || 'Web Form' });
+            }
+        });
+    });
 });

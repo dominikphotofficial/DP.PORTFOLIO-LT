@@ -1232,6 +1232,11 @@
                 <h2>Klientų & Modelių Atsiliepimai</h2>
                 <div class="divider"></div>
                 <p>Nuoširdūs įspūdžiai ir atsiliepimai po fotosesijų bei kūrybinių TFP projektų.</p>
+                <div style="margin-top: 14px;">
+                    <a href="review.html" class="contact-cta-btn btn-paid" style="display: inline-block; padding: 10px 24px; font-size: 0.8rem; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px;">
+                        ✍️ Palikti savo atsiliepimą
+                    </a>
+                </div>
             </div>
 
             <div class="reviews-filter-bar">
@@ -1597,39 +1602,58 @@
             }
         });
 
-        // Reviews loader (Dual-sync: File + Firestore)
+        // Reviews loader (Dual-sync: File + Firestore with approval filtering)
         fetchReviewsList().then(list => {
             if (list && list.length > 0) {
-                renderReviews(list.filter(r => r.visible !== false));
+                const approved = list.filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                renderReviews(approved);
             }
         });
 
-        // Real-time Firestore sync
+        // Real-time Firestore sync (safe against composite index failures)
         try {
             const reviewsCol = collection(db, "reviews");
-            const q = query(reviewsCol, orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
+            onSnapshot(reviewsCol, (snapshot) => {
                 if (!snapshot.empty) {
                     const loaded = [];
                     snapshot.forEach(docSnap => {
-                        const d = docSnap.data();
-                        if (d.visible !== false) {
+                        const d = { id: docSnap.id, ...docSnap.data() };
+                        // Approval status check: must be published or visible
+                        const isApproved = d.status === 'published' || (d.status === undefined && d.visible !== false);
+                        if (isApproved) {
                             loaded.push(d);
                         }
                     });
+
+                    // Sort client-side safely by date/createdAt descending
+                    loaded.sort((a, b) => {
+                        const timeA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : new Date(a.createdAt || a.date || 0).getTime();
+                        const timeB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date(b.createdAt || b.date || 0).getTime();
+                        return timeB - timeA;
+                    });
+
                     if (loaded.length > 0) {
                         renderReviews(loaded);
                         return;
                     }
                 }
-                fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
+                fetchReviewsList().then(list => {
+                    const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                    renderReviews(approved);
+                });
             }, (err) => {
                 console.warn("Firestore reviews fallback to file:", err);
-                fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
+                fetchReviewsList().then(list => {
+                    const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                    renderReviews(approved);
+                });
             });
         } catch (e) {
             console.warn("Reviews init error:", e);
-            fetchReviewsList().then(list => renderReviews((list && list.length > 0 ? list : initialReviews).filter(r => r.visible !== false)));
+            fetchReviewsList().then(list => {
+                const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                renderReviews(approved);
+            });
         }
 
         // Reviews filter tab handling

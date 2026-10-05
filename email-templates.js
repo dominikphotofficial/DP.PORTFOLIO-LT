@@ -794,3 +794,44 @@ export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
     return { subject, html };
 }
 
+// ⭐ Švarus atsiliepimo kvietimo šablonas po fotosesijos (Post-Delivery Review Invitation)
+export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUrl, reviewUrl }) {
+    const targetReviewUrl = reviewUrl || `${BRAND.websiteUrl}/review.html?name=${encodeURIComponent(clientName || '')}`;
+    const subject = `Kaip praėjo Jūsų fotosesija? Pasidalykite atsiliepimu | DP.PORTFOLIO`;
+    const greeting = `Sveiki, ${clientName || 'Kliente'}!`;
+    const text = `Nuoširdžiai dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionTitle ? ` („${sessionTitle}“)` : ''}. Tikimės, kad gautos nuotraukos džiugina Jus ir Jūsų artimuosius!
+
+Jūsų nuomonė ir įspūdžiai man yra be galo svarbūs – jie padeda tobulėti ir leidžia kitiems būsimiems klientams bei modeliams sužinoti, kokios patirties galima tikėtis dirbant kartu.
+
+Būtume labai dėkingi, jei skirtumėte 1 minutę ir pasidalintumėte trumpu atsiliepimu apie fotosesijos atmosferą, bendravimą bei rezultatą:`;
+
+    const boxHtml = `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #C5A880; border-radius: 4px;">
+            <tr>
+                <td style="padding: 24px; text-align: center;">
+                    <div style="font-size: 24px; color: #C5A880; margin-bottom: 8px;">★★★★★</div>
+                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Palikite Savo Atsiliepimą
+                    </div>
+                    <p style="margin: 0 0 20px 0; font-size: 14px; color: #4A5568; line-height: 1.6;">
+                        Spustelėkite žemiau esantį mygtuką ir atverkite trumpą atsiliepimo formą:
+                    </p>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto;">
+                        <tr>
+                            <td align="center" style="background-color: #113939; border-radius: 4px; box-shadow: 0 4px 15px rgba(17,57,57,0.18);">
+                                <a href="${targetReviewUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                    Palikti Atsiliepimą &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    `;
+
+    const galleryHtml = galleryUrl ? getGalleryHtml('lt', galleryUrl) : '';
+    const html = buildFinalHtml(greeting, text, boxHtml, galleryHtml, '');
+    return { subject, html };
+}
+
