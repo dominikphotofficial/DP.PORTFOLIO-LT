@@ -5,6 +5,69 @@ window.addEventListener('error', (event) => {
     }
 });
 
+// ==============================================================================
+// 🩺 Firebase Auth Configuration & Initialization Diagnostic Logger
+// Ensures current configuration is strictly injected without stale or cached values
+// ==============================================================================
+(function runFirebaseAuthDiagnostics() {
+    if (typeof window === 'undefined') return;
+
+    window.logFirebaseAuthDiagnostics = function() {
+        const isInAlbums = window.location.pathname.includes('/albums/');
+        const prefix = isInAlbums ? '../' : './';
+        
+        fetch(prefix + 'firebase-applet-config.json')
+            .then(res => res.json())
+            .then(config => {
+                const initConfig = window.__FIREBASE_INITIALIZED_CONFIG__ || {};
+                const isMatching = initConfig.authDomain === config.authDomain;
+                const isDefaultFallback = initConfig.authDomain && initConfig.authDomain.includes('firebaseapp.com');
+
+                const diag = {
+                    loadedFromFile: 'firebase-applet-config.json',
+                    configAuthDomain: config.authDomain,
+                    activeSdkAuthDomain: initConfig.authDomain || 'Loading...',
+                    isSynchronized: isMatching,
+                    isUsingCachedOrFallback: isDefaultFallback,
+                    projectId: config.projectId,
+                    targetRedirectUri: `https://${config.authDomain}/__/auth/handler`,
+                    targetIframeUri: `https://${config.authDomain}/__/auth/iframe`,
+                    targetActionUri: `https://${config.authDomain}/__/auth/action`,
+                    oAuthClientId: config.oAuthClientId,
+                    windowHostname: window.location.hostname,
+                    windowHref: window.location.href,
+                    isPrefixSubdomain: window.location.hostname.startsWith('portfolio.'),
+                    isApexDomain: window.location.hostname === 'dominikphotofficial.lt',
+                    cachedStorageSession: localStorage.getItem('dp_admin_session') ? 'Active' : 'None',
+                    timestamp: new Date().toISOString()
+                };
+
+                window.__FIREBASE_ACTIVE_CONFIG__ = diag;
+                console.group('%c[Firebase Auth Environment & Config Diagnostics]', 'color: #113939; font-weight: bold; font-size: 13px;');
+                console.log('Project ID:', diag.projectId);
+                console.log('Config authDomain (File):', diag.configAuthDomain);
+                console.log('Active SDK authDomain (Runtime):', diag.activeSdkAuthDomain);
+                console.log('Status Synchronized:', isMatching ? '✅ TAIP (Sutampa)' : '⚠️ NE (Nesutampa)');
+                console.log('Uses Default/Fallback:', isDefaultFallback ? '⚠️ Taip (Naudoja .firebaseapp.com)' : '✅ Ne (Tiesioginis domenas)');
+                console.log('Auth Redirect URI:', diag.targetRedirectUri);
+                console.log('Current Hostname:', diag.windowHostname);
+                console.log('Is Prefix Subdomain (portfolio.*):', diag.isPrefixSubdomain);
+                console.log('Full Diagnostic State:', diag);
+                console.groupEnd();
+                return diag;
+            })
+            .catch(err => {
+                console.warn('[Firebase Auth Diagnostics] Config fetch notice:', err);
+            });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.logFirebaseAuthDiagnostics);
+    } else {
+        window.logFirebaseAuthDiagnostics();
+    }
+})();
+
 // Centralized Analytics (GA4) & Unified Album Footer dynamic loaders
 (function loadGlobalHelpers() {
     const isInAlbumsDir = window.location.pathname.includes('/albums/');

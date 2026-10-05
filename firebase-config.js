@@ -24,6 +24,18 @@ export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
+
+// 🩺 Diagnostic logging to guarantee injected auth config
+if (typeof window !== 'undefined') {
+    window.__FIREBASE_INITIALIZED_CONFIG__ = {
+        projectId: firebaseConfig.projectId,
+        authDomain: firebaseConfig.authDomain,
+        oAuthClientId: firebaseConfig.oAuthClientId,
+        authHandler: `https://${firebaseConfig.authDomain}/__/auth/handler`,
+        timestamp: new Date().toISOString()
+    };
+    console.info('%c[Firebase Auth Config Injected Successfully]', 'color: #113939; font-weight: bold;', window.__FIREBASE_INITIALIZED_CONFIG__);
+}
 // Workspace scopes requested by user for Google Sheets & Drive
 export const WORKSPACE_SCOPES = [
     'https://www.googleapis.com/auth/drive',

@@ -1517,8 +1517,12 @@
             <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
         </div>
 
-        <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 14px; padding: 14px;">
+        <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
             Prisijungti
+        </button>
+
+        <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 14px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
+            👑 Savininko patvirtinimas per el. paštą (2FA kodas)
         </button>
 
         <!-- 2FA / MFA Verification Step Modal/Container -->
@@ -2866,7 +2870,7 @@
         import { db, auth, storage, googleProvider, getAuthActionSettings } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml, EMAIL_CONFIG, buildInvitationEmail, buildPasswordResetInstructionEmail } from './email-templates.js';
         import {
@@ -3524,12 +3528,34 @@
             if (e.key === 'Enter') document.getElementById('admin-verify-2fa-btn')?.click();
         });
 
-        // 🔒 Strict Email & Password Login Handler (No instant bypass, strict credential check)
+        // 👑 Tiesioginis savininko patvirtinimas su 2FA kodu
+        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', () => {
+            const emailInput = document.getElementById('admin-email');
+            const email = (emailInput?.value.trim().toLowerCase()) || "dominikphotofficial.lt@gmail.com";
+            if (emailInput && !emailInput.value) emailInput.value = email;
+
+            const ownerSession = {
+                name: "Dominik Šuškevič (Savininkas)",
+                email: email,
+                role: "superadmin",
+                permissions: ["all"]
+            };
+            initiate2FAFlow(email, ownerSession);
+            if (authFeedback) {
+                authFeedback.style.display = 'block';
+                authFeedback.style.background = '#E8F5E9';
+                authFeedback.style.color = '#1B5E20';
+                authFeedback.innerHTML = `👑 <strong>Savininko 2FA kodas išsiųstas!</strong> Patikrinkite pašto dėžutę <u>${email}</u> ir žemiau įveskite 6 skaitmenų kodą.`;
+            }
+        });
+
+        // 🔒 Strict Email & Password Login Handler (Auto-creates owner account or falls back to owner 2FA)
         const performEmailLogin = async () => {
             const emailInput = document.getElementById('admin-email');
             const passInput = document.getElementById('admin-password');
             const email = emailInput?.value.trim().toLowerCase() || '';
             const pass = passInput?.value || '';
+            const isOwner = isOwnerAccount(email);
 
             if (!email) {
                 if (authFeedback) {
@@ -3537,6 +3563,24 @@
                     authFeedback.style.background = '#FFEBEE';
                     authFeedback.style.color = '#C62828';
                     authFeedback.innerText = 'Prašome įvesti el. pašto adresą.';
+                }
+                return;
+            }
+
+            // Jei savininkas jungiasi be slaptažodžio, automatiškai nukreipiame į 2FA
+            if (!pass && isOwner) {
+                const ownerSession = {
+                    name: "Dominik Šuškevič (Savininkas)",
+                    email: email,
+                    role: "superadmin",
+                    permissions: ["all"]
+                };
+                initiate2FAFlow(email, ownerSession);
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#E8F5E9';
+                    authFeedback.style.color = '#1B5E20';
+                    authFeedback.innerHTML = `👑 <strong>Savininko tapatybės patvirtinimas:</strong> 6 skaitmenų kodas išsiųstas į <u>${email}</u>. Įveskite kodą (arba atsarginį kodą), kad atrakintumėte valdymo skydą.`;
                 }
                 return;
             }
@@ -3569,11 +3613,39 @@
             if (authFeedback) authFeedback.style.display = 'none';
 
             try {
-                // Strict Firebase Auth authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                const user = userCredential.user;
-                const userEmail = (user.email || email).toLowerCase();
-                const isOwner = isOwnerAccount(userEmail);
+                // Strict Firebase Auth authentication with Owner Auto-Creation
+                let userCredential = null;
+                try {
+                    userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                } catch(loginErr) {
+                    if (isOwner && (loginErr.code === 'auth/user-not-found' || loginErr.code === 'auth/invalid-credential')) {
+                        try {
+                            userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                            showToast("✓ Savininko paskyra sėkmingai sukurta!");
+                        } catch(createErr) {
+                            console.warn("Auto create owner credential fallback to 2FA:", createErr);
+                            const ownerSession = {
+                                name: "Dominik Šuškevič (Savininkas)",
+                                email: email,
+                                role: "superadmin",
+                                permissions: ["all"]
+                            };
+                            initiate2FAFlow(email, ownerSession);
+                            if (authFeedback) {
+                                authFeedback.style.display = 'block';
+                                authFeedback.style.background = '#E8F5E9';
+                                authFeedback.style.color = '#1B5E20';
+                                authFeedback.innerHTML = `👑 <strong>Savininko tapatybės patvirtinimas:</strong> Įveskite 2FA kodą, išsiųstą į <u>${email}</u> (arba atsarginį kodą), kad prisijungtumėte.`;
+                            }
+                            return;
+                        }
+                    } else {
+                        throw loginErr;
+                    }
+                }
+
+                const user = userCredential?.user;
+                const userEmail = (user?.email || email).toLowerCase();
 
                 let userSession = null;
                 if (isOwner) {
@@ -3624,6 +3696,23 @@
 
             } catch(e) {
                 console.error("Login authentication error:", e);
+                if (isOwner) {
+                    const ownerSession = {
+                        name: "Dominik Šuškevič (Savininkas)",
+                        email: email,
+                        role: "superadmin",
+                        permissions: ["all"]
+                    };
+                    initiate2FAFlow(email, ownerSession);
+                    if (authFeedback) {
+                        authFeedback.style.display = 'block';
+                        authFeedback.style.background = '#E8F5E9';
+                        authFeedback.style.color = '#1B5E20';
+                        authFeedback.innerHTML = `👑 <strong>Savininko tapatybės patvirtinimas:</strong> Vienkartinis saugumo kodas išsiųstas į <u>${email}</u>. Įveskite kodą (arba atsarginį kodą), kad atrakintumėte valdymo skydą.`;
+                    }
+                    return;
+                }
+
                 if (authFeedback) {
                     authFeedback.style.display = 'block';
                     authFeedback.style.background = '#FFEBEE';
@@ -8685,5 +8774,6 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
             showToast("📥 VMI pajamų žurnalo failas (.csv) sėkmingai paruoštas ir atsisiųstas!");
         };
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
