@@ -68,6 +68,37 @@ window.addEventListener('error', (event) => {
     }
 })();
 
+// ==============================================================================
+// 🛡️ Firebase & Firestore Permission & Network Error Interceptor
+// Intercepts and logs detailed diagnostics for 'Missing or insufficient permissions'
+// ==============================================================================
+(function installFirebaseErrorInterceptor() {
+    if (typeof window === 'undefined') return;
+
+    window.addEventListener('unhandledrejection', (event) => {
+        const reason = event.reason;
+        const msg = (reason?.message || String(reason) || '').toLowerCase();
+        const code = (reason?.code || '').toLowerCase();
+
+        if (msg.includes('insufficient permissions') || msg.includes('permission-denied') || code.includes('permission-denied')) {
+            console.group('%c[Firestore Permission Error Intercepted]', 'color: #D32F2F; font-weight: bold; font-size: 13px;');
+            console.error('Error Code:', reason?.code || 'permission-denied');
+            console.error('Error Message:', reason?.message || reason);
+            console.error('Stack Trace:', reason?.stack || 'N/A');
+            console.info('Full Error Object:', reason);
+            console.groupEnd();
+        }
+    });
+
+    window.interceptFirebaseError = function(context, err) {
+        console.group(`%c[Firebase Error in: ${context}]`, 'color: #C62828; font-weight: bold;');
+        console.error('Message:', err?.message || err);
+        console.error('Code:', err?.code || 'N/A');
+        console.error('Full Error:', err);
+        console.groupEnd();
+    };
+})();
+
 // Centralized Analytics (GA4) & Unified Album Footer dynamic loaders
 (function loadGlobalHelpers() {
     const isInAlbumsDir = window.location.pathname.includes('/albums/');

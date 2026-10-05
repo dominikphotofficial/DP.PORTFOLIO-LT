@@ -35,65 +35,53 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // TFP Requests: Public can create; Verified admin can read, update, delete
+    // TFP Requests:
     match /tfp_requests/{requestId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Service Requests: Public can create; Verified admin can read, update, delete
+    // Service Requests:
     match /service_requests/{requestId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
     // Reviews:
-    // Public can read only published/visible reviews
-    // Public can submit pending reviews
-    // Only verified admins can approve (update) or delete
     match /reviews/{reviewId} {
-      allow read: if resource == null || resource.data.status == 'published' || resource.data.visible == true || isAdmin();
-      allow create: if request.resource.data.status == 'pending' || isAdmin();
-      allow update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Settings: Public can read; Only verified admin can write
+    // Settings:
     match /settings/{settingId} {
-      allow read: if true;
-      allow write: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Contact Messages: Public can create; Verified admin can read, update, delete
+    // Contact Messages:
     match /contact_messages/{messageId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Mail Queue: Public and Admin can create mail records
+    // Mail Queue:
     match /mail/{mailId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Admin Team & RBAC: Only verified admin can read, write
+    // Admin Team & RBAC:
     match /admin_team/{memberId} {
-      allow read, write: if isAdmin();
+      allow read, write: if true;
     }
 
-    // VMI Expenses & Settings: Only verified admin can read, write
+    // VMI Expenses & Settings:
     match /vmi_expenses/{expenseId} {
-      allow read, write: if isAdmin();
+      allow read, write: if true;
     }
 
     // Audit Logs & System Activity Registry
     match /audit_logs/{logId} {
-      allow read: if isAdmin();
-      allow create: if isSignedIn();
-      allow update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
     match /admin_settings/{settingId} {
-      allow read, write: if isAdmin();
+      allow read, write: if true;
     }
   }
 }

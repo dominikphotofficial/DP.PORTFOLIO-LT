@@ -3686,8 +3686,17 @@
                     };
                 }
 
-                // Check 2FA requirement
-                const is2FaActive = localStorage.getItem('dp_2fa_enabled') !== 'false';
+                // Runtime Diagnostics for Auth configuration during sign-in
+                const runtimeAuthDomain = auth.config?.authDomain || firebaseConfig.authDomain;
+                console.group('%c[Firebase Auth Runtime Sign-in Diagnostics]', 'color: #113939; font-weight: bold; font-size: 13px;');
+                console.log('Runtime authDomain:', runtimeAuthDomain);
+                console.log('Is dominikphotofficial.lt:', runtimeAuthDomain === 'dominikphotofficial.lt' ? '✅ TAIP' : '⚠️ NE');
+                console.log('Is Default (.firebaseapp.com):', runtimeAuthDomain.includes('firebaseapp.com') ? '⚠️ TAIP' : '✅ NE');
+                console.log('Redirect URI:', `https://${runtimeAuthDomain}/__/auth/handler`);
+                console.groupEnd();
+
+                // Check 2FA requirement (only if explicitly enabled in profile settings)
+                const is2FaActive = localStorage.getItem('dp_2fa_enabled') === 'true';
                 if (is2FaActive) {
                     initiate2FAFlow(userEmail, userSession);
                 } else {
@@ -3729,6 +3738,15 @@
         // Google login
         document.getElementById('admin-login-google-btn')?.addEventListener('click', async () => {
             if (authFeedback) authFeedback.style.display = 'none';
+            const runtimeAuthDomain = auth.config?.authDomain || firebaseConfig.authDomain;
+            console.group('%c[Google OAuth Runtime Sign-in Diagnostics]', 'color: #113939; font-weight: bold; font-size: 13px;');
+            console.log('Runtime authDomain:', runtimeAuthDomain);
+            console.log('Is dominikphotofficial.lt:', runtimeAuthDomain === 'dominikphotofficial.lt' ? '✅ TAIP' : '⚠️ NE');
+            console.log('Is Default (.firebaseapp.com):', runtimeAuthDomain.includes('firebaseapp.com') ? '⚠️ TAIP' : '✅ NE');
+            console.log('Redirect URI Sent to Google:', `https://${runtimeAuthDomain}/__/auth/handler`);
+            console.log('Current Window Host:', window.location.hostname);
+            console.groupEnd();
+
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const cred = GoogleAuthProvider.credentialFromResult(result);
@@ -5208,7 +5226,8 @@
                 showToast("✓ Užsakymas atnaujintas ir el. laiškas su prisegtu PDF sėkmingai išsiųstas!", "success");
                 closeModal();
             } catch(e) {
-                console.error(e);
+                console.error("Email send error:", e);
+                window.interceptFirebaseError?.('Siunčiant el. laišką ir atnaujinant užsakymą', e);
                 showToast("Klaida siunčiant laišką: " + (e.message || e), "error");
             } finally {
                 btn.disabled = false;
@@ -6183,6 +6202,7 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                 closeTeamMemberModal();
             } catch(e) {
                 console.error("Error saving team member:", e);
+                window.interceptFirebaseError?.('Pridedant komandos narį', e);
                 alert("Klaida pridedant narį: " + (e.message || e));
             } finally {
                 btn.disabled = false;
