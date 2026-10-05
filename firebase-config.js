@@ -11,7 +11,7 @@ export const firebaseConfig = {
     projectId: "tfp-form",
     appId: "1:542082314917:web:34889b7aa21c7eaed0d34c",
     apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-    authDomain: "dominikphotofficial.lt",
+    authDomain: "portfolio.dominikphotofficial.lt",
     firestoreDatabaseId: "ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce",
     storageBucket: "tfp-form.firebasestorage.app",
     messagingSenderId: "542082314917",
