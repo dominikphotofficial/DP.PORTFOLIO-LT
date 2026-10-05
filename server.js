@@ -13,9 +13,9 @@ const HOST = '0.0.0.0';
 
 app.use(express.json({ limit: '20mb' }));
 
-// Subdomain & Main domain routing enforcement:
-// - Subdomain (portfolio.dominikphotofficial.lt) is used for the public website & portfolio
-// - Main domain (dominikphotofficial.lt) is used for Firebase Auth (/__/auth/), registrations (/tfp-booking), reviews (/review), and admin (/admin)
+// Subdomain & Domain routing:
+// - All site pages, admin, reviews, and bookings are served on the subdomain (portfolio.dominikphotofficial.lt)
+// - Firebase Auth handler (/__/auth/) and API (/api) pass through directly on the main domain
 app.use((req, res, next) => {
     const host = (req.headers.host || '').split(':')[0].toLowerCase();
     const isCustomDomain = host.includes('dominikphotofficial.lt');
@@ -23,26 +23,16 @@ app.use((req, res, next) => {
         return next();
     }
 
-    // Always allow Firebase Auth handler and API routes to pass through directly
+    // Pass through Firebase Auth handler and API requests
     if (req.path.startsWith('/__/auth') || req.path.startsWith('/api')) {
         return next();
     }
 
     const isSubdomain = host === 'portfolio.dominikphotofficial.lt';
-    const isFunctionalRoute = 
-        req.path.startsWith('/admin') || 
-        req.path.startsWith('/review') || 
-        req.path.startsWith('/tfp-booking');
-
-    if (isFunctionalRoute) {
-        if (host !== 'dominikphotofficial.lt') {
-            return res.redirect(301, `https://dominikphotofficial.lt${req.originalUrl}`);
-        }
-    } else {
-        if (!isSubdomain) {
-            return res.redirect(301, `https://portfolio.dominikphotofficial.lt${req.originalUrl}`);
-        }
+    if (!isSubdomain) {
+        return res.redirect(301, `https://portfolio.dominikphotofficial.lt${req.originalUrl}`);
     }
+
     next();
 });
 

@@ -796,7 +796,7 @@ export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
 
 // ⭐ Švarus atsiliepimo kvietimo šablonas po fotosesijos (Post-Delivery Review Invitation)
 export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUrl, reviewUrl }) {
-    const targetReviewUrl = reviewUrl || `https://dominikphotofficial.lt/review.html?name=${encodeURIComponent(clientName || '')}`;
+    const targetReviewUrl = reviewUrl || `https://portfolio.dominikphotofficial.lt/review.html?name=${encodeURIComponent(clientName || '')}`;
     const subject = `Kaip praėjo Jūsų fotosesija? Pasidalykite atsiliepimu | DP.PORTFOLIO`;
     const greeting = `Sveiki, ${clientName || 'Kliente'}!`;
     const text = `Nuoširdžiai dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionTitle ? ` („${sessionTitle}“)` : ''}. Tikimės, kad gautos nuotraukos džiugina Jus ir Jūsų artimuosius!
