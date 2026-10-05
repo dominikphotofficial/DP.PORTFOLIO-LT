@@ -5,7 +5,7 @@
 
 const BRAND = {
     name: "DP.PORTFOLIO",
-    author: "Dominik Šuškevič",
+    author: "DP.PORTFOLIO",
     logoUrl: "https://iili.io/fjNLbs4.png",
     websiteUrl: "https://portfolio.dominikphotofficial.lt",
     instagramUrl: "https://instagram.com/dominikphotofficial",
@@ -13,11 +13,11 @@ const BRAND = {
     email: "info@dominikphotofficial.lt",
     supportEmail: "support@dominikphotofficial.lt",
     iban: "LT867300010171188764",
-    recipientName: "DOMINIK ŠUŠKEVIČ",
+    recipientName: "DP.PORTFOLIO",
     colors: {
         darkGreen: "#113939",
         accentLight: "#2A5C5C",
-        accentGold: "#C5A880",
+        accentGold: "#113939",
         bgCream: "#F7F6F2",
         cardBg: "#FFFFFF",
         textDark: "#1A2B2B",
@@ -37,7 +37,7 @@ const emailWrapperStart = `
 <body style="margin: 0; padding: 0; background-color: #F4F6F5; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
     <!-- Preview Text Spacer -->
     <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all; font-size: 1px; line-height: 1px; color: #F4F6F5;">
-        DP.PORTFOLIO • Dominik Šuškevič fotografijos ir videografijos pranešimas.
+        DP.PORTFOLIO • Fotografijos ir videografijos pranešimas.
     </div>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F4F6F5; padding: 40px 15px;">
@@ -51,14 +51,14 @@ const emailWrapperStart = `
                             <a href="${BRAND.websiteUrl}" target="_blank" style="text-decoration: none; display: inline-block;">
                                 <img src="${BRAND.logoUrl}" alt="${BRAND.name}" width="58" height="58" style="display: block; margin: 0 auto 12px auto; border: 0; outline: none;">
                                 <div style="font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 18px; letter-spacing: 4px; text-transform: uppercase; color: #FFFFFF; font-weight: 300; line-height: 1.2;">${BRAND.name}</div>
-                                <div style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #A2BFBD; margin-top: 5px;">${BRAND.author} &bull; Fotografija & Videografija</div>
+                                <div style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #A2BFBD; margin-top: 5px;">Fotografija & Videografija</div>
                             </a>
                         </td>
                     </tr>
 
-                    <!-- Gold Accent Line -->
+                    <!-- Accent Line -->
                     <tr>
-                        <td style="height: 3px; background: linear-gradient(90deg, #113939 0%, #C5A880 50%, #113939 100%);"></td>
+                        <td style="height: 3px; background: #113939;"></td>
                     </tr>
 
                     <!-- Email Content Area -->
@@ -74,7 +74,7 @@ const emailWrapperEnd = `
                     <tr>
                         <td style="background-color: #FAFBFB; border-top: 1px solid #E8ECEB; padding: 26px 30px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
                             <p style="margin: 0 0 8px 0; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 600;">
-                                Dominik Šuškevič
+                                DP.PORTFOLIO
                             </p>
                             
                             <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
@@ -95,7 +95,7 @@ const emailWrapperEnd = `
                             </table>
 
                             <p style="margin: 0; font-size: 11px; color: #9AA7A7; line-height: 1.4;">
-                                &copy; 2026 DP.PORTFOLIO. Dominik Šuškevič. Visos teisės saugomos.
+                                &copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.
                             </p>
                         </td>
                     </tr>
@@ -801,15 +801,15 @@ export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUr
     const greeting = `Sveiki, ${clientName || 'Kliente'}!`;
     const text = `Nuoširdžiai dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionTitle ? ` („${sessionTitle}“)` : ''}. Tikimės, kad gautos nuotraukos džiugina Jus ir Jūsų artimuosius!
 
-Jūsų nuomonė ir įspūdžiai man yra be galo svarbūs – jie padeda tobulėti ir leidžia kitiems būsimiems klientams bei modeliams sužinoti, kokios patirties galima tikėtis dirbant kartu.
+Jūsų nuomonė ir įspūdžiai mums yra be galo svarbūs – jie padeda tobulėti ir leidžia kitiems būsimiems klientams bei modeliams sužinoti, kokios patirties galima tikėtis dirbant kartu.
 
 Būtume labai dėkingi, jei skirtumėte 1 minutę ir pasidalintumėte trumpu atsiliepimu apie fotosesijos atmosferą, bendravimą bei rezultatą:`;
 
     const boxHtml = `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #C5A880; border-radius: 4px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
             <tr>
                 <td style="padding: 24px; text-align: center;">
-                    <div style="font-size: 24px; color: #C5A880; margin-bottom: 8px;">★★★★★</div>
+                    <div style="font-size: 24px; color: #113939; margin-bottom: 8px;">★★★★★</div>
                     <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
                         Palikite Savo Atsiliepimą
                     </div>

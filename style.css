@@ -572,13 +572,13 @@ header.scrolled {
 }
 
 .gallery-filter-btn:focus-visible {
-    box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.5);
+    box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.3);
 }
 
 .gallery-filter-btn.active {
     background: #113939;
     color: #ffffff;
-    border-color: #c5a880;
+    border-color: #113939;
     box-shadow: 0 6px 20px rgba(17, 57, 57, 0.22);
 }
 
@@ -611,8 +611,8 @@ header.scrolled {
 }
 
 .dot-heritage {
-    background: #c5a880;
-    box-shadow: 0 0 8px rgba(197, 168, 128, 0.7);
+    background: #113939;
+    box-shadow: 0 0 8px rgba(17, 57, 57, 0.6);
 }
 
 .dot-flora {
@@ -1392,28 +1392,28 @@ body.theme-automotive .footer-minimal,
 body.theme-automotive footer {
     background: #090B0E !important;
     color: #E2E8F0 !important;
-    border-top: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+    border-top: 1.5px solid #113939 !important;
 }
 
 body.theme-equestrian .footer-minimal,
 body.theme-equestrian footer {
     background: #0B1914 !important;
     color: #F1EFEA !important;
-    border-top: 1.5px solid rgba(200, 159, 104, 0.4) !important;
+    border-top: 1.5px solid #113939 !important;
 }
 
 body.theme-cosmic .footer-minimal,
 body.theme-cosmic footer {
     background: #040714 !important;
     color: #E0E7FF !important;
-    border-top: 1.5px solid rgba(129, 140, 248, 0.4) !important;
+    border-top: 1.5px solid #113939 !important;
 }
 
 body.theme-heritage .footer-minimal,
 body.theme-heritage footer {
     background: #14100C !important;
     color: #F5EBE1 !important;
-    border-top: 1.5px solid rgba(212, 163, 115, 0.4) !important;
+    border-top: 1.5px solid #113939 !important;
 }
 
 .footer-min-container {
@@ -1977,7 +1977,7 @@ body.theme-heritage .gallery-item:hover {
 }
 
 .review-stars {
-    color: #C5A880;
+    color: #113939;
     font-size: 1.15rem;
     letter-spacing: 3px;
     line-height: 1;
