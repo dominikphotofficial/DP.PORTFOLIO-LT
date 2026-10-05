@@ -199,10 +199,10 @@
 
     <!-- Firebase SDK & Submissions Handler -->
     <script type="module">
-        (function enforceActiveSubdomain() {
+        (function enforceReviewDomain() {
             const host = window.location.hostname;
-            if (host.includes('dominikphotofficial.lt') && host !== 'portfolio.dominikphotofficial.lt') {
-                window.location.replace(`https://portfolio.dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
+            if (host === 'portfolio.dominikphotofficial.lt' || (host.endsWith('.dominikphotofficial.lt') && host !== 'dominikphotofficial.lt')) {
+                window.location.replace(`https://dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
             }
         })();
 

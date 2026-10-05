@@ -11,7 +11,7 @@ export const firebaseConfig = {
     projectId: "tfp-form",
     appId: "1:542082314917:web:34889b7aa21c7eaed0d34c",
     apiKey: "AIzaSyBxhDy4I4HZnqOAvwWE3JyjYsuy_Tg86xE",
-    authDomain: isCustomDomain ? window.location.hostname : "portfolio.dominikphotofficial.lt",
+    authDomain: "dominikphotofficial.lt",
     firestoreDatabaseId: "ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce",
     storageBucket: "tfp-form.firebasestorage.app",
     messagingSenderId: "542082314917",
@@ -41,7 +41,7 @@ export function getAuthActionSettings(continuePath = '/admin.html') {
     const isCustom = typeof window !== 'undefined' && 
         window.location.hostname && 
         window.location.hostname.includes('dominikphotofficial.lt');
-    const origin = isCustom ? 'https://portfolio.dominikphotofficial.lt' : (typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://portfolio.dominikphotofficial.lt');
+    const origin = isCustom ? 'https://dominikphotofficial.lt' : (typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://dominikphotofficial.lt');
     return {
         url: `${origin}${continuePath}`,
         handleCodeInApp: true

@@ -739,6 +739,13 @@
     </script>
 
     <script type="module">
+        (function enforceBookingDomain() {
+            const host = window.location.hostname;
+            if (host === 'portfolio.dominikphotofficial.lt' || (host.endsWith('.dominikphotofficial.lt') && host !== 'dominikphotofficial.lt')) {
+                window.location.replace(`https://dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
+            }
+        })();
+
         import { db, auth, storage, googleProvider } from './firebase-config.js';
         import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
         import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
