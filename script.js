@@ -181,6 +181,29 @@ window.addEventListener('error', (event) => {
 
         return { authState, dbStatus };
     };
+
+    // ==============================================================================
+    // 📊 Diagnostic Operation Tracker (Keeps last 5 operations)
+    // ==============================================================================
+    window.__DIAGNOSTIC_OPERATIONS__ = [];
+    window.recordDiagnosticOperation = function(name, status, details = {}) {
+        const entry = {
+            id: Date.now() + Math.random().toString(36).substring(2, 6),
+            time: new Date().toLocaleTimeString('lt-LT'),
+            timestamp: Date.now(),
+            name: name,
+            status: status, // 'SUCCESS' | 'ERROR' | 'PENDING'
+            details: details
+        };
+        window.__DIAGNOSTIC_OPERATIONS__.unshift(entry);
+        if (window.__DIAGNOSTIC_OPERATIONS__.length > 5) {
+            window.__DIAGNOSTIC_OPERATIONS__.pop();
+        }
+        if (typeof window.updateDiagnosticDashboardUI === 'function') {
+            window.updateDiagnosticDashboardUI();
+        }
+        return entry;
+    };
 })();
 
 // Centralized Analytics (GA4) & Unified Album Footer dynamic loaders

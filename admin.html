@@ -1488,6 +1488,101 @@
                 outline: none !important;
             }
         }
+
+        /* 🩺 Diagnostikos Skydelis (Diagnostics Modal) */
+        .diagnostics-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .diagnostics-modal-content {
+            background: #ffffff;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 820px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(17, 57, 57, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .diagnostics-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 22px;
+            background: #FAFBFB;
+            border-bottom: 1px solid #E8ECEB;
+        }
+        .diagnostics-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .diagnostics-close-btn:hover {
+            color: #113939;
+            background: #eee;
+        }
+        .diagnostics-body {
+            padding: 22px;
+        }
+        .diag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+        .diag-card {
+            background: #FAFBFB;
+            border: 1px solid #E8ECEB;
+            border-radius: 6px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .diag-card-title {
+            font-size: 0.86rem;
+            font-weight: bold;
+            color: #113939;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #E8ECEB;
+            padding-bottom: 6px;
+            margin-bottom: 4px;
+        }
+        .diag-field {
+            font-size: 0.82rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            color: #444;
+        }
+        .diag-field strong, .diag-field span:last-child {
+            color: #113939;
+        }
+        .diag-log-container {
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid #E8ECEB;
+            border-radius: 6px;
+            background: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -1521,8 +1616,8 @@
             Prisijungti
         </button>
 
-        <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 14px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
-            👑 Savininko patvirtinimas per el. paštą (2FA kodas)
+        <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
+            👑 Greitas 2FA kodo siuntimas į el. paštą
         </button>
 
         <!-- 2FA / MFA Verification Step Modal/Container -->
@@ -1530,7 +1625,7 @@
             <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #113939; margin-bottom: 8px; font-size: 0.95rem;">
                 <span>🔐</span> <span>Dviejų Veiksnių Autentifikacija (2FA)</span>
             </div>
-            <p style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
+            <p id="auth-2fa-instructions" style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
                 Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
             </p>
             <input type="text" id="admin-2fa-input" class="admin-select" maxlength="6" placeholder="000000" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px; font-weight: bold; margin-bottom: 12px;" autocomplete="one-time-code">
@@ -1548,23 +1643,11 @@
 
         <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 15px;"></div>
 
-        <div class="auth-divider">ARBA SU GOOGLE PASKYRA</div>
-        <button id="admin-login-google-btn" class="gsi-material-button" style="width: 100%;">
-          <div class="gsi-material-button-state"></div>
-          <div class="gsi-material-button-content-wrapper">
-            <div class="gsi-material-button-icon">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                <path fill="none" d="M0 0h48v48H0z"></path>
-              </svg>
-            </div>
-            <span class="gsi-material-button-contents">Prisijungti su Google (Sheets & Drive)</span>
-            <span style="display: none;">Prisijungti su Google</span>
-          </div>
-        </button>
+        <div style="margin-top: 12px; text-align: center;">
+            <button type="button" onclick="toggleDiagnosticsModal()" style="background: none; border: none; color: #113939; cursor: pointer; text-decoration: underline; font-size: 0.82rem;">
+                🩺 Atidaryti Diagnostikos Skydelį
+            </button>
+        </div>
     </div>
 
     <!-- Floating Toast Notification -->
@@ -1583,6 +1666,9 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="admin-btn-outline" style="padding: 7px 14px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleDiagnosticsModal()">
+                    🩺 Diagnostika
+                </button>
                 <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 7px 15px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleAiHelperWindow()">
                     🤖 AI Padėjėjas
                 </button>
@@ -2858,6 +2944,87 @@
         </div>
     </div>
 
+    <!-- 🩺 Diagnostikos Skydelis (Real-Time Auth & Firestore Inspector Modal) -->
+    <div id="diagnostics-modal" class="diagnostics-modal-overlay" style="display: none;">
+        <div class="diagnostics-modal-content">
+            <div class="diagnostics-modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.3rem;">🩺</span>
+                    <div>
+                        <h3 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 1.15rem; letter-spacing: 1px;">
+                            Sistemos & Firebase Diagnostikos Skydelis
+                        </h3>
+                        <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #666;">
+                            Realaus laiko Firebase Auth, Firestore ir integracijų analizė
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="diagnostics-close-btn" onclick="toggleDiagnosticsModal(false)">✕</button>
+            </div>
+
+            <div class="diagnostics-body">
+                <!-- Grid cards -->
+                <div class="diag-grid">
+                    <!-- Card 1: Auth State -->
+                    <div class="diag-card">
+                        <div class="diag-card-title">🔐 Firebase Auth Būsena</div>
+                        <div class="diag-field"><span>Būsena:</span> <strong id="diag-auth-user">Atsijungęs</strong></div>
+                        <div class="diag-field"><span>El. Paštas:</span> <span id="diag-auth-email" style="font-family: monospace; font-size: 0.78rem;">-</span></div>
+                        <div class="diag-field"><span>Vartotojo UID:</span> <span id="diag-auth-uid" style="font-family: monospace; font-size: 0.72rem; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">-</span></div>
+                        <div class="diag-field"><span>authDomain:</span> <strong id="diag-auth-domain" style="color: #2E7D32;">dominikphotofficial.lt</strong></div>
+                        <div class="diag-field"><span>2FA Būsena:</span> <span id="diag-auth-2fa-status" class="status-badge" style="background:#e8f5e9; color:#2e7d32;">Patikrinta</span></div>
+                    </div>
+
+                    <!-- Card 2: Firestore DB -->
+                    <div class="diag-card">
+                        <div class="diag-card-title">🗄️ Firestore Duomenų Bazė</div>
+                        <div class="diag-field"><span>Projektas:</span> <strong>tfp-form</strong></div>
+                        <div class="diag-field"><span>Aktyvi DB ID:</span> <span id="diag-db-id" style="font-family: monospace; font-size: 0.72rem; word-break: break-all;">ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce</span></div>
+                        <div class="diag-field"><span>Ryšio būsena:</span> <span id="diag-db-status" class="status-badge" style="background:#e8f5e9; color:#2e7d32;">✓ Aktyvus</span></div>
+                        <div class="diag-field"><span>Paskutinis DB testas:</span> <span id="diag-db-ping-status" style="font-size: 0.78rem; color:#555;">Ką tik</span></div>
+                    </div>
+
+                    <!-- Card 3: Google Sheets & Drive -->
+                    <div class="diag-card">
+                        <div class="diag-card-title">📗 Sheets & Drive Integracija</div>
+                        <div class="diag-field"><span>OAuth Būsena:</span> <strong id="diag-sheets-token-status" style="color:#666;">Neprijungta</strong></div>
+                        <div class="diag-field"><span>Aktyvi Lentelė:</span> <span id="diag-sheets-title" style="font-size: 0.78rem; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">-</span></div>
+                        <div class="diag-field"><span>403 Apsauga:</span> <span class="status-badge" style="background:#e8f5e9; color:#2e7d32;">Aktyvus filtras</span></div>
+                        <div class="diag-field"><span>Lapai (Sync):</span> <span style="font-size: 0.78rem;">TFP, Paslaugos, Kontaktai, VMI</span></div>
+                    </div>
+                </div>
+
+                <!-- Operations Log -->
+                <div style="margin-top: 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                        <div style="font-weight: bold; color: #113939; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                            <span>📜</span> Paskutinės Sistemos & Autentifikavimo Operacijos (Real-time Log)
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="testFirestoreConnection()">⚡ Testuoti DB ryšį</button>
+                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearDiagnosticLog()">🗑️ Išvalyti</button>
+                        </div>
+                    </div>
+                    <div class="diag-log-container">
+                        <table class="diag-table" style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                            <thead>
+                                <tr style="background: #FAFBFB; border-bottom: 1px solid #ddd; text-align: left;">
+                                    <th style="padding: 7px 10px;">Laikas</th>
+                                    <th style="padding: 7px 10px;">Veiksmas</th>
+                                    <th style="padding: 7px 10px;">Būsena</th>
+                                    <th style="padding: 7px 10px;">Informacija / Diagnostika</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diag-log-tbody">
+                                <tr><td colspan="4" style="text-align: center; padding: 15px; color: #888;">Operacijų žurnalas tuščias.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         // 🔒 Subdomain Enforcement: Ensure admin dashboard operates on active subdomain
         (function enforceActiveSubdomain() {
@@ -2932,6 +3099,177 @@
                 toast.classList.remove('show');
             }, 3200);
         };
+
+        // ==============================================================================
+        // 🩺 SISTEMOS & FIREBASE DIAGNOSTIKOS SKYDELIS (REAL-TIME INSPECTOR)
+        // ==============================================================================
+        window._diagnosticLog = [];
+
+        window.recordDiagnosticOp = (action, status, details = {}) => {
+            const timeStr = new Date().toLocaleTimeString('lt-LT');
+            let info = '';
+            if (typeof details === 'string') {
+                info = details;
+            } else if (details?.message) {
+                info = details.message;
+            } else {
+                try {
+                    info = JSON.stringify(details);
+                } catch (_) {
+                    info = String(details);
+                }
+            }
+            // Strip any raw HTML tags
+            info = info.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+
+            const entry = {
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                timestamp: timeStr,
+                action,
+                status, // 'SUCCESS', 'ERROR', 'PENDING', 'INFO'
+                details: info || 'OK'
+            };
+
+            window._diagnosticLog.unshift(entry);
+            if (window._diagnosticLog.length > 25) {
+                window._diagnosticLog.pop();
+            }
+
+            window.updateDiagnosticsUI();
+        };
+
+        window.updateDiagnosticsUI = () => {
+            const modal = document.getElementById('diagnostics-modal');
+            if (!modal) return;
+
+            // Auth State
+            const u = auth.currentUser;
+            const userEl = document.getElementById('diag-auth-user');
+            const emailEl = document.getElementById('diag-auth-email');
+            const uidEl = document.getElementById('diag-auth-uid');
+            const domainEl = document.getElementById('diag-auth-domain');
+            const mfaStatusEl = document.getElementById('diag-auth-2fa-status');
+
+            const has2FaPassed = sessionStorage.getItem('dp_2fa_passed') === 'true';
+
+            if (userEl) userEl.innerText = u ? (u.isAnonymous ? 'Anonimas (Sesija)' : 'Prisijungęs') : 'Atsijungęs';
+            if (emailEl) emailEl.innerText = u?.email || (currentAdminSession?.email || 'Nėra');
+            if (uidEl) uidEl.innerText = u?.uid || (currentAdminSession?.role || '-');
+            if (domainEl) domainEl.innerText = firebaseConfig.authDomain || 'dominikphotofficial.lt';
+
+            if (mfaStatusEl) {
+                if (has2FaPassed) {
+                    mfaStatusEl.innerText = '✓ Patvirtinta';
+                    mfaStatusEl.style.background = '#e8f5e9';
+                    mfaStatusEl.style.color = '#2e7d32';
+                } else if (sessionStorage.getItem('dp_pending_2fa')) {
+                    mfaStatusEl.innerText = '⏳ Laukiama 2FA kodo';
+                    mfaStatusEl.style.background = '#fff8e1';
+                    mfaStatusEl.style.color = '#f57f17';
+                } else {
+                    mfaStatusEl.innerText = 'Neaktyvuota';
+                    mfaStatusEl.style.background = '#f5f5f5';
+                    mfaStatusEl.style.color = '#666';
+                }
+            }
+
+            // Sheets OAuth Token status
+            const sheetsToken = getCachedToken();
+            const tokenEl = document.getElementById('diag-sheets-token-status');
+            const sheetTitleEl = document.getElementById('diag-sheets-title');
+            if (tokenEl) {
+                if (sheetsToken) {
+                    tokenEl.innerText = '✓ Prijungta (Token atmintyje)';
+                    tokenEl.style.color = '#2e7d32';
+                } else {
+                    tokenEl.innerText = 'Neprijungta';
+                    tokenEl.style.color = '#888';
+                }
+            }
+            if (sheetTitleEl) {
+                sheetTitleEl.innerText = activeSpreadsheetTitle || 'Nėra aktyvios';
+            }
+
+            // Render log table
+            const tbody = document.getElementById('diag-log-tbody');
+            if (tbody) {
+                if (window._diagnosticLog.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 15px; color: #888;">Operacijų žurnalas tuščias.</td></tr>';
+                } else {
+                    const statusBadgeMap = {
+                        SUCCESS: '<span class="status-badge" style="background:#e8f5e9; color:#2e7d32; font-weight:600;">✓ Sėkminga</span>',
+                        ERROR: '<span class="status-badge" style="background:#ffebee; color:#c62828; font-weight:600;">✕ Klaida</span>',
+                        PENDING: '<span class="status-badge" style="background:#fff8e1; color:#f57f17; font-weight:600;">⏳ Vykdoma</span>',
+                        INFO: '<span class="status-badge" style="background:#e3f2fd; color:#1565c0; font-weight:600;">ℹ Informacija</span>'
+                    };
+
+                    tbody.innerHTML = window._diagnosticLog.slice(0, 10).map(entry => {
+                        const isErr = entry.status.includes('ERROR') || entry.status.includes('403');
+                        const badge = isErr 
+                            ? `<span class="status-badge" style="background:#ffebee; color:#c62828; font-weight:600;">✕ ${entry.status}</span>` 
+                            : (statusBadgeMap[entry.status] || `<span class="status-badge">${entry.status}</span>`);
+
+                        return `
+                            <tr style="border-bottom: 1px solid #f0f0f0;">
+                                <td style="padding: 6px 10px; font-family: monospace; font-size: 0.75rem; color: #666;">${entry.timestamp}</td>
+                                <td style="padding: 6px 10px; font-weight: 600; color: #113939; font-size: 0.78rem;">${entry.action}</td>
+                                <td style="padding: 6px 10px;">${badge}</td>
+                                <td style="padding: 6px 10px; font-size: 0.76rem; color: ${isErr ? '#c62828' : '#444'}; word-break: break-word;">${entry.details}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+        };
+
+        window.toggleDiagnosticsModal = (forceState) => {
+            const modal = document.getElementById('diagnostics-modal');
+            if (!modal) return;
+            const current = modal.style.display !== 'none';
+            const target = typeof forceState === 'boolean' ? forceState : !current;
+            modal.style.display = target ? 'flex' : 'none';
+            if (target) {
+                window.updateDiagnosticsUI();
+            }
+        };
+
+        window.clearDiagnosticLog = () => {
+            window._diagnosticLog = [];
+            window.recordDiagnosticOp('LOG_CLEARED', 'INFO', 'Diagnostikos žurnalas išvalytas');
+        };
+
+        window.testFirestoreConnection = async () => {
+            const pingEl = document.getElementById('diag-db-ping-status');
+            const statusBadge = document.getElementById('diag-db-status');
+            if (pingEl) pingEl.innerText = 'Tikrinamas ryšys...';
+            window.recordDiagnosticOp('DB_PING_TEST', 'PENDING', 'Tikrinamas ryšys su Firestore...');
+
+            try {
+                const testSnap = await getDoc(doc(db, "settings", "global"));
+                const timeStr = new Date().toLocaleTimeString('lt-LT');
+                if (pingEl) pingEl.innerText = `OK (${timeStr})`;
+                if (statusBadge) {
+                    statusBadge.innerText = '✓ Aktyvus (200)';
+                    statusBadge.style.background = '#e8f5e9';
+                    statusBadge.style.color = '#2e7d32';
+                }
+                window.recordDiagnosticOp('DB_PING_TEST', 'SUCCESS', `Ryšys su Firestore aktyvus (${testSnap.exists() ? 'Dokumentas rastas' : 'Prisijungta sėkmingai'})`);
+                showToast("✓ Firestore ryšys puikus!");
+            } catch(err) {
+                console.error("Firestore test error:", err);
+                if (pingEl) pingEl.innerText = `Klaida: ${err.code || err.message}`;
+                if (statusBadge) {
+                    statusBadge.innerText = '✕ Klaida';
+                    statusBadge.style.background = '#ffebee';
+                    statusBadge.style.color = '#c62828';
+                }
+                window.recordDiagnosticOp('DB_PING_TEST', 'ERROR', err.message || err);
+                showToast("✕ Klaida tikrinant Firestore: " + (err.message || err), 'error');
+            }
+        };
+
+        // Initial diagnostic log entry
+        window.recordDiagnosticOp('SYS_INIT', 'INFO', `Admin skydelis inicijuotas (${firebaseConfig.authDomain})`);
 
         // Session & Role management
         let currentAdminSession = null;
@@ -3294,15 +3632,45 @@
             }
         }
 
-        // Saugus Auth būsenos valdymas
+        // Saugus Auth būsenos valdymas su 2FA apsauga
         onAuthStateChanged(auth, async (user) => {
             const btn = document.getElementById('admin-login-email-btn');
             if (btn) { btn.disabled = false; btn.innerText = 'Prisijungti'; }
+
+            window.updateDiagnosticsUI?.();
 
             if (user) {
                 updateSheetsAuthStatus(user);
                 const userEmail = (user.email || "").toLowerCase();
                 const isOwner = isOwnerAccount(userEmail);
+
+                // 🔐 Saugumo patikra: ar šioje sesijoje atliktas 2FA patvirtinimas?
+                const has2FaPassed = sessionStorage.getItem('dp_2fa_passed') === 'true';
+                if (!has2FaPassed) {
+                    const pending2Fa = sessionStorage.getItem('dp_pending_2fa');
+                    if (pending2Fa) {
+                        try {
+                            const pData = JSON.parse(pending2Fa);
+                            if (pData.email === userEmail && Date.now() < pData.expiresAt) {
+                                const container2fa = document.getElementById('auth-2fa-container');
+                                if (container2fa) container2fa.style.display = 'block';
+                                const emailInp = document.getElementById('admin-email');
+                                if (emailInp) emailInp.style.display = 'none';
+                                const passInp = document.getElementById('admin-password');
+                                if (passInp) passInp.style.display = 'none';
+                                const loginBtn = document.getElementById('admin-login-email-btn');
+                                if (loginBtn) loginBtn.style.display = 'none';
+                                const ownerBtn = document.getElementById('admin-owner-2fa-direct-btn');
+                                if (ownerBtn) ownerBtn.style.display = 'none';
+                                const forgotBtn = document.getElementById('admin-forgot-password-btn');
+                                if (forgotBtn) forgotBtn.style.display = 'none';
+                                return;
+                            }
+                        } catch(e) {}
+                    }
+                    // Jei 2FA dar nepatvirtintas, neatidarome valdymo skydo
+                    return;
+                }
 
                 if (isOwner) {
                     unlockDashboard({
@@ -3344,6 +3712,8 @@
                             }
                             await signOut(auth);
                             currentAdminSession = null;
+                            sessionStorage.removeItem('dp_2fa_passed');
+                            sessionStorage.removeItem('dp_pending_2fa');
                             authSection.style.display = 'block';
                             dashboardSection.style.display = 'none';
                             logoutBtn.style.display = 'none';
@@ -3353,9 +3723,10 @@
                     }
                 }
             } else {
-                // Jei vartotojas nėra prisijungęs per Firebase, bet turi išsaugotą sesiją
+                // Jei vartotojas nėra prisijungęs per Firebase, bet turi išsaugotą sesiją IR 2FA patvirtintas
+                const has2FaPassed = sessionStorage.getItem('dp_2fa_passed') === 'true';
                 const activeSession = getStoredAdminSession();
-                if (activeSession) {
+                if (has2FaPassed && activeSession) {
                     unlockDashboard(activeSession);
                 } else {
                     currentAdminSession = null;
@@ -3410,7 +3781,7 @@
             }
         });
 
-        // 🔒 2FA / MFA Helper Functions
+        // 🔒 2FA / MFA Helper Functions (Dynamic for ANY Admin Email)
         function initiate2FAFlow(email, pendingSession) {
             const mfaCode = Math.floor(100000 + Math.random() * 900000).toString();
             sessionStorage.setItem('dp_pending_2fa', JSON.stringify({
@@ -3420,7 +3791,10 @@
                 session: pendingSession
             }));
 
-            // Send 2FA code email
+            // Record diagnostic op
+            window.recordDiagnosticOp?.('2FA_OTP_SENT', 'SUCCESS', { email: email });
+
+            // Send 2FA code email dynamically to whichever admin email is signing in
             addDoc(collection(db, "mail"), {
                 to: email,
                 from: "info@dominikphotofficial.lt",
@@ -3453,12 +3827,15 @@
             if (passInp) passInp.style.display = 'none';
             const loginBtn = document.getElementById('admin-login-email-btn');
             if (loginBtn) loginBtn.style.display = 'none';
+            const ownerBtn = document.getElementById('admin-owner-2fa-direct-btn');
+            if (ownerBtn) ownerBtn.style.display = 'none';
             const forgotBtn = document.getElementById('admin-forgot-password-btn');
             if (forgotBtn) forgotBtn.style.display = 'none';
-            const divider = document.querySelector('.auth-divider');
-            if (divider) divider.style.display = 'none';
-            const googleBtn = document.getElementById('admin-login-google-btn');
-            if (googleBtn) googleBtn.style.display = 'none';
+
+            const instructionsEl = document.getElementById('auth-2fa-instructions');
+            if (instructionsEl) {
+                instructionsEl.innerHTML = `Įveskite 6 skaitmenų saugumo kodą, išsiųstą el. paštu <strong>${email}</strong>:`;
+            }
 
             if (authFeedback) {
                 authFeedback.style.display = 'block';
@@ -3466,10 +3843,17 @@
                 authFeedback.style.color = '#1B5E20';
                 authFeedback.innerHTML = `🔐 <strong>2FA kodas išsiųstas!</strong> Įveskite 6 skaitmenų kodą, gautą į <u>${email}</u>.`;
             }
+
+            const input2fa = document.getElementById('admin-2fa-input');
+            if (input2fa) {
+                input2fa.value = '';
+                input2fa.focus();
+            }
         }
 
         function reset2FaView() {
             sessionStorage.removeItem('dp_pending_2fa');
+            sessionStorage.removeItem('dp_2fa_passed');
             const container2fa = document.getElementById('auth-2fa-container');
             if (container2fa) container2fa.style.display = 'none';
             const emailInp = document.getElementById('admin-email');
@@ -3478,14 +3862,11 @@
             if (passInp) passInp.style.display = '';
             const loginBtn = document.getElementById('admin-login-email-btn');
             if (loginBtn) { loginBtn.style.display = ''; loginBtn.disabled = false; loginBtn.innerText = 'Prisijungti'; }
+            const ownerBtn = document.getElementById('admin-owner-2fa-direct-btn');
+            if (ownerBtn) ownerBtn.style.display = '';
             const forgotBtn = document.getElementById('admin-forgot-password-btn');
             if (forgotBtn) forgotBtn.style.display = '';
-            const divider = document.querySelector('.auth-divider');
-            if (divider) divider.style.display = '';
-            const googleBtn = document.getElementById('admin-login-google-btn');
-            if (googleBtn) googleBtn.style.display = '';
             if (authFeedback) authFeedback.style.display = 'none';
-            signOut(auth).catch(() => {});
         }
 
         document.getElementById('admin-cancel-2fa-btn')?.addEventListener('click', reset2FaView);
@@ -3510,13 +3891,15 @@
                     sessionStorage.removeItem('dp_pending_2fa');
                     sessionStorage.setItem('dp_2fa_passed', 'true');
                     showToast("✓ 2FA patvirtinta sėkmingai!");
+                    window.recordDiagnosticOp?.('2FA_VERIFY', 'SUCCESS', { email: data.email });
                     unlockDashboard(data.session);
                 } else {
+                    window.recordDiagnosticOp?.('2FA_VERIFY', 'ERROR', { email: data.email, error: 'Neteisingas kodas' });
                     if (authFeedback) {
                         authFeedback.style.display = 'block';
                         authFeedback.style.background = '#FFEBEE';
                         authFeedback.style.color = '#C62828';
-                        authFeedback.innerHTML = `✕ <strong>Neteisingas 2FA kodas.</strong> Patikrinkite gautą el. laišką ir bandykite dar kartą.`;
+                        authFeedback.innerHTML = `✕ <strong>Neteisingas 2FA kodas.</strong> Patikrinkite gautą el. laišką adresu <u>${data.email}</u> arba naudokite atsarginį kodą.`;
                     }
                 }
             } catch(e) {
@@ -3528,24 +3911,55 @@
             if (e.key === 'Enter') document.getElementById('admin-verify-2fa-btn')?.click();
         });
 
-        // 👑 Tiesioginis savininko patvirtinimas su 2FA kodu
-        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', () => {
+        // 👑 Greitas 2FA kodo siuntimas į el. paštą (veikia bet kuriam autorizuotam admin el. paštui)
+        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', async () => {
             const emailInput = document.getElementById('admin-email');
             const email = (emailInput?.value.trim().toLowerCase()) || "dominikphotofficial.lt@gmail.com";
             if (emailInput && !emailInput.value) emailInput.value = email;
 
-            const ownerSession = {
-                name: "Dominik Šuškevič (Savininkas)",
-                email: email,
-                role: "superadmin",
-                permissions: ["all"]
-            };
-            initiate2FAFlow(email, ownerSession);
-            if (authFeedback) {
-                authFeedback.style.display = 'block';
-                authFeedback.style.background = '#E8F5E9';
-                authFeedback.style.color = '#1B5E20';
-                authFeedback.innerHTML = `👑 <strong>Savininko 2FA kodas išsiųstas!</strong> Patikrinkite pašto dėžutę <u>${email}</u> ir žemiau įveskite 6 skaitmenų kodą.`;
+            const isOwner = isOwnerAccount(email);
+            let userSession = null;
+
+            if (isOwner) {
+                userSession = {
+                    name: "Dominik Šuškevič (Savininkas)",
+                    email: email,
+                    role: "superadmin",
+                    permissions: ["all"]
+                };
+            } else {
+                try {
+                    const teamSnap = await getDocs(collection(db, "admin_team"));
+                    let found = null;
+                    teamSnap.forEach(d => {
+                        const data = d.data();
+                        if (data.email && data.email.toLowerCase() === email && data.active !== false) {
+                            found = { id: d.id, ...data };
+                        }
+                    });
+                    if (found) {
+                        userSession = {
+                            name: found.name || found.email,
+                            email: found.email,
+                            role: found.role || "manager",
+                            permissions: found.permissions || []
+                        };
+                    } else {
+                        if (authFeedback) {
+                            authFeedback.style.display = 'block';
+                            authFeedback.style.background = '#FFEBEE';
+                            authFeedback.style.color = '#C62828';
+                            authFeedback.innerHTML = `✕ <strong>Priėjimas uždraustas:</strong> El. paštas <u>${email}</u> nėra autorizuotas komandos narys.`;
+                        }
+                        return;
+                    }
+                } catch (e) {
+                    console.warn("Team check error:", e);
+                }
+            }
+
+            if (userSession) {
+                initiate2FAFlow(email, userSession);
             }
         });
 
@@ -3695,13 +4109,9 @@
                 console.log('Redirect URI:', `https://${runtimeAuthDomain}/__/auth/handler`);
                 console.groupEnd();
 
-                // Check 2FA requirement (only if explicitly enabled in profile settings)
-                const is2FaActive = localStorage.getItem('dp_2fa_enabled') === 'true';
-                if (is2FaActive) {
-                    initiate2FAFlow(userEmail, userSession);
-                } else {
-                    unlockDashboard(userSession);
-                }
+                // Step 2: Dinamiškas 2FA saugumo kodo išsiuntimas (veikia visiems autorizuotiems administratoriams)
+                window.recordDiagnosticOp?.('AUTH_PASSWORD_SUCCESS', 'SUCCESS', { email: userEmail });
+                initiate2FAFlow(userEmail, userSession);
 
             } catch(e) {
                 console.error("Login authentication error:", e);
@@ -3733,44 +4143,6 @@
         });
         document.getElementById('admin-email')?.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') performEmailLogin();
-        });
-
-        // Google login
-        document.getElementById('admin-login-google-btn')?.addEventListener('click', async () => {
-            if (authFeedback) authFeedback.style.display = 'none';
-            const runtimeAuthDomain = auth.config?.authDomain || firebaseConfig.authDomain;
-            console.group('%c[Google OAuth Runtime Sign-in Diagnostics]', 'color: #113939; font-weight: bold; font-size: 13px;');
-            console.log('Runtime authDomain:', runtimeAuthDomain);
-            console.log('Is dominikphotofficial.lt:', runtimeAuthDomain === 'dominikphotofficial.lt' ? '✅ TAIP' : '⚠️ NE');
-            console.log('Is Default (.firebaseapp.com):', runtimeAuthDomain.includes('firebaseapp.com') ? '⚠️ TAIP' : '✅ NE');
-            console.log('Redirect URI Sent to Google:', `https://${runtimeAuthDomain}/__/auth/handler`);
-            console.log('Current Window Host:', window.location.hostname);
-            console.groupEnd();
-
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const cred = GoogleAuthProvider.credentialFromResult(result);
-                if (cred?.accessToken) {
-                    setCachedToken(cred.accessToken);
-                    updateSheetsAuthStatus(result.user);
-                }
-            } catch (error) {
-                console.warn("Google login popup error:", error);
-                if (authFeedback) {
-                    authFeedback.style.display = 'block';
-                    authFeedback.style.background = '#FFEBEE';
-                    authFeedback.style.color = '#C62828';
-                    let msg = 'Google prisijungimas nepavyko arba langas buvo uždarytas.';
-                    if (error.code === 'auth/popup-closed-by-user') {
-                        msg = 'Prisijungimo langas buvo uždarytas.';
-                    } else if (error.code === 'auth/popup-blocked') {
-                        msg = 'Naršyklė užblokavo iškylantįjį (popup) langą. Prašome leisti iškylančius langus šiai svetainei arba prisijungti su el. paštu ir slaptažodžiu.';
-                    } else if (error.code === 'auth/unauthorized-domain') {
-                        msg = 'Šis domenas nėra įtrauktas į autorizuotus domenus. Prašome naudoti el. pašto ir slaptažodžio prisijungimą.';
-                    }
-                    authFeedback.innerText = msg;
-                }
-            }
         });
 
         // 📱 Mobilus Meniu & Collapsible Navigation Handler
@@ -6477,10 +6849,18 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                 } catch(e) {}
 
                 showToast("✓ Visi duomenys sėkmingai sinchronizuoti į Google Sheets!");
+                window.recordDiagnosticOp?.('SHEETS_SYNC_ALL', 'SUCCESS', `Sinchronizuoti visi 4 lapai`);
                 previewSheetTab("Mokamos Paslaugos");
             } catch (err) {
                 console.error("Sync all error:", err);
-                alert("Klaida sinchronizuojant į Google Sheets: " + (err.message || err));
+                let cleanErr = err?.message || String(err);
+                cleanErr = cleanErr.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+                const is403 = cleanErr.includes('403') || cleanErr.includes('Forbidden') || cleanErr.includes('permission');
+                const userMsg = is403 
+                    ? "Prieiga apribota (403): Reikalingas Google Sheets/Drive leidimas. Paspauskite „Prijungti Google Paskyrą“."
+                    : cleanErr;
+                window.recordDiagnosticOp?.('SHEETS_SYNC_ALL', is403 ? 'ERROR_403' : 'ERROR', userMsg);
+                showToast(`✕ Klaida: ${userMsg}`, 'error');
             } finally {
                 if (syncBtn) { syncBtn.disabled = false; syncBtn.innerText = '⚡ Sinchronizuoti Visus Lapus (TFP + Paslaugos + Kontaktai + VMI)'; }
             }
@@ -6522,10 +6902,18 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                 if (lastSyncEl) lastSyncEl.innerText = `Paskutinis sinchronizavimas: ${nowStr} (${config.name})`;
 
                 showToast(`✓ Lapas „${config.name}“ sėkmingai atnaujintas Google Sheets!`);
+                window.recordDiagnosticOp?.(`SHEETS_SYNC_${type.toUpperCase()}`, 'SUCCESS', `Lapas „${config.name}“ atnaujintas`);
                 previewSheetTab(config.name);
             } catch (err) {
                 console.error("Single tab sync error:", err);
-                alert(`Klaida sinchronizuojant lapą „${config.name}“: ` + (err.message || err));
+                let cleanErr = err?.message || String(err);
+                cleanErr = cleanErr.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+                const is403 = cleanErr.includes('403') || cleanErr.includes('Forbidden') || cleanErr.includes('permission');
+                const userMsg = is403 
+                    ? "Prieiga apribota (403): Reikalingas Google Sheets/Drive leidimas. Paspauskite „Prijungti Google Paskyrą“."
+                    : cleanErr;
+                window.recordDiagnosticOp?.(`SHEETS_SYNC_${type.toUpperCase()}`, is403 ? 'ERROR_403' : 'ERROR', userMsg);
+                showToast(`✕ Klaida sinchronizuojant lapą „${config.name}“: ${userMsg}`, 'error');
             }
         };
 
@@ -6553,7 +6941,7 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
             }
 
             if (!activeSpreadsheetId) {
-                alert("Nėra pasirinktos Google Sheets lentelės.");
+                showToast("Pasirinkite arba sukurkite Google Sheets lentelę", 'error');
                 return;
             }
 
@@ -6574,6 +6962,7 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                     if (headerRow) headerRow.innerHTML = `<th>${tabName} (tuščias lapas)</th>`;
                     if (tbody) tbody.innerHTML = `<tr><td style="text-align: center; padding: 25px; color: #888;">Šiame lape duomenų dar nėra. Paspauskite „Sinchronizuoti“ aukščiau.</td></tr>`;
                     if (statusEl) statusEl.innerText = `Lapas „${tabName}“ tuščias.`;
+                    window.recordDiagnosticOp?.('SHEETS_PREVIEW', 'SUCCESS', `Lapas „${tabName}“ (tuščias)`);
                     return;
                 }
 
@@ -6599,10 +6988,52 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                 if (statusEl) {
                     statusEl.innerText = `✓ Sėkmingai nuskaityti ${rows.length - 1} įrašai iš lapo „${tabName}“ (Google Sheets).`;
                 }
+                window.recordDiagnosticOp?.('SHEETS_PREVIEW', 'SUCCESS', `Nuskaityta ${rows.length - 1} įrašų iš „${tabName}“`);
             } catch (err) {
                 console.error("Preview fetch error:", err);
-                if (statusEl) statusEl.innerText = `✕ Klaida nuskaitant lapą: ${err.message || err}`;
-                if (tbody) tbody.innerHTML = `<tr><td style="color: red; padding: 20px;">Nepavyko nuskaityti lapo „${tabName}“: ${err.message || err}</td></tr>`;
+                let cleanErr = err?.message || String(err);
+                cleanErr = cleanErr.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+                const is403 = cleanErr.includes('403') || cleanErr.includes('Forbidden') || cleanErr.includes('permission');
+                const userMsg = is403 
+                    ? "Prieiga apribota (403): Google paskyra neprijungta arba trūksta leidimų Google Sheets. Prijunkite autorizuotą paskyrą spausdami „Prijungti Google Paskyrą“ aukščiau."
+                    : cleanErr;
+
+                window.recordDiagnosticOp?.('SHEETS_PREVIEW', is403 ? 'ERROR_403' : 'ERROR', userMsg);
+
+                // Fallback: Gracefully show local Firestore data so the admin is never blocked!
+                const localDataMap = {
+                    "TFP Užklausos": () => formatTfpData(window._adminCache.tfp || []),
+                    "Mokamos Paslaugos": () => formatServicesData(window._adminCache.services || []),
+                    "Kontaktai & Žinutės": () => formatContactsData(window._adminCache.contacts || []),
+                    "VMI Pajamos": () => formatVmiData(window._adminCache.services || [])
+                };
+
+                const fallbackFormatter = localDataMap[tabName];
+                if (fallbackFormatter) {
+                    const fallbackRows = fallbackFormatter();
+                    const headers = fallbackRows[0] || [];
+                    const dataRows = fallbackRows.slice(1);
+
+                    if (headerRow) {
+                        headerRow.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
+                    }
+                    if (tbody) {
+                        if (dataRows.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="${headers.length}" style="text-align: center; padding: 20px; color: #888;">Duomenų bazėje (Firestore) įrašų dar nėra.</td></tr>`;
+                        } else {
+                            tbody.innerHTML = dataRows.map(row => {
+                                const cells = headers.map((_, colIdx) => `<td>${row[colIdx] !== undefined ? row[colIdx] : ''}</td>`).join('');
+                                return `<tr>${cells}</tr>`;
+                            }).join('');
+                        }
+                    }
+                    if (statusEl) {
+                        statusEl.innerHTML = `<span style="color:#d97706;">⚠️ ${userMsg}</span><br><span style="color:#2E7D32; font-weight:600;">✓ Rodomi ${dataRows.length} įrašai tiesiogiai iš vidinės Firestore duomenų bazės.</span>`;
+                    }
+                } else {
+                    if (statusEl) statusEl.innerText = `✕ ${userMsg}`;
+                    if (tbody) tbody.innerHTML = `<tr><td style="color: #c62828; padding: 20px; text-align: center;">${userMsg}</td></tr>`;
+                }
             } finally {
                 if (btn) btn.disabled = false;
             }

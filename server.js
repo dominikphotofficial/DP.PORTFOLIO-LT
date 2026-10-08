@@ -685,6 +685,19 @@ app.use('/api', (req, res) => {
     res.status(404).json({ success: false, error: `API maršrutas nerastas: ${req.method} ${req.originalUrl}` });
 });
 
+// Aliases for booking and admin routes
+app.get(['/service', '/service.html', '/services'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'services.html'));
+});
+
+app.get(['/tfp.booking', '/tfp.booking.html', '/tfp-booking', '/tfp-booking.html', '/tfp'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'tfp-booking.html'));
+});
+
+app.get(['/admin', '/admin/'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 // Serve static files with html extension support
 app.use(express.static(__dirname, {
     extensions: ['html', 'htm']

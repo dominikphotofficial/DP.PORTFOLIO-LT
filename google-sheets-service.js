@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { googleProvider } from "./firebase-config.js";
+import { googleSheetsProvider } from "./firebase-config.js";
 
 /**
  * Google Sheets & Drive Client Service
@@ -34,7 +34,7 @@ export function clearCachedToken() {
  */
 export async function authenticateGoogleSheets(authInstance) {
     try {
-        const result = await signInWithPopup(authInstance, googleProvider);
+        const result = await signInWithPopup(authInstance, googleSheetsProvider);
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (!credential?.accessToken) {
             throw new Error("Nepavyko gauti Google OAuth prieigos rakto. Patikrinkite leidimus.");
@@ -46,7 +46,17 @@ export async function authenticateGoogleSheets(authInstance) {
         };
     } catch (error) {
         console.error("Google authentication error:", error);
-        throw error;
+        if (error.code === 'auth/popup-closed-by-user') {
+            throw new Error("Google prisijungimo langas buvo uždarytas.");
+        }
+        if (error.code === 'auth/internal-error' || (error.message && (error.message.includes('403') || error.message.includes('Forbidden') || error.message.includes('permission') || error.message.includes('Cloud Function')))) {
+            throw new Error("Google autorizacijos klaida (403): Prieiga apribota arba trūksta leidimų Google Drive/Sheets. Įsitikinkite, kad jungiatės su Google paskyra, turinčia teises redaguoti lenteles.");
+        }
+        let cleanMsg = error.message || String(error);
+        if (cleanMsg.includes('<html') || cleanMsg.includes('<!DOCTYPE') || cleanMsg.includes('<body')) {
+            cleanMsg = "Google autorizacijos klaida (403 Forbidden): Prieiga uždrausta Google Cloud Console arba neteisingi domeno leidimai.";
+        }
+        throw new Error(cleanMsg);
     }
 }
 
@@ -67,20 +77,43 @@ async function callGoogleApi(url, options = {}, token = null) {
         ...(options.headers || {})
     };
 
-    const response = await fetch(url, {
-        ...options,
-        headers
-    });
+    let response;
+    try {
+        response = await fetch(url, {
+            ...options,
+            headers
+        });
+    } catch (netErr) {
+        throw new Error(`Tinklo klaida jungiantis prie Google API: ${netErr.message || netErr}`);
+    }
 
     if (!response.ok) {
+        let rawText = '';
         let errBody = null;
         try {
-            errBody = await response.json();
+            rawText = await response.text();
+            errBody = JSON.parse(rawText);
         } catch (_) {
-            errBody = { message: await response.text() };
+            errBody = { message: rawText };
         }
-        const message = errBody?.error?.message || response.statusText || 'Google API klaida';
-        const error = new Error(`Google API klaida (${response.status}): ${message}`);
+
+        let message = errBody?.error?.message;
+        if (!message) {
+            if (response.status === 403) {
+                message = "Prieiga uždrausta (403 Forbidden). Neturite leidimo pasiekti šio failo arba baigėsi OAuth sesija. Spustelėkite „Prijungti iš naujo“.";
+            } else if (response.status === 404) {
+                message = "Google Sheets lentelė arba nurodytas lapas nerastas (404).";
+            } else {
+                message = response.statusText || 'Google API klaida';
+            }
+        }
+
+        // Clean out any raw HTML tag leaks
+        if (typeof message === 'string' && (message.includes('<html') || message.includes('<body') || message.includes('<!DOCTYPE'))) {
+            message = `Google serverio atsakymas (${response.status}): Prieiga uždrausta arba neteisingas užklausos maršrutas.`;
+        }
+
+        const error = new Error(message);
         error.status = response.status;
         error.details = errBody;
         throw error;

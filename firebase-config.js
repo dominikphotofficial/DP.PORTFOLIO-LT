@@ -23,9 +23,24 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+
+// 👤 Standard Google Auth Provider (Client-facing: ONLY profile and email, no Google Drive/Sheets scopes!)
 export const googleProvider = new GoogleAuthProvider();
 
-// 🩺 Diagnostic logging to guarantee injected auth config
+// 📗 Dedicated Google Sheets & Drive Provider (Used EXCLUSIVELY inside Admin Panel on demand)
+export const googleSheetsProvider = new GoogleAuthProvider();
+export const WORKSPACE_SCOPES = [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.file',
+    'https://www.googleapis.com/auth/drive.readonly',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/spreadsheets.readonly'
+];
+WORKSPACE_SCOPES.forEach(scope => {
+    googleSheetsProvider.addScope(scope);
+});
+
+// 🩺 Diagnostic logging & strict custom domain verification
 if (typeof window !== 'undefined') {
     window.firebaseAuthInstance = auth;
     window.__FIREBASE_INITIALIZED_CONFIG__ = {
@@ -35,20 +50,12 @@ if (typeof window !== 'undefined') {
         authHandler: `https://${firebaseConfig.authDomain}/__/auth/handler`,
         timestamp: new Date().toISOString()
     };
-    console.info('%c[Firebase Auth Config Injected Successfully]', 'color: #113939; font-weight: bold;', window.__FIREBASE_INITIALIZED_CONFIG__);
+    if (firebaseConfig.authDomain !== 'dominikphotofficial.lt') {
+        console.warn(`%c[Firebase Auth Warning] authDomain is currently '${firebaseConfig.authDomain}' instead of intended 'dominikphotofficial.lt'.`, 'color: #D32F2F; font-weight: bold;');
+    } else {
+        console.info('%c[Firebase Auth Config Injected Successfully: dominikphotofficial.lt]', 'color: #113939; font-weight: bold;', window.__FIREBASE_INITIALIZED_CONFIG__);
+    }
 }
-// Workspace scopes requested by user for Google Sheets & Drive
-export const WORKSPACE_SCOPES = [
-    'https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/drive.file',
-    'https://www.googleapis.com/auth/drive.readonly',
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/spreadsheets.readonly'
-];
-
-WORKSPACE_SCOPES.forEach(scope => {
-    googleProvider.addScope(scope);
-});
 
 export function getAuthActionSettings(continuePath = '/admin.html') {
     const isCustom = typeof window !== 'undefined' && 
