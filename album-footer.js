@@ -88,60 +88,36 @@
         footerEl.style.cssText = `
             background: ${theme.bg} !important;
             color: ${theme.text} !important;
-            border-top: 2px solid ${theme.border} !important;
+            border-top: 1.5px solid ${theme.border} !important;
             clear: both !important;
             width: 100% !important;
             position: relative !important;
             z-index: 10 !important;
             margin-top: 80px !important;
-            padding: 40px 24px 28px 24px !important;
+            padding: 28px 24px !important;
             box-sizing: border-box !important;
             text-align: left !important;
         `;
 
         footerEl.innerHTML = `
-            <div style="max-width: 1300px; margin: 0 auto; width: 100%;">
-                <div style="width: 50px; height: 3px; background: #113939; margin-bottom: 20px;"></div>
-                
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 25px; margin-bottom: 30px;">
-                    <div>
-                        <div style="font-family: var(--font-heading, 'Josefin Sans', sans-serif); font-size: 1.45rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; color: ${theme.text};">
-                            DP.PORTFOLIO
+            <div class="footer-min-container" style="max-width: 1400px; margin: 0 auto; width: 100%;">
+                <div class="footer-min-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; width: 100%;">
+                    <span class="footer-min-copy" style="font-family: var(--font-heading); font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase; color: ${theme.text} !important; font-weight: 500;">
+                        &copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.
+                    </span>
+                    <div class="footer-legal-links" style="display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">
+                        <a href="${rootPrefix}privacy-policy.html" style="font-family: var(--font-heading); font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: ${theme.text} !important; text-decoration: none; font-weight: 500;">Privatumo Politika</a>
+                        <a href="${rootPrefix}terms-of-service.html" style="font-family: var(--font-heading); font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: ${theme.text} !important; text-decoration: none; font-weight: 500;">Paslaugų Sąlygos</a>
+                    </div>
+                    <div class="footer-min-langs-group" style="display: flex; align-items: center;">
+                        <div class="footer-lang-divider" style="width: 1.5px; height: 18px; background-color: ${theme.border}; margin: 0 16px; opacity: 0.9;" aria-hidden="true"></div>
+                        <div class="footer-min-langs" style="display: flex; align-items: center; gap: 12px; font-family: var(--font-heading); font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase;">
+                            <a href="${rootPrefix}index.html" style="color: ${theme.text} !important; font-weight: 700; text-decoration: none;">LT</a>
+                            <a href="https://en.dominikphotofficial.lt" style="color: ${theme.textMuted} !important; text-decoration: none;">EN</a>
+                            <a href="https://pl.dominikphotofficial.lt" style="color: ${theme.textMuted} !important; text-decoration: none;">PL</a>
+                            <a href="https://ru.dominikphotofficial.lt" style="color: ${theme.textMuted} !important; text-decoration: none;">RU</a>
+                            <a href="https://kr.dominikphotofficial.lt" style="color: ${theme.textMuted} !important; text-decoration: none;">KR</a>
                         </div>
-                        <p style="font-family: var(--font-body, 'Jost', sans-serif); font-size: 0.88rem; color: ${theme.textMuted}; margin: 6px 0 0 0; letter-spacing: 0.8px;">
-                            ${theme.subtitle}
-                        </p>
-                    </div>
-
-                    <nav style="display: flex; gap: 22px; flex-wrap: wrap; align-items: center; font-family: var(--font-heading, 'Josefin Sans', sans-serif); font-size: 0.82rem; letter-spacing: 2px; text-transform: uppercase;">
-                        <a href="${rootPrefix}index.html" style="color: ${theme.text}; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Darbai</a>
-                        <a href="${rootPrefix}services.html" style="color: ${theme.text}; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Paslaugos</a>
-                        <a href="${rootPrefix}tfp-booking.html" style="color: ${theme.text}; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">TFP Registracija</a>
-                        <a href="${rootPrefix}contacts.html" style="color: ${theme.text}; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Kontaktai</a>
-                    </nav>
-                </div>
-
-                <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 0.88rem; color: ${theme.textMuted}; margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid rgba(128, 128, 128, 0.15);">
-                    <a href="mailto:info@dominikphotofficial.lt" style="color: ${theme.text}; text-decoration: none; font-weight: 500;">info@dominikphotofficial.lt</a>
-                    <span>&bull;</span>
-                    <a href="https://www.instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer" style="color: ${theme.text}; text-decoration: none; font-weight: 500;">@dominikphotofficial</a>
-                    <span>&bull;</span>
-                    <a href="tel:+37062337615" style="color: ${theme.text}; text-decoration: none; font-weight: 500;">+370 623 37615</a>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 0.78rem; color: ${theme.textMuted};">
-                    <span>&copy; 2026 DP.PORTFOLIO &bull; Visos teisės saugomos.</span>
-                    
-                    <div style="display: flex; gap: 16px; align-items: center;">
-                        <a href="${rootPrefix}privacy-policy.html" style="color: ${theme.textMuted}; text-decoration: none;">Privatumo Politika</a>
-                        <span>&bull;</span>
-                        <a href="${rootPrefix}terms-of-service.html" style="color: ${theme.textMuted}; text-decoration: none;">Paslaugų Sąlygos</a>
-                    </div>
-
-                    <div style="display: flex; gap: 10px; align-items: center; font-family: var(--font-heading, 'Josefin Sans', sans-serif); font-size: 0.75rem; letter-spacing: 1px;">
-                        <a href="${rootPrefix}index.html" style="color: ${theme.text}; font-weight: bold; text-decoration: none;">LT</a>
-                        <span style="opacity: 0.4;">|</span>
-                        <a href="https://en.dominikphotofficial.lt" style="color: ${theme.textMuted}; text-decoration: none;">EN</a>
                     </div>
                 </div>
             </div>

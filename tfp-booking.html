@@ -186,15 +186,22 @@
         /* Moodboard strip */
         .moodboard-strip {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-top: 25px;
         }
+        @media (max-width: 640px) {
+            .moodboard-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
         .moodboard-item {
-            height: 120px;
+            height: 130px;
             border-radius: 2px;
             overflow: hidden;
+            position: relative;
+            cursor: pointer;
         }
 
         .moodboard-item img {
@@ -202,10 +209,32 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.4s ease;
+            cursor: pointer;
         }
 
         .moodboard-item:hover img {
             transform: scale(1.08);
+        }
+
+        .moodboard-item .moodboard-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(17, 57, 57, 0.35);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-family: var(--font-heading);
+            letter-spacing: 2px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        .moodboard-item:hover .moodboard-overlay {
+            opacity: 1;
         }
 
         /* Form Card */
@@ -569,10 +598,11 @@
                 <!-- Inspiration Moodboard Strip -->
                 <div>
                     <h4 style="font-family: var(--font-heading); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px;">Vizualinis Įkvėpimas</h4>
-                    <div class="moodboard-strip">
-                        <div class="moodboard-item"><img src="https://i.postimg.cc/tgn0qRHR/zirgai-zeimenos-01.jpg" alt="Nuotrauka 1"></div>
-                        <div class="moodboard-item"><img src="https://i.postimg.cc/B60zcQNx/street-nature-01.jpg" alt="Nuotrauka 2"></div>
-                        <div class="moodboard-item"><img src="https://i.postimg.cc/90JLjs3J/IMG-7652.jpg" alt="Nuotrauka 3"></div>
+                    <div class="moodboard-strip gallery-grid">
+                        <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/tgDGWFNT/paslaugos-fotosesijos-01.jpg" alt="Fotosesija" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
+                        <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/PqvGXfk5/zirgai-zeimenos-02.jpg" alt="Žeimenos žirgai" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
+                        <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/xT2XxY4R/IMG-6808.jpg" alt="TFP Kūryba 1" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
+                        <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/RVBWs9DQ/IMG-6811.jpg" alt="TFP Kūryba 2" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
                     </div>
                 </div>
             </div>
@@ -692,7 +722,7 @@
     <footer class="footer-minimal">
         <div class="footer-min-container">
             <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026.09.29 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
                 <div class="footer-legal-links">
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
@@ -702,12 +732,33 @@
                     <div class="footer-min-langs">
                         <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
+                        <a href="https://pl.dominikphotofficial.lt/tfp-booking.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
+                        <a href="https://kr.dominikphotofficial.lt/tfp-booking.html">KR</a>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
+
+    <!-- Full Lightbox for TFP image viewing -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-top">
+            <span id="lightbox-counter"></span>
+            <button class="lightbox-close" aria-label="Uždaryti">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <button class="lightbox-prev" aria-label="Ankstesnė">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="lightbox-image-wrapper">
+            <img id="lightbox-img" src="" alt="TFP nuotraukos peržiūra">
+        </div>
+        <button class="lightbox-next" aria-label="Kita">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>

@@ -55,23 +55,110 @@
     </script>
     <style>
         :root {
-            --bg-color: #080808 !important;
-            --surface-color: #121212 !important;
-            --secondary-color: #1A1A1A !important;
-            --accent-color: #D4AF37 !important;
-            --text-color: #F0F0F0 !important;
-            --accent-light: #F3E5AB !important;
+            --bg-color: #070B0E !important;
+            --surface-color: #0D141A !important;
+            --secondary-color: #141F28 !important;
+            --accent-color: #92B7C8 !important;
+            --text-color: #E6EDF2 !important;
+            --accent-light: #D2E4EE !important;
+            --frost-glow: rgba(162, 209, 233, 0.25);
         }
         
-        body { background-color: var(--bg-color); color: var(--text-color); }
-        .lightbox { background: rgba(5, 5, 5, 0.98) !important; }
-        header.scrolled { background-color: rgba(8, 8, 8, 0.95) !important; border-bottom: 1px solid rgba(212, 175, 55, 0.1) !important; }
-        .nav-overlay { background: rgba(8, 8, 8, 0.98) !important; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Winter Frosted Atmosphere */
+        #winter-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.85;
+        }
+
+        /* Frosted Vignette */
+        .frozen-atmosphere-vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 15%, rgba(68, 107, 131, 0.08) 0%, rgba(7, 11, 14, 0.4) 65%, rgba(4, 7, 10, 0.85) 100%),
+                        radial-gradient(ellipse at 50% 100%, rgba(35, 60, 75, 0.15) 0%, transparent 60%);
+        }
+
+        .lightbox { background: rgba(5, 8, 11, 0.98) !important; }
+        header.scrolled { background-color: rgba(7, 11, 14, 0.95) !important; border-bottom: 1px solid rgba(162, 209, 233, 0.15) !important; }
+        .nav-overlay { background: rgba(7, 11, 14, 0.98) !important; }
         .burger div { background-color: var(--text-color); }
         .nav-link { color: var(--text-color); }
+
+        /* Frosted Glass Accents */
+        .frost-panel {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(162, 209, 233, 0.16) !important;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+        }
+
+        /* Cinematic Winter Award Badge */
+        .winter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(146, 183, 200, 0.1);
+            border: 1px solid rgba(146, 183, 200, 0.35);
+            border-radius: 2px;
+            font-family: var(--font-heading);
+            font-size: 0.76rem;
+            letter-spacing: 2px;
+            color: #D2E4EE;
+            text-transform: uppercase;
+        }
+
+        /* Snow toggle control */
+        .snow-toggle-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99;
+            background: rgba(13, 20, 26, 0.85);
+            border: 1px solid rgba(162, 209, 233, 0.3);
+            color: #D2E4EE;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-family: var(--font-heading);
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+        .snow-toggle-btn:hover {
+            background: rgba(20, 31, 40, 0.95);
+            border-color: rgba(162, 209, 233, 0.6);
+            color: #ffffff;
+        }
     </style>
 </head>
 <body class="theme-frozen-time">
+    <!-- Atmospheric Winter Frost & Snow Particles -->
+    <div class="frozen-atmosphere-vignette" aria-hidden="true"></div>
+    <canvas id="winter-canvas" aria-hidden="true"></canvas>
+    <button type="button" id="toggle-snow-btn" class="snow-toggle-btn" title="Įjungti / išjungti žiemos efektą" aria-label="Žiemos efektas">
+        ❄️ <span id="snow-btn-label">Žiemos Efektas</span>
+    </button>
     <div id="preloader" data-nosnippet>
         <div class="loader"></div>
     </div>
@@ -227,7 +314,7 @@
     <footer class="footer-minimal">
         <div class="footer-min-container">
             <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026.09.29 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
                 <div class="footer-legal-links">
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
@@ -247,5 +334,99 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // =========================================================================
+        // Cinematic Winter Atmosphere (Organic Gentle Falling Snow & Frost Crystals)
+        // High performance, non-intrusive, natural winter velocity & drifts
+        // =========================================================================
+        (function() {
+            const canvas = document.getElementById('winter-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let animationFrameId = null;
+            let isSnowActive = true;
+
+            let width = (canvas.width = window.innerWidth);
+            let height = (canvas.height = window.innerHeight);
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }, { passive: true });
+
+            const flakeCount = Math.min(75, Math.floor((width * height) / 16000));
+            const flakes = [];
+
+            for (let i = 0; i < flakeCount; i++) {
+                flakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2.2 + 0.6,
+                    density: Math.random() * 0.7 + 0.3,
+                    opacity: Math.random() * 0.5 + 0.25,
+                    swing: Math.random() * 2 * Math.PI,
+                    swingSpeed: Math.random() * 0.02 + 0.005,
+                    speedY: Math.random() * 0.8 + 0.4
+                });
+            }
+
+            function drawFlakes() {
+                if (!isSnowActive) {
+                    ctx.clearRect(0, 0, width, height);
+                    return;
+                }
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < flakes.length; i++) {
+                    const f = flakes[i];
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = "rgba(225, 240, 250, " + f.opacity + ")";
+                    ctx.shadowColor = "rgba(162, 209, 233, 0.4)";
+                    ctx.shadowBlur = f.radius * 2;
+                    ctx.fill();
+
+                    // Natural organic movement
+                    f.swing += f.swingSpeed;
+                    f.x += Math.sin(f.swing) * 0.5;
+                    f.y += f.speedY;
+
+                    // Wrap around
+                    if (f.y > height + 5) {
+                        f.y = -5;
+                        f.x = Math.random() * width;
+                    }
+                    if (f.x > width + 5) {
+                        f.x = -5;
+                    } else if (f.x < -5) {
+                        f.x = width + 5;
+                    }
+                }
+
+                animationFrameId = requestAnimationFrame(drawFlakes);
+            }
+
+            drawFlakes();
+
+            // Toggle button
+            const toggleBtn = document.getElementById('toggle-snow-btn');
+            const label = document.getElementById('snow-btn-label');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    isSnowActive = !isSnowActive;
+                    if (isSnowActive) {
+                        if (label) label.textContent = 'Žiemos Efektas';
+                        toggleBtn.style.opacity = '1';
+                        drawFlakes();
+                    } else {
+                        if (label) label.textContent = 'Efektas Išjungtas';
+                        toggleBtn.style.opacity = '0.6';
+                        ctx.clearRect(0, 0, width, height);
+                        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
