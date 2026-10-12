@@ -12,7 +12,6 @@ service cloud.firestore {
 
     function isOwnerEmail() {
       return isNotAnonymous() && (
-        request.auth.token.email.lower() == 'support@dominikphotofficial.lt' ||
         request.auth.token.email.lower() == 'dominikphotofficial.lt@gmail.com' ||
         request.auth.token.email.lower() == 'dominik.suskevic@gmail.com' ||
         request.auth.token.email.lower() == 'info@dominikphotofficial.lt'

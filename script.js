@@ -247,25 +247,21 @@ if (typeof window !== 'undefined' &&
     }
 }
 
-window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    if (preloader) {
-        preloader.style.opacity = "0";
-        setTimeout(() => {
-            preloader.style.display = "none";
-        }, 600);
-    }
-});
-
-setTimeout(() => {
+const hidePreloaderEarly = () => {
     const preloader = document.getElementById("preloader");
     if (preloader && preloader.style.display !== "none") {
         preloader.style.opacity = "0";
         setTimeout(() => {
             preloader.style.display = "none";
-        }, 600);
+        }, 300);
     }
-}, 3000);
+};
+
+window.addEventListener("load", hidePreloaderEarly);
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(hidePreloaderEarly, 400);
+});
+setTimeout(hidePreloaderEarly, 1000);
 
 document.addEventListener("DOMContentLoaded", () => {
     const header = document.getElementById("main-header") || document.querySelector("header");
@@ -440,6 +436,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".fade-in-up, .reveal").forEach(el => {
         observer.observe(el);
     });
+
+    // Fallback: Ensure elements are gracefully made visible if observer or scroll is idle
+    setTimeout(() => {
+        document.querySelectorAll(".fade-in-up, .reveal").forEach(el => {
+            el.classList.add("visible");
+        });
+    }, 450);
 
     // =========================================================================
     // Interactive Gallery Category Filter Bar (Automotive, Nature, Heritage, Flora)

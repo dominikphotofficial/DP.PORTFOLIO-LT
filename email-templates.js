@@ -11,7 +11,7 @@ const BRAND = {
     instagramUrl: "https://instagram.com/dominikphotofficial",
     instagramHandle: "@dominikphotofficial",
     email: "info@dominikphotofficial.lt",
-    supportEmail: "support@dominikphotofficial.lt",
+    supportEmail: "info@dominikphotofficial.lt",
     iban: "LT867300010171188764",
     recipientName: "DP.PORTFOLIO",
     colors: {
@@ -680,11 +680,10 @@ export function buildEmail(templateType, lang, data = {}) {
 export const EMAIL_CONFIG = {
     // 1. Transakcinis / Sisteminis el. paštas (NO-REPLY)
     // Naudojamas tik autentiškumo patvirtinimams: slaptažodžio atstatymui, el. pašto patvirtinimui, pakvietimams.
-    // Reply-To antraštė NETURI būti nukreipta į support@dominikphotofficial.lt.
     system: {
-        email: "support@dominikphotofficial.lt",
-        from: "DP.PORTFOLIO Sistema <support@dominikphotofficial.lt>",
-        replyTo: "info@dominikphotofficial.lt", // Klientų atsakymai nukreipiami į info@, o support veikia kaip no-reply
+        email: "info@dominikphotofficial.lt",
+        from: "DP.PORTFOLIO Sistema <info@dominikphotofficial.lt>",
+        replyTo: "info@dominikphotofficial.lt",
         noReplyNote: "Šis el. laiškas yra išsiųstas automatiškai iš sisteminio adreso (NO-REPLY). Į šį laišką neatsakykite tiesiogiai."
     },
     // 2. Pagrindinis / Pagalbos el. paštas

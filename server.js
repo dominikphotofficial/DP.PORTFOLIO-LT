@@ -12,10 +12,15 @@ const app = express();
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
-// 🔒 Firebase Auth System Endpoints Proxy (/__/auth/*: /handler, /iframe, /action, etc.)
+// 🔒 Firebase Auth System Endpoints Proxy (/__/auth/* and /_/auth/*: /handler, /iframe, /action, etc.)
 // Seamlessly proxies custom domain Firebase Auth requests to the Firebase backend so custom domain OAuth & Action URLs work 100%
-app.all('/__/auth/*', (req, res) => {
-    const targetPath = req.originalUrl;
+app.all(['/__/auth/*', '/_/auth/*'], (req, res) => {
+    let targetPath = req.originalUrl;
+    // Normalize /_/auth/ to /__/auth/ for Firebase backend compatibility
+    if (targetPath.startsWith('/_/auth/')) {
+        targetPath = '/__' + targetPath.slice(2);
+    }
+
     const options = {
         hostname: 'tfp-form.firebaseapp.com',
         port: 443,
@@ -50,7 +55,7 @@ app.use(express.json({ limit: '20mb' }));
 
 // Subdomain & Domain routing:
 // - All site pages, admin, reviews, and bookings are served on the subdomain (portfolio.dominikphotofficial.lt)
-// - Firebase Auth handler (/__/auth/) and API (/api) pass through directly on the main domain
+// - Firebase Auth handler (/__/auth/ and /_/auth/) and API (/api) pass through directly on the main domain
 app.use((req, res, next) => {
     const host = (req.headers.host || '').split(':')[0].toLowerCase();
     const isCustomDomain = host.includes('dominikphotofficial.lt');
@@ -59,7 +64,7 @@ app.use((req, res, next) => {
     }
 
     // Pass through Firebase Auth handler and API requests
-    if (req.path.startsWith('/__/auth') || req.path.startsWith('/api')) {
+    if (req.path.startsWith('/__/auth') || req.path.startsWith('/_/auth') || req.path.startsWith('/api')) {
         return next();
     }
 
@@ -696,6 +701,42 @@ app.get(['/tfp.booking', '/tfp.booking.html', '/tfp-booking', '/tfp-booking.html
 
 app.get(['/admin', '/admin/'], (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// 🖼️ Unified Album & Gallery Routes:
+// Direct redirects for bare album collections
+app.get(['/albums', '/albums/', '/album', '/album/'], (req, res) => {
+    res.redirect(302, '/#gallery');
+});
+
+// Frozen Time movie special album alias
+app.get(['/albums/frozen-time', '/albums/frozen-time.html', '/album/frozen-time', '/album/frozen-time.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'frozen-time.html'));
+});
+
+// Serve core assets (CSS/JS) requested from inside /albums/ directory to prevent any 404s
+app.get('/albums/:file(style\\.css|script\\.js|album-footer\\.js|analytics\\.js)', (req, res) => {
+    res.sendFile(path.join(__dirname, req.params.file));
+});
+
+// Dynamic album page resolution (handles /albums/:slug, /album/:slug with or without .html)
+app.get(['/albums/:slug', '/album/:slug'], (req, res, next) => {
+    let slug = req.params.slug;
+    if (slug.endsWith('.html')) slug = slug.slice(0, -5);
+
+    const albumFile = path.join(__dirname, 'albums', `${slug}.html`);
+    if (fs.existsSync(albumFile)) {
+        return res.sendFile(albumFile);
+    }
+
+    // Try finding close match in albums directory
+    const files = fs.readdirSync(path.join(__dirname, 'albums'));
+    const matched = files.find(f => f.toLowerCase().replace('.html', '') === slug.toLowerCase());
+    if (matched) {
+        return res.sendFile(path.join(__dirname, 'albums', matched));
+    }
+
+    next();
 });
 
 // Serve static files with html extension support
