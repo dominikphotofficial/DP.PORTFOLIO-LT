@@ -318,6 +318,35 @@
         .team-member-card { background: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; }
         .perm-tag { display: inline-block; background: rgba(17, 57, 57, 0.06); color: var(--accent-color); font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-weight: 500; margin: 2px 2px; }
 
+        .auth-tabs {
+            display: flex;
+            background: #F4F6F6;
+            padding: 4px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(17, 57, 57, 0.08);
+        }
+        .auth-tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            font-family: var(--font-heading);
+            font-size: 0.84rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: #607272;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.25s ease;
+        }
+        .auth-tab-btn.active {
+            background: #ffffff;
+            color: #113939;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(17, 57, 57, 0.08);
+        }
         #auth-section { max-width: 460px; margin: 110px auto; background: #ffffff; padding: 45px 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.08); border: 1px solid rgba(17, 57, 57, 0.06); text-align: center; }
         .auth-divider { margin: 25px 0; font-family: var(--font-heading); color: rgba(26, 43, 43, 0.4); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; display: flex; align-items: center; }
         .auth-divider::before, .auth-divider::after { content: ""; flex: 1; border-bottom: 1px solid rgba(17, 57, 57, 0.1); margin: 0 12px; }
@@ -1593,69 +1622,124 @@
         </div>
     </header>
 
-    <!-- Saugus Prisijungimas el. paštu ir slaptažodžiu -->
+    <!-- Saugus Prisijungimas ir Registracija el. paštu ir Google -->
     <div id="auth-section">
         <h2 style="font-family: var(--font-heading); margin-bottom: 8px; font-weight: 400; letter-spacing: 2.5px; color: var(--accent-color); text-transform: uppercase;">
             Administracija
         </h2>
-        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.7); margin-bottom: 25px;">
-            Prisijunkite prie DP.PORTFOLIO valdymo skydo
+        <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(26,43,43,0.7); margin-bottom: 20px;">
+            Prisijunkite arba užsiregistruokite į DP.PORTFOLIO valdymo skydą
         </p>
 
-        <!-- Google Sign-in Button -->
-        <button type="button" id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-            Prisijungti su Google
-        </button>
-
-        <div style="display: flex; align-items: center; margin: 16px 0; color: #888; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px;">
-            <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
-            <span style="padding: 0 10px;">arba el. paštu</span>
-            <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+        <!-- Segmented Tabs: Prisijungti / Registruotis -->
+        <div class="auth-tabs" role="tablist">
+            <button type="button" id="tab-login-btn" class="auth-tab-btn active" role="tab" aria-selected="true">
+                Prisijungti
+            </button>
+            <button type="button" id="tab-register-btn" class="auth-tab-btn" role="tab" aria-selected="false">
+                Registruotis
+            </button>
         </div>
 
-        <div style="text-align: left; margin-bottom: 16px;">
-            <label class="field-label">El. pašto adresas</label>
-            <input type="email" id="admin-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required autocomplete="username">
-        </div>
+        <!-- Feedback alert -->
+        <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 18px;"></div>
 
-        <div style="text-align: left; margin-bottom: 22px;">
-            <label class="field-label">Slaptažodis</label>
-            <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
-        </div>
+        <!-- 1. LOGIN PANEL -->
+        <div id="panel-login" style="display: block;">
+            <!-- Google Sign-in Button -->
+            <button type="button" id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                Prisijungti su Google
+            </button>
 
-        <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
-            Prisijungti
-        </button>
-
-        <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
-            👑 Greitas 2FA kodo siuntimas į el. paštą
-        </button>
-
-        <!-- 2FA / MFA Verification Step Modal/Container -->
-        <div id="auth-2fa-container" style="display: none; text-align: left; margin-bottom: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.2); border-radius: 6px; padding: 18px 16px;">
-            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #113939; margin-bottom: 8px; font-size: 0.95rem;">
-                <span>🔐</span> <span>Dviejų Veiksnių Autentifikacija (2FA)</span>
+            <div style="display: flex; align-items: center; margin: 16px 0; color: #888; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px;">
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                <span style="padding: 0 10px;">arba el. paštu</span>
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
             </div>
-            <p id="auth-2fa-instructions" style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
-                Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
-            </p>
-            <input type="text" id="admin-2fa-input" class="admin-select" maxlength="6" placeholder="000000" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px; font-weight: bold; margin-bottom: 12px;" autocomplete="one-time-code">
-            <button type="button" id="admin-verify-2fa-btn" class="admin-btn" style="width: 100%; margin-bottom: 8px; padding: 12px;">
-                Patvirtinti 2FA Kodą &rarr;
+
+            <div style="text-align: left; margin-bottom: 16px;">
+                <label class="field-label">El. pašto adresas</label>
+                <input type="email" id="admin-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required autocomplete="username">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 22px;">
+                <label class="field-label">Slaptažodis</label>
+                <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
+            </div>
+
+            <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
+                Prisijungti
             </button>
-            <button type="button" id="admin-cancel-2fa-btn" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 9px;">
-                Atšaukti
+
+            <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
+                👑 Greitas 2FA kodo siuntimas į el. paštą
+            </button>
+
+            <!-- 2FA / MFA Verification Step Modal/Container -->
+            <div id="auth-2fa-container" style="display: none; text-align: left; margin-bottom: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.2); border-radius: 6px; padding: 18px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #113939; margin-bottom: 8px; font-size: 0.95rem;">
+                    <span>🔐</span> <span>Dviejų Veiksnių Autentifikacija (2FA)</span>
+                </div>
+                <p id="auth-2fa-instructions" style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
+                    Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
+                </p>
+                <input type="text" id="admin-2fa-input" class="admin-select" maxlength="6" placeholder="000000" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px; font-weight: bold; margin-bottom: 12px;" autocomplete="one-time-code">
+                <button type="button" id="admin-verify-2fa-btn" class="admin-btn" style="width: 100%; margin-bottom: 8px; padding: 12px;">
+                    Patvirtinti 2FA Kodą &rarr;
+                </button>
+                <button type="button" id="admin-cancel-2fa-btn" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 9px;">
+                    Atšaukti
+                </button>
+            </div>
+
+            <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
+                🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
             </button>
         </div>
 
-        <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
-            🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
-        </button>
+        <!-- 2. REGISTRATION PANEL -->
+        <div id="panel-register" style="display: none;">
+            <!-- Google Sign-up Button -->
+            <button type="button" id="admin-register-google-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                Užsiregistruoti su Google
+            </button>
 
-        <div id="auth-status-feedback" style="display: none; padding: 12px; border-radius: 4px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 15px;"></div>
+            <div style="display: flex; align-items: center; margin: 16px 0; color: #888; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px;">
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                <span style="padding: 0 10px;">arba susikurkite paskyrą</span>
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+            </div>
+
+            <div style="text-align: left; margin-bottom: 14px;">
+                <label class="field-label">Vardas Pavardė</label>
+                <input type="text" id="reg-name" class="admin-select" placeholder="Jūsų vardas" style="margin-top: 0;" required autocomplete="name">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 14px;">
+                <label class="field-label">El. pašto adresas</label>
+                <input type="email" id="reg-email" class="admin-select" placeholder="vardas@pavyzdys.lt" style="margin-top: 0;" required autocomplete="username">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 14px;">
+                <label class="field-label">Slaptažodis (bent 6 simboliai)</label>
+                <input type="password" id="reg-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="new-password">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 22px;">
+                <label class="field-label">Pakartokite slaptažodį</label>
+                <input type="password" id="reg-password-confirm" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="new-password">
+            </div>
+
+            <button type="button" id="admin-register-btn" class="admin-btn" style="width: 100%; margin-bottom: 12px; padding: 14px;">
+                Sukurti paskyrą &rarr;
+            </button>
+            <p style="font-size: 0.8rem; color: #888; margin: 0; line-height: 1.4;">
+                Naujai užregistruotos paskyros prijungiamos prie sistemos. Jei esate savininkas, gausite pilnas Super Admin teises.
+            </p>
+        </div>
     </div>
-
     <!-- Floating Toast Notification -->
     <div id="admin-toast">
         <span id="toast-icon" style="font-weight: bold; font-size: 1.1rem; color: #C5A880;">✓</span>
@@ -3032,10 +3116,10 @@
     </div>
 
     <script type="module">
-        // 🔒 Subdomain Enforcement: Ensure admin dashboard operates on active subdomain
+        // 🔒 Subdomain Enforcement: Ensure admin dashboard operates on active subdomain (production only)
         (function enforceActiveSubdomain() {
             const host = window.location.hostname;
-            if (host.includes('dominikphotofficial.lt') && host !== 'portfolio.dominikphotofficial.lt') {
+            if (host.endsWith('dominikphotofficial.lt') && host !== 'portfolio.dominikphotofficial.lt') {
                 window.location.replace(`https://portfolio.dominikphotofficial.lt${window.location.pathname}${window.location.search}${window.location.hash}`);
             }
         })();
@@ -3043,7 +3127,7 @@
         import { db, auth, storage, googleProvider, getAuthActionSettings } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-        import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { getDefaultContent, getGalleryHtml, getReceiptHtml, buildFinalHtml, EMAIL_CONFIG, buildInvitationEmail, buildPasswordResetInstructionEmail } from './email-templates.js';
         import {
@@ -4244,6 +4328,242 @@
         });
         document.getElementById('admin-email')?.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') performEmailLogin();
+        });
+
+        // ==============================================================================
+        // 📑 AUTH TABS SWITCHING (Prisijungti / Registruotis)
+        // ==============================================================================
+        const tabLoginBtn = document.getElementById('tab-login-btn');
+        const tabRegisterBtn = document.getElementById('tab-register-btn');
+        const panelLogin = document.getElementById('panel-login');
+        const panelRegister = document.getElementById('panel-register');
+
+        const switchAuthTab = (tab) => {
+            if (authFeedback) authFeedback.style.display = 'none';
+            if (tab === 'register') {
+                tabRegisterBtn?.classList.add('active');
+                tabRegisterBtn?.setAttribute('aria-selected', 'true');
+                tabLoginBtn?.classList.remove('active');
+                tabLoginBtn?.setAttribute('aria-selected', 'false');
+                if (panelLogin) panelLogin.style.display = 'none';
+                if (panelRegister) panelRegister.style.display = 'block';
+            } else {
+                tabLoginBtn?.classList.add('active');
+                tabLoginBtn?.setAttribute('aria-selected', 'true');
+                tabRegisterBtn?.classList.remove('active');
+                tabRegisterBtn?.setAttribute('aria-selected', 'false');
+                if (panelLogin) panelLogin.style.display = 'block';
+                if (panelRegister) panelRegister.style.display = 'none';
+            }
+        };
+
+        tabLoginBtn?.addEventListener('click', () => switchAuthTab('login'));
+        tabRegisterBtn?.addEventListener('click', () => switchAuthTab('register'));
+
+        // ==============================================================================
+        // 📝 PERFORM REGISTRATION (Email/Password & Google)
+        // ==============================================================================
+        const performEmailRegistration = async () => {
+            const nameInput = document.getElementById('reg-name');
+            const emailInput = document.getElementById('reg-email');
+            const passInput = document.getElementById('reg-password');
+            const passConfirmInput = document.getElementById('reg-password-confirm');
+            const regBtn = document.getElementById('admin-register-btn');
+
+            const name = nameInput ? nameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+            const pass = passInput ? passInput.value : '';
+            const passConfirm = passConfirmInput ? passConfirmInput.value : '';
+
+            if (authFeedback) authFeedback.style.display = 'none';
+
+            if (!name) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Prašome įvesti savo vardą ir pavardę.';
+                }
+                nameInput?.focus();
+                return;
+            }
+
+            if (!email || !email.includes('@')) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Prašome įvesti galiojantį el. pašto adresą.';
+                }
+                emailInput?.focus();
+                return;
+            }
+
+            if (!pass || pass.length < 6) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Slaptažodis turi būti bent 6 simbolių ilgio.';
+                }
+                passInput?.focus();
+                return;
+            }
+
+            if (pass !== passConfirm) {
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    authFeedback.innerText = 'Slaptažodžiai nesutampa. Patikrinkite pakartotą slaptažodį.';
+                }
+                passConfirmInput?.focus();
+                return;
+            }
+
+            if (regBtn) {
+                regBtn.disabled = true;
+                regBtn.innerText = 'Kuriama paskyra...';
+            }
+
+            try {
+                // 1. Firebase Auth user creation
+                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                const user = userCred.user;
+
+                // 2. Set Display Name
+                try {
+                    await updateProfile(user, { displayName: name });
+                } catch(upErr) {
+                    console.warn("Could not set displayName on auth user:", upErr);
+                }
+
+                // 3. Register user profile into Firestore collection
+                const isOwner = isOwnerAccount(email);
+                const role = isOwner ? 'superadmin' : 'manager';
+                const permissions = isOwner ? ['all'] : ['view', 'edit'];
+
+                try {
+                    await setDoc(doc(db, "admin_team", user.uid), {
+                        name: name,
+                        email: email,
+                        role: role,
+                        permissions: permissions,
+                        createdAt: serverTimestamp(),
+                        active: true
+                    }, { merge: true });
+                } catch(fsErr) {
+                    console.warn("Firestore team doc creation fallback:", fsErr);
+                }
+
+                const userSession = {
+                    name: isOwner ? "Dominik Šuškevič (Savininkas)" : name,
+                    email: email,
+                    role: role,
+                    permissions: permissions
+                };
+
+                sessionStorage.setItem('dp_2fa_passed', 'true');
+                showToast(`✓ Paskyra sėkmingai sukurta! Sveiki, ${name}!`);
+                unlockDashboard(userSession);
+            } catch(regErr) {
+                console.error("Registration error:", regErr);
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let msg = regErr.message || regErr.code;
+                    if (regErr.code === 'auth/email-already-in-use') {
+                        msg = 'Šis el. pašto adresas jau užregistruotas sistemoje. Perjunkite į „Prisijungti“ kortelę.';
+                    } else if (regErr.code === 'auth/weak-password') {
+                        msg = 'Slaptažodis per silpnas. Naudokite bent 6 simbolių slaptažodį.';
+                    } else if (regErr.code === 'auth/invalid-email') {
+                        msg = 'Neteisingas el. pašto adreso formatas.';
+                    }
+                    authFeedback.innerText = msg;
+                }
+            } finally {
+                if (regBtn) {
+                    regBtn.disabled = false;
+                    regBtn.innerText = 'Sukurti paskyrą →';
+                }
+            }
+        };
+
+        // Google sign-up handler (reuses Google Auth & auto-provisions profile)
+        const performGoogleRegistration = async () => {
+            const btn = document.getElementById('admin-register-google-btn');
+            const originalHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<span style="display:inline-block;animation:spin 1s linear infinite;">⏳</span> Registruojama per Google...`;
+            }
+            if (authFeedback) authFeedback.style.display = 'none';
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                const userEmail = (user.email || '').toLowerCase().trim();
+                const userName = user.displayName || userEmail;
+                const isOwner = isOwnerAccount(userEmail);
+
+                const role = isOwner ? 'superadmin' : 'manager';
+                const permissions = isOwner ? ['all'] : ['view', 'edit'];
+
+                // Ensure record in admin_team
+                try {
+                    await setDoc(doc(db, "admin_team", user.uid), {
+                        name: userName,
+                        email: userEmail,
+                        role: role,
+                        permissions: permissions,
+                        createdAt: serverTimestamp(),
+                        active: true
+                    }, { merge: true });
+                } catch(fsErr) {
+                    console.warn("Firestore record creation fallback:", fsErr);
+                }
+
+                const userSession = {
+                    name: isOwner ? "Dominik Šuškevič (Savininkas)" : userName,
+                    email: userEmail,
+                    role: role,
+                    permissions: permissions
+                };
+
+                sessionStorage.setItem('dp_2fa_passed', 'true');
+                showToast(`✓ Google registracija sėkminga! Sveiki, ${userSession.name}!`);
+                unlockDashboard(userSession);
+            } catch(e) {
+                console.error("Google registration error:", e);
+                if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+                    return;
+                }
+                if (authFeedback) {
+                    authFeedback.style.display = 'block';
+                    authFeedback.style.background = '#FFEBEE';
+                    authFeedback.style.color = '#C62828';
+                    let msg = 'Google registracijos klaida: ' + (e.message || e.code);
+                    if (e.code === 'auth/unauthorized-domain') {
+                        msg = `Domenas ${window.location.hostname} nėra įtrauktas į Firebase autorizuotus domenus. Registruokitės su el. paštu ir slaptažodžiu.`;
+                    }
+                    authFeedback.innerText = msg;
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            }
+        };
+
+        document.getElementById('admin-register-btn')?.addEventListener('click', performEmailRegistration);
+        document.getElementById('admin-register-google-btn')?.addEventListener('click', performGoogleRegistration);
+        document.getElementById('reg-password-confirm')?.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') performEmailRegistration();
+        });
+        document.getElementById('reg-password')?.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') performEmailRegistration();
         });
 
         // 📱 Mobilus Meniu & Collapsible Navigation Handler

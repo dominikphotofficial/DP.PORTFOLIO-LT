@@ -1,0 +1,6 @@
+{
+  "summary":  "Plan to fix the admin authentication & registration flow with working Google and Email/Password registration, increase mobile Hero typography size, simplify homepage album cards to show only titles with descriptions inside the album view, and clean up broken or unneeded files.",
+  "updatedAt":  "2026-10-23T14:04:20.711999632Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}
