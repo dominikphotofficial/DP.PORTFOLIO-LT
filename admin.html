@@ -1633,10 +1633,10 @@
 
         <!-- Segmented Tabs: Prisijungti / Registruotis -->
         <div class="auth-tabs" role="tablist">
-            <button type="button" id="tab-login-btn" class="auth-tab-btn active" role="tab" aria-selected="true">
+            <button type="button" id="tab-login-btn" class="auth-tab-btn active" role="tab" aria-selected="true" onclick="switchAuthTab('login')">
                 Prisijungti
             </button>
-            <button type="button" id="tab-register-btn" class="auth-tab-btn" role="tab" aria-selected="false">
+            <button type="button" id="tab-register-btn" class="auth-tab-btn" role="tab" aria-selected="false" onclick="switchAuthTab('register')">
                 Registruotis
             </button>
         </div>
@@ -1647,7 +1647,7 @@
         <!-- 1. LOGIN PANEL -->
         <div id="panel-login" style="display: block;">
             <!-- Google Sign-in Button -->
-            <button type="button" id="admin-login-google-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+            <button type="button" id="admin-login-google-btn" onclick="performGoogleLogin()" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
                 Prisijungti su Google
             </button>
@@ -1668,11 +1668,11 @@
                 <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
             </div>
 
-            <button type="button" id="admin-login-email-btn" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
+            <button type="button" id="admin-login-email-btn" onclick="performEmailLogin()" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
                 Prisijungti
             </button>
 
-            <button type="button" id="admin-owner-2fa-direct-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
+            <button type="button" id="admin-owner-2fa-direct-btn" onclick="performDirect2FA()" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
                 👑 Greitas 2FA kodo siuntimas į el. paštą
             </button>
 
@@ -1685,15 +1685,15 @@
                     Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
                 </p>
                 <input type="text" id="admin-2fa-input" class="admin-select" maxlength="6" placeholder="000000" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px; font-weight: bold; margin-bottom: 12px;" autocomplete="one-time-code">
-                <button type="button" id="admin-verify-2fa-btn" class="admin-btn" style="width: 100%; margin-bottom: 8px; padding: 12px;">
+                <button type="button" id="admin-verify-2fa-btn" onclick="verify2FACode()" class="admin-btn" style="width: 100%; margin-bottom: 8px; padding: 12px;">
                     Patvirtinti 2FA Kodą &rarr;
                 </button>
-                <button type="button" id="admin-cancel-2fa-btn" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 9px;">
+                <button type="button" id="admin-cancel-2fa-btn" onclick="reset2FaView()" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 9px;">
                     Atšaukti
                 </button>
             </div>
 
-            <button type="button" id="admin-forgot-password-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
+            <button type="button" id="admin-forgot-password-btn" onclick="performForgotPassword()" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
                 🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
             </button>
         </div>
@@ -1701,7 +1701,7 @@
         <!-- 2. REGISTRATION PANEL -->
         <div id="panel-register" style="display: none;">
             <!-- Google Sign-up Button -->
-            <button type="button" id="admin-register-google-btn" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
+            <button type="button" id="admin-register-google-btn" onclick="performGoogleRegistration()" class="admin-btn-outline" style="width: 100%; margin-bottom: 16px; padding: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.92rem; border-color: #d1d5db; background: #ffffff; cursor: pointer; transition: all 0.2s ease;">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
                 Užsiregistruoti su Google
             </button>
@@ -1732,7 +1732,7 @@
                 <input type="password" id="reg-password-confirm" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="new-password">
             </div>
 
-            <button type="button" id="admin-register-btn" class="admin-btn" style="width: 100%; margin-bottom: 12px; padding: 14px;">
+            <button type="button" id="admin-register-btn" onclick="performEmailRegistration()" class="admin-btn" style="width: 100%; margin-bottom: 12px; padding: 14px;">
                 Sukurti paskyrą &rarr;
             </button>
             <p style="font-size: 0.8rem; color: #888; margin: 0; line-height: 1.4;">
@@ -1740,6 +1740,102 @@
             </p>
         </div>
     </div>
+
+    <!-- Immediate UI Controller Script for Instant Button Responsiveness -->
+    <script>
+        (function() {
+            window.switchAuthTab = function(tab) {
+                var feedback = document.getElementById('auth-status-feedback');
+                if (feedback) feedback.style.display = 'none';
+                var tabLoginBtn = document.getElementById('tab-login-btn');
+                var tabRegisterBtn = document.getElementById('tab-register-btn');
+                var panelLogin = document.getElementById('panel-login');
+                var panelRegister = document.getElementById('panel-register');
+
+                if (tab === 'register') {
+                    if (tabRegisterBtn) { tabRegisterBtn.classList.add('active'); tabRegisterBtn.setAttribute('aria-selected', 'true'); }
+                    if (tabLoginBtn) { tabLoginBtn.classList.remove('active'); tabLoginBtn.setAttribute('aria-selected', 'false'); }
+                    if (panelLogin) panelLogin.style.display = 'none';
+                    if (panelRegister) panelRegister.style.display = 'block';
+                } else {
+                    if (tabLoginBtn) { tabLoginBtn.classList.add('active'); tabLoginBtn.setAttribute('aria-selected', 'true'); }
+                    if (tabRegisterBtn) { tabRegisterBtn.classList.remove('active'); tabRegisterBtn.setAttribute('aria-selected', 'false'); }
+                    if (panelLogin) panelLogin.style.display = 'block';
+                    if (panelRegister) panelRegister.style.display = 'none';
+                }
+            };
+
+            window.performEmailLogin = function() {
+                if (typeof window._realPerformEmailLogin === 'function') {
+                    return window._realPerformEmailLogin();
+                }
+                var fb = document.getElementById('auth-status-feedback');
+                if (fb) {
+                    fb.style.display = 'block';
+                    fb.style.background = '#FFF8E1';
+                    fb.style.color = '#B78103';
+                    fb.innerText = 'Kraunama saugi prisijungimo sistema, prašome palaukti kelias sekundes...';
+                }
+            };
+
+            window.performEmailRegistration = function() {
+                if (typeof window._realPerformEmailRegistration === 'function') {
+                    return window._realPerformEmailRegistration();
+                }
+                var fb = document.getElementById('auth-status-feedback');
+                if (fb) {
+                    fb.style.display = 'block';
+                    fb.style.background = '#FFF8E1';
+                    fb.style.color = '#B78103';
+                    fb.innerText = 'Kraunama saugi registracijos sistema, prašome palaukti kelias sekundes...';
+                }
+            };
+
+            window.performGoogleLogin = function() {
+                if (typeof window._realPerformGoogleLogin === 'function') {
+                    return window._realPerformGoogleLogin();
+                }
+                var fb = document.getElementById('auth-status-feedback');
+                if (fb) {
+                    fb.style.display = 'block';
+                    fb.style.background = '#FFF8E1';
+                    fb.style.color = '#B78103';
+                    fb.innerText = 'Kraunamas Google prisijungimas...';
+                }
+            };
+
+            window.performGoogleRegistration = function() {
+                if (typeof window._realPerformGoogleRegistration === 'function') {
+                    return window._realPerformGoogleRegistration();
+                }
+                var fb = document.getElementById('auth-status-feedback');
+                if (fb) {
+                    fb.style.display = 'block';
+                    fb.style.background = '#FFF8E1';
+                    fb.style.color = '#B78103';
+                    fb.innerText = 'Kraunama Google registracija...';
+                }
+            };
+
+            window.performDirect2FA = function() {
+                if (typeof window._realPerformDirect2FA === 'function') {
+                    return window._realPerformDirect2FA();
+                }
+            };
+
+            window.verify2FACode = function() {
+                if (typeof window._realVerify2FACode === 'function') {
+                    return window._realVerify2FACode();
+                }
+            };
+
+            window.performForgotPassword = function() {
+                if (typeof window._realPerformForgotPassword === 'function') {
+                    return window._realPerformForgotPassword();
+                }
+            };
+        })();
+    </script>
     <!-- Floating Toast Notification -->
     <div id="admin-toast">
         <span id="toast-icon" style="font-weight: bold; font-size: 1.1rem; color: #C5A880;">✓</span>
@@ -3712,8 +3808,8 @@
             showToast("Sėkmingai atsijungta.");
         }
 
-        logoutBtn.addEventListener('click', handleLogout);
-        logoutBtnInner.addEventListener('click', handleLogout);
+        logoutBtn?.addEventListener('click', handleLogout);
+        logoutBtnInner?.addEventListener('click', handleLogout);
 
         // Tikriname, ar jau turime išsaugotą sesiją iš anksčiau
         const initialSession = getStoredAdminSession();
@@ -3841,7 +3937,7 @@
         });
 
         // Password Reset / Account Setup Link via Email
-        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', async () => {
+        const performForgotPassword = async () => {
             const emailInput = document.getElementById('admin-email');
             let email = emailInput ? emailInput.value.trim() : '';
 
@@ -3880,7 +3976,10 @@
                     authFeedback.innerHTML = `✕ <strong>Klaida:</strong> ${msg}`;
                 }
             }
-        });
+        };
+        window.performForgotPassword = performForgotPassword;
+        window._realPerformForgotPassword = performForgotPassword;
+        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', performForgotPassword);
 
         // 🔒 2FA / MFA Helper Functions (Dynamic for ANY Admin Email)
         function initiate2FAFlow(email, pendingSession) {
@@ -3976,7 +4075,7 @@
 
         document.getElementById('admin-cancel-2fa-btn')?.addEventListener('click', reset2FaView);
 
-        document.getElementById('admin-verify-2fa-btn')?.addEventListener('click', () => {
+        const verify2FACode = () => {
             const input = document.getElementById('admin-2fa-input')?.value.trim();
             const raw = sessionStorage.getItem('dp_pending_2fa');
             if (!raw) {
@@ -4010,14 +4109,18 @@
             } catch(e) {
                 reset2FaView();
             }
-        });
+        };
+        window.verify2FACode = verify2FACode;
+        window._realVerify2FACode = verify2FACode;
+        window.reset2FaView = reset2FaView;
+        document.getElementById('admin-verify-2fa-btn')?.addEventListener('click', verify2FACode);
 
         document.getElementById('admin-2fa-input')?.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') document.getElementById('admin-verify-2fa-btn')?.click();
+            if (e.key === 'Enter') verify2FACode();
         });
 
         // 👑 Greitas 2FA kodo siuntimas į el. paštą (veikia bet kuriam autorizuotam admin el. paštui)
-        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', async () => {
+        const performDirect2FA = async () => {
             const emailInput = document.getElementById('admin-email');
             const email = (emailInput?.value.trim().toLowerCase()) || "dominikphotofficial.lt@gmail.com";
             if (emailInput && !emailInput.value) emailInput.value = email;
@@ -4066,7 +4169,10 @@
             if (userSession) {
                 initiate2FAFlow(email, userSession);
             }
-        });
+        };
+        window.performDirect2FA = performDirect2FA;
+        window._realPerformDirect2FA = performDirect2FA;
+        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', performDirect2FA);
 
         // 🔒 Strict Email & Password Login Handler (Auto-creates owner account or falls back to owner 2FA)
         const performEmailLogin = async () => {
@@ -4321,6 +4427,10 @@
             }
         };
 
+        window.performGoogleLogin = performGoogleLogin;
+        window._realPerformGoogleLogin = performGoogleLogin;
+        window.performEmailLogin = performEmailLogin;
+        window._realPerformEmailLogin = performEmailLogin;
         document.getElementById('admin-login-google-btn')?.addEventListener('click', performGoogleLogin);
         document.getElementById('admin-login-email-btn')?.addEventListener('click', performEmailLogin);
         document.getElementById('admin-password')?.addEventListener('keyup', (e) => {
@@ -4557,6 +4667,10 @@
             }
         };
 
+        window.performEmailRegistration = performEmailRegistration;
+        window._realPerformEmailRegistration = performEmailRegistration;
+        window.performGoogleRegistration = performGoogleRegistration;
+        window._realPerformGoogleRegistration = performGoogleRegistration;
         document.getElementById('admin-register-btn')?.addEventListener('click', performEmailRegistration);
         document.getElementById('admin-register-google-btn')?.addEventListener('click', performGoogleRegistration);
         document.getElementById('reg-password-confirm')?.addEventListener('keyup', (e) => {

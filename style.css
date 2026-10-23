@@ -751,102 +751,97 @@ header.scrolled {
     filter: brightness(0.97);
 }
 
-/* Subtle default bottom bar showing album tag & title with soft gradient fade */
+/* Desktop: Hide static bottom bar so photo stays clean until cursor hover */
 .album-bottom-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 42px 22px 18px 22px;
-    background: linear-gradient(to top, rgba(251, 249, 246, 0.98) 0%, rgba(251, 249, 246, 0.85) 45%, rgba(251, 249, 246, 0.2) 80%, transparent 100%);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 2;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    pointer-events: none;
+    display: none;
 }
 
-.album-bottom-bar .album-tag {
-    font-family: var(--font-heading);
-    font-size: 0.66rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent-color);
-    background: rgba(17, 57, 57, 0.06);
-    border: 1px solid rgba(17, 57, 57, 0.12);
-    padding: 3px 8px;
-    border-radius: 2px;
-    align-self: flex-start;
-    font-weight: 600;
-}
-
-.album-bottom-bar .album-title {
-    color: var(--text-color);
-    font-family: var(--font-heading);
-    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-    line-height: 1.25;
-}
-
-/* Full rich frosted overlay on hover with description - light, airy & comfortable for eyes */
+/* Full rich frosted overlay on cursor hover with smooth fade transition */
 .album-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(251, 249, 246, 0.98) 0%, rgba(251, 249, 246, 0.93) 55%, rgba(251, 249, 246, 0.45) 85%, transparent 100%);
+    background: linear-gradient(to top, rgba(251, 249, 246, 0.98) 0%, rgba(251, 249, 246, 0.92) 50%, rgba(251, 249, 246, 0.4) 85%, transparent 100%);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 28px 24px;
+    padding: 30px 24px;
     opacity: 0;
     pointer-events: none;
     z-index: 3;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    transform: translateY(8px);
+    transform: translateY(12px);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* On mouse cursor hover: fade in the overlay and title smoothly */
 .album-card:hover .album-overlay {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
 }
 
-.album-card:hover .album-bottom-bar {
-    opacity: 0;
-    transform: translateY(10px);
-}
-
 .album-overlay .album-tag {
     display: inline-block;
     align-self: flex-start;
-    padding: 3px 10px;
+    padding: 4px 10px;
     background: rgba(17, 57, 57, 0.08);
     border: 1px solid rgba(17, 57, 57, 0.16);
     color: var(--accent-color);
     border-radius: 2px;
     font-family: var(--font-heading);
-    font-size: 0.66rem;
+    font-size: 0.68rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease 0.05s, transform 0.4s ease 0.05s;
 }
 
+.album-card:hover .album-overlay .album-tag {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Album Title: Fades in with the accent color */
 .album-overlay .album-title {
-    color: var(--text-color);
+    color: var(--accent-color);
     font-family: var(--font-heading);
-    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
-    letter-spacing: 2px;
+    font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.25;
     margin: 0 0 10px 0;
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: color 0.4s ease, opacity 0.45s ease 0.08s, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+}
+
+.album-card:hover .album-overlay .album-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Category-specific accent color highlights on hover */
+.album-card-automotive:hover .album-overlay .album-title {
+    color: #B8860B; /* Warm gold / amber automotive accent */
+}
+
+.album-card-nature:hover .album-overlay .album-title {
+    color: #113939; /* Deep emerald nature accent */
+}
+
+.album-card-heritage:hover .album-overlay .album-title {
+    color: #8C6D4F; /* Historic warm bronze accent */
+}
+
+.album-card-zeimenos:hover .album-overlay .album-title {
+    color: #1E3A6D; /* Royal equestrian blue accent */
 }
 
 .album-overlay .album-desc {
@@ -863,10 +858,14 @@ header.scrolled {
     letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: 600;
-    transition: color 0.3s ease, gap 0.3s ease;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: color 0.3s ease, gap 0.3s ease, opacity 0.45s ease 0.12s, transform 0.45s ease 0.12s;
 }
 
 .album-card:hover .album-overlay .album-btn-text {
+    opacity: 1;
+    transform: translateY(0);
     gap: 12px;
     color: var(--accent-light);
 }
