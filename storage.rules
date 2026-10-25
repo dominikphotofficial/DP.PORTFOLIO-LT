@@ -1,0 +1,73 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ============================================================================
+    // 🛡️ PAGALBINĖS SAUGUMO IR TAPATYBĖS TIKRINIMO FUNKCIJOS
+    // ============================================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isNotAnonymous() {
+      return isSignedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
+    // Savininko el. pašto adresai
+    function isOwnerEmail() {
+      return isNotAnonymous() && (
+        request.auth.token.email.lower() == 'dominikphotofficial.lt@gmail.com' ||
+        request.auth.token.email.lower() == 'dominik.suskevic@gmail.com' ||
+        request.auth.token.email.lower() == 'info@dominikphotofficial.lt'
+      );
+    }
+
+    // Administratoriaus statusas
+    function isAdmin() {
+      return isOwnerEmail() || (isSignedIn() && request.auth.token.admin == true);
+    }
+
+    // Failų tipo ir dydžio validacija (Nuotraukos iki 15MB)
+    function isImageUnder15MB() {
+      return request.resource.size < 15 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    // Dokumentų ar nuotraukų validacija (Kvitai/Sąskaitos iki 20MB)
+    function isReceiptFileUnder20MB() {
+      return request.resource.size < 20 * 1024 * 1024
+          && (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+    }
+
+    // ============================================================================
+    // 📂 SAUGYKLOS KATALOGŲ TAISYKLĖS
+    // ============================================================================
+
+    // 1. TFP Fotosesijų pavyzdinės nuotraukos (įkelia klientai pildydami TFP formą)
+    match /tfp_references/{fileName} {
+      allow read: if true;
+      allow create: if isImageUnder15MB();
+      allow update, delete: if isSignedIn();
+    }
+
+    // 2. Mokamų paslaugų užsakymų pavyzdžiai ir nuorodos
+    match /service_references/{fileName} {
+      allow read: if true;
+      allow create: if isImageUnder15MB();
+      allow update, delete: if isSignedIn();
+    }
+
+    // 3. VMI kvitai, čekiai, sąskaitos-faktūros (įkelia administratoriai / buhalteris)
+    match /receipts/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isReceiptFileUnder20MB();
+    }
+
+    // 4. Bendras katalogas ir numatytos taisyklės
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}

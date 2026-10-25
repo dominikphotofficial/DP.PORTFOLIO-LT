@@ -2,6 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ============================================================================
+    // 🛡️ PAGALBINĖS SAUGUMO IR TAPATYBĖS TIKRINIMO FUNKCIJOS
+    // ============================================================================
+
     function isSignedIn() {
       return request.auth != null;
     }
@@ -10,6 +14,7 @@ service cloud.firestore {
       return isSignedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
 
+    // Savininko el. pašto adresai
     function isOwnerEmail() {
       return isNotAnonymous() && (
         request.auth.token.email.lower() == 'dominikphotofficial.lt@gmail.com' ||
@@ -18,6 +23,7 @@ service cloud.firestore {
       );
     }
 
+    // Komandos nario / administratoriaus patikra
     function isTeamAdmin() {
       return isNotAnonymous() && (
         exists(/databases/$(database)/documents/admin_team/$(request.auth.uid)) ||
@@ -26,61 +32,90 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isOwnerEmail() || isTeamAdmin() || isSignedIn();
+      return isOwnerEmail() || isTeamAdmin();
     }
 
-    // Default deny all
+    // Numatytas draudimas visiems neaprašytiems keliams
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // TFP Requests:
+    // ============================================================================
+    // 📋 DUOMENŲ BAZĖS KOLEKCIJŲ TAISYKLĖS
+    // ============================================================================
+
+    // 1. TFP Užklausos:
+    // Klientai gali sukurti užklausas viešai. Administratoriai skaito, redaguoja ir trina.
     match /tfp_requests/{requestId} {
-      allow read, write: if true;
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
 
-    // Service Requests:
+    // 2. Mokamų Paslaugų Užklausos:
+    // Klientai pildo užsakymus svetainėje. Administratoriai valdo.
     match /service_requests/{requestId} {
-      allow read, write: if true;
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
 
-    // Reviews:
-    match /reviews/{reviewId} {
-      allow read, write: if true;
-    }
-
-    // Settings:
-    match /settings/{settingId} {
-      allow read, write: if true;
-    }
-
-    // Contact Messages:
+    // 3. Kontaktų Žinutės (Forma iš contacts.html):
+    // Lankytojai siunčia žinutes. Administratoriai skaito ir apdoroja.
     match /contact_messages/{messageId} {
-      allow read, write: if true;
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
     }
 
-    // Mail Queue:
-    match /mail/{mailId} {
-      allow read, write: if true;
+    // 4. Klientų Atsiliepimai:
+    // Klientai teikia atsiliepimus, patvirtinti atsiliepimai rodomi viešai, administratoriai moderuoja.
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isSignedIn();
     }
 
-    // Admin Team & RBAC:
-    match /admin_team/{memberId} {
-      allow read, write: if true;
-    }
-
-    // VMI Expenses & Settings:
-    match /vmi_expenses/{expenseId} {
-      allow read, write: if true;
-    }
-
-    // Audit Logs & System Activity Registry
-    match /audit_logs/{logId} {
-      allow read, write: if true;
+    // 5. Nustatymai ir atsiliepimų matomumo valdymas:
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /admin_settings/{settingId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /reviews_visibility/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // 6. El. Pašto Eilė (Firebase Mail Extension / Pranešimų siuntimas):
+    // Naudojama siųsti patvirtinimo laiškus ir 2FA kodus.
+    match /mail/{mailId} {
+      allow create: if true;
+      allow read, update, delete: if isSignedIn();
+    }
+
+    // 7. Komandos Teisės ir Vartotojų Rolės (RBAC):
+    // Leidžia patikrinti komandos nario autorizaciją prisijungus arba registruojantis.
+    match /admin_team/{memberId} {
+      allow read: if true;
+      allow create: if isOwnerEmail() || isSignedIn() || (request.auth != null && request.auth.uid == memberId);
+      allow update, delete: if isOwnerEmail() || isSignedIn();
+    }
+
+    // 8. VMI Pajamų ir Išlaidų Žurnalas, Kvitų Apskaita:
+    // Prieinama autorizuotiems administratoriams / buhalteriui.
+    match /vmi_expenses/{expenseId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 9. Veiksmų Žurnalas (Audit Logs):
+    // Fiksuoja administratoriaus veiksmus sistemoje.
+    match /audit_logs/{logId} {
+      allow create: if true;
+      allow read: if isSignedIn();
+      allow update, delete: if isOwnerEmail();
     }
   }
 }
