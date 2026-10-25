@@ -1745,6 +1745,9 @@
     <script>
         (function() {
             window.switchAuthTab = function(tab) {
+                if (typeof window._realSwitchAuthTab === 'function') {
+                    return window._realSwitchAuthTab(tab);
+                }
                 var feedback = document.getElementById('auth-status-feedback');
                 if (feedback) feedback.style.display = 'none';
                 var tabLoginBtn = document.getElementById('tab-login-btn');
@@ -1765,74 +1768,60 @@
                 }
             };
 
-            window.performEmailLogin = function() {
-                if (typeof window._realPerformEmailLogin === 'function') {
-                    return window._realPerformEmailLogin();
+            function triggerOrWait(fnName, loadingMsg) {
+                if (typeof window[fnName] === 'function') {
+                    return window[fnName]();
                 }
                 var fb = document.getElementById('auth-status-feedback');
                 if (fb) {
                     fb.style.display = 'block';
                     fb.style.background = '#FFF8E1';
                     fb.style.color = '#B78103';
-                    fb.innerText = 'Kraunama saugi prisijungimo sistema, prašome palaukti kelias sekundes...';
+                    fb.innerText = loadingMsg;
                 }
+                var tries = 0;
+                var poll = setInterval(function() {
+                    tries++;
+                    if (typeof window[fnName] === 'function') {
+                        clearInterval(poll);
+                        window[fnName]();
+                    } else if (tries > 60) {
+                        clearInterval(poll);
+                        if (fb) {
+                            fb.style.background = '#FFEBEE';
+                            fb.style.color = '#C62828';
+                            fb.innerText = 'Nepavyko paleisti prisijungimo modulio. Prašome perkrauti puslapį.';
+                        }
+                    }
+                }, 50);
+            }
+
+            window.performEmailLogin = function() {
+                triggerOrWait('_realPerformEmailLogin', 'Jungiamasi prie saugios sistemos, prašome palaukti...');
             };
 
             window.performEmailRegistration = function() {
-                if (typeof window._realPerformEmailRegistration === 'function') {
-                    return window._realPerformEmailRegistration();
-                }
-                var fb = document.getElementById('auth-status-feedback');
-                if (fb) {
-                    fb.style.display = 'block';
-                    fb.style.background = '#FFF8E1';
-                    fb.style.color = '#B78103';
-                    fb.innerText = 'Kraunama saugi registracijos sistema, prašome palaukti kelias sekundes...';
-                }
+                triggerOrWait('_realPerformEmailRegistration', 'Kraunama saugi registracijos sistema...');
             };
 
             window.performGoogleLogin = function() {
-                if (typeof window._realPerformGoogleLogin === 'function') {
-                    return window._realPerformGoogleLogin();
-                }
-                var fb = document.getElementById('auth-status-feedback');
-                if (fb) {
-                    fb.style.display = 'block';
-                    fb.style.background = '#FFF8E1';
-                    fb.style.color = '#B78103';
-                    fb.innerText = 'Kraunamas Google prisijungimas...';
-                }
+                triggerOrWait('_realPerformGoogleLogin', 'Jungiamasi per Google...');
             };
 
             window.performGoogleRegistration = function() {
-                if (typeof window._realPerformGoogleRegistration === 'function') {
-                    return window._realPerformGoogleRegistration();
-                }
-                var fb = document.getElementById('auth-status-feedback');
-                if (fb) {
-                    fb.style.display = 'block';
-                    fb.style.background = '#FFF8E1';
-                    fb.style.color = '#B78103';
-                    fb.innerText = 'Kraunama Google registracija...';
-                }
+                triggerOrWait('_realPerformGoogleRegistration', 'Kraunama Google registracija...');
             };
 
             window.performDirect2FA = function() {
-                if (typeof window._realPerformDirect2FA === 'function') {
-                    return window._realPerformDirect2FA();
-                }
+                triggerOrWait('_realPerformDirect2FA', 'Ruošiamas 2FA saugumo kodo siuntimas...');
             };
 
             window.verify2FACode = function() {
-                if (typeof window._realVerify2FACode === 'function') {
-                    return window._realVerify2FACode();
-                }
+                triggerOrWait('_realVerify2FACode', 'Tikrinamas 2FA kodas...');
             };
 
             window.performForgotPassword = function() {
-                if (typeof window._realPerformForgotPassword === 'function') {
-                    return window._realPerformForgotPassword();
-                }
+                triggerOrWait('_realPerformForgotPassword', 'Ruošiama slaptažodžio atstatymo nuoroda...');
             };
         })();
     </script>
@@ -3220,7 +3209,7 @@
             }
         })();
 
-        import { db, auth, storage, googleProvider, getAuthActionSettings } from './firebase-config.js';
+        import { db, auth, storage, googleProvider, firebaseConfig, getAuthActionSettings } from './firebase-config.js';
         import { getReviewsVisibility, setReviewsVisibility, subscribeReviewsVisibility, fetchReviewsList, createNewReview, toggleReviewItem, deleteReviewItem } from './reviews-manager.js';
         import { collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, where, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInAnonymously, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, updatePassword, updateEmail, verifyBeforeUpdateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
@@ -3244,6 +3233,11 @@
             getSheetValues
         } from './google-sheets-service.js';
 
+        // Hoisted session & spreadsheet state (protects against Temporal Dead Zone)
+        let currentAdminSession = null;
+        let activeSpreadsheetId = localStorage.getItem('dp_active_spreadsheet_id') || '';
+        let activeSpreadsheetTitle = localStorage.getItem('dp_active_spreadsheet_title') || 'DP.PORTFOLIO Užsakymai & Finansai';
+
         const ADMIN_EMAIL = "dominikphotofficial.lt@gmail.com"; 
         const OWNER_EMAILS = [
             "dominikphotofficial.lt@gmail.com",
@@ -3258,6 +3252,24 @@
         const logoutBtnInner = document.getElementById('logout-btn-inner');
         const authFeedback = document.getElementById('auth-status-feedback');
         let pendingEmailData = null;
+
+        // Instantly register real auth handlers on window
+        window.performGoogleLogin = performGoogleLogin;
+        window._realPerformGoogleLogin = performGoogleLogin;
+        window.performEmailLogin = performEmailLogin;
+        window._realPerformEmailLogin = performEmailLogin;
+        window.performEmailRegistration = performEmailRegistration;
+        window._realPerformEmailRegistration = performEmailRegistration;
+        window.performGoogleRegistration = performGoogleRegistration;
+        window._realPerformGoogleRegistration = performGoogleRegistration;
+        window.performDirect2FA = performDirect2FA;
+        window._realPerformDirect2FA = performDirect2FA;
+        window.verify2FACode = verify2FACode;
+        window._realVerify2FACode = verify2FACode;
+        window.performForgotPassword = performForgotPassword;
+        window._realPerformForgotPassword = performForgotPassword;
+        window.switchAuthTab = switchAuthTab;
+        window._realSwitchAuthTab = switchAuthTab;
 
         // In-memory data store for safe, bug-free rendering & filtering
         window._adminCache = {
@@ -3460,9 +3472,6 @@
 
         // Initial diagnostic log entry
         window.recordDiagnosticOp('SYS_INIT', 'INFO', `Admin skydelis inicijuotas (${firebaseConfig.authDomain})`);
-
-        // Session & Role management
-        let currentAdminSession = null;
 
         // ==============================================================================
         // 🛡️ VARTOTOJŲ VEIKSMŲ SEKIMAS IR REGISTRAS (AUDIT LOG SYSTEM)
@@ -3937,7 +3946,7 @@
         });
 
         // Password Reset / Account Setup Link via Email
-        const performForgotPassword = async () => {
+        async function performForgotPassword() {
             const emailInput = document.getElementById('admin-email');
             let email = emailInput ? emailInput.value.trim() : '';
 
@@ -4075,7 +4084,7 @@
 
         document.getElementById('admin-cancel-2fa-btn')?.addEventListener('click', reset2FaView);
 
-        const verify2FACode = () => {
+        async function verify2FACode() {
             const input = document.getElementById('admin-2fa-input')?.value.trim();
             const raw = sessionStorage.getItem('dp_pending_2fa');
             if (!raw) {
@@ -4120,7 +4129,7 @@
         });
 
         // 👑 Greitas 2FA kodo siuntimas į el. paštą (veikia bet kuriam autorizuotam admin el. paštui)
-        const performDirect2FA = async () => {
+        async function performDirect2FA() {
             const emailInput = document.getElementById('admin-email');
             const email = (emailInput?.value.trim().toLowerCase()) || "dominikphotofficial.lt@gmail.com";
             if (emailInput && !emailInput.value) emailInput.value = email;
@@ -4175,7 +4184,7 @@
         document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', performDirect2FA);
 
         // 🔒 Strict Email & Password Login Handler (Auto-creates owner account or falls back to owner 2FA)
-        const performEmailLogin = async () => {
+        async function performEmailLogin() {
             const emailInput = document.getElementById('admin-email');
             const passInput = document.getElementById('admin-password');
             const email = emailInput?.value.trim().toLowerCase() || '';
@@ -4348,7 +4357,7 @@
             }
         };
 
-        const performGoogleLogin = async () => {
+        async function performGoogleLogin() {
             const btn = document.getElementById('admin-login-google-btn');
             const originalHtml = btn ? btn.innerHTML : '';
             if (btn) {
@@ -4448,7 +4457,7 @@
         const panelLogin = document.getElementById('panel-login');
         const panelRegister = document.getElementById('panel-register');
 
-        const switchAuthTab = (tab) => {
+        function switchAuthTab(tab) {
             if (authFeedback) authFeedback.style.display = 'none';
             if (tab === 'register') {
                 tabRegisterBtn?.classList.add('active');
@@ -4473,7 +4482,7 @@
         // ==============================================================================
         // 📝 PERFORM REGISTRATION (Email/Password & Google)
         // ==============================================================================
-        const performEmailRegistration = async () => {
+        async function performEmailRegistration() {
             const nameInput = document.getElementById('reg-name');
             const emailInput = document.getElementById('reg-email');
             const passInput = document.getElementById('reg-password');
@@ -4601,7 +4610,7 @@
         };
 
         // Google sign-up handler (reuses Google Auth & auto-provisions profile)
-        const performGoogleRegistration = async () => {
+        async function performGoogleRegistration() {
             const btn = document.getElementById('admin-register-google-btn');
             const originalHtml = btn ? btn.innerHTML : '';
             if (btn) {
@@ -7120,8 +7129,8 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
         // ==============================================================================
         // 📗 GOOGLE SHEETS & DRIVE API INTEGRACIJA
         // ==============================================================================
-        let activeSpreadsheetId = localStorage.getItem('dp_active_spreadsheet_id') || '';
-        let activeSpreadsheetTitle = localStorage.getItem('dp_active_spreadsheet_title') || 'DP.PORTFOLIO Užsakymai & Finansai';
+        activeSpreadsheetId = localStorage.getItem('dp_active_spreadsheet_id') || activeSpreadsheetId || '';
+        activeSpreadsheetTitle = localStorage.getItem('dp_active_spreadsheet_title') || activeSpreadsheetTitle || 'DP.PORTFOLIO Užsakymai & Finansai';
 
         function updateSheetsAuthStatus(user = auth.currentUser) {
             const token = getCachedToken();
