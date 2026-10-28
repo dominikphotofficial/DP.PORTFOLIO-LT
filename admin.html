@@ -4425,6 +4425,8 @@
                     let msg = 'Google prisijungimo klaida: ' + (e.message || e.code);
                     if (e.code === 'auth/unauthorized-domain') {
                         msg = `Domenas ${window.location.hostname} nėra įtrauktas į Firebase autorizuotus domenus. Junkitės su slaptažodžiu arba 2FA kodu.`;
+                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('Cloud Function') || e.message.includes('403')))) {
+                        msg = 'Google OAuth lango sesija buvo apribota naršyklės saugumo ar peržiūros rėmelio (iframe) nustatymų. Junkitės su el. paštu ir slaptažodžiu arba paspauskite mygtuką „👑 Greitas 2FA kodo siuntimas į el. paštą“.';
                     }
                     authFeedback.innerText = msg;
                 }
@@ -4665,6 +4667,8 @@
                     let msg = 'Google registracijos klaida: ' + (e.message || e.code);
                     if (e.code === 'auth/unauthorized-domain') {
                         msg = `Domenas ${window.location.hostname} nėra įtrauktas į Firebase autorizuotus domenus. Registruokitės su el. paštu ir slaptažodžiu.`;
+                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('Cloud Function') || e.message.includes('403')))) {
+                        msg = 'Google OAuth lango sesija buvo apribota naršyklės saugumo ar peržiūros rėmelio (iframe) nustatymų. Registruokitės su el. paštu ir slaptažodžiu arba junkitės per „Prisijungti“ kortelę su 2FA kodu.';
                     }
                     authFeedback.innerText = msg;
                 }

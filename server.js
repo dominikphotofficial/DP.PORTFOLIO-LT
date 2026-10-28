@@ -21,15 +21,24 @@ app.all(['/__/auth/*', '/_/auth/*'], (req, res) => {
         targetPath = '/__' + targetPath.slice(2);
     }
 
+    const hostHeader = (req.headers.host || '').split(':')[0].toLowerCase();
+    const isCustomDomain = hostHeader.includes('dominikphotofficial.lt');
+    const forwardedHost = isCustomDomain ? 'dominikphotofficial.lt' : 'tfp-form.firebaseapp.com';
+
+    const cleanHeaders = { ...req.headers };
+    delete cleanHeaders.host;
+    delete cleanHeaders['x-forwarded-host'];
+    delete cleanHeaders['x-forwarded-server'];
+
     const options = {
         hostname: 'tfp-form.firebaseapp.com',
         port: 443,
         path: targetPath,
         method: req.method,
         headers: {
-            ...req.headers,
+            ...cleanHeaders,
             host: 'tfp-form.firebaseapp.com',
-            'x-forwarded-host': req.headers.host || 'dominikphotofficial.lt',
+            'x-forwarded-host': forwardedHost,
             'x-forwarded-proto': 'https'
         }
     };
