@@ -1841,6 +1841,15 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div id="role-preview-container" style="display: none; align-items: center; gap: 6px; background: rgba(197, 168, 128, 0.15); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.35);">
+                    <label for="role-preview-select" style="font-size: 0.78rem; font-weight: 600; color: #113939; margin: 0; white-space: nowrap;">👁️ Peržiūra kaip:</label>
+                    <select id="role-preview-select" class="admin-select" style="padding: 4px 8px; font-size: 0.78rem; height: auto; margin: 0; background: #fff;" onchange="previewAsRole(this.value)">
+                        <option value="superadmin">👑 Super Admin (Savininkas)</option>
+                        <option value="manager">💼 Vadybininkas</option>
+                        <option value="photographer">📷 Fotografas</option>
+                        <option value="accountant">🧾 Buhalteris</option>
+                    </select>
+                </div>
                 <button type="button" class="admin-btn-outline" style="padding: 7px 14px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleDiagnosticsModal()">
                     🩺 Diagnostika
                 </button>
@@ -2903,6 +2912,9 @@
                         <input type="checkbox" id="perm-vmi"> VMI Suvestinė
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="perm-sheets"> Google Sheets
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                         <input type="checkbox" id="perm-delete"> Įrašų trynimas
                     </label>
                 </div>
@@ -3602,7 +3614,7 @@
             // Only actual owner (Dominik) gets the role preview switch dropdown
             const isRealOwner = (session.email && isOwnerAccount(session.email));
             if (previewContainer) {
-                previewContainer.style.display = isRealOwner ? 'inline-block' : 'none';
+                previewContainer.style.display = isRealOwner ? 'inline-flex' : 'none';
                 const select = document.getElementById('role-preview-select');
                 if (select) select.value = role;
             }
@@ -3624,15 +3636,16 @@
                 }
             }
 
-            // Role-specific granular visibility
-            const canSeeTfp = isSuperAdmin || isPhotographer || isManager || perms.includes('Užsakymai');
-            const canSeeServices = isSuperAdmin || isPhotographer || isManager || perms.includes('Užsakymai');
-            const canSeeContacts = isSuperAdmin || isManager || perms.includes('Kontaktai');
-            const canSeeReviews = isSuperAdmin || isManager || perms.includes('Atsiliepimai');
-            const canSeeEmailDiag = isSuperAdmin || isManager || perms.includes('El. laiškai');
-            const canSeeVmi = isSuperAdmin || isAccountant || perms.includes('VMI Suvestinė');
+            // Role-specific granular visibility (explicit permissions array takes precedence over default role)
+            const hasExplicitPerms = Array.isArray(perms) && perms.length > 0;
+            const canSeeTfp = isSuperAdmin || perms.includes('Užsakymai') || (!hasExplicitPerms && (isPhotographer || isManager));
+            const canSeeServices = isSuperAdmin || perms.includes('Užsakymai') || (!hasExplicitPerms && (isPhotographer || isManager));
+            const canSeeContacts = isSuperAdmin || perms.includes('Kontaktai') || (!hasExplicitPerms && isManager);
+            const canSeeReviews = isSuperAdmin || perms.includes('Atsiliepimai') || (!hasExplicitPerms && isManager);
+            const canSeeEmailDiag = isSuperAdmin || perms.includes('El. laiškai') || (!hasExplicitPerms && isManager);
+            const canSeeVmi = isSuperAdmin || perms.includes('VMI Suvestinė') || (!hasExplicitPerms && isAccountant);
             const canSeeTeam = isSuperAdmin;
-            const canSeeSheets = isSuperAdmin || isAccountant || isManager;
+            const canSeeSheets = isSuperAdmin || perms.includes('Google Sheets') || (!hasExplicitPerms && (isAccountant || isManager));
             const canDelete = isSuperAdmin || perms.includes('Trinimas');
 
             // 1. Tab buttons visibility
@@ -3708,17 +3721,17 @@
             };
 
             if (role === 'superadmin') {
-                mockSession.permissions = ['all'];
+                mockSession.permissions = ['all', 'Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'VMI Suvestinė', 'Google Sheets', 'Trinimas'];
                 showToast("👑 Perjungta į Savininko rodinį (Rodomos visos funkcijos)");
             } else if (role === 'accountant') {
-                mockSession.permissions = ['VMI Suvestinė'];
+                mockSession.permissions = ['VMI Suvestinė', 'Google Sheets'];
                 showToast("🧾 Perjungta į Buhalterio rodinį (Rodoma TIK VMI, finansai ir kvitai)");
             } else if (role === 'photographer') {
                 mockSession.permissions = ['Užsakymai'];
                 showToast("📷 Perjungta į Fotografo rodinį (Rodomos TIK fotosesijos ir grafikas)");
             } else if (role === 'manager') {
-                mockSession.permissions = ['Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai'];
-                showToast("💼 Perjungta į Vadybininko rodinį (Užsakymai, klientai, laiškai)");
+                mockSession.permissions = ['Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'Google Sheets'];
+                showToast("💼 Perjungta į Vadybininko rodinį (Užsakymai, klientai, laiškai, Sheets)");
             }
 
             applyUserRole(mockSession);
@@ -3731,6 +3744,7 @@
             const permContacts = document.getElementById('perm-contacts');
             const permReviews = document.getElementById('perm-reviews');
             const permVmi = document.getElementById('perm-vmi');
+            const permSheets = document.getElementById('perm-sheets');
             const permDelete = document.getElementById('perm-delete');
             const hintText = document.getElementById('role-preview-hint-text');
 
@@ -3740,14 +3754,16 @@
                 if (permContacts) permContacts.checked = false;
                 if (permReviews) permReviews.checked = false;
                 if (permVmi) permVmi.checked = true;
+                if (permSheets) permSheets.checked = true;
                 if (permDelete) permDelete.checked = false;
-                if (hintText) hintText.innerHTML = "🧾 <strong>Buhalterio prieiga:</strong> Rodoma <u>TIK VMI Suvestinė</u>, mokesčių skaičiavimas, kvitai ir finansiniai KPI. Visi fotosesijų užsakymai ir asmeninės žinutės jam bus paslėpti.";
+                if (hintText) hintText.innerHTML = "🧾 <strong>Buhalterio prieiga:</strong> Rodoma <u>TIK VMI Suvestinė</u>, Google Sheets, mokesčių skaičiavimas, kvitai ir finansiniai KPI. Visi fotosesijų užsakymai ir asmeninės žinutės jam bus paslėpti.";
             } else if (role === 'photographer') {
                 if (permRequests) permRequests.checked = true;
                 if (permEmails) permEmails.checked = false;
                 if (permContacts) permContacts.checked = false;
                 if (permReviews) permReviews.checked = false;
                 if (permVmi) permVmi.checked = false;
+                if (permSheets) permSheets.checked = false;
                 if (permDelete) permDelete.checked = false;
                 if (hintText) hintText.innerHTML = "📷 <strong>Fotografo prieiga:</strong> Rodomi <u>TIK fotosesijų užsakymai</u> (TFP ir paslaugos), datos ir lokacijos. VMI finansai, ataskaitos ir komandos valdymas bus paslėpti.";
             } else if (role === 'manager') {
@@ -3756,14 +3772,16 @@
                 if (permContacts) permContacts.checked = true;
                 if (permReviews) permReviews.checked = true;
                 if (permVmi) permVmi.checked = false;
+                if (permSheets) permSheets.checked = true;
                 if (permDelete) permDelete.checked = false;
-                if (hintText) hintText.innerHTML = "💼 <strong>Vadybininko prieiga:</strong> Rodomi klientų užsakymai, laiškai, kontaktai ir atsiliepimai. VMI buhalterija ir komandos nariai paslėpti.";
+                if (hintText) hintText.innerHTML = "💼 <strong>Vadybininko prieiga:</strong> Rodomi klientų užsakymai, laiškai, kontaktai, atsiliepimai ir Google Sheets. VMI buhalterija ir komandos nariai paslėpti.";
             } else if (role === 'superadmin') {
                 if (permRequests) permRequests.checked = true;
                 if (permEmails) permEmails.checked = true;
                 if (permContacts) permContacts.checked = true;
                 if (permReviews) permReviews.checked = true;
                 if (permVmi) permVmi.checked = true;
+                if (permSheets) permSheets.checked = true;
                 if (permDelete) permDelete.checked = true;
                 if (hintText) hintText.innerHTML = "👑 <strong>Super Admin prieiga:</strong> Pilna prieiga prie visų sistemos dalių, VMI žurnalo, komandos teisių ir duomenų trynimo.";
             }
@@ -4548,6 +4566,28 @@
             }
 
             try {
+                // Pre-check authorization in admin_team before registration
+                const isOwner = isOwnerAccount(email);
+                let role = isOwner ? 'superadmin' : null;
+                let permissions = isOwner ? ['all', 'Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'VMI Suvestinė', 'Google Sheets', 'Trinimas'] : null;
+                let invitedDocId = null;
+
+                if (!isOwner) {
+                    const qTeam = query(collection(db, "admin_team"), where("email", "==", email));
+                    const qSnap = await getDocs(qTeam);
+                    if (qSnap.empty) {
+                        throw new Error("Šis el. pašto adresas nėra įtrauktas į autorizuotų komandos narių sąrašą. Kreipkitės į Dominik Šuškevič dėl prieigos suteikimo.");
+                    }
+                    const invitedDoc = qSnap.docs[0];
+                    const invitedData = invitedDoc.data();
+                    if (invitedData.active === false) {
+                        throw new Error("Ši paskyra yra pristabdyta administratoriaus.");
+                    }
+                    role = invitedData.role || 'manager';
+                    permissions = invitedData.permissions || ['Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai'];
+                    invitedDocId = invitedDoc.id;
+                }
+
                 // 1. Firebase Auth user creation
                 const userCred = await createUserWithEmailAndPassword(auth, email, pass);
                 const user = userCred.user;
@@ -4560,10 +4600,6 @@
                 }
 
                 // 3. Register user profile into Firestore collection
-                const isOwner = isOwnerAccount(email);
-                const role = isOwner ? 'superadmin' : 'manager';
-                const permissions = isOwner ? ['all'] : ['view', 'edit'];
-
                 try {
                     await setDoc(doc(db, "admin_team", user.uid), {
                         name: name,
@@ -4571,8 +4607,18 @@
                         role: role,
                         permissions: permissions,
                         createdAt: serverTimestamp(),
+                        lastLoginAt: serverTimestamp(),
+                        status: 'active',
                         active: true
                     }, { merge: true });
+
+                    if (invitedDocId && invitedDocId !== user.uid) {
+                        try {
+                            await deleteDoc(doc(db, "admin_team", invitedDocId));
+                        } catch(delErr) {
+                            console.warn("Could not delete legacy invited doc:", delErr);
+                        }
+                    }
                 } catch(fsErr) {
                     console.warn("Firestore team doc creation fallback:", fsErr);
                 }
@@ -4628,10 +4674,29 @@
                 const userName = user.displayName || userEmail;
                 const isOwner = isOwnerAccount(userEmail);
 
-                const role = isOwner ? 'superadmin' : 'manager';
-                const permissions = isOwner ? ['all'] : ['view', 'edit'];
+                let role = isOwner ? 'superadmin' : null;
+                let permissions = isOwner ? ['all', 'Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'VMI Suvestinė', 'Google Sheets', 'Trinimas'] : null;
+                let invitedDocId = null;
 
-                // Ensure record in admin_team
+                if (!isOwner) {
+                    const qTeam = query(collection(db, "admin_team"), where("email", "==", userEmail));
+                    const qSnap = await getDocs(qTeam);
+                    if (qSnap.empty) {
+                        await signOut(auth);
+                        throw new Error("Google paskyra (" + userEmail + ") nėra įtraukta į komandos narių sąrašą. Kreipkitės į Dominik Šuškevič dėl prieigos suteikimo.");
+                    }
+                    const invitedDoc = qSnap.docs[0];
+                    const invitedData = invitedDoc.data();
+                    if (invitedData.active === false) {
+                        await signOut(auth);
+                        throw new Error("Šios komandos nario paskyros prieiga yra pristabdyta administratoriaus.");
+                    }
+                    role = invitedData.role || 'manager';
+                    permissions = invitedData.permissions || ['Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai'];
+                    invitedDocId = invitedDoc.id;
+                }
+
+                // Ensure record in admin_team under user.uid
                 try {
                     await setDoc(doc(db, "admin_team", user.uid), {
                         name: userName,
@@ -4639,8 +4704,18 @@
                         role: role,
                         permissions: permissions,
                         createdAt: serverTimestamp(),
+                        lastLoginAt: serverTimestamp(),
+                        status: 'active',
                         active: true
                     }, { merge: true });
+
+                    if (invitedDocId && invitedDocId !== user.uid) {
+                        try {
+                            await deleteDoc(doc(db, "admin_team", invitedDocId));
+                        } catch(delErr) {
+                            console.warn("Could not delete legacy invited doc:", delErr);
+                        }
+                    }
                 } catch(fsErr) {
                     console.warn("Firestore record creation fallback:", fsErr);
                 }
@@ -4705,11 +4780,61 @@
             }
         };
 
-        // Tab switcher with Mobile Title Update & Auto-Close
+        // Tab switcher with Mobile Title Update & Auto-Close + RBAC Protection
         window.switchTab = (tab) => {
             if (tab === 'ai') {
                 toggleAiHelperWindow(true);
                 return;
+            }
+
+            // Granular RBAC tab protection
+            if (currentAdminSession) {
+                const role = currentAdminSession.role || 'manager';
+                const perms = currentAdminSession.permissions || [];
+                const isSuperAdmin = (role === 'superadmin' || perms.includes('all'));
+                const hasExplicitPerms = Array.isArray(perms) && perms.length > 0;
+
+                const canSeeTfp = isSuperAdmin || perms.includes('Užsakymai') || (!hasExplicitPerms && (role === 'photographer' || role === 'manager'));
+                const canSeeServices = isSuperAdmin || perms.includes('Užsakymai') || (!hasExplicitPerms && (role === 'photographer' || role === 'manager'));
+                const canSeeContacts = isSuperAdmin || perms.includes('Kontaktai') || (!hasExplicitPerms && role === 'manager');
+                const canSeeReviews = isSuperAdmin || perms.includes('Atsiliepimai') || (!hasExplicitPerms && role === 'manager');
+                const canSeeEmailDiag = isSuperAdmin || perms.includes('El. laiškai') || (!hasExplicitPerms && role === 'manager');
+                const canSeeVmi = isSuperAdmin || perms.includes('VMI Suvestinė') || (!hasExplicitPerms && role === 'accountant');
+                const canSeeTeam = isSuperAdmin;
+                const canSeeSheets = isSuperAdmin || perms.includes('Google Sheets') || (!hasExplicitPerms && (role === 'accountant' || role === 'manager'));
+
+                if (tab === 'team' && !canSeeTeam) {
+                    showToast("⛔ Tik Super Admin (Savininkas) gali valdyti komandos narius!");
+                    return;
+                }
+                if (tab === 'vmi' && !canSeeVmi) {
+                    showToast("⛔ Neturite teisės peržiūrėti VMI finansinės suvestinės!");
+                    return;
+                }
+                if (tab === 'reviews' && !canSeeReviews) {
+                    showToast("⛔ Neturite teisės peržiūrėti atsiliepimų!");
+                    return;
+                }
+                if (tab === 'contacts' && !canSeeContacts) {
+                    showToast("⛔ Neturite teisės peržiūrėti kontaktų!");
+                    return;
+                }
+                if (tab === 'email-diag' && !canSeeEmailDiag) {
+                    showToast("⛔ Neturite teisės atlikti el. pašto diagnostikos!");
+                    return;
+                }
+                if (tab === 'sheets' && !canSeeSheets) {
+                    showToast("⛔ Neturite teisės peržiūrėti Google Sheets integracijos!");
+                    return;
+                }
+                if (tab === 'tfp' && !canSeeTfp) {
+                    showToast("⛔ Neturite teisės peržiūrėti TFP užsakymų!");
+                    return;
+                }
+                if (tab === 'services' && !canSeeServices) {
+                    showToast("⛔ Neturite teisės peržiūrėti paslaugų užsakymų!");
+                    return;
+                }
             }
             document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -6852,9 +6977,14 @@
                             </div>
 
                             <div style="border-top: 1px solid rgba(17,57,57,0.08); padding-top: 12px; margin-top: 12px; display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                                <button type="button" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="toggleMemberActive('${id}', ${isActive})">
-                                    ${isActive ? 'Pristabdyti prieigą' : 'Aktyvuoti prieigą'}
-                                </button>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button type="button" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="openEditMemberModal('${id}')">
+                                        ✏️ Redaguoti teises
+                                    </button>
+                                    <button type="button" class="admin-btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="toggleMemberActive('${id}', ${isActive})">
+                                        ${isActive ? 'Pristabdyti prieigą' : 'Aktyvuoti prieigą'}
+                                    </button>
+                                </div>
                                 <button type="button" class="admin-btn-delete" style="padding: 6px 12px; font-size: 0.75rem;" onclick="deleteTeamMember('${id}', '${(m.name || '').replace(/'/g, "\\'")}')">
                                     Pašalinti
                                 </button>
@@ -6999,22 +7129,104 @@ Kaip prisijungti:
             }
         };
 
+        let editingMemberId = null;
+
+        window.openEditMemberModal = async (id) => {
+            try {
+                const docSnap = await getDoc(doc(db, "admin_team", id));
+                if (!docSnap.exists()) {
+                    alert("Komandos nario įrašas nerastas!");
+                    return;
+                }
+                const m = docSnap.data();
+                editingMemberId = id;
+
+                const modal = document.getElementById('team-member-modal');
+                const titleEl = document.getElementById('team-modal-title');
+                const descEl = document.querySelector('#team-member-modal .modal-head-desc');
+                const nameInput = document.getElementById('member-name');
+                const emailInput = document.getElementById('member-email');
+                const roleSelect = document.getElementById('member-role');
+                const saveBtn = document.getElementById('save-team-member-btn');
+
+                if (titleEl) titleEl.innerText = "Redaguoti Komandos Narį & Teises";
+                if (descEl) descEl.innerText = "Pakeiskite komandos nario rolę arba pažymėkite konkrečias leistinas sistemos skiltis.";
+                if (nameInput) nameInput.value = m.name || '';
+                if (emailInput) {
+                    emailInput.value = m.email || '';
+                    emailInput.readOnly = true;
+                    emailInput.style.backgroundColor = '#f0f0f0';
+                }
+                if (roleSelect) {
+                    roleSelect.value = m.role || 'manager';
+                    updateRolePresetPermissions(roleSelect.value);
+                }
+
+                // Apply specific saved permissions
+                const perms = m.permissions || [];
+                const setCheck = (chkId, val) => {
+                    const el = document.getElementById(chkId);
+                    if (el) el.checked = val;
+                };
+                if (perms.length > 0) {
+                    setCheck('perm-requests', perms.includes('Užsakymai'));
+                    setCheck('perm-emails', perms.includes('El. laiškai'));
+                    setCheck('perm-contacts', perms.includes('Kontaktai'));
+                    setCheck('perm-reviews', perms.includes('Atsiliepimai'));
+                    setCheck('perm-vmi', perms.includes('VMI Suvestinė'));
+                    setCheck('perm-sheets', perms.includes('Google Sheets'));
+                    setCheck('perm-delete', perms.includes('Trinimas'));
+                }
+
+                if (saveBtn) saveBtn.innerText = "Išsaugoti Pakeitimus";
+                if (modal) modal.classList.add('active');
+            } catch(e) {
+                console.error("openEditMemberModal error:", e);
+                alert("Nepavyko atidaryti nario redagavimo: " + (e.message || e));
+            }
+        };
+
         window.closeTeamMemberModal = () => {
+            editingMemberId = null;
             const m = document.getElementById('team-member-modal');
             if (m) m.classList.remove('active');
+            const emailInput = document.getElementById('member-email');
+            if (emailInput) {
+                emailInput.readOnly = false;
+                emailInput.style.backgroundColor = '';
+            }
+            const titleEl = document.getElementById('team-modal-title');
+            if (titleEl) titleEl.innerText = "Pridėti Komandos Narį";
+            const descEl = document.querySelector('#team-member-modal .modal-head-desc');
+            if (descEl) descEl.innerText = "Pridėkite narį ir išsiųskite jam slaptažodžio nustatymo nuorodą tiesiai į el. paštą.";
+            const saveBtn = document.getElementById('save-team-member-btn');
+            if (saveBtn) saveBtn.innerText = "Išsaugoti ir Siųsti Slaptažodžio Nuorodą";
         };
 
         document.getElementById('open-add-member-modal-btn')?.addEventListener('click', () => {
+            editingMemberId = null;
             const m = document.getElementById('team-member-modal');
             if (m) {
+                const titleEl = document.getElementById('team-modal-title');
+                if (titleEl) titleEl.innerText = "Pridėti Komandos Narį";
+                const descEl = document.querySelector('#team-member-modal .modal-head-desc');
+                if (descEl) descEl.innerText = "Pridėkite narį ir išsiųskite jam slaptažodžio nustatymo nuorodą tiesiai į el. paštą.";
+                const emailInput = document.getElementById('member-email');
+                if (emailInput) {
+                    emailInput.readOnly = false;
+                    emailInput.style.backgroundColor = '';
+                }
                 document.getElementById('member-name').value = '';
                 document.getElementById('member-email').value = '';
                 document.getElementById('member-role').value = 'manager';
+                updateRolePresetPermissions('manager');
+                const saveBtn = document.getElementById('save-team-member-btn');
+                if (saveBtn) saveBtn.innerText = "Išsaugoti ir Siųsti Slaptažodžio Nuorodą";
                 m.classList.add('active');
             }
         });
 
-        // Išsaugoti komandos narį ir išsiųsti pakvietimo laišką su instrukcija
+        // Išsaugoti arba atnaujinti komandos narį
         document.getElementById('save-team-member-btn')?.addEventListener('click', async () => {
             const name = document.getElementById('member-name').value.trim();
             const email = document.getElementById('member-email').value.trim().toLowerCase();
@@ -7037,10 +7249,35 @@ Kaip prisijungti:
             if (document.getElementById('perm-contacts')?.checked) permissions.push('Kontaktai');
             if (document.getElementById('perm-reviews')?.checked) permissions.push('Atsiliepimai');
             if (document.getElementById('perm-vmi')?.checked) permissions.push('VMI Suvestinė');
+            if (document.getElementById('perm-sheets')?.checked) permissions.push('Google Sheets');
             if (document.getElementById('perm-delete')?.checked) permissions.push('Trinimas');
 
             const btn = document.getElementById('save-team-member-btn');
             btn.disabled = true;
+
+            // Handle edit mode
+            if (editingMemberId) {
+                btn.innerText = 'Atnaujinama...';
+                try {
+                    await updateDoc(doc(db, "admin_team", editingMemberId), {
+                        name,
+                        role,
+                        permissions,
+                        updatedAt: serverTimestamp()
+                    });
+                    logAdminAction('member_permissions_updated', `Atnaujintos nario ${name} (${email}) teisės ir rolė (${role})`, { memberId: editingMemberId, role, permissions });
+                    showToast("✓ Nario teisės sėkmingai atnaujintos!");
+                    closeTeamMemberModal();
+                } catch(e) {
+                    console.error("Update member error:", e);
+                    alert("Klaida atnaujinant teises: " + (e.message || e));
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = "Išsaugoti Pakeitimus";
+                }
+                return;
+            }
+
             btn.innerText = 'Saugoma ir siunčiamas kvietimas...';
 
             try {
@@ -7126,7 +7363,7 @@ Narys galės susikurti savo slaptažodį pagal nurodytus žingsnius.`);
                 alert("Klaida pridedant narį: " + (e.message || e));
             } finally {
                 btn.disabled = false;
-                btn.innerText = 'Išsaugoti ir Siųsti Pakvietimą';
+                btn.innerText = 'Išsaugoti ir Siųsti Slaptažodžio Nuorodą';
             }
         });
 
