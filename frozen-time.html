@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://i.postimg.cc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frozen Time: What If (2026) | DP.PORTFOLIO</title>
     <meta name="description" content="Filmas „Frozen Time: What If“ (2026). Režisierius Dominik Šuškevič. Laimėta I-oji vieta „Ąžuolyno“ tarptautiniame kino festivalyje.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
@@ -23,7 +23,7 @@
     <meta name="twitter:title" content="Frozen Time: What If (2026)">
     <meta name="twitter:description" content="I-osios vietos laimėtojas „Ąžuolyno“ festivalyje. Pamatykite kūrinį DP.PORTFOLIO platformoje.">
     <meta name="twitter:image" content="https://i.postimg.cc/9FtL9g39/Frozen-Time-poster.png">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <script type="application/ld+json">
@@ -54,275 +54,368 @@
     }
     </script>
     <style>
-        :root {
-            --bg-color: #070B0E !important;
-            --surface-color: #0D141A !important;
-            --secondary-color: #141F28 !important;
-            --accent-color: #92B7C8 !important;
-            --text-color: #E6EDF2 !important;
-            --accent-light: #D2E4EE !important;
-            --frost-glow: rgba(162, 209, 233, 0.25);
+        .film-hero-card {
+            max-width: 860px;
+            margin: 0 auto var(--sp-5);
+            padding: var(--sp-5) var(--sp-4);
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
         }
-        
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            overflow-x: hidden;
+        .film-kicker {
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: var(--sp-3);
+        }
+        .film-title {
+            font-size: var(--fs-hero);
+            font-weight: var(--fw-bold);
+            color: var(--text);
+            margin-bottom: var(--sp-2);
+        }
+        .film-sub {
+            font-size: var(--fs-lg);
+            color: var(--text-muted);
+            font-weight: var(--fw-medium);
+            margin-bottom: var(--sp-4);
+        }
+        .film-meta-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--sp-3);
+            font-size: var(--fs-sm);
+            color: var(--accent);
+            font-weight: var(--fw-medium);
+        }
+        .film-poster-wrap {
+            max-width: 560px;
+            margin: 0 auto var(--sp-6);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--border);
+        }
+        .film-poster-wrap img {
+            width: 100%;
+            height: auto;
+        }
+        .film-video-wrap {
             position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #111111;
+            margin-bottom: var(--sp-6);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
-
-        /* Ambient Winter Frosted Atmosphere */
-        #winter-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.85;
-        }
-
-        /* Frosted Vignette */
-        .frozen-atmosphere-vignette {
-            position: fixed;
+        .film-video-wrap iframe {
+            position: absolute;
             inset: 0;
-            pointer-events: none;
-            z-index: 1;
-            background: radial-gradient(circle at 50% 15%, rgba(68, 107, 131, 0.08) 0%, rgba(7, 11, 14, 0.4) 65%, rgba(4, 7, 10, 0.85) 100%),
-                        radial-gradient(ellipse at 50% 100%, rgba(35, 60, 75, 0.15) 0%, transparent 60%);
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-
-        .lightbox { background: rgba(5, 8, 11, 0.98) !important; }
-        header.scrolled { background-color: rgba(7, 11, 14, 0.95) !important; border-bottom: 1px solid rgba(162, 209, 233, 0.15) !important; }
-        .nav-overlay { background: rgba(7, 11, 14, 0.98) !important; }
-        .burger div { background-color: var(--text-color); }
-        .nav-link { color: var(--text-color); }
-
-        /* Frosted Glass Accents */
-        .frost-panel {
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(162, 209, 233, 0.16) !important;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+        .film-details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-5);
+            align-items: start;
+            margin-bottom: var(--sp-6);
         }
-
-        /* Cinematic Winter Award Badge */
-        .winter-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            background: rgba(146, 183, 200, 0.1);
-            border: 1px solid rgba(146, 183, 200, 0.35);
-            border-radius: 2px;
-            font-family: var(--font-heading);
-            font-size: 0.76rem;
-            letter-spacing: 2px;
-            color: #D2E4EE;
-            text-transform: uppercase;
+        @media (min-width: 768px) {
+            .film-details-grid {
+                grid-template-columns: 1.2fr 1fr;
+            }
         }
-
-        /* Snow toggle control */
-        .snow-toggle-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 99;
-            background: rgba(13, 20, 26, 0.85);
-            border: 1px solid rgba(162, 209, 233, 0.3);
-            color: #D2E4EE;
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-family: var(--font-heading);
-            font-size: 0.72rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            backdrop-filter: blur(6px);
-            transition: all 0.3s ease;
+        .film-story h2 {
+            font-size: var(--fs-lg);
+            margin-bottom: var(--sp-2);
         }
-        .snow-toggle-btn:hover {
-            background: rgba(20, 31, 40, 0.95);
-            border-color: rgba(162, 209, 233, 0.6);
-            color: #ffffff;
+        .film-story p {
+            color: var(--text-muted);
+            margin-bottom: var(--sp-4);
+        }
+        .film-quote {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding-block: var(--sp-4);
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-medium);
+            color: var(--text);
+        }
+        .film-spec-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-3);
+            margin-bottom: var(--sp-4);
+        }
+        .film-spec-row {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--sp-3);
+            padding-bottom: var(--sp-2);
+            border-bottom: 1px solid var(--border);
+            font-size: var(--fs-base);
+        }
+        .film-spec-label {
+            color: var(--text-muted);
+            font-size: var(--fs-sm);
+        }
+        .film-spec-val {
+            color: var(--text);
+            font-weight: var(--fw-medium);
+            text-align: right;
+        }
+        .film-credits-card {
+            display: grid;
+            grid-template-columns: 1fr;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg);
+            margin-bottom: var(--sp-6);
+        }
+        @media (min-width: 768px) {
+            .film-credits-card {
+                grid-template-columns: 360px 1fr;
+            }
+        }
+        .film-credits-photo {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            background: var(--border);
+            overflow: hidden;
+        }
+        .film-credits-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .film-credits-body {
+            padding: var(--sp-4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--sp-3);
+        }
+        @media (min-width: 640px) {
+            .film-credits-body {
+                padding: var(--sp-5);
+            }
+        }
+        .film-credits-role {
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            font-weight: var(--fw-medium);
+        }
+        .film-credits-item {
+            padding-bottom: var(--sp-2);
+            border-bottom: 1px solid var(--border);
+            font-size: var(--fs-base);
+        }
+        .film-credits-item span {
+            color: var(--text-muted);
+            margin-right: var(--sp-2);
         }
     </style>
 </head>
-<body class="theme-frozen-time">
-    <!-- Atmospheric Winter Frost & Snow Particles -->
-    <div class="frozen-atmosphere-vignette" aria-hidden="true"></div>
-    <canvas id="winter-canvas" aria-hidden="true"></canvas>
-    <button type="button" id="toggle-snow-btn" class="snow-toggle-btn" title="Įjungti / išjungti žiemos efektą" aria-label="Žiemos efektas">
-        ❄️ <span id="snow-btn-label">Žiemos Efektas</span>
-    </button>
-    <div id="preloader" data-nosnippet>
-        <div class="loader"></div>
-    </div>
-
-    <script>
-        setTimeout(function() {
-            var preloader = document.getElementById("preloader");
-            if (preloader && preloader.style.display !== "none") {
-                preloader.style.opacity = "0";
-                setTimeout(function() { preloader.style.display = "none"; }, 400);
-            }
-        }, 1000);
-    </script>
-
+<body>
     <header id="main-header">
         <div class="header-container">
-            <a href="index.html" class="logo">
-                <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" style="filter: brightness(0) invert(1);">
+            <a href="index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
             </a>
-            <nav class="desktop-nav">
-                <a href="index.html" class="nav-link">Darbai</a>
-                <a href="services.html" class="nav-link">Paslaugos</a>
-                <a href="biography.html" class="nav-link">Biografija</a>
-                <a href="about.html" class="nav-link">Apie</a>
-                <a href="contacts.html" class="nav-link">Kontaktai</a>
-                <a href="privacy-policy.html" class="nav-link">Privatumas</a>
-                <a href="terms-of-service.html" class="nav-link">Sąlygos</a>
-                <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-            </nav>
-            <div class="burger" id="burger-menu">
-                <div></div>
-                <div></div>
-                <div></div>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/frozen-time.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/frozen-time.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/frozen-time.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/frozen-time.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/frozen-time.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumo Politika</a>
-            <a href="terms-of-service.html" class="nav-link">Paslaugų Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-    </div>
-
-    <section class="container" style="padding-top: 140px; padding-bottom: 60px;">
-        <div class="text-content" style="max-width: 1200px; margin: 0 auto; text-align: center;">
-            <div class="fade-in-up" style="margin-bottom: 40px; border: 1px solid rgba(212, 175, 55, 0.1); padding: 50px 20px; display: inline-block; width: 100%; max-width: 900px; background-color: var(--surface-color); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);">
-                <div style="font-family: var(--font-heading); color: rgba(240, 240, 240, 0.6); letter-spacing: 5px; font-size: 0.75rem; margin-bottom: 25px; text-transform: uppercase;">Ąžuolynas International Film Festival Selection</div>
-                <h1 style="font-family: var(--font-heading); color: var(--text-color); text-transform: uppercase; font-size: clamp(1.8rem, 6vw, 4rem); letter-spacing: 12px; font-weight: 300; margin: 0; line-height: 1.2;">FROZEN TIME: WHAT IF (2026)</h1>
-                <div style="font-family: var(--font-heading); color: var(--accent-light); letter-spacing: 4px; font-size: 1.1rem; margin-top: 20px; text-transform: uppercase; font-weight: 400;">Dominik Šuškevič Filmas</div>
-                <div style="margin-top: 35px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div style="border: 1px solid var(--accent-color); padding: 10px 25px; color: var(--accent-color); font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 2px; background-color: rgba(212, 175, 55, 0.05);">🏆 WINNER: 1st PLACE</div>
-                    <div style="border: 1px solid rgba(240, 240, 240, 0.2); padding: 10px 25px; color: var(--text-color); font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 2px; background-color: transparent;">CATEGORY: STUDENTS</div>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
                 </div>
+                <nav class="mobile-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
             </div>
-
-            <div class="fade-in-up" style="margin: 40px auto; max-width: 600px; border-radius: 4px; overflow: hidden; box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);">
-                <img src="https://i.postimg.cc/9FtL9g39/Frozen-Time-poster.png" alt="Frozen Time Poster" style="width: 100%; height: auto; display: block;">
-            </div>
-
-            <div class="fade-in-up" style="position: relative; width: 100%; aspect-ratio: 16/9; background-color: #000; margin: 60px 0; border-radius: 4px; overflow: hidden; box-shadow: 0 0 100px rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.1);">
-                <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" 
-                        src="https://www.youtube.com/embed/bcLq-VXBpzI?rel=0&modestbranding=1&autoplay=0" 
-                        title="Frozen Time Movie" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/frozen-time.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/frozen-time.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/frozen-time.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/frozen-time.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/frozen-time.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="container" style="padding-top: 40px; padding-bottom: 120px; max-width: 1600px; margin: 0 auto;">
-        <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 80px; align-items: start;">
-            
-            <div class="fade-in-up" style="text-align: left; line-height: 2.0; color: var(--text-color);">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; color: var(--accent-light); font-size: 1.4rem; border-bottom: 1px solid rgba(212, 175, 55, 0.1); display: inline-block; padding-bottom: 10px; font-weight: 400;">Apie festivalį ir filmą</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem; font-weight: 300; margin-bottom: 30px; text-align: justify; color: rgba(240, 240, 240, 0.8);">
-                    Filmas „Frozen Time: What If“ buvo sukurtas specialiai „Ąžuolyno“ tarptautiniam kino festivaliui, kuris vyko Kauno tarptautinėje gimnazijoje. „What If“ (liet. „Kas būtų, jei...“) buvo pagrindinė šio festivalio tema. 2026 m. balandžio 30 d. renginio metu šis kūrinys pelnė <strong>I-ąją vietą</strong> studentų kategorijoje.
-                </p>
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; color: var(--accent-light); font-size: 1.4rem; border-bottom: 1px solid rgba(212, 175, 55, 0.1); display: inline-block; padding-bottom: 10px; font-weight: 400;">Kūrinio esmė</h3>
-                <p style="font-family: var(--font-body); font-size: 1.1rem; font-weight: 300; margin-bottom: 30px; text-align: justify; color: rgba(240, 240, 240, 0.8);">
-                    Filmas nufilmuotas Cirkliškio dvaro (Cirkliškis Manor) apylinkėse. Nors kūrybos procesas vyko labai natūraliai, tik vėliau pats supratau, ką šis filmas man reiškia. Tai pasakojimas apie tai, kad net jei aplinkui būtų amžinas šaltis, miestas sustotų, mes visada turime savo prisiminimus. Laikas su šeima ar buvimas gamtoje yra tai, kas mus šildo iš vidaus. Medis video pabaigoje simbolizuoja prisiminimus, kurie žydi mūsų širdyse.
-                </p>
-                <div style="background-color: var(--surface-color); border-left: 2px solid var(--accent-light); padding: 25px; margin-top: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
-                    <p style="font-family: var(--font-body); font-style: italic; font-size: 1.1rem; color: var(--text-color); margin: 0; font-weight: 300;">„Svarbiausia ne tai, ką matai, o tai, ką jauti, kai laikas sustoja.“</p>
+    <main class="container">
+        <section class="fade-in-up">
+            <div class="film-hero-card">
+                <div class="film-kicker">Ąžuolynas International Film Festival Selection</div>
+                <h1 class="film-title">FROZEN TIME: WHAT IF (2026)</h1>
+                <div class="film-sub">Dominik Šuškevič Filmas</div>
+                <div class="film-meta-row">
+                    <span>WINNER: 1st PLACE</span>
+                    <span>&middot;</span>
+                    <span>CATEGORY: STUDENTS</span>
                 </div>
             </div>
 
-            <div class="fade-in-up" style="background-color: var(--surface-color); padding: 50px; border: 1px solid rgba(212, 175, 55, 0.05); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); border-radius: 4px;">
-                <h4 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 35px; color: var(--accent-light); font-size: 1rem; text-align: center; font-weight: 500;">Filmo duomenys</h4>
-                
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Kūrėjas</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--text-color); font-weight: 300;">Dominik Šuškevič</span>
+            <div class="film-poster-wrap">
+                <img src="https://i.postimg.cc/9FtL9g39/Frozen-Time-poster.png" alt="Frozen Time Poster">
+            </div>
+
+            <div class="film-video-wrap">
+                <iframe
+                    src="https://www.youtube.com/embed/bcLq-VXBpzI?rel=0&modestbranding=1&autoplay=0"
+                    title="Frozen Time Movie"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section class="film-details-grid fade-in-up">
+            <div class="film-story">
+                <h2>Apie festivalį ir filmą</h2>
+                <p>
+                    Filmas „Frozen Time: What If“ buvo sukurtas specialiai „Ąžuolyno“ tarptautiniam kino festivaliui, kuris vyko Kauno tarptautinėje gimnazijoje. „What If“ (liet. „Kas būtų, jei...“) buvo pagrindinė šio festivalio tema. 2026 m. balandžio 30 d. renginio metu šis kūrinys pelnė <strong>I-ąją vietą</strong> studentų kategorijoje.
+                </p>
+                <h2>Kūrinio esmė</h2>
+                <p>
+                    Filmas nufilmuotas Cirkliškio dvaro (Cirkliškis Manor) apylinkėse. Nors kūrybos procesas vyko labai natūraliai, tik vėliau pats supratau, ką šis filmas man reiškia. Tai pasakojimas apie tai, kad net jei aplinkui būtų amžinas šaltis, miestas sustotų, mes visada turime savo prisiminimus. Laikas su šeima ar buvimas gamtoje yra tai, kas mus šildo iš vidaus. Medis video pabaigoje simbolizuoja prisiminimus, kurie žydi mūsų širdyse.
+                </p>
+                <div class="film-quote">
+                    „Svarbiausia ne tai, ką matai, o tai, ką jauti, kai laikas sustoja.“
                 </div>
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Lokacija</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--text-color); font-weight: 300;">Cirkliškis Manor</span>
-                </div>
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Sukurta</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--text-color); font-weight: 300;">2026.01.02</span>
-                </div>
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Apdovanotas</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--accent-light); font-weight: 400;">2026.04.30 (KTG)</span>
-                </div>
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Renginio vieta</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--text-color); font-weight: 300;">Kauno tarptautinė gimnazija</span>
-                </div>
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 10px;">
-                    <span style="font-family: var(--font-heading); font-size: 0.75rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 1px;">Muzika</span>
-                    <span style="font-family: var(--font-body); font-size: 0.95rem; color: var(--text-color); font-weight: 300;">Never Felt So Alone</span>
-                </div>
-                
-                <div style="margin-top: 30px; text-align: center;">
-                    <a href="https://www.imdb.com/title/tt42315532/?ref_=ext_shr_lnk" target="_blank" style="display: inline-block; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; color: var(--accent-color); font-size: 1.2rem; text-decoration: none; border: 1px solid var(--accent-color); padding: 10px 30px; transition: all 0.4s var(--cb);" onmouseover="this.style.background='var(--accent-color)'; this.style.color='var(--bg-color)';" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-color)';">IMDb</a>
-                    <span style="display: block; font-family: var(--font-heading); font-size: 0.65rem; color: rgba(240, 240, 240, 0.5); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px;">Rate</span>
+            </div>
+
+            <div class="card-surface">
+                <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">Filmo duomenys</h3>
+                <div class="film-spec-list">
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Kūrėjas</span>
+                        <span class="film-spec-val">Dominik Šuškevič</span>
+                    </div>
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Lokacija</span>
+                        <span class="film-spec-val">Cirkliškis Manor</span>
+                    </div>
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Sukurta</span>
+                        <span class="film-spec-val">2026.01.02</span>
+                    </div>
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Apdovanotas</span>
+                        <span class="film-spec-val">2026.04.30 (KTG)</span>
+                    </div>
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Renginio vieta</span>
+                        <span class="film-spec-val">Kauno tarptautinė gimnazija</span>
+                    </div>
+                    <div class="film-spec-row">
+                        <span class="film-spec-label">Muzika</span>
+                        <span class="film-spec-val">Never Felt So Alone</span>
+                    </div>
                 </div>
 
-                <div style="margin-top: 40px; padding: 20px; background-color: rgba(212, 175, 55, 0.05); color: var(--accent-color); text-align: center; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; border: 1px solid rgba(212, 175, 55, 0.1);">
+                <div style="text-align: center; margin-bottom: var(--sp-3);">
+                    <a href="https://www.imdb.com/title/tt42315532/?ref_=ext_shr_lnk" target="_blank" rel="noopener noreferrer" class="btn-secondary">IMDb &mdash; Rate</a>
+                </div>
+
+                <div style="text-align: center; font-size: var(--fs-sm); color: var(--accent); font-weight: var(--fw-medium);">
                     Award Winning Film
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="fade-in-up" style="max-width: 1000px; margin: 60px auto 0 auto; background: var(--surface-color); border: 1px solid rgba(212, 175, 55, 0.05); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
-            <div style="height: 450px;"><img src="https://i.postimg.cc/GtJB0hqn/Portrait-nuotrauka-1.jpg" alt="Dominik Šuškevič Portrait" style="width: 100%; height: 100%; object-fit: cover;"></div>
-            <div style="padding: 50px; display: flex; flex-direction: column; justify-content: center;">
-                <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; font-size: 1.5rem; color: var(--text-color);">Dominik Šuškevič</h3>
-                <p style="color: var(--accent-color); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 30px;">Kino Kūrėjas & Fotografas</p>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 15px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 300; color: var(--text-color);">
-                    <div style="border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 8px;"><span style="font-family: var(--font-heading); color: rgba(240, 240, 240, 0.5); margin-right: 10px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Director:</span> Dominik Šuškevič</div>
-                    <div style="border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 8px;"><span style="font-family: var(--font-heading); color: rgba(240, 240, 240, 0.5); margin-right: 10px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Screenwriter:</span> Dominik Šuškevič</div>
-                    <div style="border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 8px;"><span style="font-family: var(--font-heading); color: rgba(240, 240, 240, 0.5); margin-right: 10px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Producer:</span> Dominik Šuškevič</div>
-                    <div style="border-bottom: 1px solid rgba(240, 240, 240, 0.05); padding-bottom: 8px;"><span style="font-family: var(--font-heading); color: rgba(240, 240, 240, 0.5); margin-right: 10px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Cinematography:</span> Dominik Šuškevič</div>
-                </div>
+        <section class="film-credits-card fade-in-up">
+            <div class="film-credits-photo">
+                <img src="https://i.postimg.cc/GtJB0hqn/Portrait-nuotrauka-1.jpg" alt="Dominik Šuškevič Portrait">
             </div>
-        </div>
+            <div class="film-credits-body">
+                <div>
+                    <h3 style="font-size: var(--fs-xl); margin-bottom: var(--sp-1);">Dominik Šuškevič</h3>
+                    <p class="film-credits-role">Kino Kūrėjas &amp; Fotografas</p>
+                </div>
+                <div class="film-credits-item"><span>Director:</span>Dominik Šuškevič</div>
+                <div class="film-credits-item"><span>Screenwriter:</span>Dominik Šuškevič</div>
+                <div class="film-credits-item"><span>Producer:</span>Dominik Šuškevič</div>
+                <div class="film-credits-item"><span>Cinematography:</span>Dominik Šuškevič</div>
+            </div>
+        </section>
 
-        <div class="fade-in-up" style="margin-top: 80px; text-align: center;">
-            <a href="biography.html" style="display: inline-block; padding: 18px 60px; border: 1px solid var(--accent-light); color: var(--accent-light); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 4px; font-size: 0.85rem; transition: all 0.4s var(--cb); background: transparent; border-radius: 4px;" 
-               onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.boxShadow='0 0 20px rgba(212, 175, 55, 0.15)';" 
-               onmouseout="this.style.background='transparent'; this.style.boxShadow='none';">Atgal į Biografiją</a>
+        <div class="fade-in-up" style="text-align: center;">
+            <a href="biography.html" class="btn-secondary">Atgal į Biografiją</a>
         </div>
-    </section>
+    </main>
 
-    <!-- Minimalist Luxury Footer -->
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-legal-links">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="index.html">Darbai</a>
+                    <a href="tfp-booking.html">TFP Registracija</a>
+                    <a href="services.html">Paslaugos</a>
+                    <a href="biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="about.html">Apie</a>
+                    <a href="contacts.html">Kontaktai</a>
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
                 </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
                 <div class="footer-min-langs-group">
-                    <div class="footer-lang-divider" aria-hidden="true"></div>
                     <div class="footer-min-langs">
-                        <a href="https://portfolio.dominikphotofficial.lt/frozen-time.html" class="active">LT</a>
+<a href="https://portfolio.dominikphotofficial.lt/frozen-time.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/frozen-time.html">EN</a>
                         <a href="https://pl.dominikphotofficial.lt/frozen-time.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/frozen-time.html">RU</a>
@@ -334,99 +427,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // =========================================================================
-        // Cinematic Winter Atmosphere (Organic Gentle Falling Snow & Frost Crystals)
-        // High performance, non-intrusive, natural winter velocity & drifts
-        // =========================================================================
-        (function() {
-            const canvas = document.getElementById('winter-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let animationFrameId = null;
-            let isSnowActive = true;
-
-            let width = (canvas.width = window.innerWidth);
-            let height = (canvas.height = window.innerHeight);
-
-            window.addEventListener('resize', () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }, { passive: true });
-
-            const flakeCount = Math.min(75, Math.floor((width * height) / 16000));
-            const flakes = [];
-
-            for (let i = 0; i < flakeCount; i++) {
-                flakes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 2.2 + 0.6,
-                    density: Math.random() * 0.7 + 0.3,
-                    opacity: Math.random() * 0.5 + 0.25,
-                    swing: Math.random() * 2 * Math.PI,
-                    swingSpeed: Math.random() * 0.02 + 0.005,
-                    speedY: Math.random() * 0.8 + 0.4
-                });
-            }
-
-            function drawFlakes() {
-                if (!isSnowActive) {
-                    ctx.clearRect(0, 0, width, height);
-                    return;
-                }
-                ctx.clearRect(0, 0, width, height);
-
-                for (let i = 0; i < flakes.length; i++) {
-                    const f = flakes[i];
-                    ctx.beginPath();
-                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2, false);
-                    ctx.fillStyle = "rgba(225, 240, 250, " + f.opacity + ")";
-                    ctx.shadowColor = "rgba(162, 209, 233, 0.4)";
-                    ctx.shadowBlur = f.radius * 2;
-                    ctx.fill();
-
-                    // Natural organic movement
-                    f.swing += f.swingSpeed;
-                    f.x += Math.sin(f.swing) * 0.5;
-                    f.y += f.speedY;
-
-                    // Wrap around
-                    if (f.y > height + 5) {
-                        f.y = -5;
-                        f.x = Math.random() * width;
-                    }
-                    if (f.x > width + 5) {
-                        f.x = -5;
-                    } else if (f.x < -5) {
-                        f.x = width + 5;
-                    }
-                }
-
-                animationFrameId = requestAnimationFrame(drawFlakes);
-            }
-
-            drawFlakes();
-
-            // Toggle button
-            const toggleBtn = document.getElementById('toggle-snow-btn');
-            const label = document.getElementById('snow-btn-label');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    isSnowActive = !isSnowActive;
-                    if (isSnowActive) {
-                        if (label) label.textContent = 'Žiemos Efektas';
-                        toggleBtn.style.opacity = '1';
-                        drawFlakes();
-                    } else {
-                        if (label) label.textContent = 'Efektas Išjungtas';
-                        toggleBtn.style.opacity = '0.6';
-                        ctx.clearRect(0, 0, width, height);
-                        if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                    }
-                });
-            }
-        })();
-    </script>
 </body>
 </html>

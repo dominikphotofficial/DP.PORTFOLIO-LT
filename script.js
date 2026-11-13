@@ -6,8 +6,7 @@ window.addEventListener('error', (event) => {
 });
 
 // ==============================================================================
-// 🩺 Firebase Auth Configuration & Initialization Diagnostic Logger
-// Ensures current configuration is strictly injected without stale or cached values
+// Firebase Auth Configuration & Initialization Diagnostic Logger
 // ==============================================================================
 (function runFirebaseAuthDiagnostics() {
     if (typeof window === 'undefined') return;
@@ -15,7 +14,7 @@ window.addEventListener('error', (event) => {
     window.logFirebaseAuthDiagnostics = function() {
         const isInAlbums = window.location.pathname.includes('/albums/');
         const prefix = isInAlbums ? '../' : './';
-        
+
         fetch(prefix + 'firebase-applet-config.json')
             .then(res => res.json())
             .then(config => {
@@ -47,12 +46,11 @@ window.addEventListener('error', (event) => {
                 console.log('Project ID:', diag.projectId);
                 console.log('Config authDomain (File):', diag.configAuthDomain);
                 console.log('Active SDK authDomain (Runtime):', diag.activeSdkAuthDomain);
-                console.log('Status Synchronized:', isMatching ? '✅ TAIP (Sutampa)' : '⚠️ NE (Nesutampa)');
-                console.log('Uses Default/Fallback:', isDefaultFallback ? '⚠️ Taip (Naudoja .firebaseapp.com)' : '✅ Ne (Tiesioginis domenas)');
+                console.log('Status Synchronized:', isMatching ? 'TAIP (Sutampa)' : 'NE (Nesutampa)');
+                console.log('Uses Default/Fallback:', isDefaultFallback ? 'Taip (.firebaseapp.com)' : 'Ne');
                 console.log('Auth Redirect URI:', diag.targetRedirectUri);
                 console.log('Current Hostname:', diag.windowHostname);
                 console.log('Is Prefix Subdomain (portfolio.*):', diag.isPrefixSubdomain);
-                console.log('Full Diagnostic State:', diag);
                 console.groupEnd();
                 return diag;
             })
@@ -69,16 +67,14 @@ window.addEventListener('error', (event) => {
 })();
 
 // ==============================================================================
-// 🛡️ Firebase Authentication & Firestore Granular Diagnostic Wrapper
-// Intercepts all Auth calls and logs granular error details including error code,
-// message, active authDomain, and pinpoint diagnosis for 'Missing or insufficient permissions'
+// Firebase Authentication & Firestore Diagnostic Wrapper
 // ==============================================================================
 (function installFirebaseAuthDiagnosticWrapper() {
     if (typeof window === 'undefined') return;
 
     window.wrapAuthCall = async function(actionName, authFn, contextData = {}) {
-        const activeDomain = window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 
-                             window.__FIREBASE_INITIALIZED_CONFIG__?.authDomain || 
+        const activeDomain = window.__FIREBASE_ACTIVE_CONFIG__?.authDomain ||
+                             window.__FIREBASE_INITIALIZED_CONFIG__?.authDomain ||
                              'dominikphotofficial.lt';
 
         console.group(`%c[Auth Diagnostic Call: ${actionName}]`, 'color: #113939; font-weight: bold; font-size: 12px;');
@@ -101,12 +97,8 @@ window.addEventListener('error', (event) => {
             console.error('Error Code:', errCode);
             console.error('Error Message:', errMsg);
             console.error('Active authDomain at failure:', activeDomain);
-            console.error('Is Permission Error:', isPermissionError ? '⚠️ TAIP (Missing or insufficient permissions)' : 'Ne');
-            if (isPermissionError) {
-                console.warn('💡 Diagnostinė įžvalga: „Missing or insufficient permissions“ kyla ne iš pačios Auth tarnybos, o iš Firestore duomenų bazės taisyklių (firestore.rules), kai po prisijungimo bandoma nuskaityti kolekcijas (pvz. tfp_requests, admin_team).');
-            }
+            console.error('Is Permission Error:', isPermissionError ? 'TAIP' : 'Ne');
             console.error('Full Error Object:', err);
-            console.error('Stack:', err?.stack || 'N/A');
             console.groupEnd();
             throw err;
         }
@@ -123,9 +115,6 @@ window.addEventListener('error', (event) => {
             console.error('Error Code:', reason?.code || 'permission-denied');
             console.error('Error Message:', reason?.message || reason);
             console.error('Active authDomain:', activeDomain);
-            console.warn('💡 Diagnostika: Užklausa į duomenų bazę buvo atmesta dėl teisių stokos. Patikrinkite Firestore taisykles.');
-            console.error('Stack Trace:', reason?.stack || 'N/A');
-            console.info('Full Error Object:', reason);
             console.groupEnd();
         }
     });
@@ -140,10 +129,6 @@ window.addEventListener('error', (event) => {
         console.groupEnd();
     };
 
-    // ==============================================================================
-    // 🔍 Pre-Write Operation State & Auth Diagnostics Logger
-    // Explicitly logs auth.currentUser and Firestore connection before database writes
-    // ==============================================================================
     window.logPreWriteState = function(operationName, collectionName, payload = {}) {
         let storedSession = null;
         try {
@@ -171,7 +156,7 @@ window.addEventListener('error', (event) => {
             activeAuthDomain: window.__FIREBASE_ACTIVE_CONFIG__?.authDomain || 'dominikphotofficial.lt'
         };
 
-        console.group(`%c[Firestore Pre-Write State Verification: ${operationName}]`, 'color: #004D40; font-weight: bold; font-size: 12px;');
+        console.group(`%c[Firestore Pre-Write State Verification: ${operationName}]`, 'color: #113939; font-weight: bold; font-size: 12px;');
         console.log('Target Collection:', collectionName);
         console.log('Effective User Identity:', authState.effectiveIdentity);
         console.log('Live Firebase Auth State (auth.currentUser):', authState);
@@ -182,9 +167,6 @@ window.addEventListener('error', (event) => {
         return { authState, dbStatus };
     };
 
-    // ==============================================================================
-    // 📊 Diagnostic Operation Tracker (Keeps last 5 operations)
-    // ==============================================================================
     window.__DIAGNOSTIC_OPERATIONS__ = [];
     window.recordDiagnosticOperation = function(name, status, details = {}) {
         const entry = {
@@ -192,7 +174,7 @@ window.addEventListener('error', (event) => {
             time: new Date().toLocaleTimeString('lt-LT'),
             timestamp: Date.now(),
             name: name,
-            status: status, // 'SUCCESS' | 'ERROR' | 'PENDING'
+            status: status,
             details: details
         };
         window.__DIAGNOSTIC_OPERATIONS__.unshift(entry);
@@ -229,8 +211,8 @@ window.addEventListener('error', (event) => {
 })();
 
 // Only initialize Cookiebot on official production domain outside iframe
-if (typeof window !== 'undefined' && 
-    window.location.hostname.endsWith('dominikphotofficial.lt') && 
+if (typeof window !== 'undefined' &&
+    window.location.hostname.endsWith('dominikphotofficial.lt') &&
     window.self === window.top) {
     if (!document.getElementById('Cookiebot')) {
         const cbScript = document.createElement('script');
@@ -247,143 +229,213 @@ if (typeof window !== 'undefined' &&
     }
 }
 
-const hidePreloaderEarly = () => {
-    const preloader = document.getElementById("preloader");
-    if (preloader && preloader.style.display !== "none") {
-        preloader.style.opacity = "0";
-        setTimeout(() => {
-            preloader.style.display = "none";
-        }, 300);
-    }
-};
-
-window.addEventListener("load", hidePreloaderEarly);
-document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hidePreloaderEarly, 400);
-});
-setTimeout(hidePreloaderEarly, 1000);
-
 document.addEventListener("DOMContentLoaded", () => {
     const header = document.getElementById("main-header") || document.querySelector("header");
-    
-    window.addEventListener("scroll", () => {
+    const heroScroll = document.querySelector(".hero-scroll");
+    const heroProgress = document.querySelector(".hero-progress");
+    const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const handleScroll = () => {
+        const y = window.scrollY || window.pageYOffset || 0;
         if (header) {
-            if (window.scrollY > 50) {
+            if (y > 80) {
                 header.classList.add("scrolled");
             } else {
                 header.classList.remove("scrolled");
             }
         }
-    });
+        if (heroScroll) {
+            heroScroll.classList.toggle("hidden", y > 40);
+        }
+        if (heroProgress) {
+            heroProgress.classList.toggle("hidden", y > 40);
+        }
+    };
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    // Unified Header Drawer Menu
     const burger = document.getElementById("burger-menu") || document.querySelector(".burger");
     const navOverlay = document.getElementById("nav-overlay") || document.querySelector(".nav-overlay");
-    
-    const getScrollbarWidth = () => window.innerWidth - document.documentElement.clientWidth;
+    const navClose = document.getElementById("nav-close") || document.querySelector(".nav-close");
+
+    const openMenu = () => {
+        if (!burger || !navOverlay) return;
+        burger.classList.add("active");
+        burger.setAttribute("aria-expanded", "true");
+        navOverlay.classList.add("active");
+        navOverlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("menu-open");
+    };
+
+    const closeMenu = () => {
+        if (!burger || !navOverlay) return;
+        burger.classList.remove("active");
+        burger.setAttribute("aria-expanded", "false");
+        navOverlay.classList.remove("active");
+        navOverlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("menu-open");
+    };
 
     if (burger && navOverlay) {
         burger.addEventListener("click", () => {
-            const isActive = burger.classList.toggle("active");
-            navOverlay.classList.toggle("active");
-            
-            if (isActive) {
-                const scrollbarWidth = getScrollbarWidth();
-                document.body.style.overflow = "hidden";
-                document.body.style.paddingRight = `${scrollbarWidth}px`;
-                if(header) header.style.paddingRight = `calc(5vw + ${scrollbarWidth}px)`;
-                if(header) header.classList.remove("scrolled");
+            if (navOverlay.classList.contains("active")) {
+                closeMenu();
             } else {
-                document.body.style.overflow = "";
-                document.body.style.paddingRight = "0px";
-                if(header) header.style.paddingRight = "";
-                if (window.scrollY > 50 && header) {
-                    header.classList.add("scrolled");
-                }
+                openMenu();
             }
         });
     }
 
-    const slides = document.querySelectorAll(".hero-slide");
-    let currentSlide = 0;
-    
-    if (slides.length > 1) {
-        setInterval(() => {
-            slides[currentSlide].classList.remove("active");
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add("active");
-        }, 5000);
+    if (navClose) {
+        navClose.addEventListener("click", closeMenu);
     }
 
+    if (navOverlay) {
+        navOverlay.addEventListener("click", (e) => {
+            if (e.target === navOverlay) closeMenu();
+        });
+        navOverlay.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", closeMenu);
+        });
+    }
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navOverlay && navOverlay.classList.contains("active")) {
+            closeMenu();
+        }
+    });
+
+    // Subtle 200ms page fade-out on same-origin internal HTML links
+    if (!prefersReducedMotion) {
+        window.addEventListener("pageshow", () => {
+            document.body.classList.remove("page-leaving");
+        });
+        document.querySelectorAll("a[href]").forEach(link => {
+            const href = link.getAttribute("href");
+            if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:") || link.target === "_blank") return;
+            try {
+                const url = new URL(link.href, window.location.href);
+                if (url.origin !== window.location.origin) return;
+                if (url.pathname === window.location.pathname && url.hash) return;
+                link.addEventListener("click", (e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                    e.preventDefault();
+                    document.body.classList.add("page-leaving");
+                    setTimeout(() => {
+                        window.location.href = link.href;
+                    }, 180);
+                });
+            } catch (err) {}
+        });
+    }
+
+    // Lightbox Photo Viewer with preloading, 03/24 counter, and thin accent progress bar
     const galleryImages = document.querySelectorAll(".gallery-item img");
     const lightbox = document.getElementById("lightbox");
-    
+
     if (galleryImages.length > 0 && lightbox) {
         const lightboxImg = document.getElementById("lightbox-img");
         const lightboxCounter = document.getElementById("lightbox-counter");
         const closeBtn = document.querySelector(".lightbox-close");
         const prevBtn = document.querySelector(".lightbox-prev");
         const nextBtn = document.querySelector(".lightbox-next");
-        
+
+        // Ensure thin accent progress line exists inside lightbox
+        let progressBar = lightbox.querySelector(".lightbox-progress-bar");
+        if (!progressBar) {
+            const progressWrap = document.createElement("div");
+            progressWrap.className = "lightbox-progress";
+            progressBar = document.createElement("div");
+            progressBar.className = "lightbox-progress-bar";
+            progressWrap.appendChild(progressBar);
+            lightbox.appendChild(progressWrap);
+        }
+
         let currentIndex = 0;
-        let imageArray = [];
+        const imageArray = [];
         let touchStartX = 0;
         let touchEndX = 0;
-        
+
+        const padTwo = (n) => String(n).padStart(2, "0");
+
+        const preloadAdjacent = (idx) => {
+            const len = imageArray.length;
+            if (len < 2) return;
+            const prev = new Image();
+            prev.src = imageArray[(idx - 1 + len) % len];
+            const next = new Image();
+            next.src = imageArray[(idx + 1) % len];
+        };
+
+        const renderLightboxMeta = (idx) => {
+            if (lightboxCounter) {
+                lightboxCounter.textContent = `${padTwo(idx + 1)} / ${padTwo(imageArray.length)}`;
+            }
+            if (progressBar) {
+                const pct = ((idx + 1) / imageArray.length) * 100;
+                progressBar.style.width = `${pct}%`;
+            }
+            preloadAdjacent(idx);
+        };
+
         galleryImages.forEach((img, index) => {
             imageArray.push(img.src);
             img.addEventListener("click", () => {
                 currentIndex = index;
                 lightboxImg.src = imageArray[currentIndex];
-                if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${imageArray.length}`;
-                
-                const scrollbarWidth = getScrollbarWidth();
+                lightboxImg.alt = img.alt || "";
+                renderLightboxMeta(currentIndex);
                 document.body.style.overflow = "hidden";
-                document.body.style.paddingRight = `${scrollbarWidth}px`;
-                if(header) header.style.paddingRight = `calc(5vw + ${scrollbarWidth}px)`;
-                
                 lightbox.classList.add("active");
+                lightbox.setAttribute("aria-hidden", "false");
             });
         });
-        
+
         const updateL = () => {
-            lightboxImg.classList.add('loading');
+            lightboxImg.classList.add("loading");
             setTimeout(() => {
                 lightboxImg.src = imageArray[currentIndex];
-                if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${imageArray.length}`;
-            }, 350);
+                lightboxImg.alt = galleryImages[currentIndex]?.alt || "";
+                renderLightboxMeta(currentIndex);
+            }, 180);
         };
 
         if (lightboxImg) {
-            lightboxImg.addEventListener('load', () => {
-                lightboxImg.classList.remove('loading');
+            lightboxImg.addEventListener("load", () => {
+                lightboxImg.classList.remove("loading");
             });
         }
-        
+
         const closeL = () => {
             lightbox.classList.remove("active");
+            lightbox.setAttribute("aria-hidden", "true");
             setTimeout(() => {
                 document.body.style.overflow = "";
-                document.body.style.paddingRight = "0px";
-                if(header) header.style.paddingRight = "";
-            }, 400);
+            }, 220);
         };
 
         if (closeBtn) closeBtn.addEventListener("click", closeL);
-        
+
+        lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) closeL();
+        });
+
         if (nextBtn) {
             nextBtn.addEventListener("click", () => {
                 currentIndex = (currentIndex + 1) % imageArray.length;
                 updateL();
             });
         }
-        
+
         if (prevBtn) {
             prevBtn.addEventListener("click", () => {
                 currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
                 updateL();
             });
         }
-        
+
         document.addEventListener("keydown", (e) => {
             if (!lightbox.classList.contains("active")) return;
             if (e.key === "Escape") closeL();
@@ -397,16 +449,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        lightbox.addEventListener('touchstart', e => {
+        lightbox.addEventListener("touchstart", e => {
             touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
+        }, { passive: true });
 
-        lightbox.addEventListener('touchend', e => {
+        lightbox.addEventListener("touchend", e => {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, {passive: true});
-
-        const handleSwipe = () => {
             const swipeThreshold = 50;
             if (touchEndX < touchStartX - swipeThreshold) {
                 currentIndex = (currentIndex + 1) % imageArray.length;
@@ -416,175 +464,116 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
                 updateL();
             }
-        };
+        }, { passive: true });
     }
 
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
+    // Hero Photo Slideshow (6s slide, 1.2s crossfade, 1 -> 1.05 zoom, 3-line progress)
+    const heroSlides = document.querySelectorAll(".hero-slide");
+    const progressLines = document.querySelectorAll(".hero-progress-line");
+    if (heroSlides.length > 1) {
+        let heroIdx = 0;
+        let heroTimer = null;
 
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                obs.unobserve(entry.target);
+        const setHeroSlide = (nextIdx) => {
+            heroSlides.forEach((slide, i) => slide.classList.toggle("active", i === nextIdx));
+            progressLines.forEach((line, i) => line.classList.toggle("active", i === (nextIdx % progressLines.length)));
+            heroIdx = nextIdx;
+        };
+
+        progressLines.forEach((line, i) => {
+            line.addEventListener("click", () => {
+                setHeroSlide(i % heroSlides.length);
+                if (heroTimer) {
+                    clearInterval(heroTimer);
+                    heroTimer = setInterval(() => setHeroSlide((heroIdx + 1) % heroSlides.length), 6000);
+                }
+            });
+        });
+
+        if (!prefersReducedMotion) {
+            heroTimer = setInterval(() => {
+                setHeroSlide((heroIdx + 1) % heroSlides.length);
+            }, 6000);
+        }
+    }
+
+    // Soft Fade-In for Lazy-Loaded Portfolio & Album Images
+    const lazyImages = document.querySelectorAll("img[loading='lazy']");
+    lazyImages.forEach(img => {
+        if (img.classList.contains("hero-slide")) return;
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add("img-loaded");
+            return;
+        }
+        img.classList.add("dp-lazy");
+        const markLoaded = () => img.classList.add("img-loaded");
+        img.addEventListener("load", markLoaded, { once: true });
+        img.addEventListener("error", markLoaded, { once: true });
+    });
+    setTimeout(() => {
+        document.querySelectorAll("img.dp-lazy:not(.img-loaded)").forEach(img => {
+            if (img.complete) img.classList.add("img-loaded");
+        });
+    }, 1500);
+
+    // IntersectionObserver Reveal with 80ms row stagger
+    const revealEls = document.querySelectorAll(".fade-in-up, .reveal");
+    if (prefersReducedMotion) {
+        revealEls.forEach(el => el.classList.add("visible"));
+    } else {
+        document.querySelectorAll(".album-grid-columns, .album-grid").forEach(grid => {
+            grid.querySelectorAll(".album-card").forEach((card, idx) => {
+                const stagger = (idx % 2) * 80;
+                card.style.transitionDelay = `${stagger}ms`;
+            });
+        });
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.05,
+            rootMargin: "0px 0px -24px 0px"
+        });
+
+        revealEls.forEach(el => observer.observe(el));
+
+        setTimeout(() => {
+            revealEls.forEach(el => el.classList.add("visible"));
+        }, 450);
+    }
+
+    // Track album card clicks cleanly
+    document.querySelectorAll(".album-card").forEach(card => {
+        card.addEventListener("click", () => {
+            const title = card.querySelector(".album-card-title, h2, h3, .album-title")?.innerText?.trim() || "Album";
+            const link = card.getAttribute("href") || "";
+            if (window.trackAlbumOpen) {
+                window.trackAlbumOpen(link, title);
             }
         });
-    }, observerOptions);
-
-    document.querySelectorAll(".fade-in-up, .reveal").forEach(el => {
-        observer.observe(el);
     });
 
-    // Fallback: Ensure elements are gracefully made visible if observer or scroll is idle
-    setTimeout(() => {
-        document.querySelectorAll(".fade-in-up, .reveal").forEach(el => {
-            el.classList.add("visible");
-        });
-    }, 450);
-
-    // =========================================================================
-    // Interactive Gallery Category Filter Bar (Automotive, Nature, Heritage, Flora)
-    // =========================================================================
-    const filterButtons = document.querySelectorAll(".gallery-filter-btn");
-    const albumCards = document.querySelectorAll(".album-grid-columns .album-card");
-    const filterStatus = document.getElementById("gallery-filter-status");
-
-    if (filterButtons.length > 0 && albumCards.length > 0) {
-        // Dynamic category count calculation
-        const counts = {
-            all: albumCards.length,
-            automotive: 0,
-            nature: 0,
-            heritage: 0,
-            flora: 0
-        };
-
-        albumCards.forEach(card => {
-            const cat = (card.getAttribute("data-category") || "").toLowerCase().trim();
-            if (counts[cat] !== undefined) {
-                counts[cat]++;
-            }
-        });
-
-        // Update badge counts in filter buttons
-        Object.keys(counts).forEach(key => {
-            const countEl = document.getElementById(`count-${key}`);
-            if (countEl) {
-                countEl.textContent = counts[key];
-            }
-        });
-
-        const categoryLabels = {
-            all: "Visi darbai",
-            automotive: "Automotive",
-            nature: "Nature",
-            heritage: "Heritage",
-            flora: "Flora"
-        };
-
-        const updateFilterStatus = (activeFilter, visibleCount) => {
-            if (!filterStatus) return;
-            if (activeFilter === "all") {
-                filterStatus.innerHTML = `Rodomi visi ${visibleCount} galerijos albumai`;
-            } else {
-                const label = categoryLabels[activeFilter] || activeFilter;
-                filterStatus.innerHTML = `Kategorija: <strong>${label}</strong> &bull; Rodomi ${visibleCount} albumai`;
-            }
-        };
-
-        const applyFilter = (filterName) => {
-            let visibleCount = 0;
-
-            albumCards.forEach(card => {
-                const cardCat = (card.getAttribute("data-category") || "").toLowerCase().trim();
-                const matches = (filterName === "all" || cardCat === filterName);
-
-                if (matches) {
-                    card.classList.remove("filter-hidden");
-                    card.classList.remove("filter-animating-in");
-                    // Force reflow to replay entry animation
-                    void card.offsetWidth;
-                    card.classList.add("filter-animating-in");
-                    card.classList.add("visible");
-                    visibleCount++;
-                } else {
-                    card.classList.add("filter-hidden");
-                    card.classList.remove("filter-animating-in");
-                }
-            });
-
-            // Update button active state & aria attributes
-            filterButtons.forEach(btn => {
-                const btnFilter = btn.getAttribute("data-filter");
-                const isActive = (btnFilter === filterName);
-                btn.classList.toggle("active", isActive);
-                btn.setAttribute("aria-selected", isActive ? "true" : "false");
-            });
-
-            updateFilterStatus(filterName, visibleCount);
-        };
-
-        filterButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const filter = btn.getAttribute("data-filter");
-                const isCurrentlyActive = btn.classList.contains("active");
-
-                // Toggle logic: If user clicks the active category button again, toggle back to 'all'
-                if (isCurrentlyActive && filter !== "all") {
-                    applyFilter("all");
-                } else {
-                    applyFilter(filter);
-                }
-            });
-
-            // Keyboard navigation support
-            btn.addEventListener("keydown", (e) => {
-                const buttons = Array.from(filterButtons);
-                const currentIndex = buttons.indexOf(btn);
-
-                if (e.key === "ArrowRight") {
-                    e.preventDefault();
-                    const nextBtn = buttons[(currentIndex + 1) % buttons.length];
-                    nextBtn.focus();
-                    nextBtn.click();
-                } else if (e.key === "ArrowLeft") {
-                    e.preventDefault();
-                    const prevBtn = buttons[(currentIndex - 1 + buttons.length) % buttons.length];
-                    prevBtn.focus();
-                    prevBtn.click();
-                }
-            });
-        });
-
-        // Initial status update
-        updateFilterStatus("all", albumCards.length);
-
-        // Track album card clicks
-        albumCards.forEach(card => {
-            card.addEventListener("click", () => {
-                const title = card.querySelector("h2, h3, .album-title")?.innerText?.trim() || card.getAttribute("data-category") || "Album";
-                const link = card.getAttribute("href") || card.querySelector("a")?.getAttribute("href") || "";
-                if (window.trackAlbumOpen) {
-                    window.trackAlbumOpen(link, title);
-                }
-            });
-        });
-    }
-
     const tfpForm = document.getElementById('tfp-booking-form');
-    if(tfpForm) {
-        tfpForm.addEventListener('submit', function(e) {
+    if (tfpForm) {
+        tfpForm.addEventListener('submit', function() {
             if (window.trackFormSubmission) {
                 window.trackFormSubmission('tfp_booking', { form_name: 'TFP Booking Form' });
             }
             const submitBtn = tfpForm.querySelector('button');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Siunčiama...';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Siunčiama...';
+            }
             setTimeout(() => {
                 tfpForm.style.display = 'none';
-                document.getElementById('success-display').style.display = 'block';
+                const successDisplay = document.getElementById('success-display');
+                if (successDisplay) successDisplay.style.display = 'block';
                 window.scrollTo({ top: 200, behavior: 'smooth' });
             }, 1000);
         });
@@ -592,7 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Generic form submission tracking
     document.querySelectorAll("form").forEach(form => {
-        if (form.id === 'tfp-booking-form') return; // already handled
+        if (form.id === 'tfp-booking-form') return;
         form.addEventListener('submit', function() {
             if (window.trackFormSubmission) {
                 window.trackFormSubmission(form.id || 'general_form', { form_name: form.getAttribute('name') || form.id || 'Web Form' });

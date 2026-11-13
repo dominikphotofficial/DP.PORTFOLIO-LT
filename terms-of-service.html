@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://i.postimg.cc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paslaugų Teikimo Sąlygos | DP.PORTFOLIO</title>
     <meta name="description" content="DP.PORTFOLIO fotografijos ir vaizdo paslaugų teikimo bei TFP bendradarbiavimo sąlygos. Dominik Šuškevič fotografas Kaune.">
     <meta name="keywords" content="paslaugų teikimo taisyklės, terms of service, TFP sąlygos, fotosesijos taisyklės, DP.PORTFOLIO, Dominik Šuškevič, fotografija Kaunas">
@@ -18,133 +18,139 @@
     <meta property="og:description" content="DP.PORTFOLIO fotosesijų, videografijos ir TFP bendradarbiavimo taisyklės bei sąlygos.">
     <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/terms-of-service.html">
     <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <style>
         .legal-container {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 120px 24px 70px 24px;
+            max-width: 820px;
+            margin-inline: auto;
+            padding: var(--sp-6) var(--gutter);
+        }
+        @media (min-width: 1024px) {
+            .legal-container {
+                padding-block: var(--sp-7);
+            }
         }
         .legal-header {
             text-align: left;
-            margin-bottom: 35px;
-            border-bottom: 2px solid #113939;
-            padding-bottom: 18px;
+            margin-bottom: var(--sp-5);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--sp-4);
         }
         .legal-title {
-            font-family: 'Jost', -apple-system, sans-serif;
-            font-size: clamp(2rem, 3.5vw, 2.7rem);
-            color: #113939;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            font-weight: 400;
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            color: var(--text);
+            margin-bottom: var(--sp-2);
         }
         .legal-subtitle {
-            font-size: 0.92rem;
-            color: #555555;
-            letter-spacing: 0.5px;
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
             margin: 0;
-            font-family: 'Josefin Sans', sans-serif;
         }
         .legal-body {
-            color: #1a2b2b;
-            font-family: 'Josefin Sans', -apple-system, sans-serif;
+            color: var(--text);
         }
         .legal-section {
-            margin-bottom: 32px;
+            margin-bottom: var(--sp-5);
         }
         .legal-h2 {
-            font-family: 'Jost', -apple-system, sans-serif;
-            font-size: 1.25rem;
-            color: #113939;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(17, 57, 57, 0.15);
-            padding-bottom: 6px;
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+            color: var(--text);
+            margin-bottom: var(--sp-3);
+            padding-bottom: var(--sp-2);
+            border-bottom: 1px solid var(--border);
         }
         .legal-p {
-            font-family: 'Josefin Sans', -apple-system, sans-serif;
-            font-size: 1.02rem;
-            color: #222222;
-            line-height: 1.75;
-            margin-bottom: 14px;
+            font-size: var(--fs-base);
+            color: var(--text);
+            line-height: var(--lh);
+            margin-bottom: var(--sp-3);
         }
         .legal-list {
-            margin: 10px 0 16px 20px;
-            color: #222222;
-            font-family: 'Josefin Sans', -apple-system, sans-serif;
-            line-height: 1.75;
-            font-size: 1rem;
+            margin: var(--sp-2) 0 var(--sp-3) var(--sp-4);
+            color: var(--text);
+            line-height: var(--lh);
+            font-size: var(--fs-base);
         }
         .legal-list li {
-            margin-bottom: 8px;
+            margin-bottom: var(--sp-2);
         }
         .legal-contacts-plain {
-            margin: 14px 0;
-            padding: 4px 0;
-            font-size: 1rem;
-            line-height: 1.8;
-            color: #222222;
+            margin: var(--sp-3) 0;
+            padding: var(--sp-4);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: var(--fs-base);
+            line-height: var(--lh);
+            color: var(--text);
         }
-        .footer-legal-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-            font-size: 0.85rem;
-        }
-        .footer-legal-links a {
-            color: var(--accent-light);
+        .legal-contacts-plain a {
+            color: var(--accent);
+            font-weight: var(--fw-medium);
             text-decoration: underline;
             text-underline-offset: 4px;
-        }
-        .footer-legal-links a:hover {
-            color: var(--accent-color);
-        }
-        * {
-            animation: none !important;
-            transition: none !important;
         }
     </style>
 </head>
 <body>
     <header id="main-header">
-        <a href="index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumas</a>
-            <a href="terms-of-service.html" class="nav-link active">Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-container">
+            <a href="index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/terms-of-service.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/terms-of-service.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/terms-of-service.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/terms-of-service.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/terms-of-service.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumo Politika</a>
-            <a href="terms-of-service.html" class="nav-link active">Paslaugų Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="terms-of-service.html" class="nav-link nav-secondary active"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/terms-of-service.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/terms-of-service.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/terms-of-service.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/terms-of-service.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/terms-of-service.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <main class="legal-container">
@@ -233,26 +239,46 @@
                 <div class="legal-contacts-plain">
                     <strong>Klausimai ar pastebėjimai:</strong><br>
                     Jeigu turite klausimų dėl šių taisyklių ar pageidaujate aptarti individualias fotosesijos sąlygas, susisiekite:<br>
-                    Pagrindinis el. paštas: <a href="mailto:info@dominikphotofficial.lt" style="color: #113939; font-weight: 600;">info@dominikphotofficial.lt</a><br>
-                    Atsarginis el. paštas: <a href="mailto:dominikphotofficial.lt@gmail.com" style="color: #113939; font-weight: 600;">dominikphotofficial.lt@gmail.com</a>
+                    Pagrindinis el. paštas: <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a><br>
+                    Atsarginis el. paštas: <a href="mailto:dominikphotofficial.lt@gmail.com">dominikphotofficial.lt@gmail.com</a>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- Minimalist Luxury Footer -->
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-legal-links">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="index.html">Darbai</a>
+                    <a href="tfp-booking.html">TFP Registracija</a>
+                    <a href="services.html">Paslaugos</a>
+                    <a href="biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="about.html">Apie</a>
+                    <a href="contacts.html">Kontaktai</a>
                     <a href="privacy-policy.html">Privatumo Politika</a>
-                    <a href="terms-of-service.html" style="text-decoration: underline;">Paslaugų Sąlygos</a>
+                    <a href="terms-of-service.html">Paslaugų Sąlygos</a>
+                </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
                 </div>
                 <div class="footer-min-langs-group">
-                    <div class="footer-lang-divider" aria-hidden="true"></div>
                     <div class="footer-min-langs">
-                        <a href="https://portfolio.dominikphotofficial.lt/terms-of-service.html" class="active">LT</a>
+<a href="https://portfolio.dominikphotofficial.lt/terms-of-service.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/terms-of-service.html">EN</a>
                         <a href="https://pl.dominikphotofficial.lt/terms-of-service.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/terms-of-service.html">RU</a>

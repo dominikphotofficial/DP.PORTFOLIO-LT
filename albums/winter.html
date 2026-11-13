@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WINTER | LITHUANIA - DP.PORTFOLIO</title>
     <meta name="description" content="WINTER | LITHUANIA. Cirkliškis ir Šventa. Nespalvotos žiemos akimirkos ir ramybė. Fotografas Dominik Šuškevič.">
     <meta name="robots" content="index, follow">
@@ -14,80 +14,208 @@
     <meta property="og:image" content="https://i.postimg.cc/G3SvWg4k/winter-album-cirkliskis-01.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
 </head>
-<body>
-    <div id="preloader" data-nosnippet><div class="loader"></div></div>
-        <header id="main-header">
-        <a href="../index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="../index.html" class="nav-link">Darbai</a>
-            <a href="../services.html" class="nav-link">Paslaugos</a>
-            <a href="../biography.html" class="nav-link">Biografija</a>
-            <a href="../about.html" class="nav-link">Apie</a>
-            <a href="../contacts.html" class="nav-link">Kontaktai</a>
-            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+<body class="has-hero series-portraits">
+    <header id="main-header">
+        <div class="header-container">
+            <a href="../index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/albums/winter.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/albums/winter.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/albums/winter.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/albums/winter.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/albums/winter.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="../index.html" class="nav-link">Darbai</a>
-            <a href="../services.html" class="nav-link">Paslaugos</a>
-            <a href="../biography.html" class="nav-link">Biografija</a>
-            <a href="../about.html" class="nav-link">Apie</a>
-            <a href="../contacts.html" class="nav-link">Kontaktai</a>
-            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-    </div>
-    <section class="container" style="padding-top: 140px;">
-        <div class="fade-in-up" style="margin-bottom: 60px; text-align: center;">
-            <h1 style="font-family: 'Jost'; text-transform: uppercase; margin-bottom: 20px; font-size: 2.5rem; letter-spacing: 2px;">WINTER | LITHUANIA</h1>
-            <div class="divider"></div>
-            <p style="color: #444; max-width: 650px; margin: 0 auto; line-height: 1.8;">
-                Šis ciklas kviečia sustoti ir pajusti žiemą per nespalvotus kadrus ir tylos estetiką. Nuo Cirkliškio dvaro kasdienybės fragmentų iki laukinių Šventos upės vaizdų. Čia žiema yra ramybė, laukimas ir sniego girgždesys. Pasirinkite seriją peržiūrai.
-            </p>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="../index.html" class="nav-link active"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="../tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="../services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="../biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="../about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="../contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="../privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="../terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/albums/winter.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/albums/winter.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/albums/winter.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/albums/winter.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/albums/winter.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
+            </div>
         </div>
-        <div class="album-grid" style="margin-bottom: 80px;">
-            <a href="winter-cirkliskis.html" class="album-card">
-                <img src="https://i.postimg.cc/G3SvWg4k/winter-album-cirkliskis-01.jpg" width="400" height="500" alt="Cirkliškis" loading="lazy">
-                <div class="album-overlay"><span class="album-title">WINTER | CIRKLIŠKIS</span></div>
-            </a>
-            <a href="winter-sventa.html" class="album-card">
-                <img src="https://i.postimg.cc/y605WPPP/winter-album-sventa-01.jpg" width="400" height="500" alt="Šventa" loading="lazy">
-                <div class="album-overlay"><span class="album-title">WINTER | ŠVENTA</span></div>
-            </a>
+    </div>
+
+    <section class="album-hero">
+        <img src="https://i.postimg.cc/G3SvWg4k/winter-album-cirkliskis-01.jpg" alt="WINTER | LITHUANIA" class="album-hero-img">
+        <div class="album-hero-scrim" aria-hidden="true"></div>
+        <div class="album-hero-inner">
+            <a href="../index.html" class="album-back-link">&larr; Albumai</a>
+            <span class="album-hero-sub">Nespalvota žiema · 2 serijos</span>
+            <h1 class="album-hero-title">WINTER | LITHUANIA</h1>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2026 DP Corporation. Dominik Šuškevič.</p>
+    <section class="album-intro fade-in-up">
+        <div class="album-intro-grid">
+            <div class="album-intro-copy">
+<h2>WINTER | LITHUANIA</h2>
+        <div class="divider"></div>
+        <p>
+            Šis ciklas kviečia sustoti ir pajusti žiemą per nespalvotus kadrus ir tylos estetiką. Nuo Cirkliškio dvaro kasdienybės fragmentų iki laukinių Šventos upės vaizdų. Čia žiema yra ramybė, laukimas ir sniego girgždesys. Pasirinkite seriją peržiūrai.
+        </p>
+            </div>
+            <div class="album-intro-meta">
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Apimtis</span>
+                    <span class="album-info-value">2 serijos</span>
+                </div>
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Vieta</span>
+                    <span class="album-info-value">Cirkliškis · Šventa</span>
+                </div>
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Autorius</span>
+                    <span class="album-info-value">Dominik Šuškevič</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container" style="padding-top: 0;">
+        <div class="album-grid-columns">
+            <a href="winter-cirkliskis.html" class="album-card">
+                <div class="album-card-media">
+                    <img decoding="async" src="https://i.postimg.cc/G3SvWg4k/winter-album-cirkliskis-01.jpg" width="400" height="500" alt="Cirkliškis" loading="lazy">
+                </div>
+                <h3 class="album-card-title">WINTER | CIRKLIŠKIS</h3>
+            </a>
+            <a href="winter-sventa.html" class="album-card">
+                <div class="album-card-media">
+                    <img decoding="async" src="https://i.postimg.cc/y605WPPP/winter-album-sventa-01.jpg" width="400" height="500" alt="Šventa" loading="lazy">
+                </div>
+                <h3 class="album-card-title">WINTER | ŠVENTA</h3>
+            </a>
+        </div>
+    </main>
+
+    <section class="album-info-section fade-in-up">
+        <div class="album-info-band">
+            <div class="album-info-grid">
+                <div class="album-info-col">
+                    <span class="album-info-label">Serija</span>
+                    <span class="album-info-value">WINTER | LITHUANIA &bull; Nespalvota žiema</span>
+                </div>
+                <div class="album-info-col">
+                    <span class="album-info-label">Autorius</span>
+                    <span class="album-info-value">Dominik Šuškevič &bull; DP.PORTFOLIO</span>
+                </div>
+                <div class="album-info-col">
+                    <span class="album-info-label">Galerija</span>
+                    <span class="album-info-value">2 serijos &bull; <a href="../index.html" class="album-info-link">Visi albumai &rarr;</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <a href="winter-cirkliskis.html" class="next-album-strip" style="--next-tint: #f4f4f4; --next-accent: #1a1a1a;">
+        <div class="next-album-inner">
+            <div>
+                <span class="next-album-kicker">Kitas albumas</span>
+                <h2 class="next-album-title">WINTER | CIRKLIŠKIS</h2>
+            </div>
+            <span class="next-album-arrow" aria-hidden="true">&rarr;</span>
+        </div>
+    </a>
+
+    <footer class="footer-minimal">
+        <div class="footer-min-container">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="../index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="../index.html">Darbai</a>
+                    <a href="../tfp-booking.html">TFP Registracija</a>
+                    <a href="../services.html">Paslaugos</a>
+                    <a href="../biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="../about.html">Apie</a>
+                    <a href="../contacts.html">Kontaktai</a>
+                    <a href="../privacy-policy.html">Privatumo Politika</a>
+                    <a href="../terms-of-service.html">Paslaugų Sąlygos</a>
+                </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
+                <div class="footer-min-langs-group">
+                    <div class="footer-min-langs">
+<a href="https://portfolio.dominikphotofficial.lt/albums/winter.html" class="active">LT</a>
+                        <a href="https://en.dominikphotofficial.lt/albums/winter.html">EN</a>
+                        <a href="https://pl.dominikphotofficial.lt/albums/winter.html">PL</a>
+                        <a href="https://ru.dominikphotofficial.lt/albums/winter.html">RU</a>
+                        <a href="https://kr.dominikphotofficial.lt/albums/winter.html">KR</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <div id="lightbox" class="lightbox">
+    <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-top">
             <span id="lightbox-counter"></span>
-            <button class="lightbox-close" aria-label="Uždaryti">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button type="button" class="lightbox-close" aria-label="Uždaryti">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
-        <button class="lightbox-prev" aria-label="Ankstesnė">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <button type="button" class="lightbox-prev" aria-label="Ankstesnė nuotrauka">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="lightbox-image-wrapper">
-            <img id="lightbox-img" src="" alt="Nuotrauka">
+            <img id="lightbox-img" src="" alt="">
         </div>
-        <button class="lightbox-next" aria-label="Kita">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <button type="button" class="lightbox-next" aria-label="Kita nuotrauka">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 

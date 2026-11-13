@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://i.postimg.cc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO</title>
     <meta name="description" content="Nemokama TFP fotosesija Kaune. Kūrybiniai vizualiniai mainai, Fujifilm X-S20 kokybė, profesionalus portretas ir gatvės mada. Registruokitės dabar.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
@@ -19,516 +19,426 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:locale" content="lt_LT">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
 
     <style>
         .tfp-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 140px clamp(20px, 5vw, 60px) 80px clamp(20px, 5vw, 60px);
+            max-width: var(--maxw);
+            margin-inline: auto;
+            padding: var(--sp-6) var(--gutter);
         }
-
-        .tfp-split-layout {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: clamp(40px, 6vw, 90px);
-            align-items: flex-start;
-        }
-
-        @media (max-width: 960px) {
-            .tfp-split-layout {
-                grid-template-columns: 1fr;
+        @media (min-width: 1024px) {
+            .tfp-container {
+                padding-block: var(--sp-7);
             }
         }
-
-        /* Editorial Info Column */
+        .tfp-split-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-5);
+            align-items: start;
+        }
+        @media (min-width: 1024px) {
+            .tfp-split-layout {
+                grid-template-columns: 1.05fr 1fr;
+                gap: var(--sp-6);
+            }
+        }
         .tfp-info-col {
-            color: var(--text-color);
+            color: var(--text);
         }
-
         .tfp-tag {
-            display: inline-block;
-            font-family: var(--font-heading);
-            font-size: 0.8rem;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: var(--accent-light);
-            margin-bottom: 15px;
-            font-weight: 500;
+            display: block;
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-medium);
+            color: var(--text-muted);
+            margin-bottom: var(--sp-2);
         }
-
         .tfp-title {
-            font-size: clamp(2.4rem, 5vw, 3.8rem);
-            letter-spacing: clamp(4px, 1.5vw, 7px);
-            font-weight: 300;
-            line-height: 1.15;
-            margin-bottom: 25px;
-            color: var(--text-color);
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--sp-3);
+            color: var(--text);
         }
-
         .tfp-desc-lead {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            font-weight: 300;
-            color: rgba(26, 43, 43, 0.85);
-            margin-bottom: 30px;
+            font-size: var(--fs-base);
+            line-height: var(--lh);
+            color: var(--text-muted);
+            margin-bottom: var(--sp-4);
         }
-
-        /* Value highlight cards */
         .tfp-highlights {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 35px;
+            gap: var(--sp-3);
+            margin-bottom: var(--sp-5);
         }
-
         .tfp-highlight-box {
-            background: var(--surface-color);
-            padding: 24px 26px;
-            border-radius: 2px;
-            border-left: 3px solid var(--accent-color);
+            background: var(--bg);
+            padding: var(--sp-4);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
         }
-
         .tfp-highlight-box h4 {
-            font-family: var(--font-heading);
-            font-size: 1.05rem;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-            color: var(--accent-color);
-            text-transform: uppercase;
+            font-size: var(--fs-base);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--sp-2);
+            color: var(--text);
         }
-
         .tfp-highlight-box ul {
             list-style: none;
             padding: 0;
             margin: 0;
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            line-height: 1.9;
-            color: rgba(26, 43, 43, 0.85);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-2);
+            font-size: var(--fs-base);
+            color: var(--text);
         }
-
-        .tfp-highlight-box ul li {
-            position: relative;
-            padding-left: 20px;
-        }
-
         .tfp-highlight-box ul li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
+            content: '✓ ';
+            color: var(--accent);
+            font-weight: var(--fw-bold);
         }
-
-        /* Steps Timeline */
         .tfp-steps-box {
-            margin-top: 30px;
-            margin-bottom: 40px;
+            margin-block: var(--sp-4);
         }
-
         .tfp-steps-box h4 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            color: var(--text-color);
+            font-size: var(--fs-lg);
+            margin-bottom: var(--sp-3);
+            color: var(--text);
         }
-
         .steps-list {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: 1fr;
+            gap: var(--sp-3);
         }
-
-        @media (max-width: 600px) {
+        @media (min-width: 640px) {
             .steps-list {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
         }
-
         .step-mini-card {
-            background: #ffffff;
-            padding: 18px 20px;
-            border: 1px solid rgba(17, 57, 57, 0.08);
-            border-radius: 2px;
+            background: var(--bg);
+            padding: var(--sp-3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
         }
-
         .step-mini-num {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 300;
-            color: var(--accent-light);
-            margin-bottom: 6px;
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-bold);
+            color: var(--accent);
+            margin-bottom: var(--sp-1);
         }
-
         .step-mini-card strong {
-            font-family: var(--font-heading);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: var(--fs-base);
+            font-weight: var(--fw-medium);
             display: block;
-            margin-bottom: 4px;
-            color: var(--text-color);
+            margin-bottom: var(--sp-1);
+            color: var(--text);
         }
-
         .step-mini-card p {
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            line-height: 1.5;
-            color: rgba(26, 43, 43, 0.7);
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
             margin: 0;
         }
-
-        /* Moodboard strip */
         .moodboard-strip {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-top: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--sp-2);
+            margin-top: var(--sp-3);
+            padding-inline: 0;
+            padding-bottom: 0;
         }
-        @media (max-width: 640px) {
+        @media (min-width: 640px) {
             .moodboard-strip {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
-
         .moodboard-item {
-            height: 130px;
-            border-radius: 2px;
+            aspect-ratio: 4 / 5;
+            border-radius: var(--radius);
             overflow: hidden;
             position: relative;
-            cursor: pointer;
+            cursor: zoom-in;
         }
-
         .moodboard-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
-            cursor: pointer;
+            transition: transform var(--ease);
         }
-
         .moodboard-item:hover img {
-            transform: scale(1.08);
+            transform: scale(1.02);
         }
-
-        .moodboard-item .moodboard-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(17, 57, 57, 0.35);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-family: var(--font-heading);
-            letter-spacing: 2px;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            pointer-events: none;
+        .moodboard-overlay {
+            display: none;
         }
-
-        .moodboard-item:hover .moodboard-overlay {
-            opacity: 1;
-        }
-
-        /* Form Card */
         .tfp-form-card {
-            background: #ffffff;
-            border: 1px solid rgba(17, 57, 57, 0.1);
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(17, 57, 57, 0.05);
-            padding: clamp(30px, 5vw, 55px);
-            position: sticky;
-            top: 100px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--sp-4);
         }
-
-        .tfp-form-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .tfp-form-header h3 {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            letter-spacing: 3px;
-            font-weight: 300;
-            color: var(--text-color);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .tfp-form-header p {
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            color: rgba(26, 43, 43, 0.7);
-            margin: 0;
-        }
-
-        /* Google button */
-        .google-auth-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 13px 20px;
-            background: #ffffff;
-            border: 1px solid rgba(17, 57, 57, 0.15);
-            color: var(--text-color);
-            font-family: var(--font-heading);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .google-auth-btn:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 15px rgba(17, 57, 57, 0.08);
-            background: rgba(17, 57, 57, 0.02);
-        }
-
-        .google-auth-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Form Controls */
-        .form-row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 550px) {
-            .form-row-2 {
-                grid-template-columns: 1fr;
+        @media (min-width: 640px) {
+            .tfp-form-card {
+                padding: var(--sp-5);
             }
         }
-
+        @media (min-width: 1024px) {
+            .tfp-form-card {
+                position: sticky;
+                top: 96px;
+            }
+        }
+        .tfp-form-header {
+            text-align: left;
+            margin-bottom: var(--sp-4);
+        }
+        .tfp-form-header h3 {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+            color: var(--text);
+            margin-bottom: var(--sp-1);
+        }
+        .tfp-form-header p {
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-3);
+        }
+        @media (min-width: 640px) {
+            .form-row-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
         .input-group {
-            margin-bottom: 22px;
+            margin-bottom: var(--sp-3);
             display: flex;
             flex-direction: column;
         }
-
-        .input-label {
-            font-family: var(--font-heading);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--accent-color);
-            margin-bottom: 7px;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 13px 15px;
-            background: var(--bg-color);
-            border: 1px solid rgba(17, 57, 57, 0.15);
-            border-radius: 2px;
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            color: var(--text-color);
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--accent-color);
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.08);
-        }
-
-        .form-control::placeholder {
-            color: rgba(26, 43, 43, 0.35);
-        }
-
-        /* Quick chips for location */
         .location-chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
+            gap: var(--sp-2);
+            margin-top: var(--sp-2);
         }
-
         .location-chip {
-            padding: 5px 12px;
-            background: var(--surface-color);
-            border: 1px solid rgba(17, 57, 57, 0.1);
-            border-radius: 2px;
-            font-family: var(--font-body);
-            font-size: 0.8rem;
+            min-height: 44px;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: var(--fs-sm);
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--accent-color);
+            display: inline-flex;
+            align-items: center;
+            color: var(--text);
+            transition: border-color var(--ease), color var(--ease), background-color var(--ease);
         }
-
         .location-chip:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #ffffff;
         }
-
-        /* Thumbnails */
         .thumbs-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
+            gap: var(--sp-2);
+            margin-top: var(--sp-2);
         }
-
         .thumb-item {
             position: relative;
-            width: 75px;
-            height: 75px;
-            border-radius: 2px;
+            width: 76px;
+            height: 76px;
+            border-radius: var(--radius);
             overflow: hidden;
-            border: 1px solid rgba(17, 57, 57, 0.15);
+            border: 1px solid var(--border);
         }
-
         .thumb-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .thumb-del-btn {
             position: absolute;
-            top: 3px;
-            right: 3px;
-            width: 20px;
-            height: 20px;
-            background: rgba(17, 57, 57, 0.85);
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
             color: #ffffff;
             border: none;
-            border-radius: 50%;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
         }
-
-        .thumb-del-btn:hover {
-            background: #d9534f;
-        }
-
-        /* Submit Button */
         .submit-tfp-btn {
             width: 100%;
-            padding: 18px;
-            background: var(--accent-color);
-            color: var(--bg-color);
-            border: 1px solid var(--accent-color);
-            font-family: var(--font-heading);
-            font-size: 0.9rem;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
+            min-height: 44px;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            font-family: var(--font);
+            font-size: var(--fs-base);
+            font-weight: var(--fw-medium);
             cursor: pointer;
-            border-radius: 2px;
-            transition: all 0.4s var(--cb);
-            margin-top: 15px;
-            display: flex;
+            border-radius: var(--radius);
+            margin-top: var(--sp-3);
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            transition: background-color var(--ease);
         }
-
         .submit-tfp-btn:hover:not(:disabled) {
-            background: var(--accent-light);
-            border-color: var(--accent-light);
-            box-shadow: 0 10px 25px rgba(17, 57, 57, 0.15);
+            background: var(--accent-hover);
         }
-
         .submit-tfp-btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
         }
-
-        /* Success Display */
         .success-card {
             display: none;
             text-align: center;
-            padding: 50px 25px;
-            background: #ffffff;
-            border-radius: 4px;
+            padding: var(--sp-5) var(--sp-4);
+            background: var(--bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
         }
-
         .success-icon {
-            width: 54px;
-            height: 54px;
-            margin: 0 auto 20px auto;
-            border-radius: 50%;
-            background: var(--surface-color);
-            color: var(--accent-color);
+            width: 48px;
+            height: 48px;
+            margin: 0 auto var(--sp-3);
+            border-radius: var(--radius);
+            border: 1px solid var(--accent);
+            color: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
         .success-icon svg {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
         }
-
         .success-card h3 {
-            font-family: var(--font-heading);
-            font-size: 1.9rem;
-            letter-spacing: 3px;
-            font-weight: 300;
-            color: var(--accent-color);
-            margin-bottom: 12px;
+            font-size: var(--fs-xl);
+            color: var(--accent);
+            margin-bottom: var(--sp-2);
         }
-
         .success-card p {
-            font-family: var(--font-body);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: rgba(26, 43, 43, 0.85);
+            color: var(--text-muted);
             max-width: 480px;
-            margin: 0 auto 25px auto;
+            margin: 0 auto var(--sp-4);
+        }
+        .tfp-contract-card {
+            margin: var(--sp-3) 0 var(--sp-4);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--sp-3);
+        }
+        .tfp-contract-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--sp-2);
+            flex-wrap: wrap;
+            gap: var(--sp-2);
+        }
+        .tfp-contract-title {
+            font-weight: var(--fw-bold);
+            color: var(--text);
+            font-size: var(--fs-base);
+        }
+        .tfp-contract-desc {
+            margin: 0 0 var(--sp-3);
+            color: var(--text-muted);
+            font-size: var(--fs-sm);
+        }
+        .tfp-contract-check {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--sp-2);
+            cursor: pointer;
+            color: var(--text);
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-medium);
+        }
+        .tfp-contract-check input {
+            margin-top: 3px;
+            accent-color: var(--accent);
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
     </style>
 </head>
 <body>
-    <div id="preloader" data-nosnippet><div class="loader"></div></div>
-
     <header id="main-header">
-        <a href="index.html" class="logo"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO"></a>
-        <nav class="desktop-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumas</a>
-            <a href="terms-of-service.html" class="nav-link">Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link active">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu"><span></span><span></span><span></span></div>
+        <div class="header-container">
+            <a href="index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/tfp-booking.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/tfp-booking.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumo Politika</a>
-            <a href="terms-of-service.html" class="nav-link">Paslaugų Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link active">TFP Registracija</a>
-        </nav>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="tfp-booking.html" class="nav-link active"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/tfp-booking.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/tfp-booking.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <main class="tfp-container">
@@ -537,7 +447,6 @@
             <div class="tfp-info-col fade-in-up">
                 <span class="tfp-tag">DP.PORTFOLIO Bendradarbiavimas</span>
                 <h1 class="tfp-title">TFP Fotosesija Kaune</h1>
-                <div class="divider" style="margin: 0 0 25px 0;"></div>
                 
                 <p class="tfp-desc-lead">
                     Ieškau naujų veidų, unikalios išvaizdos ir kūrybiškų idėjų bendriems fotografijos projektams. 
@@ -597,7 +506,7 @@
 
                 <!-- Inspiration Moodboard Strip -->
                 <div>
-                    <h4 style="font-family: var(--font-heading); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px;">Vizualinis Įkvėpimas</h4>
+                    <h4 style="font-size: var(--fs-base); font-weight: var(--fw-bold); color: var(--text); margin-bottom: var(--sp-2);">Vizualinis Įkvėpimas</h4>
                     <div class="moodboard-strip gallery-grid">
                         <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/tgDGWFNT/paslaugos-fotosesijos-01.jpg" alt="Fotosesija" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
                         <div class="moodboard-item gallery-item"><img src="https://i.postimg.cc/PqvGXfk5/zirgai-zeimenos-02.jpg" alt="Žeimenos žirgai" loading="lazy"><div class="moodboard-overlay">Peržiūrėti</div></div>
@@ -678,20 +587,18 @@
                         </div>
 
                         <!-- TFP Sutartis & Model Release Sutikimas -->
-                        <div class="tfp-contract-card" style="margin: 20px 0 25px 0; background: #fafbfb; border: 1px solid #d5dbdb; border-radius: 8px; padding: 18px 20px; font-size: 0.9rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                                <div style="font-weight: 700; color: #113939; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
-                                    <span>📜</span> Oficiali TFP Sutartis & Model Release
-                                </div>
-                                <button type="button" onclick="window.openTfpContractTermsModal()" style="background: none; border: 1px solid #113939; color: #113939; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">
+                        <div class="tfp-contract-card">
+                            <div class="tfp-contract-head">
+                                <div class="tfp-contract-title">📜 Oficiali TFP Sutartis &amp; Model Release</div>
+                                <button type="button" onclick="window.openTfpContractTermsModal()" class="btn-secondary" style="padding: 8px 14px; font-size: var(--fs-sm);">
                                     Peržiūrėti Sąlygas &rarr;
                                 </button>
                             </div>
-                            <p style="margin: 0 0 12px 0; color: #555; font-size: 0.84rem; line-height: 1.5;">
+                            <p class="tfp-contract-desc">
                                 TFP (Time For Print) bendradarbiavimas vykdomas abipusiu kūrybiniu pagrindu: modelis gauna profesionaliai retušuotas didelės raiškos nuotraukas (Wfolio privačioje galerijoje per 7–14 d.d.), o fotografas įgyja teisę naudoti nuotraukas savo profesiniame portfolio.
                             </p>
-                            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; color: #222; font-size: 0.86rem; line-height: 1.45; font-weight: 500;">
-                                <input type="checkbox" id="tfp-contract-agree" name="contract_agreed" required style="margin-top: 3px; accent-color: #113939; width: 18px; height: 18px; cursor: pointer;">
+                            <label class="tfp-contract-check">
+                                <input type="checkbox" id="tfp-contract-agree" name="contract_agreed" required>
                                 <span>Patvirtinu, kad perskaičiau ir <strong>sutinku su oficialia TFP sutartimi</strong>, autorinių teisių ir Model Release sąlygomis. *</span>
                             </label>
                         </div>
@@ -705,11 +612,10 @@
         </div>
 
         <!-- TFP Reviews Section -->
-        <section id="tfp-reviews-section" class="reviews-section fade-in-up" style="margin-top: 80px; margin-bottom: 50px;">
+        <section id="tfp-reviews-section" class="reviews-section fade-in-up" style="margin-top: var(--sp-6);">
             <div class="reviews-header">
                 <span class="section-tag">Atsiliepimai</span>
-                <h2>TFP Modelių & Dalyvių Įspūdžiai</h2>
-                <div class="divider"></div>
+                <h2>TFP Modelių &amp; Dalyvių Įspūdžiai</h2>
                 <p>Ką apie kūrybinį procesą ir gautus kadrus sako ankstesnių TFP fotosesijų dalyviai.</p>
             </div>
             <div id="tfp-reviews-grid" class="reviews-grid">
@@ -718,19 +624,39 @@
         </section>
     </main>
 
-    <!-- Minimalist Luxury Footer -->
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-legal-links">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="index.html">Darbai</a>
+                    <a href="tfp-booking.html">TFP Registracija</a>
+                    <a href="services.html">Paslaugos</a>
+                    <a href="biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="about.html">Apie</a>
+                    <a href="contacts.html">Kontaktai</a>
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
                 </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
                 <div class="footer-min-langs-group">
-                    <div class="footer-lang-divider" aria-hidden="true"></div>
                     <div class="footer-min-langs">
-                        <a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
+<a href="https://portfolio.dominikphotofficial.lt/tfp-booking.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/tfp-booking.html">EN</a>
                         <a href="https://pl.dominikphotofficial.lt/tfp-booking.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/tfp-booking.html">RU</a>
@@ -741,22 +667,21 @@
         </div>
     </footer>
 
-    <!-- Full Lightbox for TFP image viewing -->
     <div id="lightbox" class="lightbox">
         <div class="lightbox-top">
             <span id="lightbox-counter"></span>
-            <button class="lightbox-close" aria-label="Uždaryti">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button type="button" class="lightbox-close" aria-label="Uždaryti">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
-        <button class="lightbox-prev" aria-label="Ankstesnė">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <button type="button" class="lightbox-prev" aria-label="Ankstesnė">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="lightbox-image-wrapper">
             <img id="lightbox-img" src="" alt="TFP nuotraukos peržiūra">
         </div>
-        <button class="lightbox-next" aria-label="Kita">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <button type="button" class="lightbox-next" aria-label="Kita">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 
@@ -1071,49 +996,48 @@
     </script>
 
     <!-- Modal: TFP Sutartis & Model Release -->
-    <div id="tfp-terms-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
-        <div style="background: #ffffff; width: 100%; max-width: 680px; max-height: 85vh; border-radius: 8px; overflow-y: auto; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; color: #111; line-height: 1.5; font-size: 13.5px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #113939; padding-bottom: 12px; margin-bottom: 16px;">
-                <h3 style="margin: 0; color: #113939; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">
-                    📜 TFP Sutartis & Model Release Sąlygos
+    <div id="tfp-terms-modal" style="display: none; position: fixed; inset: 0; background: rgba(17, 17, 17, 0.7); z-index: 99999; align-items: center; justify-content: center; padding: var(--sp-3);">
+        <div style="background: var(--bg); width: 100%; max-width: 680px; max-height: 85vh; border-radius: var(--radius); border: 1px solid var(--border); overflow-y: auto; padding: var(--sp-4); font-family: var(--font); color: var(--text); line-height: var(--lh); font-size: var(--fs-base);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: var(--sp-3); margin-bottom: var(--sp-3);">
+                <h3 style="margin: 0; color: var(--text); font-size: var(--fs-lg); font-weight: var(--fw-bold);">
+                    📜 TFP Sutartis &amp; Model Release Sąlygos
                 </h3>
-                <button type="button" onclick="closeTfpContractTermsModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666; line-height: 1;">&times;</button>
+                <button type="button" onclick="closeTfpContractTermsModal()" style="background: none; border: none; min-width: 44px; min-height: 44px; font-size: 24px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
             </div>
             
-            <div style="margin-bottom: 14px; font-size: 12px; color: #555; background: #fafafa; padding: 8px 12px; border-radius: 4px; border: 1px solid #eee;">
+            <div style="margin-bottom: var(--sp-3); font-size: var(--fs-sm); color: var(--text-muted); padding: var(--sp-2) var(--sp-3); border-radius: var(--radius); border: 1px solid var(--border);">
                 Fotografas: <strong>Dominik Šuškevič</strong> (DP.PORTFOLIO) &bull; EVRK 74.20 Fotografavimo veikla &bull; Kaunas, Lietuva
             </div>
 
-            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">1. Sutarties Dalykas ir Sąlygos</h4>
-            <p style="margin: 0 0 10px 0;">
+            <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">1. Sutarties Dalykas ir Sąlygos</h4>
+            <p style="margin: 0 0 var(--sp-3); color: var(--text-muted);">
                 TFP (Time for Print) – tai kūrybinis bendradarbiavimas tarp modelio ir fotografo. Abi šalys neatlygintinai skiria savo laiką ir kūrybines pastangas bendram fotosesijos projektui realizuoti.
             </p>
 
-            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">2. Rezultato Perdavimas</h4>
-            <p style="margin: 0 0 10px 0;">
+            <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">2. Rezultato Perdavimas</h4>
+            <p style="margin: 0 0 var(--sp-3); color: var(--text-muted);">
                 Fotografas įsipareigoja atrinkti, profesionaliai retušuoti ir perduoti modeliui ne mažiau kaip <strong>25 didelės raiškos skaitmenines nuotraukas</strong> privačioje internetinėje „Wfolio“ galerijoje per <strong>7–14 darbo dienų</strong> po fotosesijos. Neapdoroti „RAW“ failai nėra perduodami.
             </p>
 
-            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">3. Autorinės Teisės ir Nuotraukų Naudojimas (Model Release)</h4>
-            <p style="margin: 0 0 10px 0;">
+            <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">3. Autorinės Teisės ir Nuotraukų Naudojimas (Model Release)</h4>
+            <p style="margin: 0 0 var(--sp-3); color: var(--text-muted);">
                 &bull; Turtinės ir neturtinės autorinės teisės į sukurtas fotografijas priklauso fotografui Dominik Šuškevič.<br>
                 &bull; Modelis gauna neterminuotą teisę naudoti nuotraukas asmeniniais nekomerciniais tikslais (asmeniniams socialiniams tinklams, asmeniniam modelio portfolio), žymint fotografą: <strong>@dominikphotofficial</strong>.<br>
                 &bull; Fotografas įgyja teisę publikuoti nuotraukas savo profesiniame portfolio, parodose ir socialiniuose tinkluose.<br>
                 &bull; Nei viena šalis neturi teisės parduoti nuotraukų tretiesiems asmenims ar fotobankams (Stock) be atskiro raštiško susitarimo.
             </p>
 
-            <h4 style="color: #113939; margin: 16px 0 6px 0; font-size: 14px; text-transform: uppercase;">4. Laikas ir Datos Perkėlimas</h4>
-            <p style="margin: 0 0 16px 0;">
+            <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">4. Laikas ir Datos Perkėlimas</h4>
+            <p style="margin: 0 0 var(--sp-3); color: var(--text-muted);">
                 Dėl nepalankių oro sąlygų ar nenumatytų aplinkybių fotosesijos data suderinama ir perkeliama į kitą abiem pusėms tinkamą dieną be jokių baudų ar atskaitymų.
             </p>
 
-            <div style="text-align: right; border-top: 1px solid #eee; padding-top: 16px; margin-top: 20px;">
-                <button type="button" onclick="closeTfpContractTermsModal()" style="background: #113939; color: #ffffff; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">
+            <div style="text-align: right; border-top: 1px solid var(--border); padding-top: var(--sp-3); margin-top: var(--sp-3);">
+                <button type="button" onclick="closeTfpContractTermsModal()" class="btn-primary">
                     Supratau ir Sutinku
                 </button>
             </div>
         </div>
     </div>
-    </script>
 </body>
 </html>

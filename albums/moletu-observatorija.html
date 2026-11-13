@@ -14,106 +14,198 @@
     <meta property="og:image" content="https://i.postimg.cc/3x3PgfJH/Teleskopas-165-cm.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
 </head>
-<body class="theme-cosmic">
-    <div id="preloader" data-nosnippet><div class="loader"></div></div>
+<body class="has-hero series-urban">
     <header id="main-header">
-        <a href="../index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="../index.html" class="nav-link">Darbai</a>
-            <a href="../services.html" class="nav-link">Paslaugos</a>
-            <a href="../biography.html" class="nav-link">Biografija</a>
-            <a href="../about.html" class="nav-link">Apie</a>
-            <a href="../contacts.html" class="nav-link">Kontaktai</a>
-            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-container">
+            <a href="../index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/albums/moletu-observatorija.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/albums/moletu-observatorija.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/albums/moletu-observatorija.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/albums/moletu-observatorija.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/albums/moletu-observatorija.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="../index.html" class="nav-link">Darbai</a>
-            <a href="../services.html" class="nav-link">Paslaugos</a>
-            <a href="../biography.html" class="nav-link">Biografija</a>
-            <a href="../about.html" class="nav-link">Apie</a>
-            <a href="../contacts.html" class="nav-link">Kontaktai</a>
-            <a href="../tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-    </div>
-    <section class="container" style="padding-top: 140px;">
-        <div class="fade-in-up" style="margin-bottom: 50px; text-align: center;">
-            <div class="cosmic-hero-badge">🔭 CELESTIAL & DEEP SPACE OBSERVATORY</div>
-            <h1 style="font-family: 'Jost'; text-transform: uppercase; margin-bottom: 15px; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: 5px; color: #FFFFFF; font-weight: 300;">
-                Molėtų observatorija
-            </h1>
-            <p style="font-family: 'Jost'; font-weight: 400; letter-spacing: 4px; margin-bottom: 20px; color: #A5B4FC; text-transform: uppercase; font-size: 0.95rem;">Kulionys, Molėtų r. &bull; 165 cm teleskopas</p>
-            <div class="divider" style="background: rgba(129, 140, 248, 0.4);"></div>
-            <p style="color: #CBD5E1; max-width: 680px; margin: 0 auto; line-height: 1.85; font-size: 1.1rem; font-family: 'Josefin Sans'; font-weight: 300;">
-                Molėtų astronomijos observatorija, įsikūrusi Kulionių kaime ant Kaldinių kalvos – pagrindinė Lietuvos kosmoso mokslo tvirtovė. Čia veikia galingiausi Šiaurės Europoje teleskopai, žvelgiantys į tolimąsias galaktikas bei žvaigždžių spiečius.
-            </p>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="../index.html" class="nav-link active"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="../tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="../services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="../biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="../about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="../contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="../privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="../terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/albums/moletu-observatorija.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/albums/moletu-observatorija.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/albums/moletu-observatorija.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/albums/moletu-observatorija.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/albums/moletu-observatorija.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
+            </div>
         </div>
-        <div class="gallery-grid">
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/3x3PgfJH/Teleskopas-165-cm.png" loading="lazy" alt="Teleskopas 165 cm 1"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/RV7kJxmR/Teleskopas-165-cm-02.png" loading="lazy" alt="Teleskopas 165 cm 2"></div>
-            <div class="gallery-item fade-in-up"><img src="https://i.postimg.cc/JzKSK3GH/Teleskopas-165-cm-03.png" loading="lazy" alt="Teleskopas 165 cm 3"></div>
+    </div>
+
+    <section class="album-hero">
+        <img src="https://i.postimg.cc/3x3PgfJH/Teleskopas-165-cm.png" alt="Molėtų observatorija" class="album-hero-img">
+        <div class="album-hero-scrim" aria-hidden="true"></div>
+        <div class="album-hero-inner">
+            <a href="../index.html" class="album-back-link">&larr; Albumai</a>
+            <span class="album-hero-sub">Mokslas · 3 kadrai</span>
+            <h1 class="album-hero-title">Molėtų observatorija</h1>
         </div>
     </section>
 
-    <!-- Minimalist Single-Direction Luxury Footer -->
+    <section class="album-intro fade-in-up">
+        <div class="album-intro-grid">
+            <div class="album-intro-copy">
+<span class="album-kicker">🔭 CELESTIAL &amp; DEEP SPACE OBSERVATORY</span>
+        <h2>Molėtų observatorija</h2>
+        <div class="divider"></div>
+        <p>Molėtų astronomijos observatorija, įsikūrusi Kulionių kaime ant Kaldinių kalvos – pagrindinė Lietuvos kosmoso mokslo tvirtovė. Čia veikia galingiausi Šiaurės Europoje teleskopai, žvelgiantys į tolimąsias galaktikas bei žvaigždžių spiečius.</p>
+            </div>
+            <div class="album-intro-meta">
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Apimtis</span>
+                    <span class="album-info-value">3 kadrų</span>
+                </div>
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Vieta</span>
+                    <span class="album-info-value">Kulionys, Molėtų r.</span>
+                </div>
+                <div class="album-intro-meta-row">
+                    <span class="album-info-label">Autorius</span>
+                    <span class="album-info-value">Dominik Šuškevič</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <div class="gallery-grid">
+            <div class="gallery-item fade-in-up"><img decoding="async" src="https://i.postimg.cc/3x3PgfJH/Teleskopas-165-cm.png" loading="lazy" alt="Teleskopas 165 cm 1"></div>
+            <div class="gallery-item fade-in-up"><img decoding="async" src="https://i.postimg.cc/RV7kJxmR/Teleskopas-165-cm-02.png" loading="lazy" alt="Teleskopas 165 cm 2"></div>
+            <div class="gallery-item fade-in-up"><img decoding="async" src="https://i.postimg.cc/JzKSK3GH/Teleskopas-165-cm-03.png" loading="lazy" alt="Teleskopas 165 cm 3"></div>
+        </div>
+    </main>
+
+    <section class="album-info-section fade-in-up">
+        <div class="album-info-band">
+            <div class="album-info-grid">
+                <div class="album-info-col">
+                    <span class="album-info-label">Vieta &amp; Objektas</span>
+                    <span class="album-info-value">Kulionys, Molėtų r. &bull; 165 cm teleskopas</span>
+                </div>
+                <div class="album-info-col">
+                    <span class="album-info-label">Autorius</span>
+                    <span class="album-info-value">Dominik Šuškevič &bull; DP.PORTFOLIO</span>
+                </div>
+                <div class="album-info-col">
+                    <span class="album-info-label">Galerija</span>
+                    <span class="album-info-value">3 kadrai &bull; <a href="../index.html" class="album-info-link">Visi albumai &rarr;</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <a href="gandras.html" class="next-album-strip" style="--next-tint: #eef4f2; --next-accent: #2f6b64;">
+        <div class="next-album-inner">
+            <div>
+                <span class="next-album-kicker">Kitas albumas</span>
+                <h2 class="next-album-title">Gandras</h2>
+            </div>
+            <span class="next-album-arrow" aria-hidden="true">&rarr;</span>
+        </div>
+    </a>
+
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-accent-bar"></div>
-            <div class="footer-min-name">Dominik Šuškevič</div>
-            <p class="footer-min-tagline">Molėtų Observatorija &bull; Naktinė Fotografija &bull; Lietuva</p>
-            
-            <nav class="footer-min-nav">
-                <a href="../index.html">Darbai</a>
-                <a href="car-meet-2026-05-26.html">Car Meet</a>
-                <a href="../services.html">Paslaugos</a>
-                <a href="../tfp-booking.html">TFP</a>
-                <a href="../contacts.html">Kontaktai</a>
-            </nav>
-
-            <div class="footer-min-contact-row">
-                <a href="mailto:dominikphotofficial.lt@gmail.com" class="footer-color-link">dominikphotofficial.lt@gmail.com</a>
-                <span class="footer-min-bullet">&bull;</span>
-                <a href="https://www.instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer" class="footer-color-link">@dominikphotofficial</a>
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="../index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="../index.html">Darbai</a>
+                    <a href="../tfp-booking.html">TFP Registracija</a>
+                    <a href="../services.html">Paslaugos</a>
+                    <a href="../biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="../about.html">Apie</a>
+                    <a href="../contacts.html">Kontaktai</a>
+                    <a href="../privacy-policy.html">Privatumo Politika</a>
+                    <a href="../terms-of-service.html">Paslaugų Sąlygos</a>
+                </div>
             </div>
-
             <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-min-langs">
-                    <a href="../index.html" class="active">LT</a>
-                    <a href="https://en.dominikphotofficial.lt">EN</a>
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
+                <div class="footer-min-langs-group">
+                    <div class="footer-min-langs">
+<a href="https://portfolio.dominikphotofficial.lt/albums/moletu-observatorija.html" class="active">LT</a>
+                        <a href="https://en.dominikphotofficial.lt/albums/moletu-observatorija.html">EN</a>
+                        <a href="https://pl.dominikphotofficial.lt/albums/moletu-observatorija.html">PL</a>
+                        <a href="https://ru.dominikphotofficial.lt/albums/moletu-observatorija.html">RU</a>
+                        <a href="https://kr.dominikphotofficial.lt/albums/moletu-observatorija.html">KR</a>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <div id="lightbox" class="lightbox">
+    <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-top">
             <span id="lightbox-counter"></span>
-            <button class="lightbox-close" aria-label="Uždaryti">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button type="button" class="lightbox-close" aria-label="Uždaryti">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
-        <button class="lightbox-prev" aria-label="Ankstesnė">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <button type="button" class="lightbox-prev" aria-label="Ankstesnė nuotrauka">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="lightbox-image-wrapper">
-            <img id="lightbox-img" src="" alt="Nuotrauka">
+            <img id="lightbox-img" src="" alt="">
         </div>
-        <button class="lightbox-next" aria-label="Kita">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <button type="button" class="lightbox-next" aria-label="Kita nuotrauka">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 

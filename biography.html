@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominik Šuškevič | Biografija | DP.PORTFOLIO</title>
     <meta name="description" content="Dominik Šuškevič – fotografas ir filmmakeris. Sužinokite apie kūrybinį kelią, pasiekimus ir ateities planus vizualiojo meno srityje.">
     <meta name="keywords" content="Dominik Šuškevič, biografija, fotografas, filmmaker, kinematografija, Kaunas, Frozen Time, Ąžuolynas International Film Festival">
@@ -15,7 +15,7 @@
     <meta property="og:image" content="https://i.postimg.cc/GtJB0hqn/Portrait-nuotrauka-1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <script type="application/ld+json">
@@ -30,300 +30,324 @@
     }
     </script>
     <style>
-        .bio-lead-text {
-            font-family: var(--font-body);
-            font-size: 1.08rem;
-            line-height: 1.85;
-            color: #1A2B2B;
-            font-weight: 300;
-        }
-        .bio-metric-card {
-            background: #F8FAF9;
-            border: 1px solid rgba(17, 57, 57, 0.08);
-            border-radius: 4px;
-            padding: 16px 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .bio-metric-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(17, 57, 57, 0.06);
-            border-color: rgba(17, 57, 57, 0.2);
-        }
-        .bio-metric-num {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            color: #113939;
-            font-weight: 400;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-        .bio-metric-label {
-            font-family: var(--font-heading);
-            font-size: 0.72rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: #607272;
-        }
-        .bio-chapter-card {
-            background: #ffffff;
-            border: 1px solid rgba(17, 57, 57, 0.08);
-            padding: clamp(28px, 4vw, 48px);
-            border-radius: 4px;
-            box-shadow: 0 4px 25px rgba(17, 57, 57, 0.03);
-            transition: box-shadow 0.3s ease;
-        }
-        .bio-chapter-card:hover {
-            box-shadow: 0 10px 35px rgba(17, 57, 57, 0.06);
-        }
-        .bio-chapter-highlight {
-            background: linear-gradient(135deg, #090B0E 0%, #111A17 100%);
-            color: #F1EFEA;
-            border: 1px solid rgba(17, 57, 57, 0.3);
-            padding: clamp(30px, 4.5vw, 52px);
-            border-radius: 4px;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
-        }
-        .timeline-step-badge {
-            display: inline-flex;
+        .bio-profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-5);
             align-items: center;
+            margin-bottom: var(--sp-6);
+        }
+        @media (min-width: 768px) {
+            .bio-profile-grid {
+                grid-template-columns: 360px 1fr;
+            }
+        }
+        .bio-portrait-frame {
+            width: 100%;
+            max-width: 360px;
+            aspect-ratio: 4 / 5;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--border);
+            margin-inline: auto;
+        }
+        .bio-portrait-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .bio-portrait-caption {
+            margin-top: var(--sp-2);
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .bio-facts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-3);
+            padding-top: var(--sp-3);
+            border-top: 1px solid var(--border);
+        }
+        @media (min-width: 640px) {
+            .bio-facts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .bio-fact-label {
+            display: block;
+            font-size: var(--fs-xs);
+            color: var(--text-muted);
+            margin-bottom: var(--sp-1);
+        }
+        .bio-fact-val {
+            font-size: var(--fs-base);
+            font-weight: var(--fw-medium);
+            color: var(--text);
+        }
+        .bio-chapters {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-4);
+        }
+        .bio-chapter-head {
+            display: flex;
+            align-items: baseline;
+            gap: var(--sp-2);
+            margin-bottom: var(--sp-2);
+        }
+        .bio-chapter-num {
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-bold);
+            color: var(--accent);
+        }
+        .bio-chapter-head h2 {
+            font-size: var(--fs-lg);
+        }
+        .bio-chapter p + p {
+            margin-top: var(--sp-3);
+        }
+        .bio-film-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-4);
+            align-items: center;
+            margin-top: var(--sp-3);
+        }
+        @media (min-width: 768px) {
+            .bio-film-grid {
+                grid-template-columns: 1.4fr 280px;
+            }
+        }
+        .bio-poster-link {
+            display: block;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            max-width: 280px;
+            margin-inline: auto;
+        }
+        .bio-quote-block {
+            text-align: center;
+            padding-block: var(--sp-5);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .bio-quote-text {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-medium);
+            color: var(--text);
+            margin-bottom: var(--sp-2);
+        }
+        .bio-quote-author {
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+        }
+        .bio-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--sp-3);
             justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(17, 57, 57, 0.08);
-            color: #113939;
-            font-family: var(--font-heading);
-            font-size: 0.95rem;
-            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div id="preloader" data-nosnippet><div class="loader"></div></div>
-    
     <header id="main-header">
-        <a href="index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link active">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumas</a>
-            <a href="terms-of-service.html" class="nav-link">Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-container">
+            <a href="index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/biography.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/biography.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/biography.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/biography.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/biography.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
-    
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link active">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumo Politika</a>
-            <a href="terms-of-service.html" class="nav-link">Paslaugų Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-    </div>
-    
-    <!-- Editorial Biography Main Section -->
-    <main class="container" style="padding-top: 130px; padding-bottom: 90px; max-width: 1200px; margin: 0 auto; padding-left: clamp(20px, 4vw, 40px); padding-right: clamp(20px, 4vw, 40px);">
-        
-        <!-- Hero Editorial Profile Card -->
-        <section class="fade-in-up" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(35px, 5vw, 65px); align-items: center; margin-bottom: 70px; background: #ffffff; border: 1px solid rgba(17, 57, 57, 0.1); padding: clamp(28px, 4vw, 55px); border-radius: 4px; box-shadow: 0 10px 40px rgba(17, 57, 57, 0.04);">
-            
-            <!-- Portrait Column -->
-            <div style="position: relative; text-align: center;">
-                <div style="position: relative; width: 100%; max-width: 380px; margin: 0 auto; aspect-ratio: 4/5; border-radius: 3px; overflow: hidden; box-shadow: 0 15px 45px rgba(17, 57, 57, 0.12); border: 1px solid rgba(17, 57, 57, 0.15);">
-                    <img src="https://i.postimg.cc/GtJB0hqn/Portrait-nuotrauka-1.jpg" alt="Dominik Šuškevič — Portretas" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: contrast(1.03);">
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 18px 20px; background: linear-gradient(to top, rgba(9, 11, 14, 0.85) 0%, transparent 100%); color: #ffffff; text-align: left;">
-                        <span style="font-family: var(--font-heading); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.85;">Dominik Šuškevič</span>
-                        <div style="font-size: 0.82rem; font-weight: 300; opacity: 0.95;">Autorinė Fotografija & Kinematografija</div>
-                    </div>
+
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="biography.html" class="nav-link active"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="contacts.html" class="nav-link"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/biography.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/biography.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/biography.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/biography.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/biography.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Profile Info Column -->
+    <main class="container">
+        <section class="card-surface bio-profile-grid fade-in-up">
             <div>
-                <div style="display: inline-block; font-family: var(--font-heading); font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px; font-weight: 600;">
-                    Autoriaus Dosjė &bull; Kūrybos Kelias
+                <div class="bio-portrait-frame">
+                    <img src="https://i.postimg.cc/GtJB0hqn/Portrait-nuotrauka-1.jpg" alt="Dominik Šuškevič — Portretas">
                 </div>
-                <h1 style="font-family: var(--font-heading); text-transform: uppercase; font-size: clamp(2.1rem, 4.5vw, 3.2rem); letter-spacing: 4px; font-weight: 400; color: #113939; margin: 0 0 10px 0; line-height: 1.15;">
-                    Dominik Šuškevič
-                </h1>
-                <p style="font-family: var(--font-heading); font-size: 0.92rem; letter-spacing: 2.5px; text-transform: uppercase; color: #2A5C5C; margin: 0 0 24px 0; font-weight: 500;">
-                    Fotografas & Filmmaker &bull; Kaunas & Lietuva
-                </p>
+                <p class="bio-portrait-caption">Dominik Šuškevič &middot; Autorinė Fotografija &amp; Kinematografija</p>
+            </div>
 
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.8; color: #1A2B2B; font-weight: 300; margin-bottom: 30px;">
+            <div>
+                <span class="feature-kicker" style="display: block; margin-bottom: var(--sp-2);">Autoriaus Dosjė &middot; Kūrybos Kelias</span>
+                <h1 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Dominik Šuškevič</h1>
+                <p style="font-size: var(--fs-sm); color: var(--text-muted); margin-bottom: var(--sp-3);">Fotografas &amp; Filmmaker &middot; Kaunas &amp; Lietuva</p>
+
+                <p style="margin-bottom: var(--sp-4);">
                     Kūryba mano gyvenime atsirado kaip būdas suprasti, pajusti ir įamžinti aplinkinį pasaulį. Kiekvienas kadras ar vaizdo įrašas man yra unikali galimybė sustabdyti laiką ir atverti tai, kas plika akimi dažnai lieka nepastebėta.
                 </p>
 
-                <!-- Key Facts Grid -->
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding-top: 18px; border-top: 1px solid rgba(17, 57, 57, 0.1);">
+                <div class="bio-facts-grid">
                     <div>
-                        <span style="display: block; font-family: var(--font-heading); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: #607272; margin-bottom: 3px;">Gimimo data</span>
-                        <strong style="font-family: var(--font-body); font-size: 0.95rem; color: #113939; font-weight: 500;">2011 m. spalio 5 d.</strong>
+                        <span class="bio-fact-label">Gimimo data</span>
+                        <span class="bio-fact-val">2011 m. spalio 5 d.</span>
                     </div>
                     <div>
-                        <span style="display: block; font-family: var(--font-heading); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: #607272; margin-bottom: 3px;">Kilmė</span>
-                        <strong style="font-family: var(--font-body); font-size: 0.95rem; color: #113939; font-weight: 500;">Švenčionėliai, Lietuva</strong>
+                        <span class="bio-fact-label">Kilmė</span>
+                        <span class="bio-fact-val">Švenčionėliai, Lietuva</span>
                     </div>
                     <div>
-                        <span style="display: block; font-family: var(--font-heading); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: #607272; margin-bottom: 3px;">Pagrindinė lokacija</span>
-                        <strong style="font-family: var(--font-body); font-size: 0.95rem; color: #113939; font-weight: 500;">Kaunas</strong>
+                        <span class="bio-fact-label">Pagrindinė lokacija</span>
+                        <span class="bio-fact-val">Kaunas</span>
                     </div>
                     <div>
-                        <span style="display: block; font-family: var(--font-heading); font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: #607272; margin-bottom: 3px;">Veiklos kryptys</span>
-                        <strong style="font-family: var(--font-body); font-size: 0.95rem; color: #113939; font-weight: 500;">Fotografija & Kinematografija</strong>
+                        <span class="bio-fact-label">Veiklos kryptys</span>
+                        <span class="bio-fact-val">Fotografija &amp; Kinematografija</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Structured Editorial Chapters -->
-        <div style="display: flex; flex-direction: column; gap: 50px;">
-
-            <!-- Chapter 01: Asmenybė ir Vizija -->
-            <article class="fade-in-up" style="background: #ffffff; border: 1px solid rgba(17, 57, 57, 0.08); padding: clamp(26px, 3.5vw, 45px); border-radius: 4px; box-shadow: 0 4px 20px rgba(17, 57, 57, 0.02);">
-                <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px;">
-                    <span style="font-family: var(--font-heading); font-size: 1.3rem; color: #113939; font-weight: 600; opacity: 0.5;">01</span>
-                    <h2 style="font-family: var(--font-heading); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 2.5px; color: #113939; margin: 0; font-weight: 500;">
-                        Asmenybė ir Kūrybinė Vizija
-                    </h2>
+        <div class="bio-chapters">
+            <article class="card-surface bio-chapter fade-in-up">
+                <div class="bio-chapter-head">
+                    <span class="bio-chapter-num">01</span>
+                    <h2>Asmenybė ir Kūrybinė Vizija</h2>
                 </div>
-                <div style="width: 40px; height: 1.5px; background: #113939; margin-bottom: 22px;"></div>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0 0 16px 0;">
-                    Nors šiuo metu gyvenu ir aktyviai kuriu Kaune, mano didžiausias vidinis įkvėpimo šaltinis išlieka gimtasis Švenčionių kraštas – jo miškai, upių vingiai ir natūrali ramybė. 
-                </p>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0;">
-                    Savo darbuose neapsiriboju viena siaura kryptimi. Man vienodai svarbu perteikti tiek gilią gamtos tylą (žirgai prie Žeimenos, paukščiai, botanikos sodai), tiek šiuolaikinio didmiesčio ritmą (automobilių kultūra, naktinės šviesos, architektūra). Kiekvienas kūrinys yra dialogas tarp autoriaus matymo ir akimirkos autentiškumo.
-                </p>
+                <p>Nors šiuo metu gyvenu ir aktyviai kuriu Kaune, mano didžiausias vidinis įkvėpimo šaltinis išlieka gimtasis Švenčionių kraštas – jo miškai, upių vingiai ir natūrali ramybė.</p>
+                <p>Savo darbuose neapsiriboju viena siaura kryptimi. Man vienodai svarbu perteikti tiek gilią gamtos tylą (žirgai prie Žeimenos, paukščiai, botanikos sodai), tiek šiuolaikinio didmiesčio ritmą (automobilių kultūra, naktinės šviesos, architektūra). Kiekvienas kūrinys yra dialogas tarp autoriaus matymo ir akimirkos autentiškumo.</p>
             </article>
 
-            <!-- Chapter 02: Kūrybinis Kelias -->
-            <article class="fade-in-up" style="background: #ffffff; border: 1px solid rgba(17, 57, 57, 0.08); padding: clamp(26px, 3.5vw, 45px); border-radius: 4px; box-shadow: 0 4px 20px rgba(17, 57, 57, 0.02);">
-                <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px;">
-                    <span style="font-family: var(--font-heading); font-size: 1.3rem; color: #113939; font-weight: 600; opacity: 0.5;">02</span>
-                    <h2 style="font-family: var(--font-heading); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 2.5px; color: #113939; margin: 0; font-weight: 500;">
-                        Kūrybinis Kelias (Nuo 2023 m.)
-                    </h2>
+            <article class="card-surface bio-chapter fade-in-up">
+                <div class="bio-chapter-head">
+                    <span class="bio-chapter-num">02</span>
+                    <h2>Kūrybinis Kelias (Nuo 2023 m.)</h2>
                 </div>
-                <div style="width: 40px; height: 1.5px; background: #113939; margin-bottom: 22px;"></div>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0 0 16px 0;">
-                    Nuo 2023 metų pradėjau nuosekliai ir aktyviai gilintis į fotografijos amatą bei vaizdo įrašų kūrimą. Per trumpą laiką asmeninis pomėgis išaugo į brandžią kūrybinę veiklą, apimančią asmenines fotosesijas, renginių reportažus, TFP projektus ir meninius kino eksperimentus.
-                </p>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0;">
-                    Kiekvienas projektas leido tobulinti optikos valdymą, šviesos pajautimą ir kompozicijos discipliną, formuojant savitą autorinį braižą, pasižymintį natūraliomis spalvomis ir emociniu gilumu.
-                </p>
+                <p>Nuo 2023 metų pradėjau nuosekliai ir aktyviai gilintis į fotografijos amatą bei vaizdo įrašų kūrimą. Per trumpą laiką asmeninis pomėgis išaugo į brandžią kūrybinę veiklą, apimančią asmenines fotosesijas, renginių reportažus, TFP projektus ir meninius kino eksperimentus.</p>
+                <p>Kiekvienas projektas leido tobulinti optikos valdymą, šviesos pajautimą ir kompozicijos discipliną, formuojant savitą autorinį braižą, pasižymintį natūraliomis spalvomis ir emociniu gilumu.</p>
             </article>
 
-            <!-- Chapter 03: Filmo „Frozen Time: What If“ Triumfas -->
-            <article class="fade-in-up" style="background: linear-gradient(135deg, #090B0E 0%, #111A17 100%); color: #F1EFEA; border: 1px solid rgba(17, 57, 57, 0.3); padding: clamp(28px, 4vw, 50px); border-radius: 4px; box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);">
-                <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px;">
-                    <span style="font-family: var(--font-heading); font-size: 1.3rem; color: #2A5C5C; font-weight: 600;">03</span>
-                    <h2 style="font-family: var(--font-heading); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 2.5px; color: #ffffff; margin: 0; font-weight: 500;">
-                        Filmas „Frozen Time: What If“ — Festivalio Triumfas
-                    </h2>
+            <article class="card-surface bio-chapter fade-in-up">
+                <div class="bio-chapter-head">
+                    <span class="bio-chapter-num">03</span>
+                    <h2>Filmas „Frozen Time: What If“ — Festivalio Triumfas</h2>
                 </div>
-                <div style="width: 40px; height: 1.5px; background: #2A5C5C; margin-bottom: 24px;"></div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: center;">
+                <p style="font-size: var(--fs-sm); color: var(--accent); font-weight: var(--fw-medium);">1-oji Vieta &middot; Tarptautinis Kino Festivalis</p>
+                <div class="bio-film-grid">
                     <div>
-                        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(17, 57, 57, 0.35); border: 1px solid rgba(42, 92, 92, 0.6); padding: 6px 14px; border-radius: 2px; font-family: var(--font-heading); font-size: 0.74rem; letter-spacing: 2px; text-transform: uppercase; color: #E5ECE9; margin-bottom: 18px;">
-                            🏆 1-oji Vieta &bull; Tarptautinis Kino Festivalis
-                        </div>
-                        <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: rgba(241, 239, 234, 0.9); font-weight: 300; margin-bottom: 16px;">
+                        <p style="margin-bottom: var(--sp-3);">
                             Didžiausias kinematografinis pasiekimas iki šiol – autorinis filmas <strong>„Frozen Time: What If“</strong>, kuris <strong>2026 m. balandžio 30 d.</strong> tarptautiniame „Ąžuolyno“ kino festivalyje (Kauno tarptautinė gimnazija) laimėjo <strong>I-ąją vietą</strong> studentų kategorijoje.
                         </p>
-                        <p style="font-family: var(--font-body); font-size: 1.02rem; line-height: 1.8; color: rgba(241, 239, 234, 0.78); font-weight: 300; margin-bottom: 24px;">
+                        <p style="color: var(--text-muted); margin-bottom: var(--sp-4);">
                             Nufilmuotas Cirkliškio dvaro apylinkėse, filmas tyrinėja atminties ir artumo jėgą amžino šalčio apsuptyje. Šis apdovanojimas tapo reikšmingu postūmiu mano režisūrinei ir kinematografinei veiklai.
                         </p>
-                        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-                            <a href="frozen-time.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 26px; background: #113939; color: #FFFFFF; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.78rem; text-decoration: none; border-radius: 2px; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-                                Plačiau apie filmą &rarr;
-                            </a>
-                            <a href="https://www.imdb.com/title/tt42315532/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 12px 22px; border: 1px solid rgba(241, 239, 234, 0.35); color: #F1EFEA; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; font-size: 0.78rem; text-decoration: none; border-radius: 2px; transition: border-color 0.3s;" onmouseover="this.style.borderColor='#ffffff'" onmouseout="this.style.borderColor='rgba(241, 239, 234, 0.35)'">
-                                IMDb Profilis &#8599;
-                            </a>
+                        <div class="feature-cta-row">
+                            <a href="frozen-time.html" class="btn-primary">Plačiau apie filmą &rarr;</a>
+                            <a href="https://www.imdb.com/title/tt42315532/" target="_blank" rel="noopener noreferrer" class="btn-secondary">IMDb Profilis &#8599;</a>
                         </div>
                     </div>
-                    <div style="text-align: center;">
-                        <a href="frozen-time.html" style="display: block; max-width: 320px; margin: 0 auto; border-radius: 3px; overflow: hidden; box-shadow: 0 10px 35px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                            <img src="https://i.postimg.cc/9FtL9g39/Frozen-Time-poster.png" alt="Frozen Time: What If Plakatas" style="width: 100%; height: auto; display: block;">
-                        </a>
-                    </div>
+                    <a href="frozen-time.html" class="bio-poster-link">
+                        <img src="https://i.postimg.cc/9FtL9g39/Frozen-Time-poster.png" alt="Frozen Time: What If Plakatas">
+                    </a>
                 </div>
             </article>
 
-            <!-- Chapter 04: Planai nuo 2026-ųjų -->
-            <article class="fade-in-up" style="background: #ffffff; border: 1px solid rgba(17, 57, 57, 0.08); padding: clamp(26px, 3.5vw, 45px); border-radius: 4px; box-shadow: 0 4px 20px rgba(17, 57, 57, 0.02);">
-                <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px;">
-                    <span style="font-family: var(--font-heading); font-size: 1.3rem; color: #113939; font-weight: 600; opacity: 0.5;">04</span>
-                    <h2 style="font-family: var(--font-heading); text-transform: uppercase; font-size: 1.35rem; letter-spacing: 2.5px; color: #113939; margin: 0; font-weight: 500;">
-                        Planai nuo 2026-ųjų (Ateities Horizontai)
-                    </h2>
+            <article class="card-surface bio-chapter fade-in-up">
+                <div class="bio-chapter-head">
+                    <span class="bio-chapter-num">04</span>
+                    <h2>Planai nuo 2026-ųjų (Ateities Horizontai)</h2>
                 </div>
-                <div style="width: 40px; height: 1.5px; background: #113939; margin-bottom: 22px;"></div>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0 0 16px 0;">
-                    2026-ieji žymi naują, ambicingą etapą mano kūryboje. Planuose – skirti dar daugiau dėmesio kinematografijai, gilesnių ir dramatiškesnių filmų scenarijams bei jų įgyvendinimui.
-                </p>
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.85; color: #222222; font-weight: 300; margin: 0;">
-                    Mano siekis – pasakoti vizualines istorijas, kurios peržengtų Lietuvos ribas ir rastų atgarsį platesnėje tarptautinėje auditorijoje. Nuosekliai tobulinu meistriškumą abiejose barikadų pusėse: tiek už fotoaparato objektyvo, tiek režisieriaus aikštelėje.
-                </p>
+                <p>2026-ieji žymi naują, ambicingą etapą mano kūryboje. Planuose – skirti dar daugiau dėmesio kinematografijai, gilesnių ir dramatiškesnių filmų scenarijams bei jų įgyvendinimui.</p>
+                <p>Mano siekis – pasakoti vizualines istorijas, kurios peržengtų Lietuvos ribas ir rastų atgarsį platesnėje tarptautinėje auditorijoje. Nuosekliai tobulinu meistriškumą abiejose barikadų pusėse: tiek už fotoaparato objektyvo, tiek režisieriaus aikštelėje.</p>
             </article>
 
-            <!-- Autoriaus Šūkis / Citata -->
-            <div class="fade-in-up" style="text-align: center; padding: 40px 20px; background: #FAFBFB; border-top: 1px solid rgba(17, 57, 57, 0.1); border-bottom: 1px solid rgba(17, 57, 57, 0.1); margin-top: 10px;">
-                <p style="font-family: var(--font-heading); font-style: italic; color: #113939; font-size: clamp(1.2rem, 2.5vw, 1.5rem); font-weight: 400; margin: 0 0 10px 0; letter-spacing: 1px;">
-                    „Kai atsiranda idėja – atsiranda energija.“
-                </p>
-                <span style="font-family: var(--font-heading); font-size: 0.78rem; letter-spacing: 2.5px; text-transform: uppercase; color: #607272;">
-                    &mdash; Dominik Šuškevič
-                </span>
+            <div class="bio-quote-block fade-in-up">
+                <p class="bio-quote-text">„Kai atsiranda idėja – atsiranda energija.“</p>
+                <span class="bio-quote-author">&mdash; Dominik Šuškevič</span>
             </div>
 
-            <!-- Greitos Nuorodos į Kūrinius -->
-            <div class="fade-in-up" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-                <a href="index.html" class="admin-btn" style="padding: 12px 28px; text-decoration: none; font-size: 0.82rem; letter-spacing: 2px;">
-                    Peržiūrėti Darbų Galeriją
-                </a>
-                <a href="services.html" class="admin-btn-outline" style="padding: 12px 28px; text-decoration: none; font-size: 0.82rem; letter-spacing: 2px; color: #113939; border-color: #113939;">
-                    Fotosesijų Paslaugos
-                </a>
-                <a href="tfp-booking.html" class="admin-btn-outline" style="padding: 12px 28px; text-decoration: none; font-size: 0.82rem; letter-spacing: 2px; color: #113939; border-color: #113939;">
-                    TFP Bendradarbiavimas
-                </a>
-                <a href="contacts.html" class="admin-btn-outline" style="padding: 12px 28px; text-decoration: none; font-size: 0.82rem; letter-spacing: 2px; color: #113939; border-color: #113939;">
-                    Susisiekti
-                </a>
+            <div class="bio-actions fade-in-up">
+                <a href="index.html" class="btn-primary">Peržiūrėti Darbų Galeriją</a>
+                <a href="services.html" class="btn-secondary">Fotosesijų Paslaugos</a>
+                <a href="tfp-booking.html" class="btn-secondary">TFP Bendradarbiavimas</a>
+                <a href="contacts.html" class="btn-secondary">Susisiekti</a>
             </div>
-
         </div>
     </main>
 
-    <!-- Minimalist Luxury Footer -->
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-legal-links">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="index.html">Darbai</a>
+                    <a href="tfp-booking.html">TFP Registracija</a>
+                    <a href="services.html">Paslaugos</a>
+                    <a href="biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="about.html">Apie</a>
+                    <a href="contacts.html">Kontaktai</a>
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
                 </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
                 <div class="footer-min-langs-group">
-                    <div class="footer-lang-divider" aria-hidden="true"></div>
                     <div class="footer-min-langs">
-                        <a href="https://portfolio.dominikphotofficial.lt/biography.html" class="active">LT</a>
+<a href="https://portfolio.dominikphotofficial.lt/biography.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/biography.html">EN</a>
                         <a href="https://pl.dominikphotofficial.lt/biography.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/biography.html">RU</a>

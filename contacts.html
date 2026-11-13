@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontaktai | DP.PORTFOLIO</title>
     <meta name="description" content="Susisiekite su DP.PORTFOLIO. Užsakykite fotosesiją, video paslaugas arba registruokitės TFP projektams Kaune bei Švenčionėliuose.">
     <meta name="keywords" content="kontaktai, fotografas, uzklausa, forma, Kaunas, Švenčionėliai, DP.PORTFOLIO">
@@ -10,74 +10,133 @@
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/contacts.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://iili.io/fjNLbs4.png">
     <style>
-        .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: start; max-width: 1200px; margin: 0 auto; }
-        .info-card { background: var(--surface-color); padding: 45px 35px; border-radius: 6px; border: 1px solid rgba(17, 57, 57, 0.06); box-shadow: 0 10px 30px rgba(17, 57, 57, 0.03); }
-        .info-group { margin-bottom: 25px; }
-        .info-label { display: block; font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent-light); margin-bottom: 8px; font-weight: 600; }
-        .info-value { font-family: var(--font-body); font-size: 1.15rem; color: var(--text-color); text-decoration: none; font-weight: 400; word-break: break-word; }
-        .form-card { background: #ffffff; padding: 45px 40px; border-radius: 6px; border: 1px solid rgba(17, 57, 57, 0.08); box-shadow: 0 15px 40px rgba(17, 57, 57, 0.04); }
-        .form-title { font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 3px; color: var(--accent-color); margin-bottom: 30px; font-weight: 300; text-align: center; }
-        .form-group { margin-bottom: 22px; }
-        .form-group label { display: block; font-family: var(--font-heading); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 8px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(17, 57, 57, 0.15); font-family: var(--font-body); font-size: 16px; outline: none; transition: border-color 0.3s; background: #ffffff; border-radius: 4px; box-sizing: border-box; color: var(--text-color); }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(17, 57, 57, 0.08); }
-        .contact-cta-btn { display: block; width: 100%; padding: 16px 20px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; text-align: center; text-decoration: none; border-radius: 4px; transition: all 0.3s; box-sizing: border-box; }
-        .btn-paid { background: var(--accent-color); color: #ffffff; border: 1px solid var(--accent-color); }
-        .btn-paid:hover { background: transparent; color: var(--accent-color); }
-        .btn-free { background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); }
-        .btn-free:hover { background: var(--accent-color); color: #ffffff; }
-        @media (max-width: 900px) {
-            .contact-grid { grid-template-columns: 1fr; gap: 30px; }
-            .form-card, .info-card { padding: 30px 22px; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sp-4);
+            align-items: start;
+        }
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr 1.3fr;
+            }
+        }
+        .info-card,
+        .form-card {
+            background: var(--bg);
+            padding: var(--sp-4);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        @media (min-width: 640px) {
+            .info-card,
+            .form-card {
+                padding: var(--sp-5);
+            }
+        }
+        .info-group {
+            padding-bottom: var(--sp-3);
+            margin-bottom: var(--sp-3);
+            border-bottom: 1px solid var(--border);
+        }
+        .info-label {
+            display: block;
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-medium);
+            color: var(--text-muted);
+            margin-bottom: var(--sp-1);
+        }
+        .info-value {
+            font-size: var(--fs-base);
+            color: var(--text);
+            overflow-wrap: anywhere;
+        }
+        .info-value:hover {
+            color: var(--accent);
+        }
+        .form-title {
+            font-size: var(--fs-lg);
+            margin-bottom: var(--sp-4);
+        }
+        .form-group {
+            margin-bottom: var(--sp-3);
+        }
+        .contact-cta-stack {
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-2);
+        }
+        .contact-cta-stack a {
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div id="preloader" data-nosnippet><div class="loader"></div></div>
-
     <header id="main-header">
-        <a href="index.html" class="logo">
-            <img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO">
-        </a>
-        <nav class="desktop-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link active">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumas</a>
-            <a href="terms-of-service.html" class="nav-link">Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
-        <div class="burger" id="burger-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-container">
+            <a href="index.html" class="logo" aria-label="DP.PORTFOLIO">
+                <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                <span class="logo-sub">Portfolio</span>
+            </a>
+            <div class="header-right">
+                <div class="header-langs" aria-label="Kalba">
+                    <a href="https://portfolio.dominikphotofficial.lt/contacts.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/contacts.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/contacts.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/contacts.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/contacts.html">KR</a>
+                </div>
+                <button type="button" class="burger" id="burger-menu" aria-label="Atidaryti meniu" aria-expanded="false" aria-controls="nav-overlay">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="nav-overlay" id="nav-overlay">
-        <nav class="mobile-nav">
-            <a href="index.html" class="nav-link">Darbai</a>
-            <a href="services.html" class="nav-link">Paslaugos</a>
-            <a href="biography.html" class="nav-link">Biografija</a>
-            <a href="about.html" class="nav-link">Apie</a>
-            <a href="contacts.html" class="nav-link active">Kontaktai</a>
-            <a href="privacy-policy.html" class="nav-link">Privatumo Politika</a>
-            <a href="terms-of-service.html" class="nav-link">Paslaugų Sąlygos</a>
-            <a href="tfp-booking.html" class="nav-link tfp-link">TFP Registracija</a>
-        </nav>
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+        <div class="nav-panel" role="dialog" aria-modal="true" aria-label="Navigacija">
+            <div>
+                <div class="nav-panel-top">
+                    <span class="nav-panel-label">Meniu</span>
+                    <button type="button" class="nav-close" id="nav-close" aria-label="Uždaryti meniu">&times;</button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-num">01</span><span class="nav-label-text">Darbai</span></a>
+                    <a href="tfp-booking.html" class="nav-link"><span class="nav-num">02</span><span class="nav-label-text">TFP Registracija</span></a>
+                    <a href="services.html" class="nav-link"><span class="nav-num">03</span><span class="nav-label-text">Paslaugos</span></a>
+                    <a href="biography.html" class="nav-link"><span class="nav-num">04</span><span class="nav-label-text">Biografija</span></a>
+                    <a href="about.html" class="nav-link"><span class="nav-num">05</span><span class="nav-label-text">Apie</span></a>
+                    <a href="contacts.html" class="nav-link active"><span class="nav-num">06</span><span class="nav-label-text">Kontaktai</span></a>
+                    <a href="privacy-policy.html" class="nav-link nav-secondary"><span class="nav-label-text">Privatumo Politika</span></a>
+                    <a href="terms-of-service.html" class="nav-link nav-secondary"><span class="nav-label-text">Paslaugų Sąlygos</span></a>
+                </nav>
+            </div>
+            <div class="nav-panel-footer">
+                <div class="nav-panel-langs" aria-label="Kalba">
+<a href="https://portfolio.dominikphotofficial.lt/contacts.html" class="active">LT</a>
+                    <a href="https://en.dominikphotofficial.lt/contacts.html">EN</a>
+                    <a href="https://pl.dominikphotofficial.lt/contacts.html">PL</a>
+                    <a href="https://ru.dominikphotofficial.lt/contacts.html">RU</a>
+                    <a href="https://kr.dominikphotofficial.lt/contacts.html">KR</a>
+                </div>
+                <div class="nav-panel-meta">
+                    <a href="mailto:info@dominikphotofficial.lt">info@dominikphotofficial.lt</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer">@dominikphotofficial</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <section class="container" style="padding-top: 160px; padding-bottom: 90px;">
-        <div class="fade-in-up" style="text-align: center; margin-bottom: 50px;">
-            <h1 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; letter-spacing: 5px; margin-bottom: 20px;">Susisiekime</h1>
-            <div class="divider"></div>
-            <p style="font-family: var(--font-body); font-size: 1.1rem; color: rgba(26, 43, 43, 0.8); max-width: 650px; margin: 0 auto; line-height: 1.8;">
+    <main class="container">
+        <div class="fade-in-up section-heading-group">
+            <h1 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Susisiekime</h1>
+            <p class="section-subtitle">
                 Užsakymams ir registracijai naudokite žemiau pateiktus mygtukus arba parašykite bendrą žinutę formoje.
             </p>
         </div>
@@ -88,59 +147,53 @@
                     <span class="info-label">Pagrindinis el. paštas</span>
                     <a href="mailto:info@dominikphotofficial.lt" class="info-value">info@dominikphotofficial.lt</a>
                 </div>
-                <div class="info-group" style="margin-top: 10px;">
-                    <span class="info-label" style="font-size: 0.76rem; opacity: 0.85;">Atsarginis el. paštas (Backup)</span>
-                    <a href="mailto:dominikphotofficial.lt@gmail.com" class="info-value" style="font-size: 0.95rem;">dominikphotofficial.lt@gmail.com</a>
+                <div class="info-group">
+                    <span class="info-label">Atsarginis el. paštas (Backup)</span>
+                    <a href="mailto:dominikphotofficial.lt@gmail.com" class="info-value">dominikphotofficial.lt@gmail.com</a>
                 </div>
-                <div class="divider" style="margin: 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.08);"></div>
                 <div class="info-group">
                     <span class="info-label">Telefonas</span>
                     <a href="tel:+37062337615" class="info-value">+370 623 37615</a>
                 </div>
-                <div class="divider" style="margin: 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.08);"></div>
                 <div class="info-group">
                     <span class="info-label">Instagram</span>
-                    <a href="https://instagram.com/dominikphotofficial" target="_blank" class="info-value">@dominikphotofficial</a>
+                    <a href="https://instagram.com/dominikphotofficial" target="_blank" rel="noopener noreferrer" class="info-value">@dominikphotofficial</a>
                 </div>
-                <div class="divider" style="margin: 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.08);"></div>
-                <div class="info-group" style="margin-bottom: 30px;">
+                <div class="info-group">
                     <span class="info-label">Veiklos vieta</span>
                     <span class="info-value">Kaunas / Švenčionėliai (Lietuva)</span>
                 </div>
-                
-                <div class="divider" style="margin: 25px 0 20px 0; width: 100%; height: 1px; background: rgba(17, 57, 57, 0.12);"></div>
-                
-                <div style="display: flex; flex-direction: column; gap: 14px;">
+
+                <div class="contact-cta-stack">
                     <span class="info-label">Tiesioginis užsakymas:</span>
-                    <a href="services.html" class="contact-cta-btn btn-paid">Mokamos Paslaugos & Kainos</a>
-                    <a href="tfp-booking.html" class="contact-cta-btn btn-free">TFP Registracija (Nemokamai)</a>
+                    <a href="services.html" class="btn-primary">Mokamos Paslaugos &amp; Kainos</a>
+                    <a href="tfp-booking.html" class="btn-secondary">TFP Registracija (Nemokamai)</a>
                 </div>
             </div>
 
             <div class="form-card">
                 <h3 class="form-title">Bendra Užklausa</h3>
 
-                <div id="contact-success" style="display: none; padding: 30px 20px; text-align: center; background: #FAFBFB; border: 1px solid rgba(17, 57, 57, 0.15); border-radius: 6px;">
-                    <div style="font-size: 2.4rem; color: var(--accent-color); margin-bottom: 12px; line-height: 1;">✓</div>
-                    <h4 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.15rem;">Žinutė Sėkmingai Gauta!</h4>
-                    <p style="font-size: 0.95rem; color: #555; line-height: 1.6; margin: 0 0 22px 0;">
+                <div id="contact-success" style="display: none; padding: var(--sp-4); text-align: center; border: 1px solid var(--border); border-radius: var(--radius);">
+                    <h4 style="color: var(--accent); margin-bottom: var(--sp-2);">Žinutė Sėkmingai Gauta!</h4>
+                    <p style="color: var(--text-muted); margin-bottom: var(--sp-3);">
                         Dėkojame už Jūsų kreipimąsi. Netrukus susisieksime su Jumis nurodytu el. pašto adresu.
                     </p>
-                    <button type="button" id="contact-reset-btn" class="submit-btn" style="padding: 12px 28px; font-size: 0.85rem; width: auto; display: inline-block;">Siųsti naują žinutę</button>
+                    <button type="button" id="contact-reset-btn" class="btn-secondary">Siųsti naują žinutę</button>
                 </div>
 
                 <form id="contact-form" action="https://formspree.io/f/mgvnbvaw" method="POST">
                     <div class="form-group">
-                        <label for="name">Jūsų vardas *</label>
+                        <label class="field-label" for="name">Jūsų vardas *</label>
                         <input type="text" id="name" name="name" required placeholder="Vardas Pavardė" autocomplete="name">
                     </div>
                     <div class="form-group">
-                        <label for="email">El. pašto adresas *</label>
+                        <label class="field-label" for="email">El. pašto adresas *</label>
                         <input type="email" id="email" name="email" required placeholder="vardas@pavyzdys.lt" autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="style">Tema</label>
-                        <select id="style" name="style" style="appearance: none; cursor: pointer;">
+                        <label class="field-label" for="style">Tema</label>
+                        <select id="style" name="style">
                             <option value="Mokama fotosesija">Mokama fotosesija</option>
                             <option value="TFP fotosesija">TFP bendradarbiavimas</option>
                             <option value="Videografija">Videografijos projektas</option>
@@ -148,28 +201,48 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="message">Žinutė *</label>
+                        <label class="field-label" for="message">Žinutė *</label>
                         <textarea id="message" name="message" rows="5" required placeholder="Jūsų žinutė arba klausimas..."></textarea>
                     </div>
-                    <button type="submit" id="contact-submit-btn" class="submit-btn" style="width: 100%; padding: 18px; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; border-radius: 4px;">Siųsti žinutę</button>
+                    <button type="submit" id="contact-submit-btn" class="btn-primary" style="width: 100%;">Siųsti žinutę</button>
                 </form>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Minimalist Luxury Footer -->
     <footer class="footer-minimal">
         <div class="footer-min-container">
-            <div class="footer-min-bottom">
-                <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
-                <div class="footer-legal-links">
+            <div class="footer-editorial-grid">
+                <div class="footer-brand-col">
+                    <a href="index.html" class="footer-logo" aria-label="DP.PORTFOLIO">
+                        <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
+                        <span class="logo-sub">Portfolio</span>
+                    </a>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Navigacija</span>
+                    <a href="index.html">Darbai</a>
+                    <a href="tfp-booking.html">TFP Registracija</a>
+                    <a href="services.html">Paslaugos</a>
+                    <a href="biography.html">Biografija</a>
+                </div>
+                <div class="footer-nav-col">
+                    <span class="footer-col-label">Informacija</span>
+                    <a href="about.html">Apie</a>
+                    <a href="contacts.html">Kontaktai</a>
                     <a href="privacy-policy.html">Privatumo Politika</a>
                     <a href="terms-of-service.html">Paslaugų Sąlygos</a>
                 </div>
+            </div>
+            <div class="footer-min-bottom">
+                <div class="footer-brand-copy">
+                    <span class="footer-min-copy">&copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.</span>
+                </div>
                 <div class="footer-min-langs-group">
-                    <div class="footer-lang-divider" aria-hidden="true"></div>
                     <div class="footer-min-langs">
-                        <a href="https://portfolio.dominikphotofficial.lt/contacts.html" class="active">LT</a>
+<a href="https://portfolio.dominikphotofficial.lt/contacts.html" class="active">LT</a>
                         <a href="https://en.dominikphotofficial.lt/contacts.html">EN</a>
                         <a href="https://pl.dominikphotofficial.lt/contacts.html">PL</a>
                         <a href="https://ru.dominikphotofficial.lt/contacts.html">RU</a>
@@ -205,7 +278,6 @@
                 const messageVal = document.getElementById('message').value.trim();
 
                 if (!nameVal || !emailVal || !messageVal) {
-                    alert("Prašome užpildyti visus privalomus laukus.");
                     return;
                 }
 
@@ -214,7 +286,6 @@
                 submitBtn.innerText = 'Siunčiama...';
 
                 try {
-                    // 1. Save message to Firestore collection "contact_messages"
                     await addDoc(collection(db, "contact_messages"), {
                         name: nameVal,
                         email: emailVal,
@@ -224,14 +295,13 @@
                         createdAt: serverTimestamp()
                     });
 
-                    // 2. Queue email acknowledgement in Firestore "mail" collection
                     try {
                         const ackHtml = `
                             <div style="font-family: Arial, sans-serif; background-color: #F4F6F5; padding: 30px 15px;">
-                                <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #E8ECEB; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                                <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #E8ECEB;">
                                     <div style="background-color: #113939; padding: 25px; text-align: center; color: #ffffff;">
                                         <h2 style="margin: 0; font-size: 20px; letter-spacing: 3px; text-transform: uppercase;">DP.PORTFOLIO</h2>
-                                        <div style="font-size: 11px; letter-spacing: 2px; color: #A2BFBD; margin-top: 5px;">Fotografija & Videografija</div>
+                                        <div style="font-size: 11px; letter-spacing: 2px; color: #A2BFBD; margin-top: 5px;">Fotografija &amp; Videografija</div>
                                     </div>
                                     <div style="padding: 30px 25px; color: #1A2B2B; line-height: 1.6;">
                                         <h3 style="color: #113939; margin-top: 0;">Sveiki, ${nameVal}!</h3>
@@ -266,7 +336,6 @@
                         console.warn("Mail queueing error:", mailErr);
                     }
 
-                    // 3. Trigger Telegram notification to Dominik
                     try {
                         const tgText = `💬 NAUJA ŽINUTĖ IŠ CONTACTS.HTML!\n\n` +
                             `👤 Vardas: ${nameVal}\n` +
@@ -283,7 +352,6 @@
                         console.warn("Telegram trigger error:", tgErr);
                     }
 
-                    // 4. Background backup to Formspree
                     try {
                         const formData = new FormData();
                         formData.append('name', nameVal);
@@ -297,13 +365,11 @@
                         }).catch(() => {});
                     } catch (_) {}
 
-                    // 5. Show clean in-page success UI
                     contactForm.reset();
                     contactForm.style.display = 'none';
                     successBox.style.display = 'block';
                 } catch (err) {
                     console.error("Contact submission error:", err);
-                    alert("Nepavyko išsiųsti žinutės: " + (err.message || err));
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerText = originalText;
