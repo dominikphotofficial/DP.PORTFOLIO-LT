@@ -1335,11 +1335,14 @@
                     <div style="font-size: 0.9rem; line-height: 1.8; color: #333;">
                         <div><strong>📁 Firestore Kolekcija:</strong> <code>mail</code></div>
                         <div><strong>🗄 Firestore Instance ID (Database ID):</strong> <code style="background:#f0f4f4; padding:2px 6px; border-radius:3px;">ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce</code> <span style="color:#d9534f; font-weight:600;">(⚠️ Svarbu: plėtinio nustatymuose „Firestore Instance ID“ privalo būti šis ID, o NE „(default)“!)</span></div>
-                        <div><strong>🔑 SMTP Siuntėjas:</strong> <code>dominikphotofficial.lt@gmail.com</code></div>
+                        <div><strong>🔑 Numatytasis Siuntėjas (From / Reply-To):</strong> <code>info@dominikphotofficial.lt</code></div>
                         <div style="margin-top: 8px;">
-                            <strong>🔌 Tiksli SMTP Connection URI eilutė „Firebase Extension“ nustatymams:</strong>
-                            <div style="background: #f4f6f5; padding: 10px 12px; border-radius: 4px; border: 1px solid #E0E0E0; font-family: monospace; font-size: 0.85rem; word-break: break-all; margin-top: 4px; user-select: all;">
-                                smtps://dominikphotofficial.lt%40gmail.com:vturoaxxpzuzivdm@smtp.gmail.com:465
+                            <strong>🔌 SMTP Connection URI šablonas „Firebase Extension“ nustatymams:</strong>
+                            <div style="background: #f4f6f5; padding: 10px 12px; border-radius: 4px; border: 1px solid #E0E0E0; font-family: monospace; font-size: 0.85rem; word-break: break-all; margin-top: 4px;">
+                                smtps://&lt;SMTP_USER&gt;:&lt;SMTP_PASSWORD&gt;@&lt;SMTP_HOST&gt;:465
+                            </div>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">
+                                Saugumo sumetimais tikrieji SMTP prisijungimai laikomi tik Firebase Console plėtinio („Trigger Email from Firestore“) nustatymuose (Secret Manager).
                             </div>
                         </div>
                     </div>
@@ -3054,6 +3057,8 @@
             return null;
         }
 
+        let dashboardListenersInitialized = false;
+
         function unlockDashboard(session) {
             authSection.style.display = 'none';
             dashboardSection.style.display = 'block';
@@ -3064,15 +3069,18 @@
             } catch(e) {}
             applyUserRole(session);
 
-            loadTFPRequests();
-            loadServiceRequests();
-            loadContactMessages();
-            loadReviews();
-            loadMailDiagnostics();
-            loadVmiSummary();
-            loadTeamMembers();
-            loadAuditLogs();
-            loadSheetsSettings();
+            if (!dashboardListenersInitialized) {
+                dashboardListenersInitialized = true;
+                loadTFPRequests();
+                loadServiceRequests();
+                loadContactMessages();
+                loadReviews();
+                loadMailDiagnostics();
+                loadVmiSummary();
+                loadTeamMembers();
+                loadAuditLogs();
+                loadSheetsSettings();
+            }
         }
 
         function handleLogout() {
@@ -3262,7 +3270,6 @@
         };
         window.performForgotPassword = performForgotPassword;
         window._realPerformForgotPassword = performForgotPassword;
-        document.getElementById('admin-forgot-password-btn')?.addEventListener('click', performForgotPassword);
 
         // 🔒 2FA / MFA Helper Functions (Dynamic for ANY Admin Email)
         function initiate2FAFlow(email, pendingSession) {
@@ -3396,7 +3403,6 @@
         window.verify2FACode = verify2FACode;
         window._realVerify2FACode = verify2FACode;
         window.reset2FaView = reset2FaView;
-        document.getElementById('admin-verify-2fa-btn')?.addEventListener('click', verify2FACode);
 
         document.getElementById('admin-2fa-input')?.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') verify2FACode();
@@ -3455,7 +3461,6 @@
         };
         window.performDirect2FA = performDirect2FA;
         window._realPerformDirect2FA = performDirect2FA;
-        document.getElementById('admin-owner-2fa-direct-btn')?.addEventListener('click', performDirect2FA);
 
         // 🔒 Strict Email & Password Login Handler (Auto-creates owner account or falls back to owner 2FA)
         async function performEmailLogin() {
@@ -3631,7 +3636,11 @@
             }
         };
 
+        let isGoogleAuthInProgress = false;
+
         async function performGoogleLogin() {
+            if (isGoogleAuthInProgress) return;
+            isGoogleAuthInProgress = true;
             const btn = document.getElementById('admin-login-google-btn');
             const originalHtml = btn ? btn.innerHTML : '';
             if (btn) {
@@ -3699,12 +3708,15 @@
                     let msg = 'Google prisijungimo klaida: ' + (e.message || e.code);
                     if (e.code === 'auth/unauthorized-domain') {
                         msg = `Domenas ${window.location.hostname} nėra įtrauktas į Firebase autorizuotus domenus. Junkitės su slaptažodžiu arba 2FA kodu.`;
-                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('Cloud Function') || e.message.includes('403')))) {
+                    } else if (e.message && e.message.includes('Cloud Function')) {
+                        msg = 'Firebase serverio klaida (403 Forbidden iš „Blocking Cloud Function“): projekte „tfp-form“ (Firebase Console → Authentication → Settings → Blocking functions) yra prijungta blokuojanti funkcija be prieigos teisių. Išjunkite ją Firebase Console arba junkitės su el. paštu ir 2FA kodu.';
+                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('403')))) {
                         msg = 'Google OAuth lango sesija buvo apribota naršyklės saugumo ar peržiūros rėmelio (iframe) nustatymų. Junkitės su el. paštu ir slaptažodžiu arba paspauskite mygtuką „👑 Greitas 2FA kodo siuntimas į el. paštą“.';
                     }
                     authFeedback.innerText = msg;
                 }
             } finally {
+                isGoogleAuthInProgress = false;
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = originalHtml;
@@ -3716,8 +3728,6 @@
         window._realPerformGoogleLogin = performGoogleLogin;
         window.performEmailLogin = performEmailLogin;
         window._realPerformEmailLogin = performEmailLogin;
-        document.getElementById('admin-login-google-btn')?.addEventListener('click', performGoogleLogin);
-        document.getElementById('admin-login-email-btn')?.addEventListener('click', performEmailLogin);
         document.getElementById('admin-password')?.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') performEmailLogin();
         });
@@ -3915,6 +3925,8 @@
 
         // Google sign-up handler (reuses Google Auth & auto-provisions profile)
         async function performGoogleRegistration() {
+            if (isGoogleAuthInProgress) return;
+            isGoogleAuthInProgress = true;
             const btn = document.getElementById('admin-register-google-btn');
             const originalHtml = btn ? btn.innerHTML : '';
             if (btn) {
@@ -3998,12 +4010,15 @@
                     let msg = 'Google registracijos klaida: ' + (e.message || e.code);
                     if (e.code === 'auth/unauthorized-domain') {
                         msg = `Domenas ${window.location.hostname} nėra įtrauktas į Firebase autorizuotus domenus. Registruokitės su el. paštu ir slaptažodžiu.`;
-                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('Cloud Function') || e.message.includes('403')))) {
+                    } else if (e.message && e.message.includes('Cloud Function')) {
+                        msg = 'Firebase serverio klaida (403 Forbidden iš „Blocking Cloud Function“): projekte „tfp-form“ (Firebase Console → Authentication → Settings → Blocking functions) yra prijungta blokuojanti funkcija be prieigos teisių. Išjunkite ją Firebase Console arba registruokitės su el. paštu ir slaptažodžiu.';
+                    } else if (e.code === 'auth/internal-error' || (e.message && (e.message.includes('initial state') || e.message.includes('403')))) {
                         msg = 'Google OAuth lango sesija buvo apribota naršyklės saugumo ar peržiūros rėmelio (iframe) nustatymų. Registruokitės su el. paštu ir slaptažodžiu arba junkitės per „Prisijungti“ kortelę su 2FA kodu.';
                     }
                     authFeedback.innerText = msg;
                 }
             } finally {
+                isGoogleAuthInProgress = false;
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = originalHtml;
@@ -4015,8 +4030,6 @@
         window._realPerformEmailRegistration = performEmailRegistration;
         window.performGoogleRegistration = performGoogleRegistration;
         window._realPerformGoogleRegistration = performGoogleRegistration;
-        document.getElementById('admin-register-btn')?.addEventListener('click', performEmailRegistration);
-        document.getElementById('admin-register-google-btn')?.addEventListener('click', performGoogleRegistration);
         document.getElementById('reg-password-confirm')?.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') performEmailRegistration();
         });
@@ -5497,20 +5510,26 @@
                 if (galleryUrl) updatePayload.galleryUrl = galleryUrl;
                 if (receiptUrl) updatePayload.receiptUrl = receiptUrl;
 
-                await updateDoc(doc(db, pendingEmailData.collection, pendingEmailData.id), updatePayload);
+                const targetCollection = pendingEmailData.collection === 'services_requests' ? 'service_requests' : pendingEmailData.collection;
+                if (pendingEmailData.id && pendingEmailData.id !== 'manual' && targetCollection) {
+                    await updateDoc(doc(db, targetCollection, pendingEmailData.id), updatePayload);
+                }
+
+                const messageObj = {
+                    from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
+                    replyTo: "info@dominikphotofficial.lt",
+                    subject: subject,
+                    html: finalHtml
+                };
+                if (attachments.length > 0) {
+                    messageObj.attachments = attachments;
+                }
 
                 const mailPayload = { 
                     to: pendingEmailData.email,
                     from: "info@dominikphotofficial.lt",
                     replyTo: "info@dominikphotofficial.lt", // Visi klientų atsakymai nukreipiami į pagrindinį info@ paštą
-                    message: { 
-                        from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
-                        replyTo: "info@dominikphotofficial.lt",
-                        subject: subject, 
-                        html: finalHtml,
-                        attachments: attachments
-                    },
-                    attachments: attachments,
+                    message: messageObj,
                     createdAt: serverTimestamp()
                 };
 
@@ -8378,7 +8397,7 @@ Pateik aiškų, profesionalų atsakymą, atsakantį į kliento klausimą.`;
                     if (typeof openEmailModal === 'function') {
                         openEmailModal({
                             id: activeDocCustomData.id || 'manual',
-                            collection: 'services_requests',
+                            collection: activeDocCustomData.collection || 'service_requests',
                             email: clientMail,
                             name: clientName,
                             lang: activeDocCustomData.language || 'lt',

@@ -16,7 +16,7 @@ export function getCachedToken() {
     if (cachedAccessToken && Date.now() < tokenExpiryTime) {
         return cachedAccessToken;
     }
-    return cachedAccessToken;
+    return null;
 }
 
 export function setCachedToken(token, expiresInSeconds = 3500) {
