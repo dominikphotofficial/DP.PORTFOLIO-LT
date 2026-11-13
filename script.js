@@ -235,13 +235,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroProgress = document.querySelector(".hero-progress");
     const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Wrap hero descriptor words cleanly for sequential 120ms load stagger
+    const heroDesc = document.querySelector(".hero-descriptors");
+    if (heroDesc && !heroDesc.querySelector(".hero-word")) {
+        const parts = heroDesc.textContent.split("·").map(s => s.trim()).filter(Boolean);
+        if (parts.length > 1) {
+            heroDesc.textContent = "";
+            parts.forEach((word, idx) => {
+                const span = document.createElement("span");
+                span.className = `hero-word hero-word-${idx + 1}`;
+                span.textContent = word;
+                heroDesc.appendChild(span);
+                if (idx < parts.length - 1) {
+                    const sep = document.createElement("span");
+                    sep.className = `hero-sep hero-sep-${idx + 1}`;
+                    sep.setAttribute("aria-hidden", "true");
+                    sep.textContent = "·";
+                    heroDesc.appendChild(sep);
+                }
+            });
+        }
+    }
+
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
     const handleScroll = () => {
         const y = window.scrollY || window.pageYOffset || 0;
+        const delta = y - lastScrollY;
         if (header) {
-            if (y > 80) {
-                header.classList.add("scrolled");
-            } else {
-                header.classList.remove("scrolled");
+            header.classList.toggle("scrolled", y > 80);
+            if (y <= 80 || document.body.classList.contains("menu-open")) {
+                header.classList.remove("header-hidden");
+            } else if (y > 120 && delta > 6) {
+                header.classList.add("header-hidden");
+            } else if (delta < -4) {
+                header.classList.remove("header-hidden");
             }
         }
         if (heroScroll) {
@@ -250,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (heroProgress) {
             heroProgress.classList.toggle("hidden", y > 40);
         }
+        lastScrollY = y;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -262,6 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const openMenu = () => {
         if (!burger || !navOverlay) return;
+        if (header) header.classList.remove("header-hidden");
         burger.classList.add("active");
         burger.setAttribute("aria-expanded", "true");
         navOverlay.classList.add("active");
@@ -307,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Subtle 200ms page fade-out on same-origin internal HTML links
+    // Subtle 200ms page fade-out on same-origin internal links
     if (!prefersReducedMotion) {
         window.addEventListener("pageshow", () => {
             document.body.classList.remove("page-leaving");
@@ -325,13 +354,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.body.classList.add("page-leaving");
                     setTimeout(() => {
                         window.location.href = link.href;
-                    }, 180);
+                    }, 200);
                 });
             } catch (err) {}
         });
     }
 
-    // Lightbox Photo Viewer with preloading, 03/24 counter, and thin accent progress bar
+    // Lightbox Photo Viewer: FLIP open/close, directional crossfade+slide, swipe inertia & cursor UI fade
     const galleryImages = document.querySelectorAll(".gallery-item img");
     const lightbox = document.getElementById("lightbox");
 
@@ -342,7 +371,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const prevBtn = document.querySelector(".lightbox-prev");
         const nextBtn = document.querySelector(".lightbox-next");
 
-        // Ensure thin accent progress line exists inside lightbox
         let progressBar = lightbox.querySelector(".lightbox-progress-bar");
         if (!progressBar) {
             const progressWrap = document.createElement("div");
@@ -354,19 +382,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let currentIndex = 0;
+        let animToken = 0;
+        let uiIdleTimer = null;
         const imageArray = [];
-        let touchStartX = 0;
-        let touchEndX = 0;
 
         const padTwo = (n) => String(n).padStart(2, "0");
 
         const preloadAdjacent = (idx) => {
             const len = imageArray.length;
             if (len < 2) return;
-            const prev = new Image();
-            prev.src = imageArray[(idx - 1 + len) % len];
-            const next = new Image();
-            next.src = imageArray[(idx + 1) % len];
+            [imageArray[(idx - 1 + len) % len], imageArray[(idx + 1) % len]].forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
         };
 
         const renderLightboxMeta = (idx) => {
@@ -374,118 +402,272 @@ document.addEventListener("DOMContentLoaded", () => {
                 lightboxCounter.textContent = `${padTwo(idx + 1)} / ${padTwo(imageArray.length)}`;
             }
             if (progressBar) {
-                const pct = ((idx + 1) / imageArray.length) * 100;
-                progressBar.style.width = `${pct}%`;
+                progressBar.style.width = `${((idx + 1) / imageArray.length) * 100}%`;
             }
             preloadAdjacent(idx);
         };
 
-        galleryImages.forEach((img, index) => {
-            imageArray.push(img.src);
-            img.addEventListener("click", () => {
-                currentIndex = index;
-                lightboxImg.src = imageArray[currentIndex];
-                lightboxImg.alt = img.alt || "";
-                renderLightboxMeta(currentIndex);
-                document.body.style.overflow = "hidden";
-                lightbox.classList.add("active");
-                lightbox.setAttribute("aria-hidden", "false");
-            });
-        });
+        const wakeLightboxUI = () => {
+            lightbox.classList.remove("ui-idle");
+            clearTimeout(uiIdleTimer);
+            if (!prefersReducedMotion && lightbox.classList.contains("active")) {
+                uiIdleTimer = setTimeout(() => {
+                    const focusedInside = lightbox.querySelector(":hover, :focus");
+                    if (!focusedInside) lightbox.classList.add("ui-idle");
+                }, 2200);
+            }
+        };
 
-        const updateL = () => {
-            lightboxImg.classList.add("loading");
-            setTimeout(() => {
+        const clearImgInlineMotion = () => {
+            lightboxImg.style.transition = "";
+            lightboxImg.style.transform = "";
+            lightboxImg.style.opacity = "";
+            lightboxImg.style.willChange = "";
+        };
+
+        const openLightboxAt = (index, sourceImg) => {
+            const token = ++animToken;
+            currentIndex = index;
+            const firstRect = sourceImg.getBoundingClientRect();
+
+            clearImgInlineMotion();
+            lightboxImg.src = imageArray[currentIndex];
+            lightboxImg.alt = sourceImg.alt || "";
+            renderLightboxMeta(currentIndex);
+            document.body.style.overflow = "hidden";
+            lightbox.classList.add("active");
+            lightbox.setAttribute("aria-hidden", "false");
+            wakeLightboxUI();
+
+            if (prefersReducedMotion || !firstRect.width) return;
+
+            const runFlipIn = () => {
+                if (token !== animToken || !lightbox.classList.contains("active")) return;
+                const lastRect = lightboxImg.getBoundingClientRect();
+                if (!lastRect.width || !lastRect.height) return;
+
+                const dx = (firstRect.left + firstRect.width / 2) - (lastRect.left + lastRect.width / 2);
+                const dy = (firstRect.top + firstRect.height / 2) - (lastRect.top + lastRect.height / 2);
+                const scale = Math.min(firstRect.width / lastRect.width, firstRect.height / lastRect.height);
+
+                lightboxImg.style.willChange = "transform";
+                lightboxImg.style.transition = "none";
+                lightboxImg.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`;
+                lightboxImg.getBoundingClientRect();
+
+                requestAnimationFrame(() => {
+                    if (token !== animToken) return;
+                    lightboxImg.style.transition = "transform 400ms var(--ease), opacity 350ms var(--ease)";
+                    lightboxImg.style.transform = "translate3d(0, 0, 0) scale(1)";
+                    setTimeout(() => {
+                        if (token === animToken) clearImgInlineMotion();
+                    }, 420);
+                });
+            };
+
+            if (lightboxImg.complete && lightboxImg.naturalWidth > 0) {
+                runFlipIn();
+            } else {
+                lightboxImg.addEventListener("load", runFlipIn, { once: true });
+            }
+        };
+
+        const switchPhoto = (direction) => {
+            if (!imageArray.length) return;
+            const token = ++animToken;
+            currentIndex = (currentIndex + direction + imageArray.length) % imageArray.length;
+            wakeLightboxUI();
+
+            if (prefersReducedMotion) {
                 lightboxImg.src = imageArray[currentIndex];
                 lightboxImg.alt = galleryImages[currentIndex]?.alt || "";
                 renderLightboxMeta(currentIndex);
-            }, 180);
-        };
+                return;
+            }
 
-        if (lightboxImg) {
-            lightboxImg.addEventListener("load", () => {
-                lightboxImg.classList.remove("loading");
-            });
-        }
+            const outOffset = direction > 0 ? -28 : 28;
+            const inOffset = direction > 0 ? 28 : -28;
+            lightboxImg.style.willChange = "transform, opacity";
+            lightboxImg.style.transition = "transform 170ms var(--ease), opacity 170ms var(--ease)";
+            lightboxImg.style.opacity = "0";
+            lightboxImg.style.transform = `translate3d(${outOffset}px, 0, 0)`;
+
+            setTimeout(() => {
+                if (token !== animToken) return;
+                const finishSwap = () => {
+                    if (token !== animToken) return;
+                    lightboxImg.style.transition = "none";
+                    lightboxImg.style.opacity = "0";
+                    lightboxImg.style.transform = `translate3d(${inOffset}px, 0, 0)`;
+                    lightboxImg.getBoundingClientRect();
+                    requestAnimationFrame(() => {
+                        if (token !== animToken) return;
+                        lightboxImg.style.transition = "transform 350ms var(--ease), opacity 350ms var(--ease)";
+                        lightboxImg.style.opacity = "1";
+                        lightboxImg.style.transform = "translate3d(0, 0, 0)";
+                        setTimeout(() => {
+                            if (token === animToken) clearImgInlineMotion();
+                        }, 370);
+                    });
+                };
+
+                lightboxImg.src = imageArray[currentIndex];
+                lightboxImg.alt = galleryImages[currentIndex]?.alt || "";
+                renderLightboxMeta(currentIndex);
+
+                if (lightboxImg.complete && lightboxImg.naturalWidth > 0) {
+                    finishSwap();
+                } else {
+                    lightboxImg.addEventListener("load", finishSwap, { once: true });
+                }
+            }, 160);
+        };
 
         const closeL = () => {
+            const token = ++animToken;
+            clearTimeout(uiIdleTimer);
+            const thumb = galleryImages[currentIndex];
+            const thumbRect = thumb ? thumb.getBoundingClientRect() : null;
+            const currentRect = lightboxImg.getBoundingClientRect();
+            const thumbVisible = Boolean(
+                thumbRect &&
+                thumbRect.width > 0 &&
+                thumbRect.bottom > -80 &&
+                thumbRect.top < window.innerHeight + 80
+            );
+
+            if (!prefersReducedMotion && thumbVisible && currentRect.width > 0) {
+                const dx = (thumbRect.left + thumbRect.width / 2) - (currentRect.left + currentRect.width / 2);
+                const dy = (thumbRect.top + thumbRect.height / 2) - (currentRect.top + currentRect.height / 2);
+                const scale = Math.min(thumbRect.width / currentRect.width, thumbRect.height / currentRect.height);
+
+                lightboxImg.style.willChange = "transform";
+                lightboxImg.style.transition = "transform 400ms var(--ease), opacity 350ms var(--ease)";
+                lightboxImg.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(${scale})`;
+            }
+
             lightbox.classList.remove("active");
+            lightbox.classList.remove("ui-idle");
             lightbox.setAttribute("aria-hidden", "true");
+
             setTimeout(() => {
+                if (token !== animToken) return;
                 document.body.style.overflow = "";
-            }, 220);
+                clearImgInlineMotion();
+            }, prefersReducedMotion ? 180 : 400);
         };
 
-        if (closeBtn) closeBtn.addEventListener("click", closeL);
+        galleryImages.forEach((img, index) => {
+            imageArray.push(img.src);
+            img.addEventListener("click", () => openLightboxAt(index, img));
+        });
 
+        if (closeBtn) closeBtn.addEventListener("click", closeL);
         lightbox.addEventListener("click", (e) => {
             if (e.target === lightbox) closeL();
         });
+        lightbox.addEventListener("mousemove", wakeLightboxUI, { passive: true });
+        lightbox.addEventListener("pointerdown", wakeLightboxUI, { passive: true });
 
-        if (nextBtn) {
-            nextBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex + 1) % imageArray.length;
-                updateL();
-            });
-        }
-
-        if (prevBtn) {
-            prevBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
-                updateL();
-            });
-        }
+        if (nextBtn) nextBtn.addEventListener("click", () => switchPhoto(1));
+        if (prevBtn) prevBtn.addEventListener("click", () => switchPhoto(-1));
 
         document.addEventListener("keydown", (e) => {
             if (!lightbox.classList.contains("active")) return;
+            wakeLightboxUI();
             if (e.key === "Escape") closeL();
-            if (e.key === "ArrowRight") {
-                currentIndex = (currentIndex + 1) % imageArray.length;
-                updateL();
-            }
-            if (e.key === "ArrowLeft") {
-                currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
-                updateL();
-            }
+            if (e.key === "ArrowRight") switchPhoto(1);
+            if (e.key === "ArrowLeft") switchPhoto(-1);
         });
 
-        lightbox.addEventListener("touchstart", e => {
-            touchStartX = e.changedTouches[0].screenX;
+        // Mobile swipe with drag feedback & velocity inertia
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let touchDeltaX = 0;
+        let isDraggingX = false;
+
+        lightbox.addEventListener("touchstart", (e) => {
+            if (!lightbox.classList.contains("active") || e.touches.length !== 1) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            touchDeltaX = 0;
+            isDraggingX = false;
+            wakeLightboxUI();
         }, { passive: true });
 
-        lightbox.addEventListener("touchend", e => {
-            touchEndX = e.changedTouches[0].screenX;
-            const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold) {
-                currentIndex = (currentIndex + 1) % imageArray.length;
-                updateL();
+        lightbox.addEventListener("touchmove", (e) => {
+            if (!lightbox.classList.contains("active") || e.touches.length !== 1) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (!isDraggingX) {
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+                    isDraggingX = true;
+                    lightboxImg.style.willChange = "transform, opacity";
+                    lightboxImg.style.transition = "none";
+                } else {
+                    return;
+                }
             }
-            if (touchEndX > touchStartX + swipeThreshold) {
-                currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
-                updateL();
+            touchDeltaX = dx;
+            lightboxImg.style.transform = `translate3d(${dx}px, 0, 0)`;
+            lightboxImg.style.opacity = String(Math.max(0.45, 1 - Math.abs(dx) / 480));
+        }, { passive: true });
+
+        lightbox.addEventListener("touchend", () => {
+            if (!isDraggingX) return;
+            isDraggingX = false;
+            const dt = Math.max(16, Date.now() - touchStartTime);
+            const velocity = touchDeltaX / dt;
+            const projected = touchDeltaX + velocity * 120;
+
+            if (Math.abs(projected) > 65) {
+                switchPhoto(projected < 0 ? 1 : -1);
+            } else {
+                lightboxImg.style.transition = "transform 300ms var(--ease), opacity 300ms var(--ease)";
+                lightboxImg.style.transform = "translate3d(0, 0, 0)";
+                lightboxImg.style.opacity = "1";
+                setTimeout(clearImgInlineMotion, 310);
             }
         }, { passive: true });
     }
 
-    // Hero Photo Slideshow (6s slide, 1.2s crossfade, 1 -> 1.05 zoom, 3-line progress)
+    // Hero Photo Slideshow (8s slide, 1.2s crossfade, 1 -> 1.06 zoom, next-image preloading)
     const heroSlides = document.querySelectorAll(".hero-slide");
     const progressLines = document.querySelectorAll(".hero-progress-line");
     if (heroSlides.length > 1) {
         let heroIdx = 0;
         let heroTimer = null;
 
+        const preloadHeroSlide = (idx) => {
+            const slide = heroSlides[idx % heroSlides.length];
+            if (!slide) return;
+            const pre = new Image();
+            pre.src = slide.src;
+            if (typeof pre.decode === "function") pre.decode().catch(() => {});
+        };
+
         const setHeroSlide = (nextIdx) => {
-            heroSlides.forEach((slide, i) => slide.classList.toggle("active", i === nextIdx));
+            if (nextIdx === heroIdx) return;
+            const prevIdx = heroIdx;
+            heroSlides.forEach(s => s.classList.remove("was-active"));
+            heroSlides[prevIdx].classList.remove("active");
+            heroSlides[prevIdx].classList.add("was-active");
+            heroSlides[nextIdx].classList.add("active");
             progressLines.forEach((line, i) => line.classList.toggle("active", i === (nextIdx % progressLines.length)));
             heroIdx = nextIdx;
+            preloadHeroSlide(nextIdx + 1);
         };
+
+        preloadHeroSlide(1);
 
         progressLines.forEach((line, i) => {
             line.addEventListener("click", () => {
                 setHeroSlide(i % heroSlides.length);
                 if (heroTimer) {
                     clearInterval(heroTimer);
-                    heroTimer = setInterval(() => setHeroSlide((heroIdx + 1) % heroSlides.length), 6000);
+                    heroTimer = setInterval(() => setHeroSlide((heroIdx + 1) % heroSlides.length), 8000);
                 }
             });
         });
@@ -493,7 +675,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!prefersReducedMotion) {
             heroTimer = setInterval(() => {
                 setHeroSlide((heroIdx + 1) % heroSlides.length);
-            }, 6000);
+            }, 8000);
         }
     }
 
@@ -517,35 +699,50 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, 1500);
 
-    // IntersectionObserver Reveal with 80ms row stagger
+    // Subtle Scroll Reveal (600ms, once only, 80ms batch row stagger)
+    if (!prefersReducedMotion) {
+        document.querySelectorAll("main .page-section, main .card-surface, main .section-heading-group").forEach(el => {
+            if (el.classList.contains("fade-in-up") || el.classList.contains("reveal")) return;
+            const rect = el.getBoundingClientRect();
+            if (rect.top > window.innerHeight * 0.96) {
+                el.classList.add("reveal");
+            }
+        });
+    }
+
     const revealEls = document.querySelectorAll(".fade-in-up, .reveal");
     if (prefersReducedMotion) {
         revealEls.forEach(el => el.classList.add("visible"));
     } else {
-        document.querySelectorAll(".album-grid-columns, .album-grid").forEach(grid => {
-            grid.querySelectorAll(".album-card").forEach((card, idx) => {
-                const stagger = (idx % 2) * 80;
-                card.style.transitionDelay = `${stagger}ms`;
-            });
-        });
-
         const observer = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                    obs.unobserve(entry.target);
+            const visibleBatch = entries.filter(e => e.isIntersecting);
+            let cardStep = 0;
+            visibleBatch.forEach(entry => {
+                const el = entry.target;
+                const isGridUnit = el.classList.contains("album-card") || el.classList.contains("gallery-item");
+                if (isGridUnit) {
+                    el.style.transitionDelay = `${Math.min(cardStep, 3) * 80}ms`;
+                    cardStep++;
+                }
+                el.classList.add("visible");
+                obs.unobserve(el);
+                if (isGridUnit) {
+                    setTimeout(() => { el.style.transitionDelay = ""; }, 900);
                 }
             });
         }, {
-            threshold: 0.05,
-            rootMargin: "0px 0px -24px 0px"
+            threshold: 0.06,
+            rootMargin: "0px 0px -32px 0px"
         });
 
-        revealEls.forEach(el => observer.observe(el));
-
-        setTimeout(() => {
-            revealEls.forEach(el => el.classList.add("visible"));
-        }, 450);
+        revealEls.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.96 && rect.bottom > 0) {
+                el.classList.add("visible");
+            } else {
+                observer.observe(el);
+            }
+        });
     }
 
     // Track album card clicks cleanly
