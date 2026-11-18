@@ -1,8 +1,6 @@
 {
   "name": "DP.PORTFOLIO",
-  "description": "Profesionali fotografija Kaunas, Lietuva. Asmeninės fotosesijos, renginiai ir Premium videografija. Aukščiausia kokybė.",
+  "description": "Fotografija Kaune ir Lietuvoje. Asmeninės fotosesijos, renginiai ir ilgesnio formato vaizdo įrašai su baziniu montažu.",
   "permissions": [],
-  "capabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
+  "capabilities": []
 }

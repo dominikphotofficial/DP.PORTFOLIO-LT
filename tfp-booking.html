@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO</title>
-    <meta name="description" content="Nemokama TFP fotosesija Kaune. Kūrybiniai vizualiniai mainai, Fujifilm X-S20 kokybė, profesionalus portretas ir gatvės mada. Registruokitės dabar.">
+    <meta name="description" content="Nemokama TFP fotosesija Kaune. Kūrybiniai vizualiniai mainai, portretai ir gatvės mada. Registruokitės bendram projektui.">
     <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DP.PORTFOLIO">
     <meta property="og:title" content="TFP Fotosesija Kaune | Registracija | DP.PORTFOLIO">
-    <meta property="og:description" content="Ieškau naujų veidų portfolio pildymui. Registruokitės kūrybiniam projektui su Fujifilm X-S20.">
+    <meta property="og:description" content="Ieškau naujų veidų portfolio pildymui. Registruokitės bendram fotografijos projektui.">
     <meta property="og:url" content="https://portfolio.dominikphotofficial.lt/tfp-booking.html">
     <meta property="og:image" content="https://i.postimg.cc/Jnv9KRSs/IMG-7441.jpg">
     <meta property="og:image:width" content="1200">
@@ -442,7 +442,7 @@
                 <p class="tfp-desc-lead">
                     Ieškau naujų veidų, unikalios išvaizdos ir kūrybiškų idėjų bendriems fotografijos projektams. 
                     <strong>TFP (Time for Print / Pozavimas už nuotraukas)</strong> yra abipusis bendradarbiavimas be finansinio atlygio: 
-                    jūs skiriate savo laiką ir energiją, o mes kartu sukuriame aukštos kokybės kinematografinį turinį.
+                    jūs skiriate savo laiką ir energiją, o kartu sukuriame kokybišką nuotraukų seriją abiejų pusių portfolio.
                 </p>
 
                 <!-- Value Boxes -->
@@ -450,20 +450,20 @@
                     <div class="tfp-highlight-box">
                         <h4>Ką gaunate jūs:</h4>
                         <ul>
-                            <li>10–15 autorinių retušuotų kadrų aukščiausia raiška</li>
-                            <li>Nemokama asmeninė Wfolio galerija be vandens ženklų</li>
-                            <li>Profesionali Fujifilm X-S20 cinema optika ir spalvų profiliai</li>
-                            <li>Pagalba pozavimui, stiliaus patarimai ir jauki atmosfera</li>
+                            <li>10–15 retušuotų kadrų pilna raiška</li>
+                            <li>Asmeninė internetinė Wfolio galerija be vandens ženklų</li>
+                            <li>Išankstinis idėjos, aprangos ir lokacijos suderinimas</li>
+                            <li>Pagalba pozavimui ir rami atmosfera fotosesijos metu</li>
                         </ul>
                     </div>
 
                     <div class="tfp-highlight-box">
-                        <h4>Ko mes ieškome šiuo metu:</h4>
+                        <h4>Ko ieškau šiuo metu:</h4>
                         <ul>
-                            <li>Gatvės mada (Streetwear / Casual chic / High fashion)</li>
-                            <li>Charakteringi portretai ir unikalios veido išraiškos</li>
-                            <li>Automobilių ir motociklų kultūra bei naktinis Kaunas</li>
-                            <li>Meninės, kinematografinės ir film-noir idėjos</li>
+                            <li>Gatvės mada (Streetwear / Casual / High fashion)</li>
+                            <li>Charakteringi portretai</li>
+                            <li>Automobilių ir motociklų kultūra bei vakarinis Kaunas</li>
+                            <li>Meninės, nespalvotos ir film-noir įkvėptos idėjos</li>
                         </ul>
                     </div>
                 </div>
@@ -623,7 +623,7 @@
                         <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
                         <span class="logo-sub">Portfolio</span>
                     </a>
-                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir vaizdo įrašai.</p>
                     <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
                 </div>
                 <div class="footer-nav-col">
@@ -710,7 +710,7 @@
 
         import { db, auth, storage } from './firebase-config.js';
         import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
-        import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { collection, addDoc, serverTimestamp, query, where, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
 
@@ -805,7 +805,7 @@
 
         // Real-time Firestore sync
         try {
-            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "reviews"), where("visible", "==", true));
             onSnapshot(q, (snapshot) => {
                 if (!snapshot.empty) {
                     const loaded = [];
@@ -814,6 +814,11 @@
                         if (d.visible !== false && (d.type === 'tfp' || !d.type)) {
                             loaded.push(d);
                         }
+                    });
+                    loaded.sort((a, b) => {
+                        const tA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : new Date(a.createdAt || a.date || 0).getTime();
+                        const tB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date(b.createdAt || b.date || 0).getTime();
+                        return (isNaN(tB) ? 0 : tB) - (isNaN(tA) ? 0 : tA);
                     });
                     if (loaded.length > 0) {
                         renderTfpReviews(loaded);
@@ -928,11 +933,12 @@
                         to: requestData.email,
                         from: "info@dominikphotofficial.lt",
                         replyTo: "info@dominikphotofficial.lt",
-                        message: { 
+                        message: {
                             from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
                             replyTo: "info@dominikphotofficial.lt",
-                            subject: emailData.subject, 
-                            html: emailData.html 
+                            subject: emailData.subject,
+                            text: emailData.text || '',
+                            html: emailData.html
                         },
                         createdAt: serverTimestamp()
                     });
@@ -1007,7 +1013,7 @@
 
             <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">2. Rezultato Perdavimas</h4>
             <p style="margin: 0 0 var(--sp-3); color: var(--text-muted);">
-                Fotografas įsipareigoja atrinkti, profesionaliai retušuoti ir perduoti modeliui ne mažiau kaip <strong>25 didelės raiškos skaitmenines nuotraukas</strong> privačioje internetinėje „Wfolio“ galerijoje per <strong>7–14 darbo dienų</strong> po fotosesijos. Neapdoroti „RAW“ failai nėra perduodami.
+                Fotografas įsipareigoja atrinkti, retušuoti ir perduoti modeliui <strong>10–15 didelės raiškos skaitmeninių nuotraukų</strong> privačioje internetinėje „Wfolio“ galerijoje per <strong>7–14 darbo dienų</strong> po fotosesijos. Neapdoroti „RAW“ failai nėra perduodami.
             </p>
 
             <h4 style="color: var(--text); margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-base); font-weight: var(--fw-bold);">3. Autorinės Teisės ir Nuotraukų Naudojimas (Model Release)</h4>

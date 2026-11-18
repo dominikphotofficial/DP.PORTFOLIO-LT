@@ -169,7 +169,7 @@
                     <button type="button" id="contact-reset-btn" class="btn-secondary">Siųsti naują žinutę</button>
                 </div>
 
-                <form id="contact-form" action="https://formspree.io/f/mgvnbvaw" method="POST">
+                <form id="contact-form">
                     <div class="form-group">
                         <label class="field-label" for="name">Jūsų vardas *</label>
                         <input type="text" id="name" name="name" required placeholder="Vardas Pavardė" autocomplete="name">
@@ -183,7 +183,7 @@
                         <select id="style" name="style">
                             <option value="Mokama fotosesija">Mokama fotosesija</option>
                             <option value="TFP fotosesija">TFP bendradarbiavimas</option>
-                            <option value="Videografija">Videografijos projektas</option>
+                            <option value="Vaizdo įrašymas">Ilgesnio formato vaizdo įrašas</option>
                             <option value="Kita">Kitas klausimas</option>
                         </select>
                     </div>
@@ -205,7 +205,7 @@
                         <span class="logo-mark"><img src="https://iili.io/fjNLbs4.png" alt="DP.PORTFOLIO" class="logo-img"></span>
                         <span class="logo-sub">Portfolio</span>
                     </a>
-                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir kinematografija.</p>
+                    <p class="footer-tagline">Erdvė &middot; Šviesa &middot; Emocija — autorinė fotografija ir vaizdo įrašai.</p>
                     <a href="mailto:info@dominikphotofficial.lt" class="footer-email">info@dominikphotofficial.lt</a>
                 </div>
                 <div class="footer-nav-col">
@@ -315,6 +315,8 @@
                             </div>
                         `;
 
+                        const ackText = `Sveiki, ${nameVal}!\n\nAčiū už jūsų žinutę. Patvirtiname, kad užklausa gauta:\n- Tema: ${styleVal}\n- Žinutė: ${messageVal}\n\nNetrukus susisieksime atsakydami į jūsų klausimus.\n\n--\nDP.PORTFOLIO\nhttps://portfolio.dominikphotofficial.lt`;
+
                         await addDoc(collection(db, "mail"), {
                             to: emailVal,
                             from: "info@dominikphotofficial.lt",
@@ -323,6 +325,7 @@
                                 from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
                                 replyTo: "info@dominikphotofficial.lt",
                                 subject: "Gauta Jūsų žinutė | DP.PORTFOLIO",
+                                text: ackText,
                                 html: ackHtml
                             },
                             createdAt: serverTimestamp()
@@ -346,19 +349,6 @@
                     } catch (tgErr) {
                         console.warn("Telegram trigger error:", tgErr);
                     }
-
-                    try {
-                        const formData = new FormData();
-                        formData.append('name', nameVal);
-                        formData.append('email', emailVal);
-                        formData.append('style', styleVal);
-                        formData.append('message', messageVal);
-                        fetch('https://formspree.io/f/mgvnbvaw', {
-                            method: 'POST',
-                            body: formData,
-                            headers: { 'Accept': 'application/json' }
-                        }).catch(() => {});
-                    } catch (_) {}
 
                     contactForm.reset();
                     contactForm.style.display = 'none';

@@ -1,8 +1,16 @@
 // Reviews & Visibility Manager
 // Bridges real-time Firestore with local JSON files & Server APIs for rock-solid reliability
 
-import { db } from './firebase-config.js';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { db, auth } from './firebase-config.js';
+import { collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+function requireAdminAuth() {
+    const user = auth?.currentUser;
+    if (!user || user.isAnonymous) {
+        throw new Error('Reikalinga administratoriaus autorizacija.');
+    }
+    return user;
+}
 
 // 1. Visibility (Rodymui / Nerodymui)
 export async function getReviewsVisibility() {
@@ -19,35 +27,40 @@ export async function getReviewsVisibility() {
 }
 
 export async function setReviewsVisibility(showReviews) {
+    requireAdminAuth();
     let savedToFile = false;
     try {
         const res = await fetch('/api/reviews-visibility', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ showReviews })
+            body: JSON.stringify({ showReviews: Boolean(showReviews) })
         });
         if (res.ok) savedToFile = true;
     } catch (e) {
         console.warn("Error saving to /api/reviews-visibility:", e);
     }
 
+    let dbError = null;
     try {
         await setDoc(doc(db, "settings", "reviews"), {
-            visible: showReviews,
+            visible: Boolean(showReviews),
             updatedAt: serverTimestamp()
         }, { merge: true });
     } catch (dbErr) {
-        console.warn("Firestore settings update skipped/failed:", dbErr);
+        dbError = dbErr;
+        console.error("Firestore settings update failed:", dbErr);
     }
 
-    return savedToFile;
+    if (dbError && !savedToFile) {
+        throw dbError;
+    }
+
+    return savedToFile || !dbError;
 }
 
 export function subscribeReviewsVisibility(callback) {
-    // Initial fetch from file
     getReviewsVisibility().then(callback);
 
-    // Real-time Firestore sync listener
     try {
         return onSnapshot(doc(db, "settings", "reviews"), (docSnap) => {
             if (docSnap.exists()) {
@@ -76,6 +89,7 @@ export async function fetchReviewsList() {
 }
 
 export async function createNewReview(reviewData) {
+    requireAdminAuth();
     let fileResult = null;
     try {
         const res = await fetch('/api/reviews', {
@@ -91,46 +105,72 @@ export async function createNewReview(reviewData) {
         console.warn("Error saving review to server API:", e);
     }
 
+    let dbError = null;
+    let docRef = null;
     try {
-        await addDoc(collection(db, "reviews"), {
+        docRef = await addDoc(collection(db, "reviews"), {
             ...reviewData,
+            visible: reviewData.visible !== false,
             createdAt: serverTimestamp()
         });
     } catch (dbErr) {
-        console.warn("Firestore review add skipped/failed:", dbErr);
+        dbError = dbErr;
+        console.error("Firestore review add failed:", dbErr);
     }
 
-    return fileResult;
+    if (dbError && !fileResult) {
+        throw dbError;
+    }
+
+    return fileResult || (docRef ? { id: docRef.id, ...reviewData } : null);
 }
 
 export async function toggleReviewItem(id, nextVisible) {
+    requireAdminAuth();
+    let apiOk = false;
     try {
-        await fetch(`/api/reviews/${id}`, {
+        const res = await fetch(`/api/reviews/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ visible: nextVisible })
+            body: JSON.stringify({ visible: Boolean(nextVisible) })
         });
+        if (res.ok) apiOk = true;
     } catch (e) {
         console.warn("API toggle error:", e);
     }
 
+    let dbError = null;
     try {
-        await updateDoc(doc(db, "reviews", id), { visible: nextVisible });
+        await updateDoc(doc(db, "reviews", id), { visible: Boolean(nextVisible) });
     } catch (dbErr) {
-        console.warn("Firestore toggle error:", dbErr);
+        dbError = dbErr;
+        console.error("Firestore toggle error:", dbErr);
+    }
+
+    if (dbError && !apiOk) {
+        throw dbError;
     }
 }
 
 export async function deleteReviewItem(id) {
+    requireAdminAuth();
+    let apiOk = false;
     try {
-        await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+        if (res.ok) apiOk = true;
     } catch (e) {
         console.warn("API delete error:", e);
     }
 
+    let dbError = null;
     try {
         await deleteDoc(doc(db, "reviews", id));
     } catch (dbErr) {
-        console.warn("Firestore delete error:", dbErr);
+        dbError = dbErr;
+        console.error("Firestore delete error:", dbErr);
+    }
+
+    if (dbError && !apiOk) {
+        throw dbError;
     }
 }

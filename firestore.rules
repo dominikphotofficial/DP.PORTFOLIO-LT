@@ -3,8 +3,20 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ============================================================================
-    // 🛡️ PAGALBINĖS SAUGUMO IR TAPATYBĖS TIKRINIMO FUNKCIJOS
+    // PAGALBINES SAUGUMO IR TAPATYBES TIKRINIMO FUNKCIJOS
     // ============================================================================
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
 
     function isSignedIn() {
       return request.auth != null;
@@ -14,26 +26,31 @@ service cloud.firestore {
       return isSignedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
 
-    // Sistemos savininko el. pašto adresai ir custom claims
+    function isVerifiedEmail() {
+      return isNotAnonymous()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email is string
+        && request.auth.token.email.size() <= 120;
+    }
+
+    // Savininko patvirtinti el. pasto adresai
     function isOwnerEmail() {
-      return isNotAnonymous() && (
+      return isVerifiedEmail() && (
         request.auth.token.email.lower() == 'dominikphotofficial.lt@gmail.com' ||
         request.auth.token.email.lower() == 'dominik.suskevic@gmail.com' ||
-        request.auth.token.email.lower() == 'info@dominikphotofficial.lt' ||
-        request.auth.token.admin == true
+        request.auth.token.email.lower() == 'info@dominikphotofficial.lt'
       );
     }
 
-    // Komandos nario patikra pagal vartotojo UID kolekcijoje admin_team
+    // Komandos nario patikra pagal UID dokumenta admin_team kolekcijoje
     function isTeamMember() {
-      return isNotAnonymous() && (
-        isOwnerEmail() ||
-        (exists(/databases/$(database)/documents/admin_team/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/admin_team/$(request.auth.uid)).data.active != false)
+      return isOwnerEmail() || (
+        isVerifiedEmail() &&
+        exists(/databases/$(database)/documents/admin_team/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/admin_team/$(request.auth.uid)).data.active == true
       );
     }
 
-    // Teisių patikra pagal nario priskirtas privilegijas
     function hasPermission(perm) {
       return isOwnerEmail() || (
         isTeamMember() &&
@@ -45,88 +62,372 @@ service cloud.firestore {
       );
     }
 
-    // Numatytas draudimas visiems neaprašytiems keliams
+    // ============================================================================
+    // VALIDACIJOS SCHEMA PAGALVEY (ANTI-UPDATE-GAP)
+    // ============================================================================
+
+    function isValidTFPRequest(data) {
+      return data.keys().hasAll(['name', 'email', 'date_time', 'location', 'idea', 'status'])
+        && data.keys().hasOnly([
+          'name', 'email', 'phone', 'instagram', 'social', 'socialProfile',
+          'date_time', 'location', 'idea', 'photos', 'reference_photos',
+          'extra_info', 'contractAgreed', 'adminNotes', 'language',
+          'status', 'galleryUrl', 'contract_pdf_url', 'createdAt'
+        ])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.email is string && data.email.size() > 3 && data.email.size() <= 120
+        && data.date_time is string && data.date_time.size() <= 80
+        && data.location is string && data.location.size() <= 150
+        && data.idea is string && data.idea.size() <= 1000
+        && data.status is string && data.status in ['New', 'Pending', 'Confirmed', 'Rescheduled', 'Completed', 'Cancelled']
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
+        && (!('instagram' in data) || (data.instagram is string && data.instagram.size() <= 150))
+        && (!('social' in data) || (data.social is string && data.social.size() <= 150))
+        && (!('socialProfile' in data) || (data.socialProfile is string && data.socialProfile.size() <= 200))
+        && (!('extra_info' in data) || (data.extra_info is string && data.extra_info.size() <= 1500))
+        && (!('contractAgreed' in data) || data.contractAgreed is bool)
+        && (!('adminNotes' in data) || (data.adminNotes is string && data.adminNotes.size() <= 2000))
+        && (!('language' in data) || (data.language is string && data.language.size() <= 10))
+        && (!('galleryUrl' in data) || (data.galleryUrl is string && data.galleryUrl.size() <= 500))
+        && (!('contract_pdf_url' in data) || (data.contract_pdf_url is string && data.contract_pdf_url.size() <= 500))
+        && (!('photos' in data) || (data.photos is list && data.photos.size() <= 10 && (data.photos.size() == 0 || data.photos[0] is string)))
+        && (!('reference_photos' in data) || (data.reference_photos is list && data.reference_photos.size() <= 10 && (data.reference_photos.size() == 0 || data.reference_photos[0] is string)))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidServiceRequest(data) {
+      return data.keys().hasAll(['clientName', 'email', 'serviceId', 'serviceName', 'preferredDate', 'status'])
+        && data.keys().hasOnly([
+          'clientName', 'email', 'phone', 'clientCode', 'clientAddress', 'socialProfile',
+          'serviceId', 'serviceName', 'originalPrice', 'finalPrice', 'depositPercentage',
+          'depositAmount', 'remainingAmount', 'paymentMethod', 'receiptNeeded',
+          'preferredDate', 'preferredTime', 'location', 'additionalInformation',
+          'adminNotes', 'reference_photos', 'language', 'status',
+          'galleryUrl', 'receiptUrl', 'createdAt'
+        ])
+        && data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 100
+        && data.email is string && data.email.size() > 3 && data.email.size() <= 120
+        && data.serviceId is string && data.serviceId.size() <= 60
+        && data.serviceName is string && data.serviceName.size() <= 120
+        && data.preferredDate is string && data.preferredDate.size() <= 50
+        && data.status is string && data.status in ['Pending', 'Confirmed', 'Deposit Paid', 'In Progress', 'Fully Paid', 'Completed', 'Cancelled']
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
+        && (!('clientCode' in data) || (data.clientCode is string && data.clientCode.size() <= 40))
+        && (!('clientAddress' in data) || (data.clientAddress is string && data.clientAddress.size() <= 200))
+        && (!('socialProfile' in data) || (data.socialProfile is string && data.socialProfile.size() <= 200))
+        && (!('originalPrice' in data) || data.originalPrice is number)
+        && (!('finalPrice' in data) || data.finalPrice is number)
+        && (!('depositPercentage' in data) || data.depositPercentage is number)
+        && (!('depositAmount' in data) || data.depositAmount is number)
+        && (!('remainingAmount' in data) || data.remainingAmount is number)
+        && (!('paymentMethod' in data) || (data.paymentMethod is string && data.paymentMethod.size() <= 50))
+        && (!('receiptNeeded' in data) || (data.receiptNeeded is string && data.receiptNeeded.size() <= 10))
+        && (!('preferredTime' in data) || (data.preferredTime is string && data.preferredTime.size() <= 50))
+        && (!('location' in data) || (data.location is string && data.location.size() <= 150))
+        && (!('additionalInformation' in data) || (data.additionalInformation is string && data.additionalInformation.size() <= 1500))
+        && (!('adminNotes' in data) || (data.adminNotes is string && data.adminNotes.size() <= 2000))
+        && (!('language' in data) || (data.language is string && data.language.size() <= 10))
+        && (!('galleryUrl' in data) || (data.galleryUrl is string && data.galleryUrl.size() <= 500))
+        && (!('receiptUrl' in data) || (data.receiptUrl is string && data.receiptUrl.size() <= 500))
+        && (!('reference_photos' in data) || (data.reference_photos is list && data.reference_photos.size() <= 10 && (data.reference_photos.size() == 0 || data.reference_photos[0] is string)))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidContactMessage(data) {
+      return data.keys().hasAll(['name', 'email', 'message', 'status'])
+        && data.keys().hasOnly(['name', 'email', 'subject', 'message', 'status', 'createdAt'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.email is string && data.email.size() > 3 && data.email.size() <= 120
+        && data.message is string && data.message.size() > 0 && data.message.size() <= 3000
+        && data.status is string && data.status in ['New', 'Answered', 'Replied', 'Archived']
+        && (!('subject' in data) || (data.subject is string && data.subject.size() <= 150))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidReview(data) {
+      return data.keys().hasAll(['clientName', 'comment', 'visible'])
+        && data.keys().hasOnly([
+          'clientName', 'type', 'sessionTag', 'rating', 'date',
+          'reviewLink', 'comment', 'status', 'visible', 'token', 'createdAt'
+        ])
+        && data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 100
+        && data.comment is string && data.comment.size() > 0 && data.comment.size() <= 2000
+        && data.visible is bool
+        && (!('type' in data) || (data.type is string && data.type in ['service', 'tfp']))
+        && (!('sessionTag' in data) || (data.sessionTag is string && data.sessionTag.size() <= 150))
+        && (!('rating' in data) || (data.rating is number && data.rating >= 1 && data.rating <= 5))
+        && (!('date' in data) || (data.date is string && data.date.size() <= 30))
+        && (!('reviewLink' in data) || (data.reviewLink is string && data.reviewLink.size() <= 500))
+        && (!('status' in data) || (data.status is string && data.status in ['pending', 'published', 'hidden']))
+        && (!('token' in data) || (data.token is string && data.token.size() <= 120))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidSetting(data) {
+      return data.keys().hasOnly(['visible', 'showSection', 'updatedAt'])
+        && (!('visible' in data) || data.visible is bool)
+        && (!('showSection' in data) || data.showSection is bool)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidAdminSetting(data) {
+      return data.keys().hasOnly([
+          'spreadsheetId', 'title', 'url', 'lastSync', 'lastSyncBy', 'createdBy',
+          'recipient', 'iban', 'bank', 'paypal', 'createdAt', 'updatedAt'
+        ])
+        && (!('spreadsheetId' in data) || (data.spreadsheetId is string && data.spreadsheetId.size() <= 150))
+        && (!('title' in data) || (data.title is string && data.title.size() <= 200))
+        && (!('url' in data) || (data.url is string && data.url.size() <= 500))
+        && (!('lastSync' in data) || (data.lastSync is string && data.lastSync.size() <= 80))
+        && (!('lastSyncBy' in data) || (data.lastSyncBy is string && data.lastSyncBy.size() <= 120))
+        && (!('createdBy' in data) || (data.createdBy is string && data.createdBy.size() <= 120))
+        && (!('recipient' in data) || (data.recipient is string && data.recipient.size() <= 150))
+        && (!('iban' in data) || (data.iban is string && data.iban.size() <= 60))
+        && (!('bank' in data) || (data.bank is string && data.bank.size() <= 100))
+        && (!('paypal' in data) || (data.paypal is string && data.paypal.size() <= 150))
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidReviewsVisibility(data) {
+      return data.keys().hasOnly(['showReviews', 'visible', 'updatedAt'])
+        && (!('showReviews' in data) || data.showReviews is bool)
+        && (!('visible' in data) || data.visible is bool)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidMail(data) {
+      return data.keys().hasAll(['to', 'message'])
+        && data.keys().hasOnly(['to', 'from', 'replyTo', 'message', 'createdAt', 'delivery'])
+        && data.to is string && data.to.size() > 3 && data.to.size() <= 120
+        && data.message is map
+        && data.message.keys().hasAll(['subject'])
+        && data.message.keys().hasOnly(['from', 'replyTo', 'subject', 'text', 'html', 'attachments'])
+        && data.message.subject is string && data.message.subject.size() > 0 && data.message.subject.size() <= 250
+        && (!('from' in data) || (data.from is string && data.from.size() <= 150))
+        && (!('replyTo' in data) || (data.replyTo is string && data.replyTo.size() <= 150))
+        && (!('from' in data.message) || (data.message.from is string && data.message.from.size() <= 150))
+        && (!('replyTo' in data.message) || (data.message.replyTo is string && data.message.replyTo.size() <= 150))
+        && (!('text' in data.message) || (data.message.text is string && data.message.text.size() <= 30000))
+        && (!('html' in data.message) || (data.message.html is string && data.message.html.size() <= 120000))
+        && (!('attachments' in data.message) || (data.message.attachments is list && data.message.attachments.size() <= 5))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidAdminTeamMember(data) {
+      return data.keys().hasAll(['name', 'email', 'role'])
+        && data.keys().hasOnly([
+          'name', 'email', 'role', 'permissions', 'customPermissions',
+          'active', 'status', 'lastInviteSentAt', 'lastLoginAt', 'updatedAt', 'createdAt'
+        ])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.email is string && data.email.size() > 3 && data.email.size() <= 120
+        && data.role is string && data.role in ['superadmin', 'manager', 'photographer', 'accountant']
+        && (!('permissions' in data) || (data.permissions is list && data.permissions.size() <= 15 && (data.permissions.size() == 0 || data.permissions[0] is string)))
+        && (!('customPermissions' in data) || data.customPermissions is bool)
+        && (!('active' in data) || data.active is bool)
+        && (!('status' in data) || (data.status is string && data.status in ['invited', 'active', 'suspended']))
+        && (!('lastInviteSentAt' in data) || data.lastInviteSentAt is timestamp)
+        && (!('lastLoginAt' in data) || data.lastLoginAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp)
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidVmiExpense(data) {
+      return data.keys().hasAll(['title', 'amount', 'date'])
+        && data.keys().hasOnly(['title', 'amount', 'category', 'date', 'invoiceNumber', 'notes', 'createdAt'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 150
+        && data.amount is number && data.amount >= 0 && data.amount <= 1000000
+        && data.date is string && data.date.size() > 0 && data.date.size() <= 30
+        && (!('category' in data) || (data.category is string && data.category.size() <= 60))
+        && (!('invoiceNumber' in data) || (data.invoiceNumber is string && data.invoiceNumber.size() <= 60))
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 500))
+        && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['actionType', 'description', 'timestamp'])
+        && data.keys().hasOnly(['userEmail', 'userName', 'actionType', 'description', 'details', 'timestamp'])
+        && data.actionType is string && data.actionType.size() > 0 && data.actionType.size() <= 60
+        && data.description is string && data.description.size() > 0 && data.description.size() <= 500
+        && data.timestamp is timestamp
+        && (!('userEmail' in data) || (data.userEmail is string && data.userEmail.size() <= 120))
+        && (!('userName' in data) || (data.userName is string && data.userName.size() <= 100))
+        && (!('details' in data) || data.details is map);
+    }
+
+    // Numatytas draudimas visiems neaprasytiems keliams
     match /{document=**} {
       allow read, write: if false;
     }
 
     // ============================================================================
-    // 📋 DUOMENŲ BAZĖS KOLEKCIJŲ TAISYKLĖS
+    // KOLEKCIJU TAISYKLES
     // ============================================================================
 
-    // 1. TFP Užklausos:
-    // Lankytojai kuria užklausas svetainėje. Administratoriai skaito, tvarko ir trina.
+    // 1. TFP Uzsakymu / bendradarbiavimo uzklausos
     match /tfp_requests/{requestId} {
-      allow create: if true;
-      allow read, update: if isSignedIn();
-      allow delete: if isOwnerEmail() || hasPermission('Trinimas') || isSignedIn();
+      allow create: if isValidId(requestId)
+        && isValidTFPRequest(incoming())
+        && incoming().status in ['New', 'Pending']
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow get: if isValidId(requestId) && isTeamMember();
+      allow list: if isOwnerEmail() || hasPermission('Užsakymai');
+      allow update: if isValidId(requestId)
+        && isTeamMember()
+        && isValidTFPRequest(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+        && (isOwnerEmail() || hasPermission('Užsakymai'));
+      allow delete: if isValidId(requestId)
+        && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 2. Mokamų Paslaugų Užklausos:
-    // Lankytojai pildo užsakymus svetainėje. Administratoriai valdo.
+    // 2. Mokamu paslaugu uzsakymai
     match /service_requests/{requestId} {
-      allow create: if true;
-      allow read, update: if isSignedIn();
-      allow delete: if isOwnerEmail() || hasPermission('Trinimas') || isSignedIn();
+      allow create: if isValidId(requestId)
+        && isValidServiceRequest(incoming())
+        && incoming().status == 'Pending'
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow get: if isValidId(requestId) && isTeamMember();
+      allow list: if isOwnerEmail() || hasPermission('Užsakymai') || hasPermission('VMI Suvestinė');
+      allow update: if isValidId(requestId)
+        && isTeamMember()
+        && isValidServiceRequest(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+        && (isOwnerEmail() || hasPermission('Užsakymai') || hasPermission('VMI Suvestinė'));
+      allow delete: if isValidId(requestId)
+        && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 3. Kontaktų Žinutės (Forma iš contacts.html):
-    // Lankytojai siunčia žinutes. Administratoriai skaito ir apdoroja.
+    // 3. Kontaktu zinutes
     match /contact_messages/{messageId} {
-      allow create: if true;
-      allow read, update: if isSignedIn();
-      allow delete: if isOwnerEmail() || hasPermission('Trinimas') || isSignedIn();
+      allow create: if isValidId(messageId)
+        && isValidContactMessage(incoming())
+        && incoming().status == 'New'
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow get: if isValidId(messageId) && isTeamMember();
+      allow list: if isOwnerEmail() || hasPermission('Kontaktai');
+      allow update: if isValidId(messageId)
+        && isTeamMember()
+        && isValidContactMessage(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+        && (isOwnerEmail() || hasPermission('Kontaktai'));
+      allow delete: if isValidId(messageId)
+        && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 4. Klientų Atsiliepimai:
-    // Klientai teikia atsiliepimus, patvirtinti atsiliepimai rodomi viešai.
+    // 4. Klientu atsiliepimai (viesai matomi tik patvirtinti)
     match /reviews/{reviewId} {
-      allow read: if true;
-      allow create: if true;
-      allow update: if isSignedIn();
-      allow delete: if isOwnerEmail() || hasPermission('Trinimas') || isSignedIn();
+      allow create: if isValidId(reviewId)
+        && isValidReview(incoming())
+        && (
+          isOwnerEmail() ||
+          hasPermission('Atsiliepimai') ||
+          (incoming().visible == false && (!('status' in incoming()) || incoming().status == 'pending'))
+        )
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow get: if isValidId(reviewId) && (existing().visible == true || isTeamMember());
+      allow list: if existing().visible == true || isOwnerEmail() || hasPermission('Atsiliepimai');
+      allow update: if isValidId(reviewId)
+        && (isOwnerEmail() || hasPermission('Atsiliepimai'))
+        && isValidReview(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt);
+      allow delete: if isValidId(reviewId)
+        && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 5. Nustatymai ir atsiliepimų matomumo valdymas:
+    // 5. Viesi UI nustatymai (pvz., atsiliepimu sekcijos rodymas)
     match /settings/{settingId} {
-      allow read: if true;
-      allow write: if isSignedIn();
+      allow get: if isValidId(settingId) && (settingId == 'reviews' || isTeamMember());
+      allow list: if isOwnerEmail();
+      allow create, update: if isValidId(settingId)
+        && (isOwnerEmail() || hasPermission('Atsiliepimai'))
+        && isValidSetting(incoming())
+        && (!('updatedAt' in incoming()) || incoming().updatedAt == request.time);
+      allow delete: if false;
     }
 
+    // 6. Administravimo nustatymai (pvz., privatūs banko rekvizitai 'billing' ir 'google_sheets')
     match /admin_settings/{settingId} {
-      allow read: if true;
-      allow write: if isSignedIn();
+      allow get: if isValidId(settingId) && (settingId == 'billing' ? isOwnerEmail() : isTeamMember());
+      allow list: if isOwnerEmail();
+      allow create, update: if isValidId(settingId)
+        && (settingId == 'billing' ? isOwnerEmail() : (isOwnerEmail() || hasPermission('Google Sheets')))
+        && isValidAdminSetting(incoming())
+        && (!('updatedAt' in incoming()) || incoming().updatedAt == request.time);
+      allow delete: if false;
     }
 
+    // 7. Papildomas atsiliepimu matomumo kelias
     match /reviews_visibility/{docId} {
-      allow read: if true;
-      allow write: if isSignedIn();
+      allow get: if isValidId(docId);
+      allow list: if isOwnerEmail();
+      allow create, update: if isValidId(docId)
+        && (isOwnerEmail() || hasPermission('Atsiliepimai'))
+        && isValidReviewsVisibility(incoming())
+        && (!('updatedAt' in incoming()) || incoming().updatedAt == request.time);
+      allow delete: if false;
     }
 
-    // 6. El. Pašto Eilė (Firebase Mail Extension / Pranešimų siuntimas):
+    // 8. El. pasto eile (Firebase Trigger Email)
     match /mail/{mailId} {
-      allow create: if true;
-      allow read, update, delete: if isSignedIn();
+      allow create: if isValidId(mailId)
+        && isValidMail(incoming())
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow get: if isValidId(mailId) && isTeamMember();
+      allow list: if isOwnerEmail() || hasPermission('El. laiškai');
+      allow update: if false;
+      allow delete: if isValidId(mailId) && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 7. Komandos Teisės ir Vartotojų Rolės (RBAC):
-    // Skaitymas prieinamas autorizacijos patikrai. Kūrimas/keitimas – savininkui arba pačiam nariui (susiejimui).
+    // 9. Komandos nariai ir RBAC prieiga
     match /admin_team/{memberId} {
-      allow read: if true;
-      allow create, update: if isOwnerEmail() || (isSignedIn() && request.auth.uid == memberId) || isSignedIn();
-      allow delete: if isOwnerEmail();
+      allow get: if isValidId(memberId) && (
+        isOwnerEmail() ||
+        (isVerifiedEmail() && (request.auth.uid == memberId || existing().email.lower() == request.auth.token.email.lower()))
+      );
+      allow list: if isOwnerEmail() || (
+        isVerifiedEmail() &&
+        existing().email.lower() == request.auth.token.email.lower()
+      );
+      allow create: if isValidId(memberId)
+        && isValidAdminTeamMember(incoming())
+        && (
+          isOwnerEmail() ||
+          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == request.auth.token.email.lower() && incoming().role != 'superadmin')
+        );
+      allow update: if isValidId(memberId)
+        && isValidAdminTeamMember(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+        && (
+          isOwnerEmail() ||
+          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == existing().email.lower() && incoming().role == existing().role && incoming().permissions == existing().permissions && incoming().active == existing().active && incoming().diff(existing()).affectedKeys().hasOnly(['lastLoginAt', 'name', 'status', 'updatedAt']))
+        );
+      allow delete: if isValidId(memberId) && (
+        isOwnerEmail() ||
+        (isVerifiedEmail() && existing().email.lower() == request.auth.token.email.lower() && memberId != request.auth.uid)
+      );
     }
 
-    // 8. VMI Pajamų ir Išlaidų Žurnalas, Kvitų Apskaita:
+    // 10. VMI Pajamu ir Islaidu Zurnalas
     match /vmi_expenses/{expenseId} {
-      allow read, write: if isSignedIn();
+      allow get: if isValidId(expenseId) && isTeamMember();
+      allow list: if isOwnerEmail() || hasPermission('VMI Suvestinė');
+      allow create, update: if isValidId(expenseId)
+        && (isOwnerEmail() || hasPermission('VMI Suvestinė'))
+        && isValidVmiExpense(incoming());
+      allow delete: if isValidId(expenseId) && (isOwnerEmail() || hasPermission('Trinimas') || hasPermission('VMI Suvestinė'));
     }
 
-    // 9. Veiksmų Žurnalas (Audit Logs):
+    // 11. Audito zurnalas (nekeiciamas ir netrinamas)
     match /audit_logs/{logId} {
-      allow create: if true;
-      allow read: if isSignedIn();
-      allow update, delete: if isOwnerEmail();
+      allow create: if isValidId(logId)
+        && isTeamMember()
+        && isValidAuditLog(incoming())
+        && incoming().timestamp == request.time;
+      allow get: if isValidId(logId) && isTeamMember();
+      allow list: if isOwnerEmail();
+      allow update, delete: if false;
     }
   }
 }

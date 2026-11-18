@@ -8,15 +8,21 @@
         "name": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "format": "email", "maxLength": 120 },
         "phone": { "type": "string", "maxLength": 30 },
+        "instagram": { "type": "string", "maxLength": 150 },
         "social": { "type": "string", "maxLength": 150 },
-        "date_time": { "type": "string", "maxLength": 50 },
+        "socialProfile": { "type": "string", "maxLength": 200 },
+        "date_time": { "type": "string", "maxLength": 80 },
         "location": { "type": "string", "maxLength": 150 },
-        "idea": { "type": "string", "maxLength": 500 },
+        "idea": { "type": "string", "maxLength": 1000 },
         "photos": { "type": "array" },
-        "extra_info": { "type": "string", "maxLength": 1000 },
+        "reference_photos": { "type": "array" },
+        "extra_info": { "type": "string", "maxLength": 1500 },
+        "contractAgreed": { "type": "boolean" },
+        "adminNotes": { "type": "string", "maxLength": 2000 },
         "language": { "type": "string", "maxLength": 10 },
-        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Rescheduled", "Completed", "Cancelled"] },
+        "status": { "type": "string", "enum": ["New", "Pending", "Confirmed", "Rescheduled", "Completed", "Cancelled"] },
         "galleryUrl": { "type": "string", "maxLength": 500 },
+        "contract_pdf_url": { "type": "string", "maxLength": 500 },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["name", "email", "date_time", "location", "idea"]
@@ -29,9 +35,11 @@
         "clientName": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "format": "email", "maxLength": 120 },
         "phone": { "type": "string", "maxLength": 30 },
-        "socialProfile": { "type": "string", "maxLength": 150 },
-        "serviceId": { "type": "string", "maxLength": 50 },
-        "serviceName": { "type": "string", "maxLength": 100 },
+        "clientCode": { "type": "string", "maxLength": 40 },
+        "clientAddress": { "type": "string", "maxLength": 200 },
+        "socialProfile": { "type": "string", "maxLength": 200 },
+        "serviceId": { "type": "string", "maxLength": 60 },
+        "serviceName": { "type": "string", "maxLength": 120 },
         "originalPrice": { "type": "number" },
         "finalPrice": { "type": "number" },
         "depositPercentage": { "type": "number" },
@@ -42,15 +50,30 @@
         "preferredDate": { "type": "string", "maxLength": 50 },
         "preferredTime": { "type": "string", "maxLength": 50 },
         "location": { "type": "string", "maxLength": 150 },
-        "additionalInformation": { "type": "string", "maxLength": 1000 },
+        "additionalInformation": { "type": "string", "maxLength": 1500 },
+        "adminNotes": { "type": "string", "maxLength": 2000 },
         "reference_photos": { "type": "array" },
         "language": { "type": "string", "maxLength": 10 },
-        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Deposit Paid", "Fully Paid", "Completed", "Cancelled"] },
+        "status": { "type": "string", "enum": ["Pending", "Confirmed", "Deposit Paid", "In Progress", "Fully Paid", "Completed", "Cancelled"] },
         "galleryUrl": { "type": "string", "maxLength": 500 },
         "receiptUrl": { "type": "string", "maxLength": 500 },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["clientName", "email", "serviceId", "serviceName", "preferredDate"]
+    },
+    "ContactMessage": {
+      "title": "Contact Message",
+      "description": "Public contact form inquiry from website visitors",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "subject": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 3000 },
+        "status": { "type": "string", "enum": ["New", "Answered", "Replied", "Archived"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message"]
     },
     "Review": {
       "title": "Review",
@@ -61,9 +84,12 @@
         "type": { "type": "string", "enum": ["service", "tfp"] },
         "sessionTag": { "type": "string", "maxLength": 150 },
         "rating": { "type": "number" },
+        "date": { "type": "string", "maxLength": 30 },
         "reviewLink": { "type": "string", "maxLength": 500 },
         "comment": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["pending", "published", "hidden"] },
         "visible": { "type": "boolean" },
+        "token": { "type": "string", "maxLength": 120 },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["clientName", "comment"]
@@ -78,12 +104,43 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       }
     },
+    "AdminSetting": {
+      "title": "Admin Setting",
+      "description": "Private administrative settings including Google Sheets link and private billing details",
+      "type": "object",
+      "properties": {
+        "spreadsheetId": { "type": "string", "maxLength": 150 },
+        "title": { "type": "string", "maxLength": 200 },
+        "url": { "type": "string", "maxLength": 500 },
+        "lastSync": { "type": "string", "maxLength": 80 },
+        "lastSyncBy": { "type": "string", "maxLength": 120 },
+        "createdBy": { "type": "string", "maxLength": 120 },
+        "recipient": { "type": "string", "maxLength": 150 },
+        "iban": { "type": "string", "maxLength": 60 },
+        "bank": { "type": "string", "maxLength": 100 },
+        "paypal": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ReviewsVisibility": {
+      "title": "Reviews Visibility",
+      "description": "Legacy visibility flag document for testimonials section",
+      "type": "object",
+      "properties": {
+        "showReviews": { "type": "boolean" },
+        "visible": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
     "Mail": {
       "title": "Mail",
       "description": "Queued email notification triggered upon booking and updates",
       "type": "object",
       "properties": {
         "to": { "type": "string", "format": "email", "maxLength": 120 },
+        "from": { "type": "string", "maxLength": 150 },
+        "replyTo": { "type": "string", "maxLength": 150 },
         "message": { "type": "object" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
@@ -98,8 +155,12 @@
         "email": { "type": "string", "format": "email", "maxLength": 120 },
         "role": { "type": "string", "enum": ["superadmin", "manager", "photographer", "accountant"] },
         "permissions": { "type": "array" },
+        "customPermissions": { "type": "boolean" },
         "active": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["invited", "active", "suspended"] },
         "lastInviteSentAt": { "type": "string", "format": "date-time" },
+        "lastLoginAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["name", "email", "role"]
@@ -143,6 +204,10 @@
       "schema": "ServiceRequest",
       "description": "Submissions from paid services booking form"
     },
+    "/contact_messages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Submissions from public contact form"
+    },
     "/reviews/{reviewId}": {
       "schema": "Review",
       "description": "Customer reviews and testimonials displayed on portfolio"
@@ -150,6 +215,14 @@
     "/settings/{settingId}": {
       "schema": "Setting",
       "description": "System and website presentation preferences"
+    },
+    "/admin_settings/{settingId}": {
+      "schema": "AdminSetting",
+      "description": "Private administrative settings including Google Sheets link and private billing details"
+    },
+    "/reviews_visibility/{docId}": {
+      "schema": "ReviewsVisibility",
+      "description": "Legacy reviews visibility flag collection"
     },
     "/mail/{mailId}": {
       "schema": "Mail",

@@ -651,69 +651,6 @@
         .quick-period-btn:hover { border-color: var(--accent); color: var(--accent); }
         .quick-period-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
-        .ai-floating-widget { position: fixed; bottom: var(--sp-4); right: var(--sp-4); z-index: 2500; }
-        .ai-launcher-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--sp-2);
-            background: var(--accent);
-            color: #ffffff;
-            border: 1px solid var(--accent);
-            padding: 12px 18px;
-            min-height: 44px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-family: var(--font);
-            font-size: var(--fs-sm);
-            font-weight: var(--fw-medium);
-            transition: background-color var(--ease);
-        }
-        .ai-launcher-btn:hover { background: var(--accent-hover); }
-        .ai-online-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block; }
-
-        .ai-helper-window {
-            position: fixed;
-            bottom: 84px;
-            right: var(--sp-4);
-            width: 440px;
-            max-width: calc(100vw - 32px);
-            height: 600px;
-            max-height: calc(100vh - 110px);
-            z-index: 2501;
-            background: var(--bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .ai-helper-window.active { display: flex; }
-        .ai-window-header {
-            background: var(--accent);
-            color: #ffffff;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .ai-window-title { font-family: var(--font); font-size: var(--fs-sm); font-weight: var(--fw-medium); display: flex; align-items: center; gap: var(--sp-2); margin: 0; }
-        .ai-window-tool-btn { background: transparent; border: none; color: #ffffff; cursor: pointer; font-size: 1rem; padding: 6px; min-width: 36px; min-height: 36px; border-radius: var(--radius); }
-        .ai-window-tool-btn:hover { background: rgba(255, 255, 255, 0.15); }
-        .ai-chips-bar { background: #fafafa; border-bottom: 1px solid var(--border); padding: var(--sp-2) var(--sp-3); display: flex; gap: var(--sp-2); overflow-x: auto; white-space: nowrap; }
-        .ai-chip-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; min-height: 36px; border-radius: var(--radius); font-size: var(--fs-xs); font-family: var(--font); cursor: pointer; flex-shrink: 0; }
-        .ai-chip-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .ai-chat-body { flex: 1; overflow-y: auto; padding: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-3); background: var(--bg); }
-        .ai-msg { max-width: 90%; padding: 10px 14px; border-radius: var(--radius); font-size: var(--fs-sm); line-height: var(--lh); word-break: break-word; }
-        .ai-msg-user { align-self: flex-end; background: var(--accent); color: #ffffff; }
-        .ai-msg-bot { align-self: flex-start; background: #fafafa; color: var(--text); border: 1px solid var(--border); }
-        .ai-msg-bot table { width: 100%; border-collapse: collapse; margin: var(--sp-2) 0; font-size: var(--fs-xs); }
-        .ai-msg-bot th, .ai-msg-bot td { padding: 6px 8px; border: 1px solid var(--border); }
-        .ai-msg-bot th { background: #f3f4f6; font-weight: var(--fw-bold); }
-        .ai-msg-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-2); border-top: 1px solid var(--border); padding-top: var(--sp-2); }
-        .ai-msg-act-btn { background: var(--bg); border: 1px solid var(--border); font-size: var(--fs-xs); padding: 6px 10px; min-height: 36px; border-radius: var(--radius); cursor: pointer; color: var(--text); font-weight: var(--fw-medium); }
-        .ai-msg-act-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .ai-chat-input-area { border-top: 1px solid var(--border); background: var(--bg); padding: var(--sp-3); }
-
         .doc-preview-modal-content { background: var(--bg); max-width: 980px; width: 95vw; max-height: 94vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--border); }
         .doc-preview-header { background: var(--accent); color: #ffffff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--sp-2); }
         .doc-preview-tabs { display: flex; gap: var(--sp-2); background: #fafafa; padding: 10px 16px; border-bottom: 1px solid var(--border); overflow-x: auto; }
@@ -770,7 +707,6 @@
             .tab-btn { width: 100%; text-align: left; }
             .admin-filter-toolbar { flex-direction: column; align-items: stretch; }
             .filter-pills { overflow-x: auto; flex-wrap: nowrap; padding-bottom: var(--sp-1); }
-            .ai-helper-window { width: calc(100vw - 24px) !important; right: 12px !important; bottom: 12px !important; }
         }
 
         @media print {
@@ -779,7 +715,7 @@
             body > *:not(#document-print-modal) { display: none !important; }
             #document-print-modal,
             .modal-content.doc-preview-modal-content { display: block !important; position: static !important; width: 100% !important; max-width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; border: none !important; background: #ffffff !important; overflow: visible !important; }
-            .doc-preview-header, .doc-preview-tabs, .doc-template-toolbar, #admin-toast, #ai-floating-widget, #ai-helper-window, header, #main-header, .nav-overlay, .admin-header-bar, .admin-filter-toolbar, .vmi-filter-bar, .admin-quick-toolbar, .dashboard-stats, .admin-btn, .admin-btn-outline, .admin-btn-delete, .auth-divider { display: none !important; }
+            .doc-preview-header, .doc-preview-tabs, .doc-template-toolbar, #admin-toast, header, #main-header, .nav-overlay, .admin-header-bar, .admin-filter-toolbar, .vmi-filter-bar, .admin-quick-toolbar, .dashboard-stats, .admin-btn, .admin-btn-outline, .admin-btn-delete, .auth-divider { display: none !important; }
             .doc-paper-wrap { display: block !important; padding: 0 !important; background: transparent !important; overflow: visible !important; }
             #print-document-container.doc-a4-sheet { display: block !important; position: static !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: none !important; background: #ffffff !important; overflow: visible !important; }
             .single-page-doc { page-break-inside: avoid !important; break-inside: avoid !important; }
@@ -888,18 +824,14 @@
                 <input type="password" id="admin-password" class="admin-select" placeholder="••••••••••••" style="margin-top: 0;" required autocomplete="current-password">
             </div>
 
-            <button type="button" id="admin-login-email-btn" onclick="performEmailLogin()" class="admin-btn" style="width: 100%; margin-bottom: 10px; padding: 14px;">
+            <button type="button" id="admin-login-email-btn" onclick="performEmailLogin()" class="admin-btn" style="width: 100%; margin-bottom: 12px; padding: 14px;">
                 Prisijungti
             </button>
 
-            <button type="button" id="admin-owner-2fa-direct-btn" onclick="performDirect2FA()" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.85rem; padding: 11px; border: 1.5px solid #113939; color: #113939; font-weight: 600; background: #FAFBFB;">
-                👑 Greitas 2FA kodo siuntimas į el. paštą
-            </button>
-
             <!-- 2FA / MFA Verification Step Modal/Container -->
-            <div id="auth-2fa-container" style="display: none; text-align: left; margin-bottom: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.2); border-radius: 6px; padding: 18px 16px;">
+            <div id="auth-2fa-container" style="display: none; text-align: left; margin-bottom: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.2); border-radius: var(--radius); padding: 18px 16px;">
                 <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #113939; margin-bottom: 8px; font-size: 0.95rem;">
-                    <span>🔐</span> <span>Dviejų Veiksnių Autentifikacija (2FA)</span>
+                    <span>Dviejų veiksnių autentifikacija (2FA)</span>
                 </div>
                 <p id="auth-2fa-instructions" style="font-size: 0.84rem; color: #555; margin: 0 0 12px 0; line-height: 1.5;">
                     Įveskite 6 skaitmenų saugumo patvirtinimo kodą, išsiųstą Jūsų autorizuotu el. paštu:
@@ -914,7 +846,7 @@
             </div>
 
             <button type="button" id="admin-forgot-password-btn" onclick="performForgotPassword()" class="admin-btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 0.8rem; padding: 11px;">
-                🔑 Pamiršote slaptažodį? Siųsti nustatymo nuorodą
+                Pamiršote slaptažodį? Siųsti nustatymo nuorodą
             </button>
         </div>
 
@@ -1032,10 +964,6 @@
                 triggerOrWait('_realPerformGoogleRegistration', 'Kraunama Google registracija...');
             };
 
-            window.performDirect2FA = function() {
-                triggerOrWait('_realPerformDirect2FA', 'Ruošiamas 2FA saugumo kodo siuntimas...');
-            };
-
             window.verify2FACode = function() {
                 triggerOrWait('_realVerify2FACode', 'Tikrinamas 2FA kodas...');
             };
@@ -1097,35 +1025,32 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <div id="role-preview-container" style="display: none; align-items: center; gap: 6px; background: rgba(197, 168, 128, 0.15); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.35);">
-                    <label for="role-preview-select" style="font-size: 0.78rem; font-weight: 600; color: #113939; margin: 0; white-space: nowrap;">👁️ Peržiūra kaip:</label>
+                <div id="role-preview-container" style="display: none; align-items: center; gap: 6px; background: #FAFBFB; padding: 4px 10px; border-radius: var(--radius); border: 1px solid var(--border);">
+                    <label for="role-preview-select" style="font-size: 0.78rem; font-weight: 600; color: #113939; margin: 0; white-space: nowrap;">Peržiūra kaip:</label>
                     <select id="role-preview-select" class="admin-select" style="padding: 4px 8px; font-size: 0.78rem; height: auto; margin: 0; background: #fff;" onchange="previewAsRole(this.value)">
-                        <option value="superadmin">👑 Super Admin (Savininkas)</option>
-                        <option value="manager">💼 Vadybininkas</option>
-                        <option value="photographer">📷 Fotografas</option>
-                        <option value="accountant">🧾 Buhalteris</option>
+                        <option value="superadmin">Super Admin (Savininkas)</option>
+                        <option value="manager">Vadybininkas</option>
+                        <option value="photographer">Fotografas</option>
+                        <option value="accountant">Buhalteris</option>
                     </select>
                 </div>
                 <button type="button" class="admin-btn-outline" onclick="toggleDiagnosticsModal()">
-                    🩺 Diagnostika
-                </button>
-                <button type="button" class="admin-btn" onclick="toggleAiHelperWindow()">
-                    🤖 AI Padėjėjas
+                    Diagnostika
                 </button>
                 <button id="logout-btn-inner" class="logout-btn-header">Atsijungti</button>
             </div>
         </div>
 
-        <!-- ⚡ Greitojo Valdymo & Nustatymų Juosta -->
+        <!-- Greitojo valdymo ir nustatymų juosta -->
         <div class="admin-quick-toolbar">
             <div class="quick-tool-item" id="quick-item-reviews">
-                <span class="quick-tool-label">🌟 Atsiliepimai svetainėje:</span>
+                <span class="quick-tool-label">Atsiliepimai svetainėje:</span>
                 <button type="button" id="quick-toggle-reviews-btn" class="quick-status-toggle active" onclick="toggleReviewsVisibilityQuick()">
                     <span class="dot"></span> <span id="quick-reviews-status-text">Rodoma</span>
                 </button>
             </div>
             <div class="quick-tool-item" id="quick-item-period">
-                <span class="quick-tool-label">📊 VMI Laikotarpis:</span>
+                <span class="quick-tool-label">VMI Laikotarpis:</span>
                 <div style="display: inline-flex; gap: 5px;">
                     <button type="button" class="quick-period-btn active" id="btn-period-2026" onclick="setQuickPeriod('2026')">2026 m.</button>
                     <button type="button" class="quick-period-btn" id="btn-period-Q1" onclick="setQuickPeriod('2026-Q1')">Q1</button>
@@ -1136,16 +1061,16 @@
                 </div>
             </div>
             <div class="quick-tool-item" id="quick-item-method">
-                <span class="quick-tool-label">🧾 Išlaidų metodas:</span>
+                <span class="quick-tool-label">Išlaidų metodas:</span>
                 <div style="display: inline-flex; gap: 5px;">
                     <button type="button" class="quick-period-btn active" id="btn-method-flat30" onclick="setQuickDeductionMethod('flat30')">30% prezumpcija</button>
                     <button type="button" class="quick-period-btn" id="btn-method-actual" onclick="setQuickDeductionMethod('actual')">Faktinės išlaidos</button>
                 </div>
             </div>
             <div class="quick-tool-item" id="quick-item-sheets">
-                <span class="quick-tool-label">📗 Sheets:</span>
+                <span class="quick-tool-label">Sheets:</span>
                 <button type="button" class="admin-btn-outline" style="padding: 5px 12px; font-size: 0.76rem;" onclick="syncSingleTabWithConfirm('vmi')">
-                    🔄 Sinchronizuoti
+                    Sinchronizuoti
                 </button>
             </div>
         </div>
@@ -1159,7 +1084,7 @@
             <div class="stat-box" id="stat-box-vmi"><h3>VMI Pajamos</h3><p id="stat-vmi-income" style="color:#2E7D32;">0 €</p></div>
         </div>
 
-        <!-- 📱 Mobilus Meniu Mygtukas (Collapsible Navigation Bar) -->
+        <!-- Mobilus meniu mygtukas -->
         <div class="mobile-tabs-toggle-bar" style="display: none;">
             <button type="button" id="mobile-tabs-menu-btn" class="mobile-tabs-btn" onclick="toggleMobileNavTabs()">
                 <span style="display: flex; align-items: center; gap: 8px;">
@@ -1171,16 +1096,15 @@
         </div>
 
         <div class="tabs" id="admin-tabs-nav">
-            <button class="tab-btn active" id="tab-btn-tfp" data-tab="tfp" onclick="switchTab('tfp')">TFP Užklausos <span id="badge-tfp" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
-            <button class="tab-btn" id="tab-btn-services" data-tab="services" onclick="switchTab('services')">Mokamos Paslaugos <span id="badge-services" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
-            <button class="tab-btn" id="tab-btn-contacts" data-tab="contacts" onclick="switchTab('contacts')">Žinutės (Kontaktai) <span id="badge-contacts" style="display:none; background:var(--accent-color); color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">0</span></button>
+            <button class="tab-btn active" id="tab-btn-tfp" data-tab="tfp" onclick="switchTab('tfp')">TFP Užklausos <span id="badge-tfp" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:var(--radius); font-size:0.75rem; margin-left:4px;">0</span></button>
+            <button class="tab-btn" id="tab-btn-services" data-tab="services" onclick="switchTab('services')">Mokamos Paslaugos <span id="badge-services" style="display:none; background:#E08700; color:#fff; padding:2px 7px; border-radius:var(--radius); font-size:0.75rem; margin-left:4px;">0</span></button>
+            <button class="tab-btn" id="tab-btn-contacts" data-tab="contacts" onclick="switchTab('contacts')">Žinutės (Kontaktai) <span id="badge-contacts" style="display:none; background:var(--accent-color); color:#fff; padding:2px 7px; border-radius:var(--radius); font-size:0.75rem; margin-left:4px;">0</span></button>
             <button class="tab-btn" id="tab-btn-reviews" data-tab="reviews" onclick="switchTab('reviews')">Atsiliepimai</button>
-            <button class="tab-btn" id="tab-btn-email-diag" data-tab="email-diag" onclick="switchTab('email-diag')">✉️ El. Pašto Būsena</button>
-            <button class="tab-btn" id="tab-btn-vmi" data-tab="vmi" onclick="switchTab('vmi')">📊 VMI Suvestinė</button>
-            <button class="tab-btn" id="tab-btn-team" data-tab="team" onclick="switchTab('team')">👥 Komanda & Teisės</button>
-            <button class="tab-btn" id="tab-btn-sheets" data-tab="sheets" onclick="switchTab('sheets')">📗 Google Sheets <span id="badge-sheets" style="display:none; background:#2E7D32; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.75rem; margin-left:4px;">✓</span></button>
-            <button class="tab-btn" id="tab-btn-profile" data-tab="profile" onclick="switchTab('profile')">👤 Profilis & 2FA</button>
-            <button type="button" class="tab-btn" id="tab-btn-ai" onclick="toggleAiHelperWindow(true)" style="margin-left: auto; background: linear-gradient(135deg, rgba(17,57,57,0.06) 0%, rgba(30,90,90,0.12) 100%); border: 1px dashed rgba(17,57,57,0.35); color: #113939; font-weight: 600;">🤖 AI Padėjėjas <span style="background: #113939; color: #fff; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; margin-left: 5px;">Langelis ↗</span></button>
+            <button class="tab-btn" id="tab-btn-email-diag" data-tab="email-diag" onclick="switchTab('email-diag')">El. Pašto Būsena</button>
+            <button class="tab-btn" id="tab-btn-vmi" data-tab="vmi" onclick="switchTab('vmi')">VMI Suvestinė</button>
+            <button class="tab-btn" id="tab-btn-team" data-tab="team" onclick="switchTab('team')">Komanda &amp; Teisės</button>
+            <button class="tab-btn" id="tab-btn-sheets" data-tab="sheets" onclick="switchTab('sheets')">Google Sheets <span id="badge-sheets" style="display:none; background:#2E7D32; color:#fff; padding:2px 7px; border-radius:var(--radius); font-size:0.75rem; margin-left:4px;">✓</span></button>
+            <button class="tab-btn" id="tab-btn-profile" data-tab="profile" onclick="switchTab('profile')">Profilis &amp; 2FA</button>
         </div>
 
         <div id="tfp-tab" class="tab-content active">
@@ -1197,7 +1121,7 @@
                     <button type="button" class="filter-pill" data-filter="Confirmed">Patvirtinti (<span id="tfp-pill-count-conf">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Completed">Atlikti (<span id="tfp-pill-count-comp">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Cancelled">Atšaukti (<span id="tfp-pill-count-canc">0</span>)</button>
-                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('tfp')">📗 Į Google Sheets</button>
+                    <button type="button" class="admin-btn-outline" style="border-color:#2E7D32; color:#2E7D32; padding:8px 14px;" onclick="quickSyncToGoogleSheets('tfp')">Į Google Sheets</button>
                 </div>
             </div>
             <div id="tfp-list">Kraunama...</div>
@@ -1218,7 +1142,7 @@
                     <button type="button" class="filter-pill" data-filter="Deposit Paid">Avansas (<span id="srv-pill-count-dep">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Completed">Atlikti (<span id="srv-pill-count-comp">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="receipt">Reikia kvito (<span id="srv-pill-count-rec">0</span>)</button>
-                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('services')">📗 Į Google Sheets</button>
+                    <button type="button" class="admin-btn-outline" style="border-color:#2E7D32; color:#2E7D32; padding:8px 14px;" onclick="quickSyncToGoogleSheets('services')">Į Google Sheets</button>
                 </div>
             </div>
             <div id="services-list">Kraunama...</div>
@@ -1236,7 +1160,7 @@
                     <button type="button" class="filter-pill active" data-filter="all">Visos žinutės (<span id="contact-pill-count-all">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="New">Naujos (<span id="contact-pill-count-new">0</span>)</button>
                     <button type="button" class="filter-pill" data-filter="Answered">Atsakytos (<span id="contact-pill-count-ans">0</span>)</button>
-                    <button type="button" class="filter-pill" style="border-color:#2E7D32; color:#2E7D32;" onclick="quickSyncToGoogleSheets('contacts')">📗 Į Google Sheets</button>
+                    <button type="button" class="admin-btn-outline" style="border-color:#2E7D32; color:#2E7D32; padding:8px 14px;" onclick="quickSyncToGoogleSheets('contacts')">Į Google Sheets</button>
                 </div>
             </div>
             <div id="contacts-list">Kraunama...</div>
@@ -1331,14 +1255,14 @@
                     Ši skiltis rodo realią laiškų siuntimo būseną tiesiai iš Jūsų „Firestore“ <code>mail</code> kolekcijos.
                 </p>
 
-                <div style="background: #ffffff; border: 1px solid #E8ECEB; border-radius: 6px; padding: 18px; margin-bottom: 18px;">
+                <div style="background: #ffffff; border: 1px solid #E8ECEB; border-radius: var(--radius); padding: 18px; margin-bottom: 18px;">
                     <div style="font-size: 0.9rem; line-height: 1.8; color: #333;">
-                        <div><strong>📁 Firestore Kolekcija:</strong> <code>mail</code></div>
-                        <div><strong>🗄 Firestore Instance ID (Database ID):</strong> <code style="background:#f0f4f4; padding:2px 6px; border-radius:3px;">ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce</code> <span style="color:#d9534f; font-weight:600;">(⚠️ Svarbu: plėtinio nustatymuose „Firestore Instance ID“ privalo būti šis ID, o NE „(default)“!)</span></div>
-                        <div><strong>🔑 Numatytasis Siuntėjas (From / Reply-To):</strong> <code>info@dominikphotofficial.lt</code></div>
+                        <div><strong>Firestore Kolekcija:</strong> <code>mail</code></div>
+                        <div><strong>Firestore Instance ID (Database ID):</strong> <code style="background:#f0f4f4; padding:2px 6px; border-radius:3px;">ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce</code> <span style="color:#d9534f; font-weight:600;">(Svarbu: plėtinio nustatymuose „Firestore Instance ID“ privalo būti šis ID, o NE „(default)“!)</span></div>
+                        <div><strong>Numatytasis Siuntėjas (From / Reply-To):</strong> <code>info@dominikphotofficial.lt</code></div>
                         <div style="margin-top: 8px;">
-                            <strong>🔌 SMTP Connection URI šablonas „Firebase Extension“ nustatymams:</strong>
-                            <div style="background: #f4f6f5; padding: 10px 12px; border-radius: 4px; border: 1px solid #E0E0E0; font-family: monospace; font-size: 0.85rem; word-break: break-all; margin-top: 4px;">
+                            <strong>SMTP Connection URI šablonas „Firebase Extension“ nustatymams:</strong>
+                            <div style="background: #f4f6f5; padding: 10px 12px; border-radius: var(--radius); border: 1px solid #E0E0E0; font-family: monospace; font-size: 0.85rem; word-break: break-all; margin-top: 4px;">
                                 smtps://&lt;SMTP_USER&gt;:&lt;SMTP_PASSWORD&gt;@&lt;SMTP_HOST&gt;:465
                             </div>
                             <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">
@@ -1350,7 +1274,7 @@
 
                 <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                     <button type="button" id="send-test-mail-btn" class="admin-btn" style="padding: 11px 22px; font-size: 0.85rem;">
-                        ✉️ Siųsti testinį laišką į mail kolekciją
+                        Siųsti testinį laišką į mail kolekciją
                     </button>
                     <span id="test-mail-status-feedback" style="font-size: 0.9rem; font-weight: 500;"></span>
                 </div>
@@ -1368,59 +1292,72 @@
             </div>
         </div>
 
-        <!-- 📊 VMI Suvestinė (IV Apskaita) Tab -->
+        <!-- VMI Suvestinė (IV Apskaita) Tab -->
         <div id="vmi-tab" class="tab-content">
-            <!-- 💡 Kaip Veikia VMI Suvestinė (Aiškus Gidas) -->
+            <!-- Kaip veikia VMI suvestinė -->
             <div class="request-card" style="margin-bottom: 22px; padding: 20px 24px; background: #FAFBFB; border-left: 5px solid #2E7D32;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 280px;">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                            <span style="font-size: 1.2rem;">💡</span>
-                            <h3 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">
-                                Kaip Veikia Ši VMI Suvestinė?
-                            </h3>
-                        </div>
+                        <h3 style="margin: 0 0 6px 0; font-family: var(--font-heading); color: #113939; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">
+                            Kaip veikia ši VMI suvestinė
+                        </h3>
                         <p style="margin: 0 0 10px 0; font-size: 0.88rem; color: #444; line-height: 1.55;">
-                            Tai oficialus individualios veiklos (EVRK 74.20 – Fotografavimo veikla) pajamų ir išlaidų apskaitos žurnalas pagal LR įstatymus.
+                            Individualios veiklos (EVRK 74.20 – Fotografavimo veikla) pajamų ir išlaidų apskaitos žurnalas pagal LR įstatymus.
                         </p>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px;">
-                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
+                            <div style="background: #ffffff; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
                                 <strong style="color: #2E7D32; font-size: 0.84rem;">1. Pajamų gavimas:</strong>
                                 <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">Patvirtinus arba atlikus fotosesijos užsakymą, suma automatiškai atsiranda pajamų stulpelyje.</p>
                             </div>
-                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
-                                <strong style="color: #E08700; font-size: 0.84rem;">2. Išlaidos & 30% taisyklė:</strong>
-                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">Galite rinkti pirkimo kvitus ARBA pasirinkti 30% prezumpciją (VMI leidžia nurašyti 30% pajamų be jokių kvitų!).</p>
+                            <div style="background: #ffffff; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
+                                <strong style="color: #E08700; font-size: 0.84rem;">2. Išlaidos &amp; 30% taisyklė:</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">Galite rinkti pirkimo kvitus arba pasirinkti 30% prezumpciją (VMI leidžia nurašyti 30% pajamų be kvitų).</p>
                             </div>
-                            <div style="background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid rgba(17,57,57,0.08);">
-                                <strong style="color: #C62828; font-size: 0.84rem;">3. Mokesčiai & Grynasis:</strong>
-                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">GPM 5% + Sodros PSD (6,98%) ir VSD (12,52%) nuo 90% bazės. Likutis – Jūsų grynasis uždarbis į rankas.</p>
+                            <div style="background: #ffffff; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
+                                <strong style="color: #C62828; font-size: 0.84rem;">3. Mokesčiai &amp; Grynasis:</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #666; line-height: 1.45;">GPM 5% + Sodros PSD (6,98%) ir VSD (12,52%) nuo 90% bazės. Likutis – grynasis uždarbis po mokesčių.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ⚡ Paslaugų Analizė & Automatinis Išlaidų Įkėlimas -->
-            <div class="request-card" style="margin-bottom: 22px; padding: 22px 26px; background: #FFFFFF; border: 1px solid rgba(17,57,57,0.1); border-left: 5px solid #113939;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+            <!-- Privatūs apmokėjimo rekvizitai (SuperAdmin Only, Firestore admin_settings/billing) -->
+            <div class="request-card" id="vmi-billing-settings-card" style="display: none; margin-bottom: 22px; padding: 22px 26px; background: #FFFFFF; border: 1px solid var(--border); border-left: 5px solid #113939;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
                     <div>
                         <h3 style="margin: 0 0 4px 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.12rem; text-transform: uppercase; letter-spacing: 1px;">
-                            ⚡ Paslaugų Analizė ir Įtraukimas į Pajamas bei Išlaidas
+                            Privatūs apmokėjimo rekvizitai
                         </h3>
-                        <p style="margin: 0; font-size: 0.86rem; color: #666;">
-                            Išanalizuokite visas studijos teikiamas paslaugas, nustatykite pajamas ir vienu paspaudimu suformuokite rekomenduojamas veiklos išlaidas (kuras, studija, technika, programos) į VMI žurnalą.
+                        <p style="margin: 0; font-size: 0.86rem; color: #666; line-height: 1.5;">
+                            Šie duomenys saugomi tik privačioje Firestore kolekcijoje (<code>admin_settings/billing</code>), nėra vieši svetainės kode ir naudojami tik siunčiant privačius patvirtinimo el. laiškus, sąskaitas-faktūras bei sutartis.
                         </p>
-                    </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 9px 18px; font-size: 0.82rem;" onclick="runAiServicesAnalysis()">
-                            🔍 Analizuoti Paslaugas & Siūlyti Išlaidas
-                        </button>
                     </div>
                 </div>
 
-                <div id="services-ai-analysis-box" style="display: none; border-top: 1px solid rgba(17,57,57,0.08); padding-top: 16px; margin-top: 14px;">
-                    <!-- Populated by runAiServicesAnalysis() -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    <div>
+                        <label class="field-label" for="billing-recipient">Gavėjas</label>
+                        <input type="text" id="billing-recipient" class="admin-select" placeholder="Vardas Pavardė" autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="field-label" for="billing-iban">IBAN sąskaita</label>
+                        <input type="text" id="billing-iban" class="admin-select" placeholder="LT000000000000000000" autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="field-label" for="billing-bank">Bankas</label>
+                        <input type="text" id="billing-bank" class="admin-select" placeholder="Pvz., Swedbank, AB" autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="field-label" for="billing-paypal">PayPal (el. paštas arba nuoroda)</label>
+                        <input type="text" id="billing-paypal" class="admin-select" placeholder="paypal@pavyzdys.lt" autocomplete="off">
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
+                    <button type="button" id="save-billing-settings-btn" class="admin-btn">
+                        Išsaugoti rekvizitus
+                    </button>
                 </div>
             </div>
 
@@ -1457,29 +1394,29 @@
                 </div>
 
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 10px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="openDocumentPrintModal('vmi_journal')">
-                        🖨️ A4 Spausdinimo Peržiūra (VMI)
+                    <button type="button" class="admin-btn" style="background: #113939; padding: 10px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" onclick="openDocumentPrintModal('vmi_journal')">
+                        A4 Spausdinimo Peržiūra (VMI)
                     </button>
                     <button type="button" class="admin-btn" id="open-expense-modal-btn" style="padding: 10px 14px; font-size: 0.8rem;">
                         + Registruoti Išlaidą
                     </button>
                     <button type="button" class="admin-btn-outline" style="padding: 10px 14px; font-size: 0.8rem;" onclick="openDocumentPrintModal('invoice')">
-                        🧾 Išrašyti Kvitą / SF
+                        Išrašyti Kvitą / SF
                     </button>
                     <button type="button" class="admin-btn-outline" style="padding: 10px 14px; font-size: 0.8rem;" onclick="openDocumentPrintModal('contract')">
-                        📜 Paruošti Sutartį
+                        Paruošti Sutartį
                     </button>
-                    <button type="button" class="admin-btn-outline" style="padding: 10px 14px; font-size: 0.8rem; border-color: #2E7D32; color: #2E7D32;" onclick="downloadTestVmiCsvFile()" title="Atsisiųsti paruoštą testinį VMI pajamų žurnalo failą Excel/Sheets formatu">
-                        📥 Testinis VMI Sheets (.csv)
+                    <button type="button" class="admin-btn-outline" style="padding: 10px 14px; font-size: 0.8rem; border-color: #2E7D32; color: #2E7D32;" onclick="downloadVmiCsvReport()" title="Atsisiųsti VMI pajamų ir išlaidų žurnalo ataskaitą Excel/Sheets formatu">
+                        Eksportuoti VMI Žurnalą (.csv)
                     </button>
                     <button type="button" class="admin-btn-outline" id="print-vmi-btn" style="padding: 10px 14px; font-size: 0.8rem;">
-                        🖨️ Greitas Spausdinimas
+                        Greitas Spausdinimas
                     </button>
                     <button type="button" class="admin-btn-outline" id="export-vmi-csv-btn" style="padding: 10px 14px; font-size: 0.8rem;">
-                        📥 Eksportuoti CSV
+                        Eksportuoti CSV
                     </button>
                     <button type="button" class="admin-btn-outline" style="padding: 10px 14px; font-size: 0.8rem; border-color: #2E7D32; color: #2E7D32;" onclick="quickSyncToGoogleSheets('vmi')">
-                        📗 Į Google Sheets
+                        Į Google Sheets
                     </button>
                 </div>
             </div>
@@ -1487,41 +1424,41 @@
             <!-- VMI KPI Summary Cards -->
             <div class="vmi-kpi-grid">
                 <div class="vmi-kpi-card" style="border-left: 4px solid #2E7D32;">
-                    <div class="vmi-kpi-title">💰 Gautos Pajamos</div>
+                    <div class="vmi-kpi-title">Gautos Pajamos</div>
                     <div class="vmi-kpi-val" id="vmi-kpi-income">0,00 €</div>
-                    <div class="vmi-kpi-sub">Iš apmokėtų fotosesijų & paslaugų</div>
+                    <div class="vmi-kpi-sub">Iš apmokėtų fotosesijų &amp; paslaugų</div>
                 </div>
                 <div class="vmi-kpi-card" style="border-left: 4px solid #E08700;">
-                    <div class="vmi-kpi-title">🧾 Leidžiami Atskaitymai</div>
+                    <div class="vmi-kpi-title">Leidžiami Atskaitymai</div>
                     <div class="vmi-kpi-val" id="vmi-kpi-deductions">0,00 €</div>
                     <div class="vmi-kpi-sub" id="vmi-kpi-deductions-sub">30% prezumpcija be kvitų</div>
                 </div>
                 <div class="vmi-kpi-card" style="border-left: 4px solid var(--accent-color);">
-                    <div class="vmi-kpi-title">🏛 Apmokestinamos Pajamos</div>
+                    <div class="vmi-kpi-title">Apmokestinamos Pajamos</div>
                     <div class="vmi-kpi-val" id="vmi-kpi-taxable">0,00 €</div>
                     <div class="vmi-kpi-sub">Pajamos minus atskaitymai</div>
                 </div>
                 <div class="vmi-kpi-card" style="border-left: 4px solid #C62828;">
-                    <div class="vmi-kpi-title">⚖️ Mokesčiai (VMI + Sodra)</div>
+                    <div class="vmi-kpi-title">Mokesčiai (VMI + Sodra)</div>
                     <div class="vmi-kpi-val" id="vmi-kpi-taxes" style="color: #C62828;">0,00 €</div>
                     <div class="vmi-kpi-sub" id="vmi-kpi-taxes-sub">GPM: 0 € | PSD: 0 € | VSD: 0 €</div>
                 </div>
                 <div class="vmi-kpi-card" style="border-left: 4px solid #113939; background: #FAFBFB;">
-                    <div class="vmi-kpi-title">💵 Grynasis Uždarbis</div>
+                    <div class="vmi-kpi-title">Grynasis Uždarbis</div>
                     <div class="vmi-kpi-val" id="vmi-kpi-net" style="color: #113939; font-weight: 500;">0,00 €</div>
                     <div class="vmi-kpi-sub">Likusi suma „į rankas“ po visų mokesčių</div>
                 </div>
             </div>
 
-            <!-- Oficiali VMI Deklaracijos Suvestinė & Pastabos (Editable & AI Controlled) -->
+            <!-- Oficiali VMI Deklaracijos Suvestinė & Pastabos -->
             <div class="request-card" style="margin-bottom: 25px; padding: 22px 26px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-left: 5px solid #113939;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0 0 4px 0; font-size: 1.12rem;">
-                            📝 Oficiali VMI Deklaracijos Suvestinė & Pastabos
+                            Oficiali VMI Deklaracijos Suvestinė &amp; Pastabos
                         </h3>
                         <p style="font-size: 0.85rem; color: #666; margin: 0;">
-                            Tekstas VMI deklaracijai ir pajamų-išlaidų žurnalo paaiškinimams. AI asistentas gali akimirksniu atnaujinti šį tekstą.
+                            Tekstas VMI deklaracijai ir pajamų-išlaidų žurnalo paaiškinimams pagal faktinius sistemos duomenis.
                         </p>
                     </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1529,14 +1466,14 @@
                             Atnaujinti Suvestinės Tekstą
                         </button>
                         <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="copyVmiReportNotes()">
-                            📋 Kopijuoti
+                            Kopijuoti
                         </button>
                         <button type="button" class="admin-btn-outline" style="padding: 8px 14px; font-size: 0.8rem;" onclick="saveVmiReportNotes()">
-                            💾 Išsaugoti
+                            Išsaugoti
                         </button>
                     </div>
                 </div>
-                <textarea id="vmi-custom-report-notes" rows="4" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 85px; font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; background: #ffffff;" placeholder="Čia rodoma AI sugeneruota ar Jūsų redaguota ataskaitos suvestinė, VMI deklaracijos pastabos, mokesčių apskaičiavimai..."></textarea>
+                <textarea id="vmi-custom-report-notes" rows="4" class="admin-select" style="margin-top: 0; resize: vertical; min-height: 85px; font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; background: #ffffff;" placeholder="Čia rodoma sugeneruota ar Jūsų redaguota ataskaitos suvestinė, VMI deklaracijos pastabos, mokesčių apskaičiavimai..."></textarea>
             </div>
 
             <!-- VMI Journal Table -->
@@ -1569,7 +1506,7 @@
             </div>
         </div>
 
-        <!-- 👥 Komanda & Privilegijos Tab -->
+        <!-- Komanda & Privilegijos Tab -->
         <div id="team-tab" class="tab-content">
             <div class="request-card" style="margin-bottom: 25px; padding: 24px; background: #FAFBFB; border-left: 4px solid var(--accent-color);">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
@@ -1578,7 +1515,7 @@
                             Komandos Nariai ir Prieigos Teisės (RBAC)
                         </h3>
                         <p style="margin: 0; font-size: 0.95rem; color: rgba(26,43,43,0.7);">
-                            Pridėkite asistentus, vadybininkus ar partnerius, suteikite jiems atskirus PIN kodus bei pritaikytas valdymo teises.
+                            Pridėkite asistentus, vadybininkus ar partnerius, suteikite jiems pritaikytas valdymo teises ir pakvietimus el. paštu.
                         </p>
                     </div>
                     <button type="button" class="admin-btn" id="open-add-member-modal-btn">
@@ -1589,21 +1526,21 @@
 
             <!-- Team Roles Explanation Box -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                         <span class="role-badge role-superadmin">Super Admin</span>
                         <strong style="color: var(--accent-color);">Pilnas valdymas</strong>
                     </div>
-                    <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Prieiga prie visų užsakymų, laiškų, VMI apskaitos, kodo keitimo, komandos valdymo bei įrašų trynimo.</p>
+                    <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Prieiga prie visų užsakymų, laiškų, VMI apskaitos, komandos valdymo bei įrašų trynimo.</p>
                 </div>
-                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                         <span class="role-badge role-manager">Vadybininkas / Asistentas</span>
                         <strong style="color: #1565C0;">Klientų valdymas</strong>
                     </div>
                     <p style="font-size: 0.85rem; color: #666; margin: 0; line-height: 1.5;">Gali peržiūrėti užklausas, keisti statusus, siųsti laiškus ir atsakyti į žinutes. Neturi prieigos prie VMI ir saugumo nustatymų.</p>
                 </div>
-                <div style="background: #ffffff; padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(17,57,57,0.08);">
+                <div style="background: #ffffff; padding: 18px 20px; border-radius: var(--radius); border: 1px solid rgba(17,57,57,0.08);">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                         <span class="role-badge role-photographer">Fotografas / Partneris</span>
                         <strong style="color: #E08700;">Tik peržiūra</strong>
@@ -1617,30 +1554,30 @@
                 <!-- Loaded via JS -->
             </div>
 
-            <!-- 🛡️ Vartotojų Veiksmų Registras & Auditas (Audit Log) -->
-            <div class="request-card" style="margin-top: 35px; padding: 24px; background: #ffffff; border: 1px solid rgba(17,57,57,0.12); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+            <!-- Vartotojų veiksmų registras & auditas -->
+            <div class="request-card" style="margin-top: 35px; padding: 24px; background: #ffffff; border: 1px solid rgba(17,57,57,0.12);">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #113939; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
                     <div>
-                        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; font-weight: 700;">Sistemos Saugumas & Sekimas</div>
+                        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; font-weight: 700;">Sistemos Saugumas &amp; Sekimas</div>
                         <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: #113939; margin: 3px 0 0 0; font-size: 1.25rem;">
-                            🛡️ Vartotojų Veiksmų Registras (Audit Log)
+                            Vartotojų Veiksmų Registras (Audit Log)
                         </h3>
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="text" id="audit-log-search-input" class="admin-select" placeholder="🔍 Ieškoti veiksmų / naudotojo..." style="font-size: 0.8rem; padding: 6px 12px; margin: 0; min-width: 240px; height: 34px;" oninput="filterAuditLogsTable()">
+                        <input type="text" id="audit-log-search-input" class="admin-select" placeholder="Ieškoti veiksmų / naudotojo..." style="font-size: 0.8rem; padding: 6px 12px; margin: 0; min-width: 240px; height: 34px;" oninput="filterAuditLogsTable()">
                         <button type="button" class="admin-btn" onclick="loadAuditLogs()" style="font-size: 0.8rem; padding: 6px 14px; background: #113939; height: 34px;">
-                            Atnaujinti 🔄
+                            Atnaujinti
                         </button>
                     </div>
                 </div>
                 <p style="font-size: 0.86rem; color: #555; margin: 0 0 16px 0; line-height: 1.5;">
-                    Šiame registre realiu laiku fiksuojami visi administratorių ir pakviestų komandos narių veiksmai: užsakymų būsenos pokyčiai, pirkėjo duomenų atnaujinimai, sutarčių/sąskaitų generavimas, el. laiškų siuntimas bei VMI žurnalo korekcijos.
+                    Šiame registre realiu laiku fiksuojami administratorių ir pakviestų komandos narių veiksmai: užsakymų būsenos pokyčiai, pirkėjo duomenų atnaujinimai, sutarčių/sąskaitų generavimas, el. laiškų siuntimas bei VMI žurnalo korekcijos.
                 </p>
-                <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid #E8ECEB; border-radius: 6px;">
+                <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid #E8ECEB; border-radius: var(--radius);">
                     <table class="audit-log-table" style="width: 100%; border-collapse: collapse; font-size: 0.83rem;">
                         <thead style="position: sticky; top: 0; z-index: 2; background: #FAFBFB;">
                             <tr style="border-bottom: 2px solid #113939; text-align: left;">
-                                <th style="padding: 10px 14px; width: 155px; color: #113939;">Data & Laikas</th>
+                                <th style="padding: 10px 14px; width: 155px; color: #113939;">Data &amp; Laikas</th>
                                 <th style="padding: 10px 14px; width: 190px; color: #113939;">Vartotojas</th>
                                 <th style="padding: 10px 14px; width: 160px; color: #113939;">Kategorija</th>
                                 <th style="padding: 10px 14px; color: #113939;">Atliktas Veiksmas / Detalės</th>
@@ -1654,18 +1591,18 @@
             </div>
         </div>
 
-        <!-- 📗 Google Sheets Integracijos Tab -->
+        <!-- Google Sheets Integracijos Tab -->
         <div id="sheets-tab" class="tab-content">
             <!-- Header Banner -->
             <div class="request-card" style="margin-bottom: 22px; padding: 18px 24px; background: #FAFBFB; border-left: 5px solid #2E7D32;">
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 260px;">
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                            <span style="background: #2E7D32; color: #ffffff; font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">📗 Google Sheets & Drive API</span>
-                            <span id="sheets-connection-badge" class="sheets-status-badge disconnected">⚪ Tikrinama prieiga</span>
+                            <span style="background: #2E7D32; color: #ffffff; font-size: 0.72rem; padding: 3px 8px; border-radius: var(--radius); font-family: var(--font-heading); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">Google Sheets &amp; Drive API</span>
+                            <span id="sheets-connection-badge" class="sheets-status-badge disconnected">Tikrinama prieiga</span>
                         </div>
                         <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin: 0; font-size: 1.25rem; font-weight: 400;">
-                            Google Sheets Sinchronizavimas & Duomenų Eksportas
+                            Google Sheets Sinchronizavimas &amp; Duomenų Eksportas
                         </h2>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px; align-items: flex-end;">
@@ -1695,29 +1632,28 @@
                     <div>
                         <span class="field-label" style="margin-bottom: 4px;">Aktyvi Google Sheets Lentelė</span>
                         <h3 id="active-sheet-title" style="margin: 0; font-family: var(--font-heading); color: var(--accent-color); font-size: 1.3rem;">
-                            DP.PORTFOLIO Užsakymai & Finansai
+                            DP.PORTFOLIO Užsakymai &amp; Finansai
                         </h3>
                         <div id="active-sheet-id-sub" style="font-size: 0.8rem; color: #888; font-family: monospace; margin-top: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <a id="open-sheet-external-link" href="#" target="_blank" class="admin-btn" style="padding: 10px 18px; font-size: 0.8rem; text-decoration: none; display: none;">
-                            ↗️ Atverti Google Sheets
+                        <a id="open-sheet-external-link" href="#" target="_blank" rel="noopener noreferrer" class="admin-btn" style="padding: 10px 18px; font-size: 0.8rem; text-decoration: none; display: none;">
+                            Atverti Google Sheets ↗
                         </a>
                         <button type="button" id="sheets-test-connection-btn" class="admin-btn-outline" style="padding: 10px 16px; font-size: 0.8rem;">
-                            🔄 Tikrinti ryšį
+                            Tikrinti ryšį
                         </button>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                     <!-- Create New Spreadsheet -->
-                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px;">
+                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: var(--radius); padding: 20px;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                            <span style="font-size: 1.2rem;">➕</span>
-                            <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Sukurti Naują Lentelę</strong>
+                            <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">+ Sukurti Naują Lentelę</strong>
                         </div>
                         <p style="font-size: 0.88rem; color: #666; margin: 0 0 14px 0; line-height: 1.5;">
-                            Automatiškai sukurs naują Google Spreadsheet jūsų Google Drive diske su paruoštais lapais (TFP, Paslaugos, Kontaktai, VMI) ir firminiu dizainu.
+                            Automatiškai sukurs naują Google Spreadsheet jūsų Google Drive diske su paruoštais lapais (TFP, Paslaugos, Kontaktai, VMI).
                         </p>
                         <div style="display: flex; gap: 10px;">
                             <input type="text" id="new-sheet-title-input" class="admin-select" value="DP.PORTFOLIO Užsakymai & Finansai" style="margin-top: 0; font-size: 0.9rem;">
@@ -1728,20 +1664,19 @@
                     </div>
 
                     <!-- Link Existing from Drive or ID -->
-                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 20px;">
+                    <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: var(--radius); padding: 20px;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                            <span style="font-size: 1.2rem;">📂</span>
                             <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Pasirinkti iš Google Drive arba ID</strong>
                         </div>
                         <p style="font-size: 0.88rem; color: #666; margin: 0 0 14px 0; line-height: 1.5;">
-                            Pasirinkite iš savo Google Drive diske esančių lentelių arba įklijuokite bet kurios skaičiuoklės ID ar URL nuorodą.
+                            Pasirinkite iš savo Google Drive diske esančių lentelių arba įklijuokite skaičiuoklės ID ar URL nuorodą.
                         </p>
                         <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                             <select id="drive-sheets-dropdown" class="admin-select" style="margin-top: 0; font-size: 0.9rem;">
                                 <option value="">-- Kraunamos lentelės iš Google Drive... --</option>
                             </select>
                             <button type="button" id="btn-refresh-drive-sheets" class="admin-btn-outline" style="white-space: nowrap; padding: 9px 14px; font-size: 0.8rem;" title="Atnaujinti Drive sąrašą">
-                                🔄
+                                Atnaujinti
                             </button>
                         </div>
                         <div style="display: flex; gap: 10px;">
@@ -1764,7 +1699,7 @@
                         <span id="last-sync-timestamp" style="font-size: 0.85rem; color: #666;">Paskutinis sinchronizavimas: dar neatliktas</span>
                     </div>
                     <button type="button" id="sync-all-to-sheets-btn" class="sheets-sync-btn" style="background: #2E7D32; font-size: 0.9rem; padding: 12px 24px;">
-                        ⚡ Sinchronizuoti Visus Lapus (TFP + Paslaugos + Kontaktai + VMI)
+                        Sinchronizuoti Visus Lapus (TFP + Paslaugos + Kontaktai + VMI)
                     </button>
                 </div>
 
@@ -1773,7 +1708,7 @@
                     <div class="sheets-card">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">📸 TFP Užklausos</strong>
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">TFP Užklausos</strong>
                                 <span class="lang-pill" id="sheets-tfp-count">0 įrašų</span>
                             </div>
                             <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
@@ -1783,10 +1718,10 @@
                         </div>
                         <div style="display: flex; gap: 8px; margin-top: 15px;">
                             <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('tfp')">
-                                🔄 Sinchronizuoti TFP
+                                Sinchronizuoti TFP
                             </button>
                             <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('TFP Užklausos')" title="Peržiūrėti lapą">
-                                👁
+                                Peržiūra
                             </button>
                         </div>
                     </div>
@@ -1795,20 +1730,20 @@
                     <div class="sheets-card">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">💼 Mokamos Paslaugos</strong>
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Mokamos Paslaugos</strong>
                                 <span class="lang-pill" id="sheets-services-count">0 užsakymų</span>
                             </div>
                             <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
                                 Lapas: <code>Mokamos Paslaugos</code><br>
-                                Eksportuoja pilną finansų informaciją, kainas, avansus, likučius, kvitus ir Wfolio galerijų nuorodas.
+                                Eksportuoja finansų informaciją, kainas, avansus, likučius, kvitus ir Wfolio galerijų nuorodas.
                             </p>
                         </div>
                         <div style="display: flex; gap: 8px; margin-top: 15px;">
                             <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('services')">
-                                🔄 Sinchronizuoti Paslaugas
+                                Sinchronizuoti Paslaugas
                             </button>
                             <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('Mokamos Paslaugos')" title="Peržiūrėti lapą">
-                                👁
+                                Peržiūra
                             </button>
                         </div>
                     </div>
@@ -1817,20 +1752,20 @@
                     <div class="sheets-card">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">✉️ Kontaktų Žinutės</strong>
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">Kontaktų Žinutės</strong>
                                 <span class="lang-pill" id="sheets-contacts-count">0 žinučių</span>
                             </div>
                             <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
-                                Lapas: <code>Kontaktai & Žinutės</code><br>
+                                Lapas: <code>Kontaktai &amp; Žinutės</code><br>
                                 Eksportuoja gautas žinutes iš svetainės kontaktų formos su siuntėjo duomenimis ir tema.
                             </p>
                         </div>
                         <div style="display: flex; gap: 8px; margin-top: 15px;">
                             <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('contacts')">
-                                🔄 Sinchronizuoti Žinutes
+                                Sinchronizuoti Žinutes
                             </button>
                             <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('Kontaktai & Žinutės')" title="Peržiūrėti lapą">
-                                👁
+                                Peržiūra
                             </button>
                         </div>
                     </div>
@@ -1839,7 +1774,7 @@
                     <div class="sheets-card">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">📊 VMI Pajamų Žurnalas</strong>
+                                <strong style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color);">VMI Pajamų Žurnalas</strong>
                                 <span class="lang-pill" id="sheets-vmi-count">0 įrašų</span>
                             </div>
                             <p style="font-size: 0.88rem; color: #666; margin: 0 0 12px 0; line-height: 1.5;">
@@ -1849,10 +1784,10 @@
                         </div>
                         <div style="display: flex; gap: 8px; margin-top: 15px;">
                             <button type="button" class="sheets-sync-btn" style="flex: 1;" onclick="syncSingleTabWithConfirm('vmi')">
-                                🔄 Sinchronizuoti VMI
+                                Sinchronizuoti VMI
                             </button>
                             <button type="button" class="admin-btn-outline" style="padding: 10px 14px;" onclick="previewSheetTab('VMI Pajamos')" title="Peržiūrėti lapą">
-                                👁
+                                Peržiūra
                             </button>
                         </div>
                     </div>
@@ -1874,11 +1809,11 @@
                         <select id="preview-tab-selector" class="admin-select" style="min-width: 200px; margin-top: 0; padding: 9px 12px; font-size: 0.88rem;">
                             <option value="TFP Užklausos">Lapas: TFP Užklausos</option>
                             <option value="Mokamos Paslaugos" selected>Lapas: Mokamos Paslaugos</option>
-                            <option value="Kontaktai & Žinutės">Lapas: Kontaktai & Žinutės</option>
+                            <option value="Kontaktai & Žinutės">Lapas: Kontaktai &amp; Žinutės</option>
                             <option value="VMI Pajamos">Lapas: VMI Pajamos</option>
                         </select>
                         <button type="button" id="btn-fetch-sheet-preview" class="admin-btn-outline" style="padding: 9px 16px; font-size: 0.82rem;">
-                            🔄 Gauti duomenis
+                            Gauti duomenis
                         </button>
                     </div>
                 </div>
@@ -1900,13 +1835,13 @@
             </div>
         </div>
 
-        <!-- 👤 Mano Profilis & Saugumo Nustatymai (Self-Service Profile & 2FA) -->
+        <!-- Mano Profilis & Saugumo Nustatymai -->
         <div id="profile-tab" class="tab-content">
             <div class="request-card" style="margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
                     <div>
                         <h2 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); font-size: 1.3rem; margin: 0 0 4px 0;">
-                            Mano Profilis & Paskyros Saugumas
+                            Mano Profilis &amp; Paskyros Saugumas
                         </h2>
                         <p style="font-size: 0.88rem; color: #666; margin: 0;">
                             Valdykite savo prisijungimo duomenis, keiskite slaptažodį ir konfigūruokite 2FA apsaugą
@@ -1917,7 +1852,7 @@
                     </span>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: var(--radius); padding: 18px 20px;">
                     <div>
                         <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px;">Paskyros El. Paštas</span>
                         <strong id="profile-email-display" style="font-size: 1.05rem; color: #113939; font-family: monospace;">-</strong>
@@ -1937,7 +1872,7 @@
                 <!-- 1. Slaptažodžio keitimas -->
                 <div class="request-card">
                     <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
-                        🔒 Slaptažodžio Keitimas
+                        Slaptažodžio Keitimas
                     </h3>
                     <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
                         Naujas slaptažodis privalo būti bent 8 simbolių ilgio.
@@ -1960,14 +1895,14 @@
                         Atnaujinti Slaptažodį
                     </button>
                     <button type="button" class="admin-btn-outline" style="width: 100%; font-size: 0.8rem; padding: 10px;" onclick="sendSelfPasswordResetLink()">
-                        ✉️ Arba siųsti atstatymo nuorodą į el. paštą
+                        Siųsti atstatymo nuorodą į el. paštą
                     </button>
                 </div>
 
-                <!-- 2. El. pašto keitimas (su patvirtinimu) -->
+                <!-- 2. El. pašto keitimas -->
                 <div class="request-card">
                     <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
-                        ✉️ El. Pašto Atnaujinimas
+                        El. Pašto Atnaujinimas
                     </h3>
                     <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
                         Pakeitus adresą, į naująją pašto dėžutę bus išsiųsta saugi patvirtinimo nuoroda (el. pašto verifikacija).
@@ -1990,90 +1925,19 @@
                 <!-- 3. Dviejų Veiksnių Autentifikacija (2FA) -->
                 <div class="request-card">
                     <h3 style="font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-color); font-size: 1.1rem; margin: 0 0 8px 0;">
-                        🛡️ Dviejų Veiksnių Autentifikacija (2FA)
+                        Dviejų Veiksnių Autentifikacija (2FA)
                     </h3>
                     <p style="font-size: 0.84rem; color: #666; margin: 0 0 16px 0; line-height: 1.5;">
                         Apsaugokite valdymo skydą nuo neleistino prisijungimo reikalaujant papildomo 6 skaitmenų kodo.
                     </p>
 
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.12); border-radius: 4px; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #FAFBFB; border: 1px solid rgba(17,57,57,0.12); border-radius: var(--radius); margin-bottom: 16px;">
                         <div>
                             <strong style="color: #113939; display: block; font-size: 0.95rem;">2FA Reikalavimas Prisijungiant</strong>
                             <span style="font-size: 0.8rem; color: #666;">Tikrinti saugumo kodą kiekvieno prisijungimo metu</span>
                         </div>
-                        <input type="checkbox" id="self-2fa-toggle" checked style="width: 20px; height: 20px; cursor: pointer;" onchange="toggle2faSetting(this.checked)">
+                        <input type="checkbox" id="self-2fa-toggle" checked style="width: 20px; height: 20px; cursor: pointer;" onchange="toggleProfile2FA(this.checked)">
                     </div>
-
-                    <button type="button" class="admin-btn-outline" style="width: 100%; font-size: 0.82rem; padding: 11px;" onclick="test2faCodeDispatch()">
-                        📲 Generuoti ir išbandyti testinį 2FA kodą
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 🤖 AI Padėjėjas Plaukiojantis Valdiklis (Floating Launcher Button) -->
-        <div id="ai-floating-widget" class="ai-floating-widget">
-            <button type="button" id="ai-widget-launcher-btn" class="ai-launcher-btn" onclick="toggleAiHelperWindow()">
-                <span style="font-size: 1.25rem;">🤖</span>
-                <span>AI Padėjėjas</span>
-                <span class="ai-online-dot"></span>
-            </button>
-        </div>
-
-        <!-- 🤖 AI Padėjėjas Langelis (Floating Assistant Window) -->
-        <div id="ai-helper-window" class="ai-helper-window">
-            <div class="ai-window-header">
-                <div class="ai-window-title">
-                    <span style="font-size: 1.15rem;">🤖</span>
-                    <span>DP.PORTFOLIO AI Padėjėjas</span>
-                    <span class="sheets-status-badge connected" style="font-size: 0.68rem; padding: 2px 7px; margin-left: 6px;">● Gemini AI</span>
-                </div>
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <button type="button" class="ai-window-tool-btn" onclick="clearAiChat()" title="Išvalyti susirašinėjimą">🗑️</button>
-                    <button type="button" class="ai-window-tool-btn" onclick="toggleAiHelperWindow(false)" title="Uždaryti langelį">✕</button>
-                </div>
-            </div>
-
-            <div class="ai-chips-bar">
-                <button type="button" class="ai-chip-btn" style="background:#113939; color:#fff; font-weight:600;" onclick="sendAiHelperPrompt('prepare_receipt')">🧾 Paruošti Kvitą / SF</button>
-                <button type="button" class="ai-chip-btn" style="background:#113939; color:#fff; font-weight:600;" onclick="sendAiHelperPrompt('prepare_contract')">📜 Paruošti Sutartį</button>
-                <button type="button" class="ai-chip-btn" style="border-color:#2E7D32; color:#2E7D32;" onclick="openDocumentPrintModal('vmi_journal')">📊 VMI Žurnalas (A4)</button>
-                <button type="button" class="ai-chip-btn" style="border-color:#2E7D32; color:#2E7D32;" onclick="downloadTestVmiCsvFile()">📥 Testinis VMI Sheets</button>
-                <button type="button" class="ai-chip-btn" onclick="sendAiHelperPrompt('services_income_expenses')">⚡ Paslaugų & Išlaidų analizė</button>
-                <button type="button" class="ai-chip-btn" onclick="sendAiHelperPrompt('vmi_audit')">📊 VMI mokesčių auditas</button>
-                <button type="button" class="ai-chip-btn" onclick="sendAiHelperPrompt('quarter_summary')">📝 Ketvirčio suvestinė</button>
-                <button type="button" class="ai-chip-btn" onclick="sendAiHelperPrompt('expense_advice')">🧾 30% vs Faktinės</button>
-                <button type="button" class="ai-chip-btn" onclick="sendAiHelperPrompt('client_reply')">✉️ Laiškas klientui</button>
-            </div>
-
-            <div id="ai-chat-body" class="ai-chat-body">
-                <div class="ai-msg ai-msg-bot">
-                    <p style="margin: 0 0 6px 0;"><strong>Sveiki, Dominik! Esu Jūsų studijos AI padėjėjas.</strong></p>
-                    <p style="margin: 0; font-size: 0.85rem; color: #444; line-height: 1.5;">
-                        Galiu atsakyti į Jūsų klausimus, akimirksniu sugeneruoti oficialų <strong>Pinigų priėmimo kvitą / Sąskaitą-faktūrą</strong> arba <strong>Fotografavimo sutartį</strong> spausdinimui, išanalizuoti pajamas bei išlaidas, perskaičiuoti VMI mokesčius ar paruošti atsakymus klientams. Pasirinkite greitą veiksmą arba rašykite žemiau!
-                    </p>
-                    <div class="ai-msg-actions">
-                        <button type="button" class="ai-msg-act-btn" style="font-weight: 600; color: #113939;" onclick="sendAiHelperPrompt('prepare_receipt')">🧾 Paruošti Kvitą / SF</button>
-                        <button type="button" class="ai-msg-act-btn" style="font-weight: 600; color: #113939;" onclick="sendAiHelperPrompt('prepare_contract')">📜 Paruošti Sutartį</button>
-                        <button type="button" class="ai-msg-act-btn" style="color: #2E7D32;" onclick="openDocumentPrintModal('vmi_journal')">🖨️ VMI Žurnalas (A4)</button>
-                        <button type="button" class="ai-msg-act-btn" style="color: #2E7D32;" onclick="downloadTestVmiCsvFile()">📥 Testinis VMI Sheets (.csv)</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ai-chat-input-area">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.76rem; color: #666;">
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                        <input type="checkbox" id="ai-helper-context-check" checked>
-                        <span>Studijos finansų kontekstas</span>
-                    </label>
-                    <span style="font-size: 0.72rem; color: #888;">Enter siuntimui</span>
-                </div>
-                <div style="display: flex; gap: 8px; align-items: flex-end;">
-                    <textarea id="ai-helper-input" rows="2" placeholder="Klauskite AI padėjėjo arba rašykite nurodymą..." style="flex: 1; resize: none; border: 1px solid rgba(17,57,57,0.2); border-radius: 6px; padding: 9px 12px; font-family: var(--font-body); font-size: 0.88rem; outline: none;"></textarea>
-                    <button type="button" id="ai-helper-send-btn" class="admin-btn" style="padding: 10px 16px; font-size: 0.82rem; height: 42px;" onclick="sendAiHelperInput()">
-                        <span>Siųsti 🚀</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -2148,11 +2012,11 @@
                 <option value="superadmin">Super Admin (Pilnos teisės ir nustatymai)</option>
             </select>
 
-            <div id="role-preview-hint" style="background: #E8F5E9; border-left: 4px solid #2E7D32; padding: 10px 14px; border-radius: 4px; font-size: 0.84rem; color: #1B5E20; line-height: 1.45; margin-bottom: 18px;">
-                <strong>ℹ️ Prieigos paaiškinimas:</strong> <span id="role-preview-hint-text">Vadybininkas matys klientų užklausas, laiškus ir kontaktų žinutes. VMI finansai jam bus paslėpti.</span>
+            <div id="role-preview-hint" style="background: #E8F5E9; border-left: 4px solid #2E7D32; padding: 10px 14px; border-radius: var(--radius); font-size: 0.84rem; color: #1B5E20; line-height: 1.45; margin-bottom: 18px;">
+                <strong>Prieigos paaiškinimas:</strong> <span id="role-preview-hint-text">Vadybininkas matys klientų užklausas, laiškus ir kontaktų žinutes. VMI finansai jam bus paslėpti.</span>
             </div>
 
-            <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+            <div style="background: #FAFBFB; border: 1px solid rgba(17,57,57,0.1); border-radius: var(--radius); padding: 18px; margin-bottom: 16px;">
                 <span class="field-label" style="margin-bottom: 10px;">Papildomi Leidimai:</span>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -2179,8 +2043,8 @@
                 </div>
             </div>
 
-            <div style="background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: 6px; padding: 14px 16px; margin-bottom: 22px; font-size: 0.88rem; color: #1B5E20; line-height: 1.5;">
-                <strong>💡 Kaip narys prisijungs:</strong> Išsaugojus narį, į jo el. paštą bus automatiškai išsiųsta slaptažodžio nustatymo nuoroda. Narys paspaudžia nuorodą, susikuria savo slaptažodį ir prisijungia be jokių skaitmeninių kodų!
+            <div style="background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 22px; font-size: 0.88rem; color: #1B5E20; line-height: 1.5;">
+                <strong>Kaip narys prisijungs:</strong> Išsaugojus narį, į jo el. paštą bus išsiųsta pakvietimo instrukcija, su kuria jis susikurs slaptažodį arba prisijungs su Google.
             </div>
 
             <div class="req-actions" style="border: none; padding: 0; justify-content: flex-end;">
@@ -2207,30 +2071,30 @@
             <div id="modal-link-container" class="modal-section-box" style="display: none;">
                 <label class="field-label">Wfolio albumo nuoroda (Galerija klientui)</label>
                 <input type="url" id="modal-gallery-link" class="admin-select" placeholder="https://..." style="margin-bottom: 5px;">
-                <span style="font-size: 13px; color: #666;">Ši nuoroda laiške pavirs į gražų mygtuką „Atidaryti Wfolio galeriją“.</span>
+                <span style="font-size: 13px; color: #666;">Ši nuoroda laiške pavirs į mygtuką „Atidaryti Wfolio galeriją“.</span>
             </div>
 
             <div id="modal-receipt-container" class="modal-section-box" style="display: none;">
                 <label class="field-label" style="display: flex; align-items: center; justify-content: space-between;">
-                    <span>📎 <strong>Prisegti PDF dokumentą prie šio el. laiško</strong></span>
-                    <span style="font-size: 11px; color: #113939; font-weight: bold; background: #e0f2f1; padding: 2px 8px; border-radius: 4px;">AUTOMATINIS PRIEDAS</span>
+                    <span><strong>Prisegti PDF dokumentą prie šio el. laiško</strong></span>
+                    <span style="font-size: 11px; color: #113939; font-weight: bold; background: #e0f2f1; padding: 2px 8px; border-radius: var(--radius);">PRIEDAS</span>
                 </label>
                 
-                <div id="modal-attached-preview-badge" style="display: none; margin-bottom: 12px; padding: 10px 14px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 6px; font-size: 13px; color: #1b5e20;">
+                <div id="modal-attached-preview-badge" style="display: none; margin-bottom: 12px; padding: 10px 14px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: var(--radius); font-size: 13px; color: #1b5e20;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>📎 <strong>Prisegtas PDF failas:</strong> <span id="attached-pdf-filename-display">dokumentas.pdf</span></span>
+                        <span><strong>Prisegtas PDF failas:</strong> <span id="attached-pdf-filename-display">dokumentas.pdf</span></span>
                         <button type="button" onclick="removeAttachedPdf()" style="background: none; border: none; color: #c62828; cursor: pointer; font-size: 12px; font-weight: bold;">Pašalinti ✕</button>
                     </div>
-                    <div style="font-size: 11px; color: #2e7d32; margin-top: 3px;">✓ Šis PDF dokumentas bus tiesiogiai prisegtas prie el. laiško kaip tikras PDF failo priedas (attachment).</div>
+                    <div style="font-size: 11px; color: #2e7d32; margin-top: 3px;">✓ Šis PDF dokumentas bus prisegtas prie el. laiško kaip PDF priedas.</div>
                 </div>
 
-                <!-- Greiti vieno paspaudimo PDF generavimo ir prisegimo mygtukai -->
+                <!-- PDF generavimo ir prisegimo mygtukai -->
                 <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
                     <button type="button" class="admin-btn" style="padding: 7px 13px; font-size: 0.76rem; background: #113939;" onclick="attachGeneratedPdfToCurrentEmail('invoice')">
-                        🧾 Sugeneruoti ir prisegti Sąskaitą / Kvitą (PDF)
+                        Sugeneruoti ir prisegti Sąskaitą / Kvitą (PDF)
                     </button>
                     <button type="button" class="admin-btn" style="padding: 7px 13px; font-size: 0.76rem; background: #113939;" onclick="attachGeneratedPdfToCurrentEmail('contract')">
-                        📜 Sugeneruoti ir prisegti Sutartį (PDF)
+                        Sugeneruoti ir prisegti Sutartį (PDF)
                     </button>
                 </div>
 
@@ -2241,9 +2105,9 @@
             </div>
 
             <button type="button" id="modal-preview-toggle-btn" class="admin-btn-outline" style="width: 100%; margin: 15px 0; font-size: 0.8rem; padding: 11px;">
-                👁 Rodyti / Slėpti el. laiško peržiūrą
+                Rodyti / Slėpti el. laiško peržiūrą
             </button>
-            <div id="modal-live-preview-container" style="display: none; margin-bottom: 22px; border: 1px solid rgba(17,57,57,0.15); border-radius: 6px; overflow: hidden; background: #f4f6f5; max-height: 480px; overflow-y: auto; padding: 12px;">
+            <div id="modal-live-preview-container" style="display: none; margin-bottom: 22px; border: 1px solid rgba(17,57,57,0.15); border-radius: var(--radius); overflow: hidden; background: #f4f6f5; max-height: 480px; overflow-y: auto; padding: 12px;">
                 <div id="modal-live-preview"></div>
             </div>
             
@@ -2254,12 +2118,11 @@
         </div>
     </div>
 
-    <!-- 🖨️ Modal: Oficialių Dokumentų (VMI Žurnalo, Sąskaitos-Faktūros, Sutarties) Spausdinimas & A4 Peržiūra -->
+    <!-- Modal: Oficialių Dokumentų Spausdinimas & A4 Peržiūra -->
     <div id="document-print-modal" class="modal-overlay">
         <div class="modal-content doc-preview-modal-content">
             <div class="doc-preview-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.35rem;">🖨️</span>
                     <div>
                         <h3 id="doc-modal-header-title" style="margin: 0; font-family: var(--font-heading); color: #ffffff; font-size: 1.15rem; letter-spacing: 1px; text-transform: uppercase;">
                             Oficialių Dokumentų Spausdinimas (A4 Formatas)
@@ -2270,14 +2133,14 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #113939 0%, #1e5a5a 100%); padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="downloadDocumentPdf()">
-                        📥 Atsisiųsti PDF Failą
+                    <button type="button" class="admin-btn" style="background: #113939; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-color: rgba(255,255,255,0.3);" onclick="downloadDocumentPdf()">
+                        Atsisiųsti PDF Failą
                     </button>
-                    <button type="button" class="admin-btn" style="background: #1565C0; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(21,101,192,0.25);" onclick="attachAndEmailCurrentPdf()">
-                        ✉️ Prisegti PDF ir Siųsti Klientui
+                    <button type="button" class="admin-btn" style="background: #1565C0; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-color: #1565C0;" onclick="attachAndEmailCurrentPdf()">
+                        Prisegti PDF ir Siųsti Klientui
                     </button>
-                    <button type="button" class="admin-btn" style="background: #2E7D32; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(46,125,50,0.25);" onclick="triggerDocumentPrint()">
-                        🖨️ Spausdinti / PDF
+                    <button type="button" class="admin-btn" style="background: #2E7D32; padding: 9px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-color: #2E7D32;" onclick="triggerDocumentPrint()">
+                        Spausdinti / PDF
                     </button>
                     <button type="button" class="admin-btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 9px 14px; font-size: 0.84rem;" onclick="closeDocumentPrintModal()">
                         ✕ Uždaryti
@@ -2288,96 +2151,38 @@
             <!-- Dokumentų Pasirinkimo Juosta -->
             <div class="doc-preview-tabs">
                 <button type="button" class="doc-tab-btn active" id="btn-doc-tab-vmi" onclick="switchDocumentTab('vmi_journal')">
-                    📊 VMI Pajamų Žurnalas (A4)
+                    VMI Pajamų Žurnalas (A4)
                 </button>
                 <button type="button" class="doc-tab-btn" id="btn-doc-tab-invoice" onclick="switchDocumentTab('invoice')">
-                    🧾 Sąskaita-Faktūra / Kvitas
+                    Sąskaita-Faktūra / Kvitas
                 </button>
                 <button type="button" class="doc-tab-btn" id="btn-doc-tab-contract" onclick="switchDocumentTab('contract')">
-                    📜 Paslaugų / TFP Sutartis
+                    Paslaugų / TFP Sutartis
                 </button>
-                <button type="button" class="admin-btn-outline" style="margin-left: auto; padding: 6px 12px; font-size: 0.78rem; border-color: #2E7D32; color: #2E7D32;" onclick="downloadTestVmiCsvFile()">
-                    📥 Atsisiųsti Testinį VMI Excel (.csv)
+                <button type="button" class="admin-btn-outline" style="margin-left: auto; padding: 6px 12px; font-size: 0.78rem; border-color: #2E7D32; color: #2E7D32;" onclick="downloadVmiCsvReport()">
+                    Atsisiųsti VMI Žurnalą (.csv)
                 </button>
             </div>
 
-            <!-- ✏️ Šablono Redagavimo & Modifikavimo Įrankių Juosta -->
+            <!-- Šablono Redagavimo Įrankių Juosta -->
             <div class="doc-template-toolbar">
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <button type="button" id="btn-toggle-edit-mode" class="admin-btn" onclick="toggleDocumentEditMode()" style="background: #113939; padding: 6px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
-                        ✏️ Redaguoti Šabloną: <strong id="edit-mode-status-text" style="color: #FFD54F;">IŠJUNGTA</strong>
+                        Redaguoti Šabloną: <strong id="edit-mode-status-text" style="color: #FFD54F;">IŠJUNGTA</strong>
                     </button>
-                    <button type="button" id="btn-toggle-client-editor" class="admin-btn-outline" onclick="toggleClientEditBar()" style="padding: 6px 12px; font-size: 0.78rem; border-color: #113939; color: #113939; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-                        👤 Pirkėjo Duomenys
-                    </button>
-                    <button type="button" class="admin-btn" onclick="saveCurrentDocAsTemplate()" style="background: #2E7D32; padding: 6px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px;">
-                        💾 Išsaugoti Šabloną
+                    <button type="button" class="admin-btn" onclick="saveCurrentDocAsTemplate()" style="background: #2E7D32; padding: 6px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px; border-color: #2E7D32;">
+                        Išsaugoti Šabloną
                     </button>
                     <button type="button" class="admin-btn-outline" onclick="resetCurrentDocTemplate()" style="padding: 6px 12px; font-size: 0.78rem; border-color: #999;">
-                        🔄 Atstatyti Standartą
+                        Atstatyti Standartą
                     </button>
                     <button type="button" id="btn-add-table-row" class="admin-btn-outline" onclick="addNewDocTableRow()" style="padding: 6px 12px; font-size: 0.78rem; border-color: #113939; color: #113939;">
-                        ➕ Pridėti Eilutę
+                        + Pridėti Eilutę
                     </button>
-                    <div style="display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
-                        <span style="font-size: 0.76rem; color: #555;">Užsakymas / Pirkėjas:</span>
-                        <select id="doc-client-picker" class="admin-select" onchange="onClientPickerChange(this.value)" style="padding: 5px 8px; font-size: 0.78rem; width: auto; max-width: 240px; margin: 0; height: 32px;">
-                            <option value="">-- Pasirinkti pirkėją / modelį --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- 👤 Greitasis Pirkėjo Duomenų Redagavimo Skydelis -->
-                <div id="doc-client-edit-bar" style="display: none; margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #113939; border-radius: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.06);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-weight: bold; font-size: 0.82rem; color: #113939; text-transform: uppercase;">
-                            👤 Redaguoti Pirkėjo / Užsakovo rekvizitus dokumente (Atnaujina gyvai):
-                        </span>
-                        <button type="button" onclick="toggleClientEditBar()" style="background: none; border: none; color: #888; cursor: pointer; font-size: 11px;">✕ Slėpti</button>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Pirkėjas (Vardas Pavardė)</label>
-                            <input type="text" id="live-client-name" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Vardas Pavardė" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">El. paštas</label>
-                            <input type="email" id="live-client-email" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="el.pastas@pavyzdys.lt" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Telefonas</label>
-                            <input type="text" id="live-client-phone" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="+370 600 00000" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Miestas / Adresas</label>
-                            <input type="text" id="live-client-location" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Kaunas / Vilnius" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Paslauga / Tipas</label>
-                            <input type="text" id="live-client-service" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="Fotosesijos tipas" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Bendra Kaina (€)</label>
-                            <input type="number" id="live-client-price" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="150" step="5" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Avansas (€)</label>
-                            <input type="number" id="live-client-deposit" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" placeholder="50" step="5" oninput="updateLiveClientData()">
-                        </div>
-                        <div>
-                            <label class="field-label" style="font-size: 11px; margin-bottom: 2px;">Fotosesijos Data</label>
-                            <input type="date" id="live-client-date" class="admin-select" style="margin: 0; font-size: 12px; padding: 6px;" oninput="updateLiveClientData()">
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px;">
-                        <button type="button" class="admin-btn" onclick="saveLiveClientDataToDb()" style="background: #113939; padding: 6px 14px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                            💾 Išsaugoti pirkėjo pakeitimus į užsakymų bazę
-                        </button>
-                    </div>
                 </div>
 
                 <div style="font-size: 0.76rem; color: #444; line-height: 1.4; margin-top: 6px;">
-                    💡 <em>Spustelėkite „Redaguoti Šabloną“ norėdami tiesiogiai redaguoti tekstą lape, arba „Pirkėjo Duomenys“ norėdami greitai pakeisti užsakovo rekvizitus!</em>
+                    <em>Spustelėkite „Redaguoti Šabloną“ norėdami tiesiogiai redaguoti tekstą lape prieš spausdinant ar išsaugant PDF.</em>
                 </div>
             </div>
 
@@ -2390,15 +2195,14 @@
         </div>
     </div>
 
-    <!-- 🩺 Diagnostikos Skydelis (Real-Time Auth & Firestore Inspector Modal) -->
+    <!-- Diagnostikos Skydelis -->
     <div id="diagnostics-modal" class="diagnostics-modal-overlay" style="display: none;">
         <div class="diagnostics-modal-content">
             <div class="diagnostics-modal-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.3rem;">🩺</span>
                     <div>
                         <h3 style="margin: 0; font-family: var(--font-heading); color: #113939; font-size: 1.15rem; letter-spacing: 1px;">
-                            Sistemos & Firebase Diagnostikos Skydelis
+                            Sistemos &amp; Firebase Diagnostikos Skydelis
                         </h3>
                         <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #666;">
                             Realaus laiko Firebase Auth, Firestore ir integracijų analizė
@@ -2413,7 +2217,7 @@
                 <div class="diag-grid">
                     <!-- Card 1: Auth State -->
                     <div class="diag-card">
-                        <div class="diag-card-title">🔐 Firebase Auth Būsena</div>
+                        <div class="diag-card-title">Firebase Auth Būsena</div>
                         <div class="diag-field"><span>Būsena:</span> <strong id="diag-auth-user">Atsijungęs</strong></div>
                         <div class="diag-field"><span>El. Paštas:</span> <span id="diag-auth-email" style="font-family: monospace; font-size: 0.78rem;">-</span></div>
                         <div class="diag-field"><span>Vartotojo UID:</span> <span id="diag-auth-uid" style="font-family: monospace; font-size: 0.72rem; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">-</span></div>
@@ -2423,7 +2227,7 @@
 
                     <!-- Card 2: Firestore DB -->
                     <div class="diag-card">
-                        <div class="diag-card-title">🗄️ Firestore Duomenų Bazė</div>
+                        <div class="diag-card-title">Firestore Duomenų Bazė</div>
                         <div class="diag-field"><span>Projektas:</span> <strong>tfp-form</strong></div>
                         <div class="diag-field"><span>Aktyvi DB ID:</span> <span id="diag-db-id" style="font-family: monospace; font-size: 0.72rem; word-break: break-all;">ai-studio-dpportfoliolt-0d398e5b-e665-43c2-8ab2-94507a3cbbce</span></div>
                         <div class="diag-field"><span>Ryšio būsena:</span> <span id="diag-db-status" class="status-badge" style="background:#e8f5e9; color:#2e7d32;">✓ Aktyvus</span></div>
@@ -2432,7 +2236,7 @@
 
                     <!-- Card 3: Google Sheets & Drive -->
                     <div class="diag-card">
-                        <div class="diag-card-title">📗 Sheets & Drive Integracija</div>
+                        <div class="diag-card-title">Sheets &amp; Drive Integracija</div>
                         <div class="diag-field"><span>OAuth Būsena:</span> <strong id="diag-sheets-token-status" style="color:#666;">Neprijungta</strong></div>
                         <div class="diag-field"><span>Aktyvi Lentelė:</span> <span id="diag-sheets-title" style="font-size: 0.78rem; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">-</span></div>
                         <div class="diag-field"><span>403 Apsauga:</span> <span class="status-badge" style="background:#e8f5e9; color:#2e7d32;">Aktyvus filtras</span></div>
@@ -2444,11 +2248,11 @@
                 <div style="margin-top: 18px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                         <div style="font-weight: bold; color: #113939; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                            <span>📜</span> Paskutinės Sistemos & Autentifikavimo Operacijos (Real-time Log)
+                            Paskutinės Sistemos &amp; Autentifikavimo Operacijos
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="testFirestoreConnection()">⚡ Testuoti DB ryšį</button>
-                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearDiagnosticLog()">🗑️ Išvalyti</button>
+                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="testFirestoreConnection()">Testuoti DB ryšį</button>
+                            <button type="button" class="admin-btn-outline" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearDiagnosticLog()">Išvalyti</button>
                         </div>
                     </div>
                     <div class="diag-log-container">

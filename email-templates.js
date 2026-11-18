@@ -1,6 +1,6 @@
 // ==============================================================================
-// DP.PORTFOLIO - Premium Editorial Email Templates
-// DP.PORTFOLIO • Fotografija & Videografija • Kaunas, Lietuva
+// DP.PORTFOLIO - El. pašto šablonai (HTML + Plain Text)
+// DP.PORTFOLIO • Fotografija & Vaizdo įrašai • Kaunas, Lietuva
 // ==============================================================================
 
 const BRAND = {
@@ -12,8 +12,6 @@ const BRAND = {
     instagramHandle: "@dominikphotofficial",
     email: "info@dominikphotofficial.lt",
     supportEmail: "info@dominikphotofficial.lt",
-    iban: "LT867300010171188764",
-    recipientName: "DP.PORTFOLIO",
     colors: {
         darkGreen: "#113939",
         accentLight: "#2A5C5C",
@@ -26,6 +24,40 @@ const BRAND = {
     }
 };
 
+export function escapeEmailHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[ch]));
+}
+
+export function htmlToPlainText(html) {
+    return String(html ?? '')
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/(p|div|tr|li|h1|h2|h3|h4|ol|ul|table)>/gi, '\n')
+        .replace(/<(td|th)[^>]*>/gi, ' ')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&middot;/gi, '·')
+        .replace(/&bull;/gi, '•')
+        .replace(/&rarr;/gi, '->')
+        .replace(/&darr;/gi, '↓')
+        .replace(/&ndash;|&mdash;/gi, '-')
+        .replace(/&euro;/gi, 'EUR')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+}
+
 const emailWrapperStart = `
 <!DOCTYPE html>
 <html lang="lt">
@@ -35,65 +67,43 @@ const emailWrapperStart = `
     <title>DP.PORTFOLIO</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #F4F6F5; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
-    <!-- Preview Text Spacer -->
     <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all; font-size: 1px; line-height: 1px; color: #F4F6F5;">
-        DP.PORTFOLIO • Fotografijos ir videografijos pranešimas.
+        DP.PORTFOLIO • Pranešimas apie jūsų užsakymą arba užklausą.
     </div>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F4F6F5; padding: 40px 15px;">
         <tr>
             <td align="center">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #FFFFFF; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 35px rgba(17,57,57,0.08); border: 1px solid #E8ECEB;">
-                    
-                    <!-- Header Banner -->
                     <tr>
                         <td align="center" style="background-color: #113939; padding: 32px 25px; text-align: center;">
                             <a href="${BRAND.websiteUrl}" target="_blank" style="text-decoration: none; display: inline-block;">
                                 <img src="${BRAND.logoUrl}" alt="${BRAND.name}" width="58" height="58" style="display: block; margin: 0 auto 12px auto; border: 0; outline: none;">
-                                <div style="font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 18px; letter-spacing: 4px; text-transform: uppercase; color: #FFFFFF; font-weight: 300; line-height: 1.2;">${BRAND.name}</div>
-                                <div style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #A2BFBD; margin-top: 5px;">Fotografija & Videografija</div>
+                                <div style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 18px; letter-spacing: 4px; text-transform: uppercase; color: #FFFFFF; font-weight: 500; line-height: 1.2;">${BRAND.name}</div>
+                                <div style="font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #A2BFBD; margin-top: 5px;">Fotografija &amp; Vaizdo įrašai</div>
                             </a>
                         </td>
                     </tr>
-
-                    <!-- Accent Line -->
                     <tr>
                         <td style="height: 3px; background: #113939;"></td>
                     </tr>
-
-                    <!-- Email Content Area -->
                     <tr>
-                        <td style="padding: 38px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                        <td style="padding: 36px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 `;
 
 const emailWrapperEnd = `
                         </td>
                     </tr>
-
-                    <!-- Footer Section -->
                     <tr>
                         <td style="background-color: #FAFBFB; border-top: 1px solid #E8ECEB; padding: 26px 30px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
-                            <p style="margin: 0 0 8px 0; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 600;">
+                            <p style="margin: 0 0 8px 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 600;">
                                 DP.PORTFOLIO
                             </p>
-                            
                             <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
-                                Fotografija & Videografija &bull; Kaunas, Lietuva<br>
+                                Fotografija &amp; Vaizdo įrašai &bull; Kaunas, Lietuva<br>
                                 <a href="${BRAND.websiteUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">portfolio.dominikphotofficial.lt</a> &bull;
                                 <a href="${BRAND.instagramUrl}" target="_blank" style="color: #113939; text-decoration: underline; font-weight: 600;">${BRAND.instagramHandle}</a>
                             </p>
-
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 14px auto;">
-                                <tr>
-                                    <td style="padding: 0 8px;">
-                                        <a href="${BRAND.instagramUrl}" target="_blank" style="display: inline-block; background: #113939; color: #ffffff; padding: 6px 14px; border-radius: 3px; font-size: 11px; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;">Instagram</a>
-                                    </td>
-                                    <td style="padding: 0 8px;">
-                                        <a href="${BRAND.websiteUrl}" target="_blank" style="display: inline-block; background: #2A5C5C; color: #ffffff; padding: 6px 14px; border-radius: 3px; font-size: 11px; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;">Portfolio</a>
-                                    </td>
-                                </tr>
-                            </table>
-
                             <p style="margin: 0; font-size: 11px; color: #9AA7A7; line-height: 1.4;">
                                 &copy; 2026 DP.PORTFOLIO. Visos teisės saugomos.
                             </p>
@@ -107,81 +117,160 @@ const emailWrapperEnd = `
 </html>
 `;
 
-export function getPaymentDetailsHtml(method, depositAmount, clientName) {
+/**
+ * Generates payment block HTML and Plain Text.
+ * Sensitive bank/IBAN data is NEVER hardcoded in public JS.
+ * Pass `paymentDetails = { recipient, iban, bank, paypal }` only from server env or authenticated Admin billing settings.
+ */
+export function getPaymentDetailsContent(method, depositAmount, clientName, paymentDetails = null, lang = 'lt') {
     const formattedDeposit = Number(depositAmount || 0).toFixed(2);
-    const safeClient = clientName ? clientName : 'Fotosesija';
+    const safeClient = escapeEmailHtml(clientName || 'Fotosesija');
+    const rawClient = String(clientName || 'Fotosesija');
+    const details = paymentDetails || {};
+    const recipient = details.recipient ? String(details.recipient).trim() : '';
+    const iban = details.iban ? String(details.iban).trim() : '';
+    const bank = details.bank ? String(details.bank).trim() : '';
+    const paypal = details.paypal ? String(details.paypal).trim() : '';
 
     if (method === 'PayPal') {
-        return `
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0; background-color: #FFFFFF; border: 1px solid #003087; border-left: 5px solid #003087; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,48,135,0.06);">
+        if (!paypal) {
+            const noteText = lang === 'en'
+                ? `Payment details (PayPal) for the 50% deposit (${formattedDeposit} EUR) will be sent in a separate confirmation message once your date is finalized.`
+                : lang === 'ru'
+                ? `Реквизиты для оплаты аванса 50% (${formattedDeposit} EUR) через PayPal будут отправлены вам после подтверждения даты и времени.`
+                : `PayPal apmokėjimo rekvizitus 50% avansui (${formattedDeposit} EUR) atsiųsime atskiru pranešimu, kai suderinsime ir patvirtinsime jūsų pasirinktą datą.`;
+            const html = `
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FAFBFB; border: 1px solid #D9E2E2; border-left: 4px solid #113939; border-radius: 4px;">
+                    <tr>
+                        <td style="padding: 20px 22px; font-size: 14px; color: #1A2B2B; line-height: 1.6;">
+                            <strong style="display: block; color: #113939; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-bottom: 6px;">Apmokėjimo informacija (PayPal)</strong>
+                            ${escapeEmailHtml(noteText)}
+                        </td>
+                    </tr>
+                </table>
+            `;
+            return { html, text: `Apmokėjimo informacija (PayPal):\n${noteText}` };
+        }
+
+        const html = `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FFFFFF; border: 1px solid #003087; border-left: 4px solid #003087; border-radius: 4px;">
                 <tr>
                     <td style="padding: 22px 24px;">
-                        <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #003087; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center;">
-                            PayPal Apmokėjimo Informacija
+                        <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #003087; font-weight: 700; margin-bottom: 12px;">
+                            PayPal apmokėjimo rekvizitai
                         </div>
-                        <table role="presentation" width="100%" cellpadding="4" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
+                        <table role="presentation" width="100%" cellpadding="5" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
                             <tr>
-                                <td style="width: 140px; color: #607272; font-size: 13px;">Gavėjo PayPal:</td>
-                                <td>
-                                    <span style="background-color: #EDF2F7; padding: 4px 9px; border-radius: 3px; font-family: monospace; font-size: 14px; font-weight: bold; color: #003087;">${BRAND.email}</span>
-                                </td>
+                                <td style="width: 150px; color: #607272; font-size: 13px;">Gavėjo PayPal:</td>
+                                <td><span style="background-color: #EDF2F7; padding: 4px 9px; border-radius: 3px; font-family: monospace; font-size: 14px; font-weight: bold; color: #003087;">${escapeEmailHtml(paypal)}</span></td>
                             </tr>
+                            ${recipient ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">Gavėjas:</td>
-                                <td><b>Dominik Šuškevič</b></td>
-                            </tr>
+                                <td><b>${escapeEmailHtml(recipient)}</b></td>
+                            </tr>` : ''}
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">Mokėtinas avansas (50%):</td>
-                                <td><b style="color: #003087; font-size: 17px;">${formattedDeposit} &euro;</b></td>
+                                <td><b style="color: #003087; font-size: 16px;">${formattedDeposit} &euro;</b></td>
                             </tr>
                             <tr>
-                                <td style="color: #607272; font-size: 13px;">Paskirtis / Pastaba:</td>
-                                <td><em>Avansas už fotosesiją &ndash; ${safeClient}</em></td>
+                                <td style="color: #607272; font-size: 13px;">Mokėjimo paskirtis:</td>
+                                <td><em>Avansas už fotosesiją (${safeClient})</em></td>
                             </tr>
                         </table>
-                        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #EDF2F7; font-size: 12px; color: #718096; line-height: 1.5;">
-                            &bull; Pervesdami nurodykite savo vardą ir pasirinktą paslaugą. Pervedę atsakykite į šį laišką patvirtinimui.
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #EDF2F7; font-size: 12px; color: #607272; line-height: 1.5;">
+                            Pervedę nurodykite savo vardą mokėjimo pastaboje ir atsakykite į šį laišką patvirtinimui.
                         </div>
                     </td>
                 </tr>
             </table>
         `;
+        const text = [
+            `PayPal apmokėjimo rekvizitai:`,
+            `- Gavėjo PayPal: ${paypal}`,
+            recipient ? `- Gavėjas: ${recipient}` : null,
+            `- Mokėtinas avansas (50%): ${formattedDeposit} EUR`,
+            `- Mokėjimo paskirtis: Avansas už fotosesiją (${rawClient})`,
+            `Pervedę atsakykite į šį laišką patvirtinimui.`
+        ].filter(Boolean).join('\n');
+        return { html, text };
     }
 
-    return `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0; background-color: #FFFFFF; border: 1px solid #113939; border-left: 5px solid #113939; border-radius: 4px; box-shadow: 0 4px 15px rgba(17,57,57,0.06);">
+    if (!iban) {
+        const noteText = lang === 'en'
+            ? `Bank transfer details for the 50% deposit (${formattedDeposit} EUR) will be sent privately once your session date and time are confirmed.`
+            : lang === 'ru'
+            ? `Банковские реквизиты для оплаты 50% аванса (${formattedDeposit} EUR) будут отправлены в ответном письме после подтверждения даты и времени.`
+            : `Bankinio pavedimo rekvizitus 50% avansui (${formattedDeposit} EUR) atsiųsime privačiai el. paštu, kai tik patvirtinsime jūsų pasirinktą fotosesijos datą ir laiką.`;
+        const html = `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FAFBFB; border: 1px solid #D9E2E2; border-left: 4px solid #113939; border-radius: 4px;">
+                <tr>
+                    <td style="padding: 20px 22px; font-size: 14px; color: #1A2B2B; line-height: 1.6;">
+                        <strong style="display: block; color: #113939; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-bottom: 6px;">Apmokėjimo informacija</strong>
+                        ${escapeEmailHtml(noteText)}
+                    </td>
+                </tr>
+            </table>
+        `;
+        return { html, text: `Apmokėjimo informacija:\n${noteText}` };
+    }
+
+    const html = `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FFFFFF; border: 1px solid #113939; border-left: 4px solid #113939; border-radius: 4px;">
             <tr>
                 <td style="padding: 22px 24px;">
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
-                        Bankinio Pavedimo Rekvizitai
+                    <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Bankinio pavedimo rekvizitai
                     </div>
-                    <table role="presentation" width="100%" cellpadding="4" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
+                    <table role="presentation" width="100%" cellpadding="5" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
+                        ${recipient ? `
                         <tr>
-                            <td style="width: 140px; color: #607272; font-size: 13px;">Gavėjas:</td>
-                            <td><b>${BRAND.recipientName}</b></td>
-                        </tr>
+                            <td style="width: 150px; color: #607272; font-size: 13px;">Gavėjas:</td>
+                            <td><b>${escapeEmailHtml(recipient)}</b></td>
+                        </tr>` : ''}
                         <tr>
-                            <td style="color: #607272; font-size: 13px;">IBAN Sąskaita:</td>
+                            <td style="width: 150px; color: #607272; font-size: 13px;">IBAN sąskaita:</td>
                             <td>
-                                <span style="background-color: #F0F5F4; border: 1px solid #D5E2E0; padding: 4px 9px; border-radius: 3px; font-family: monospace; font-size: 15px; font-weight: bold; color: #113939;">${BRAND.iban}</span>
+                                <span style="background-color: #F0F5F4; border: 1px solid #D5E2E0; padding: 4px 9px; border-radius: 3px; font-family: monospace; font-size: 15px; font-weight: bold; color: #113939;">${escapeEmailHtml(iban)}</span>
                             </td>
                         </tr>
+                        ${bank ? `
+                        <tr>
+                            <td style="color: #607272; font-size: 13px;">Bankas:</td>
+                            <td>${escapeEmailHtml(bank)}</td>
+                        </tr>` : ''}
                         <tr>
                             <td style="color: #607272; font-size: 13px;">Mokėtinas avansas (50%):</td>
-                            <td><b style="color: #113939; font-size: 17px;">${formattedDeposit} &euro;</b></td>
+                            <td><b style="color: #113939; font-size: 16px;">${formattedDeposit} &euro;</b></td>
                         </tr>
                         <tr>
                             <td style="color: #607272; font-size: 13px;">Mokėjimo paskirtis:</td>
-                            <td><em>Avansas už fotosesiją &ndash; ${safeClient}</em></td>
+                            <td><em>Avansas už fotosesiją (${safeClient})</em></td>
                         </tr>
                     </table>
-                    <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #E8ECEB; font-size: 12px; color: #607272; line-height: 1.5;">
-                        &bull; Rezervacijos laikas galutinai patvirtinamas gavus avansą. Atlikę pervedimą, praneškite atsakydami į šį laišką.
+                    <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #E8ECEB; font-size: 12px; color: #607272; line-height: 1.5;">
+                        Rezervacijos laikas galutinai užfiksuojamas gavus avansą. Atlikę pavedimą, informuokite atsakydami į šį laišką.
                     </div>
                 </td>
             </tr>
         </table>
     `;
+
+    const text = [
+        `Bankinio pavedimo rekvizitai:`,
+        recipient ? `- Gavėjas: ${recipient}` : null,
+        `- IBAN sąskaita: ${iban}`,
+        bank ? `- Bankas: ${bank}` : null,
+        `- Mokėtinas avansas (50%): ${formattedDeposit} EUR`,
+        `- Mokėjimo paskirtis: Avansas už fotosesiją (${rawClient})`,
+        `Rezervacijos laikas galutinai užfiksuojamas gavus avansą. Atlikę pavedimą, atsakykite į šį laišką.`
+    ].filter(Boolean).join('\n');
+
+    return { html, text };
+}
+
+export function getPaymentDetailsHtml(method, depositAmount, clientName, paymentDetails = null, lang = 'lt') {
+    return getPaymentDetailsContent(method, depositAmount, clientName, paymentDetails, lang).html;
 }
 
 export function getPreparationTipsHtml(lang) {
@@ -189,10 +278,10 @@ export function getPreparationTipsHtml(lang) {
     const t = texts[safeLang].tips;
 
     return `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-radius: 4px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-radius: 4px;">
             <tr>
                 <td style="padding: 20px 22px;">
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 10px;">
+                    <div style="font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 10px;">
                         ${t.title}
                     </div>
                     <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8; color: #4A5568;">
@@ -210,12 +299,12 @@ export const texts = {
     lt: {
         greeting: "Sveiki, {{name}}!",
         badgeConfirmed: "Patvirtinta",
-        badgePending: "Užklausa Gauta",
-        badgeCompleted: "Galerija Paruošta",
+        badgePending: "Užklausa gauta",
+        badgeCompleted: "Galerija paruošta",
         badgeCancelled: "Atšaukta",
         TFPNew: {
             sub: "DP.PORTFOLIO | TFP fotosesijos užklausa gauta",
-            txt: "Dėkoju už Jūsų anketą ir pasiūlytą fotosesijos idėją.\n\nUžklausa sėkmingai gauta. Peržiūrėsiu Jūsų profilį ir netrukus susisieksiu suderinti fotosesijos detalių."
+            txt: "Dėkoju už jūsų anketą ir pasiūlytą fotosesijos idėją.\n\nUžklausa sėkmingai gauta. Peržiūrėsiu jūsų profilį ir netrukus susisieksiu suderinti fotosesijos detalių."
         },
         TFPConfirmed: {
             sub: "DP.PORTFOLIO | TFP fotosesija patvirtinta",
@@ -227,7 +316,7 @@ export const texts = {
         },
         TFPCancelled: {
             sub: "DP.PORTFOLIO | Fotosesijos užklausa atšaukta",
-            txt: "Informuoju, kad planuota fotosesija yra atšaukta.\n\nDėkoju už Jūsų skirtą laiką ir susidomėjimą."
+            txt: "Informuoju, kad planuota fotosesija yra atšaukta.\n\nDėkoju už jūsų skirtą laiką ir susidomėjimą."
         },
         TFPCompleted: {
             sub: "DP.PORTFOLIO | Nuotraukos paruoštos",
@@ -235,10 +324,10 @@ export const texts = {
         },
         ServiceNew: {
             sub: "DP.PORTFOLIO | Užsakymas gautas",
-            txt: "Dėkoju už Jūsų paslaugų užsakymą.\n\nUžsakymo informacija ir pasirinktas apmokėjimo būdas pateikti žemiau. Netrukus susisieksiu su Jumis."
+            txt: "Dėkoju už jūsų paslaugų užsakymą.\n\nŽemiau pateikiama jūsų užsakymo santrauka ir pasirinktas apmokėjimo būdas. Peržiūrėsiu užklausą ir netrukus susisieksiu su jumis."
         },
         ServiceConfirmed: {
-            sub: "DP.PORTFOLIO | Užsakymas patvirtintas – Mokėjimo informacija",
+            sub: "DP.PORTFOLIO | Užsakymas patvirtintas – Apmokėjimo rekvizitai",
             txt: "Jūsų užsakymas patvirtintas.\n\nNorėdami galutinai rezervuoti fotosesijos laiką, atlikite 50% avanso mokėjimą pagal žemiau nurodytus rekvizitus."
         },
         ServiceDepositPaid: {
@@ -251,22 +340,22 @@ export const texts = {
         },
         ServiceCompleted: {
             sub: "DP.PORTFOLIO | Nuotraukos paruoštos",
-            txt: "Jūsų užsakymas atliktas, nuotraukos paruoštos.\n\nKviečiu peržiūrėti ir atsisiųsti darbus asmeninėje Wfolio galerijoje."
+            txt: "Jūsų užsakymas atliktas, medžiaga paruošta.\n\nKviečiu peržiūrėti ir atsisiųsti darbus asmeninėje Wfolio galerijoje."
         },
         ServiceCancelled: {
             sub: "DP.PORTFOLIO | Užsakymas atšauktas",
-            txt: "Informuoju, kad Jūsų užsakymas yra atšauktas.\n\nJei turite klausimų, atsakykite tiesiogiai į šį laišką."
+            txt: "Informuoju, kad jūsų užsakymas yra atšauktas.\n\nJei turite klausimų, atsakykite tiesiogiai į šį laišką."
         },
         ServiceStatusUpdate: {
             sub: "DP.PORTFOLIO | Užsakymo statusas atnaujintas",
-            txt: "Informuoju, kad Jūsų užsakymo statusas sistemoje buvo atnaujintas."
+            txt: "Informuoju, kad jūsų užsakymo statusas sistemoje buvo atnaujintas."
         },
         labels: {
             date: "Data ir laikas:",
             loc: "Lokacija:",
             price: "Bendra kaina:",
             dep: "Mokėtinas avansas (50%):",
-            rem: "Likutis po fotosesijos:",
+            rem: "Likutis po atlikimo:",
             srv: "Paslaugos paketas:",
             status: "Užsakymo statusas:",
             payMethod: "Apmokėjimo būdas:",
@@ -274,20 +363,20 @@ export const texts = {
         },
         gallery: {
             title: "Jūsų nuotraukų galerija paruošta",
-            desc: "Spustelėkite žemiau esantį mygtuką norėdami atidaryti asmeninę Wfolio galeriją ir atsisiųsti nuotraukas be jokių suspaudimų:",
-            btn: "Atidaryti Wfolio Galeriją &rarr;",
+            desc: "Spustelėkite žemiau esantį mygtuką norėdami atidaryti asmeninę Wfolio galeriją ir atsisiųsti nuotraukas:",
+            btn: "Atidaryti Wfolio galeriją &rarr;",
             note: "Galerijoje galite atsisiųsti visas nuotraukas ZIP archyvu arba po vieną pilna raiška."
         },
         receipt: {
-            title: "Oficialus Sąskaita / Kvitas",
-            desc: "Jūsų apmokėjimo patvirtinimo dokumentas yra paruoštas. Spustelėkite mygtuką žemiau failo atsisiuntimui:",
-            btn: "Atsisiųsti Kvitą (PDF / Dokumentas) &darr;"
+            title: "Oficiali sąskaita / kvitas",
+            desc: "Jūsų apmokėjimo patvirtinimo dokumentas paruoštas:",
+            btn: "Atsisiųsti kvitą (PDF) &darr;"
         },
         tips: {
             title: "Naudingi patarimai prieš fotosesiją:",
-            tip1: "<b>Apranga:</b> Rekomenduojame 1&ndash;2 derinius be ryškių logotipų. Pirmenybę teikite natūraliems, žemės, pasteliniams arba elegantiškiems tonams.",
-            tip2: "<b>Laikas:</b> Prašome atvykti 5&ndash;10 minučių anksčiau, kad ramiai aptartume kadrus ir pradėtume laiku.",
-            tip3: "<b>Nuotaika:</b> Jokio streso &ndash; fotosesija vyksta ramiai ir laisvai, padėsiu jaustis natūraliai."
+            tip1: "<b>Apranga:</b> Rekomenduojame 1&ndash;2 derinius be ryškių logotipų. Geriausiai tinka natūralūs, žemės ar pasteliniai tonai.",
+            tip2: "<b>Laikas:</b> Atvykite 5&ndash;10 minučių anksčiau, kad ramiai aptartume detales ir pradėtume laiku.",
+            tip3: "<b>Nuotaika:</b> Jokios įtampos &ndash; fotosesija vyksta ramiai ir paprastai, padėsiu jaustis natūraliai."
         }
     },
     en: {
@@ -298,51 +387,51 @@ export const texts = {
         badgeCancelled: "Cancelled",
         TFPNew: {
             sub: "DP.PORTFOLIO | TFP Photoshoot Request Received",
-            txt: "Thank you for your inquiry and creative concept proposal!\n\nWe have received your registration. Dominik will review your profile and vision, and get back to you within 24–48 hours to coordinate all details."
+            txt: "Thank you for your inquiry and creative concept proposal.\n\nWe have received your registration. Dominik will review your profile and get back to you within 24–48 hours to coordinate all details."
         },
         TFPConfirmed: {
             sub: "DP.PORTFOLIO | Confirmed: TFP Photoshoot in Kaunas",
-            txt: "Your TFP photoshoot is officially confirmed.\n\nPlease review the confirmed schedule, location, and preparation tips below. Looking forward to working together!"
+            txt: "Your TFP photoshoot is confirmed.\n\nPlease review the confirmed schedule, location, and preparation tips below."
         },
         TFPRescheduled: {
             sub: "DP.PORTFOLIO | Rescheduled: TFP Photoshoot Time or Location",
-            txt: "We would like to inform you that your TFP photoshoot date, time, or location has been updated.\n\nPlease review the updated details below. If the new timing does not work for you, simply reply directly to this email."
+            txt: "Your TFP photoshoot date, time, or location has been updated.\n\nPlease review the updated details below. If the new timing does not work for you, reply directly to this email."
         },
         TFPCancelled: {
             sub: "DP.PORTFOLIO | Cancelled: TFP Photoshoot",
-            txt: "We sincerely apologize, but due to unforeseen circumstances or scheduling constraints, we have to cancel your planned TFP photoshoot.\n\nThank you very much for your interest, and we hope to collaborate on a future project."
+            txt: "Unfortunately, we have to cancel your planned TFP photoshoot.\n\nThank you very much for your interest."
         },
         TFPCompleted: {
-            sub: "DP.PORTFOLIO | Thank you for the shoot! Your photos are ready",
-            txt: "A huge thank you for your energy, style, and great mood during our shoot!\n\nAll selected images have been carefully curated, color-graded, and uploaded to your private Wfolio gallery. Click the button below to view and download full-resolution images."
+            sub: "DP.PORTFOLIO | Your photos are ready",
+            txt: "Thank you for collaborating on the shoot.\n\nAll selected images have been edited and uploaded to your private Wfolio gallery. Click the button below to view and download them."
         },
         ServiceNew: {
-            sub: "DP.PORTFOLIO | Order Received & Details",
-            txt: "Thank you for choosing DP.PORTFOLIO professional photography & videography!\n\nYour order has been recorded. Review your booking summary and payment instructions below. We will reach out shortly to finalize all details."
+            sub: "DP.PORTFOLIO | Order Received & Summary",
+            txt: "Thank you for choosing DP.PORTFOLIO photography and video services.\n\nYour order has been recorded. Review your booking summary below. We will contact you shortly to confirm all details."
         },
         ServiceConfirmed: {
             sub: "DP.PORTFOLIO | Order Confirmed – Payment Details",
-            txt: "Your service order is officially confirmed!\n\nTo lock in your date in our calendar, please transfer the 50% deposit using your selected payment details below. We will send a confirmation receipt once received."
+            txt: "Your service order is confirmed.\n\nTo lock in your date, please transfer the 50% deposit using the payment details below."
         },
         ServiceDepositPaid: {
-            sub: "DP.PORTFOLIO | Deposit Received. Booking Fully Secured!",
-            txt: "We have successfully received your 50% deposit payment. Thank you!\n\nYour photoshoot date and time are officially locked in. See you at the agreed location! The remaining balance will be settled after the session."
+            sub: "DP.PORTFOLIO | Deposit Received – Booking Secured",
+            txt: "We have received your 50% deposit payment. Thank you.\n\nYour session date and time are reserved. The remaining balance is settled after the session."
         },
         ServiceFullyPaid: {
-            sub: "DP.PORTFOLIO | Full Payment Received. Thank you!",
-            txt: "We would like to confirm that full payment for our services has been successfully received.\n\nThank you sincerely for your trust and wonderful collaboration with DP.PORTFOLIO!"
+            sub: "DP.PORTFOLIO | Full Payment Received",
+            txt: "We confirm that full payment for your session has been received. Thank you!"
         },
         ServiceCompleted: {
-            sub: "DP.PORTFOLIO | Service Completed. Your photos are ready!",
-            txt: "Your order is complete!\n\nAll selected photos and videos have been processed and uploaded to your personal Wfolio gallery. We invite you to view and download them in maximum quality."
+            sub: "DP.PORTFOLIO | Service Completed – Files Ready",
+            txt: "Your order is complete and uploaded to your personal Wfolio gallery."
         },
         ServiceCancelled: {
             sub: "DP.PORTFOLIO | Order Cancelled",
-            txt: "This email is to inform you that your order has been cancelled.\n\nIf this was done in error or you have questions, please reply directly to this email."
+            txt: "Your order has been cancelled. If you have any questions, reply directly to this email."
         },
         ServiceStatusUpdate: {
             sub: "DP.PORTFOLIO | Order Status Updated",
-            txt: "We would like to inform you that your order status has been updated in our system."
+            txt: "Your order status has been updated in our system."
         },
         labels: {
             date: "Date & Time:",
@@ -353,85 +442,85 @@ export const texts = {
             srv: "Service Package:",
             status: "Order Status:",
             payMethod: "Payment Method:",
-            notes: "Vision / Notes:"
+            notes: "Notes / Vision:"
         },
         gallery: {
             title: "Your photo gallery is ready",
-            desc: "Click the button below to open your private Wfolio gallery and download your photos without compression:",
+            desc: "Click the button below to open your private Wfolio gallery and download your photos:",
             btn: "Open Wfolio Gallery &rarr;",
             note: "You can download individual photos or the entire collection as a ZIP archive."
         },
         receipt: {
             title: "Official Receipt / Invoice",
-            desc: "Your payment confirmation document is ready. Click the button below to download:",
+            desc: "Your payment confirmation document is ready:",
             btn: "Download Receipt (PDF) &darr;"
         },
         tips: {
             title: "Helpful tips before your shoot:",
-            tip1: "<b>Outfits:</b> Bring 1–2 coordinated outfits without large logos. Earthy, neutral, or pastel colors photograph best.",
-            tip2: "<b>Punctuality:</b> Please arrive 5–10 minutes early so we can discuss the shoot and start on time.",
-            tip3: "<b>Mindset:</b> Relax and be yourself – the session is calm and easygoing, I'll help you feel comfortable."
+            tip1: "<b>Outfits:</b> Bring 1–2 coordinated outfits without large logos. Neutral or earthy tones photograph best.",
+            tip2: "<b>Punctuality:</b> Please arrive 5–10 minutes early so we can discuss the session and start on time.",
+            tip3: "<b>Mindset:</b> Relax and be yourself – the session is calm and easygoing."
         }
     },
     ru: {
         greeting: "Здравствуйте, {{name}}!",
         badgeConfirmed: "Подтверждено",
-        badgePending: "Заявка Получена",
-        badgeCompleted: "Галерея Готова",
+        badgePending: "Заявка получена",
+        badgeCompleted: "Галерея готова",
         badgeCancelled: "Отменено",
         TFPNew: {
             sub: "DP.PORTFOLIO | Получена заявка на TFP фотосессию",
-            txt: "Большое спасибо за вашу заявку и предложенную идею!\n\nМы получили вашу анкету. Доминик ознакомится с вашим профилем и свяжется с вами в течение 24–48 часов для согласования деталей."
+            txt: "Спасибо за вашу заявку и предложенную идею.\n\nМы получили анкету и свяжемся с вами в течение 24–48 часов для согласования деталей."
         },
         TFPConfirmed: {
-            sub: "DP.PORTFOLIO | Подтверждено: TFP Фотосессия в Каунасе",
-            txt: "Нам очень понравилась ваша идея, и мы с радостью подтверждаем вашу TFP фотосессию!\n\nС нетерпением ждем совместной съемки. Детали встречи и полезные советы указаны ниже."
+            sub: "DP.PORTFOLIO | Подтверждено: TFP фотосессия",
+            txt: "Ваша TFP фотосессия подтверждена.\n\nДетали встречи и советы по подготовке указаны ниже."
         },
         TFPRescheduled: {
             sub: "DP.PORTFOLIO | Обновлено время или место TFP фотосессии",
-            txt: "Сообщаем, что время, дата или локация вашей TFP фотосессии были обновлены.\n\nПожалуйста, ознакомьтесь с обновленной информацией ниже. Если новое время вам не подходит, ответьте на это письмо."
+            txt: "Дата, время или локация вашей TFP фотосессии обновлены.\n\nОзнакомьтесь с новой информацией ниже."
         },
         TFPCancelled: {
-            sub: "DP.PORTFOLIO | Отменено: TFP Фотосессия",
-            txt: "К сожалению, ввиду непредвиденных обстоятельств мы вынуждены отменить запланированную TFP фотосессию.\n\nБлагодарим за проявленный интерес и надеемся на сотрудничество в будущем."
+            sub: "DP.PORTFOLIO | Отменено: TFP фотосессия",
+            txt: "К сожалению, запланированная TFP фотосессия отменена.\n\nБлагодарим за проявленный интерес."
         },
         TFPCompleted: {
-            sub: "DP.PORTFOLIO | Спасибо за съемку! Фотографии готовы",
-            txt: "Огромное спасибо за отличную энергетику и позитив на фотосессии!\n\nВсе кадры отобраны, профессионально отретушированы и загружены в вашу персональную галерею Wfolio."
+            sub: "DP.PORTFOLIO | Фотографии готовы",
+            txt: "Спасибо за совместную съемку.\n\nОтобранные и обработанные фотографии загружены в вашу персональную галерею Wfolio."
         },
         ServiceNew: {
-            sub: "DP.PORTFOLIO | Заказ принят – Информация и реквизиты",
-            txt: "Благодарим за выбор услуг DP.PORTFOLIO!\n\nВаш заказ успешно принят. Ниже представлены детали бронирования и реквизиты для оплаты. Мы скоро свяжемся с вами."
+            sub: "DP.PORTFOLIO | Заказ получен",
+            txt: "Благодарим за выбор услуг DP.PORTFOLIO.\n\nВаш заказ принят. Детали бронирования указаны ниже, мы свяжемся с вами в ближайшее время."
         },
         ServiceConfirmed: {
             sub: "DP.PORTFOLIO | Заказ подтвержден – Реквизиты для оплаты",
-            txt: "Ваш заказ официально подтвержден!\n\nДля окончательного закрепления даты в нашем календаре внесите 50% аванса по указанным ниже реквизитам выбранного вами способа оплаты."
+            txt: "Ваш заказ подтвержден.\n\nДля закрепления даты внесите 50% аванса по указанным ниже реквизитам."
         },
         ServiceDepositPaid: {
-            sub: "DP.PORTFOLIO | Аванс получен. Бронь подтверждена!",
-            txt: "Мы успешно получили ваш аванс (50%). Спасибо!\n\nДата и время окончательно забронированы. До встречи на съемке! Остаток суммы оплачивается после проведения фотосессии."
+            sub: "DP.PORTFOLIO | Аванс получен. Бронь подтверждена",
+            txt: "Мы получили ваш 50% аванс. Дата и время забронированы. Остаток оплачивается после съемки."
         },
         ServiceFullyPaid: {
-            sub: "DP.PORTFOLIO | Полная оплата получена. Спасибо!",
-            txt: "Подтверждаем успешное получение полной оплаты за услуги.\n\nИскренне благодарим за сотрудничество и доверие к DP.PORTFOLIO!"
+            sub: "DP.PORTFOLIO | Полная оплата получена",
+            txt: "Подтверждаем получение полной оплаты. Спасибо за доверие!"
         },
         ServiceCompleted: {
-            sub: "DP.PORTFOLIO | Заказ выполнен. Фотографии готовы!",
-            txt: "Ваш заказ успешно выполнен!\n\nВсе фотографии и видеоматериалы готовы и загружены в вашу персональную галерею Wfolio. Приглашаем к просмотру и скачиванию."
+            sub: "DP.PORTFOLIO | Заказ выполнен. Материалы готовы",
+            txt: "Ваш заказ выполнен и загружен в вашу персональную галерею Wfolio."
         },
         ServiceCancelled: {
             sub: "DP.PORTFOLIO | Заказ отменен",
-            txt: "Сообщаем, что ваш заказ был отменен.\n\nЕсли это произошло по ошибке или у вас есть вопросы, ответьте на это письмо."
+            txt: "Сообщаем, что ваш заказ отменен. По всем вопросам ответьте на это письмо."
         },
         ServiceStatusUpdate: {
             sub: "DP.PORTFOLIO | Статус заказа обновлен",
-            txt: "Статус вашего заказа в системе DP.PORTFOLIO был обновлен."
+            txt: "Статус вашего заказа обновлен в системе."
         },
         labels: {
             date: "Дата и время:",
             loc: "Локация:",
             price: "Общая стоимость:",
-            dep: "Аванс к оплате (50%):",
+            dep: "Аванс (50%):",
             rem: "Остаток после съемки:",
             srv: "Пакет услуг:",
             status: "Статус заказа:",
@@ -440,20 +529,20 @@ export const texts = {
         },
         gallery: {
             title: "Ваша галерея готова к просмотру",
-            desc: "Нажмите кнопку ниже, чтобы открыть персональную галерею Wfolio и скачать снимки в оригинальном качестве без сжатия:",
+            desc: "Нажмите кнопку ниже, чтобы открыть персональную галерею Wfolio:",
             btn: "Открыть галерею Wfolio &rarr;",
-            note: "Вы можете скачать как отдельные фотографии, так и весь архив разом."
+            note: "Вы можете скачать отдельные фотографии или весь архив."
         },
         receipt: {
             title: "Официальный чек / Квитанция",
-            desc: "Ваш платежный документ сформирован и готов к скачиванию. Нажмите кнопку ниже:",
+            desc: "Ваш платежный документ готов:",
             btn: "Скачать квитанцию (PDF) &darr;"
         },
         tips: {
             title: "Полезные советы перед фотосессией:",
-            tip1: "<b>Одежда:</b> Возьмите 1–2 образа без крупных логотипов. Лучше всего смотрятся натуральные, пастельные и земляные оттенки.",
-            tip2: "<b>Время:</b> Пожалуйста, приходите за 5–10 минут до начала, чтобы мы могли спокойно начать съемку.",
-            tip3: "<b>Настрой:</b> Расслабьтесь и будьте собой — фотосессия пройдет спокойно и легко, помогу чувствовать себя естественно."
+            tip1: "<b>Одежда:</b> Возьмите 1–2 образа без крупных логотипов в спокойных тонах.",
+            tip2: "<b>Время:</b> Приходите за 5–10 минут до начала.",
+            tip3: "<b>Настрой:</b> Фотосессия проходит спокойно, помогу чувствовать себя уверенно."
         }
     }
 };
@@ -464,41 +553,46 @@ export function getDefaultContent(templateType, lang, data = {}) {
     const template = t[templateType] || t.ServiceStatusUpdate;
 
     const subject = template.sub;
-    const clientName = data.name || data.clientName || '';
-    const greeting = t.greeting.replace('{{name}}', clientName ? clientName : (safeLang === 'en' ? 'there' : (safeLang === 'ru' ? 'друг' : 'kliente')));
+    const rawName = data.name || data.clientName || '';
+    const displayName = rawName ? escapeEmailHtml(rawName) : (safeLang === 'en' ? 'there' : (safeLang === 'ru' ? 'друг' : 'kliente'));
+    const greeting = t.greeting.replace('{{name}}', displayName);
+    const greetingPlain = t.greeting.replace('{{name}}', rawName || (safeLang === 'en' ? 'there' : (safeLang === 'ru' ? 'друг' : 'kliente')));
     const text = template.txt;
 
     let boxHtml = '';
+    const textSections = [greetingPlain, text];
 
-    // If it's a financial service request or has price data
     if (data.finalPrice !== undefined && data.finalPrice !== null && data.finalPrice !== '') {
-        const finalPriceFormatted = Number(data.finalPrice).toFixed(2);
-        const depositFormatted = Number(data.depositAmount || (data.finalPrice / 2)).toFixed(2);
-        const remainingFormatted = Number(data.remainingAmount || (data.finalPrice - (data.depositAmount || (data.finalPrice / 2)))).toFixed(2);
-        const payMethod = data.paymentMethod || 'Bank Transfer';
+        const finalPriceNum = Number(data.finalPrice) || 0;
+        const depositNum = data.depositAmount !== undefined ? Number(data.depositAmount) : finalPriceNum / 2;
+        const remainingNum = data.remainingAmount !== undefined ? Number(data.remainingAmount) : (finalPriceNum - depositNum);
+        const finalPriceFormatted = finalPriceNum.toFixed(2);
+        const depositFormatted = depositNum.toFixed(2);
+        const remainingFormatted = remainingNum.toFixed(2);
+        const payMethod = String(data.paymentMethod || 'Bank Transfer');
 
         boxHtml = `
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
                 <tr>
                     <td style="padding: 22px 24px;">
-                        <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 14px;">
+                        <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 14px;">
                             ${safeLang === 'en' ? 'Order Summary' : (safeLang === 'ru' ? 'Детали заказа' : 'Užsakymo Suvestinė')}
                         </div>
                         <table role="presentation" width="100%" cellpadding="6" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
                             ${data.serviceName ? `
                             <tr>
-                                <td style="width: 150px; color: #607272; font-size: 13px;">${t.labels.srv}</td>
-                                <td><b>${data.serviceName}</b></td>
+                                <td style="width: 155px; color: #607272; font-size: 13px;">${t.labels.srv}</td>
+                                <td><b>${escapeEmailHtml(data.serviceName)}</b></td>
                             </tr>` : ''}
                             ${data.date_time ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.date}</td>
-                                <td><b>${data.date_time}</b></td>
+                                <td><b>${escapeEmailHtml(data.date_time)}</b></td>
                             </tr>` : ''}
                             ${data.location ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.loc}</td>
-                                <td><b>${data.location}</b></td>
+                                <td><b>${escapeEmailHtml(data.location)}</b></td>
                             </tr>` : ''}
                             <tr style="border-top: 1px solid #E8ECEB;">
                                 <td style="color: #607272; font-size: 13px; padding-top: 10px;">${t.labels.price}</td>
@@ -514,7 +608,7 @@ export function getDefaultContent(templateType, lang, data = {}) {
                             </tr>
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.payMethod}</td>
-                                <td><span style="background-color: #EDF2F1; padding: 2px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; color: #113939;">${payMethod}</span></td>
+                                <td><span style="background-color: #EDF2F1; padding: 2px 8px; border-radius: 3px; font-size: 13px; font-weight: 600; color: #113939;">${escapeEmailHtml(payMethod)}</span></td>
                             </tr>
                         </table>
                     </td>
@@ -522,47 +616,66 @@ export function getDefaultContent(templateType, lang, data = {}) {
             </table>
         `;
 
+        textSections.push([
+            safeLang === 'en' ? 'Order Summary:' : (safeLang === 'ru' ? 'Детали заказа:' : 'Užsakymo suvestinė:'),
+            data.serviceName ? `- ${t.labels.srv} ${data.serviceName}` : null,
+            data.date_time ? `- ${t.labels.date} ${data.date_time}` : null,
+            data.location ? `- ${t.labels.loc} ${data.location}` : null,
+            `- ${t.labels.price} ${finalPriceFormatted} EUR`,
+            `- ${t.labels.dep} ${depositFormatted} EUR`,
+            `- ${t.labels.rem} ${remainingFormatted} EUR`,
+            `- ${t.labels.payMethod} ${payMethod}`
+        ].filter(Boolean).join('\n'));
+
         if (templateType === 'ServiceConfirmed' || templateType === 'ServiceNew' || templateType === 'ServiceStatusUpdate') {
-            boxHtml += getPaymentDetailsHtml(payMethod, depositFormatted, clientName);
+            const paymentContent = getPaymentDetailsContent(payMethod, depositFormatted, rawName, data.paymentDetails || null, safeLang);
+            boxHtml += paymentContent.html;
+            textSections.push(paymentContent.text);
             boxHtml += getPreparationTipsHtml(safeLang);
         } else if (templateType === 'ServiceDepositPaid') {
             boxHtml += getPreparationTipsHtml(safeLang);
         }
     } else if (data.date_time || data.location) {
-        // TFP or simple appointment
         boxHtml = `
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
                 <tr>
                     <td style="padding: 22px 24px;">
-                        <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 14px;">
+                        <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 14px;">
                             ${safeLang === 'en' ? 'Photoshoot Session Details' : (safeLang === 'ru' ? 'Детали фотосессии' : 'Fotosesijos Detalės')}
                         </div>
                         <table role="presentation" width="100%" cellpadding="6" cellspacing="0" border="0" style="font-size: 14px; color: #1A2B2B;">
                             ${data.date_time ? `
                             <tr>
                                 <td style="width: 140px; color: #607272; font-size: 13px;">${t.labels.date}</td>
-                                <td><b>${data.date_time}</b></td>
+                                <td><b>${escapeEmailHtml(data.date_time)}</b></td>
                             </tr>` : ''}
                             ${data.location ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.loc}</td>
-                                <td><b>${data.location}</b></td>
+                                <td><b>${escapeEmailHtml(data.location)}</b></td>
                             </tr>` : ''}
                             ${data.idea ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.notes}</td>
-                                <td><em>${data.idea}</em></td>
+                                <td><em>${escapeEmailHtml(data.idea)}</em></td>
                             </tr>` : ''}
                             ${data.status ? `
                             <tr>
                                 <td style="color: #607272; font-size: 13px;">${t.labels.status}</td>
-                                <td><b style="color: #113939; text-transform: uppercase;">${data.status}</b></td>
+                                <td><b style="color: #113939; text-transform: uppercase;">${escapeEmailHtml(data.status)}</b></td>
                             </tr>` : ''}
                         </table>
                     </td>
                 </tr>
             </table>
         `;
+
+        textSections.push([
+            data.date_time ? `- ${t.labels.date} ${data.date_time}` : null,
+            data.location ? `- ${t.labels.loc} ${data.location}` : null,
+            data.idea ? `- ${t.labels.notes} ${data.idea}` : null,
+            data.status ? `- ${t.labels.status} ${data.status}` : null
+        ].filter(Boolean).join('\n'));
 
         if (templateType === 'TFPConfirmed' || templateType === 'TFPRescheduled') {
             boxHtml += getPreparationTipsHtml(safeLang);
@@ -572,40 +685,45 @@ export function getDefaultContent(templateType, lang, data = {}) {
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
                 <tr>
                     <td style="padding: 18px 22px; font-size: 15px; color: #1A2B2B;">
-                        <b>${t.labels.status}</b> <span style="color: #113939; font-weight: bold; text-transform: uppercase; margin-left: 8px;">${data.status}</span>
+                        <b>${t.labels.status}</b> <span style="color: #113939; font-weight: bold; text-transform: uppercase; margin-left: 8px;">${escapeEmailHtml(data.status)}</span>
                     </td>
                 </tr>
             </table>
         `;
+        textSections.push(`${t.labels.status} ${data.status}`);
     }
 
-    return { subject, greeting, text, boxHtml };
+    textSections.push(`--\nDP.PORTFOLIO | ${BRAND.email}\n${BRAND.websiteUrl}`);
+    const plainText = textSections.filter(Boolean).join('\n\n');
+
+    return { subject, greeting, text, boxHtml, plainText };
 }
 
 export function getGalleryHtml(lang, url) {
     const safeLang = texts[lang] ? lang : 'lt';
     const t = texts[safeLang].gallery;
+    const safeUrl = escapeEmailHtml(url);
 
     return `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0; background: linear-gradient(135deg, #113939 0%, #1c4d4d 100%); border-radius: 6px; box-shadow: 0 8px 25px rgba(17,57,57,0.18);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0; background-color: #113939; border-radius: 6px;">
             <tr>
-                <td align="center" style="padding: 34px 25px; text-align: center;">
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; font-weight: 600; margin-bottom: 8px;">
+                <td align="center" style="padding: 32px 24px; text-align: center;">
+                    <div style="font-size: 18px; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; font-weight: 600; margin-bottom: 8px;">
                         ${t.title}
                     </div>
-                    <p style="margin: 0 0 22px 0; color: #C2D6D4; font-size: 14px; line-height: 1.6; max-width: 460px;">
+                    <p style="margin: 0 0 20px 0; color: #C2D6D4; font-size: 14px; line-height: 1.6; max-width: 460px;">
                         ${t.desc}
                     </p>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 16px auto;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 14px auto;">
                         <tr>
-                            <td align="center" style="background-color: #FFFFFF; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
-                                <a href="${url}" target="_blank" style="display: inline-block; padding: 15px 38px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #113939; text-decoration: none;">
+                            <td align="center" style="background-color: #FFFFFF; border-radius: 4px;">
+                                <a href="${safeUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; text-decoration: none;">
                                     ${t.btn}
                                 </a>
                             </td>
                         </tr>
                     </table>
-                    <div style="font-size: 12px; color: #A2BFBD; font-style: italic;">
+                    <div style="font-size: 12px; color: #A2BFBD;">
                         ${t.note}
                     </div>
                 </td>
@@ -617,32 +735,33 @@ export function getGalleryHtml(lang, url) {
 export function getReceiptHtml(lang, url, fileName = 'Dokumentas.pdf') {
     const safeLang = texts[lang] ? lang : 'lt';
     const t = texts[safeLang].receipt;
+    const safeUrl = escapeEmailHtml(url || '');
+    const safeFile = escapeEmailHtml(fileName);
 
     return `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #F7FAF9; border: 2px dashed #2A5C5C; border-radius: 6px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #F7FAF9; border: 1px solid #2A5C5C; border-radius: 6px;">
             <tr>
-                <td align="center" style="padding: 24px 22px; text-align: center;">
-                    <div style="font-size: 26px; line-height: 1; margin-bottom: 8px;">📎</div>
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 6px;">
+                <td align="center" style="padding: 22px 20px; text-align: center;">
+                    <div style="font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 6px;">
                         ${t.title}
                     </div>
                     <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
                         ${t.desc}<br>
-                        <strong style="color: #113939;">Failas: ${fileName}</strong> (taip pat tiesiogiai prisegtas prie šio el. laiško priedų)
+                        <strong style="color: #113939;">Failas: ${safeFile}</strong>
                     </p>
-                    ${url ? `
+                    ${safeUrl ? `
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                         <tr>
-                            <td align="center" style="background-color: #2A5C5C; border-radius: 4px; box-shadow: 0 4px 12px rgba(42,92,92,0.2);">
-                                <a href="${url}" target="_blank" style="display: inline-block; padding: 11px 28px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                            <td align="center" style="background-color: #2A5C5C; border-radius: 4px;">
+                                <a href="${safeUrl}" target="_blank" style="display: inline-block; padding: 11px 26px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
                                     ${t.btn}
                                 </a>
                             </td>
                         </tr>
                     </table>
                     ` : `
-                    <div style="display: inline-block; padding: 7px 16px; background: #e8f5e9; border: 1px solid #2e7d32; border-radius: 4px; color: #1b5e20; font-size: 12px; font-weight: 600;">
-                        ✓ PDF dokumentas tiesiogiai prisegtas el. pašto prieduose
+                    <div style="display: inline-block; padding: 7px 14px; background: #F0F5F4; border: 1px solid #113939; border-radius: 4px; color: #113939; font-size: 12px; font-weight: 600;">
+                        PDF dokumentas pridėtas prie šio el. laiško
                     </div>
                     `}
                 </td>
@@ -652,13 +771,13 @@ export function getReceiptHtml(lang, url, fileName = 'Dokumentas.pdf') {
 }
 
 export function buildFinalHtml(greeting, text, boxHtml = '', galleryHtml = '', receiptHtml = '') {
-    const formattedText = (text || '').replace(/\n/g, '<br>');
+    const formattedText = String(text || '').replace(/\n/g, '<br>');
 
     return `${emailWrapperStart}
-        <h2 style="font-family: 'Josefin Sans', Arial, sans-serif; color: #113939; font-size: 24px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin: 0 0 16px 0;">
+        <h2 style="color: #113939; font-size: 22px; font-weight: 500; margin: 0 0 16px 0;">
             ${greeting}
         </h2>
-        <div style="color: #2D3748; font-size: 15px; line-height: 1.75; margin-bottom: 22px;">
+        <div style="color: #2D3748; font-size: 15px; line-height: 1.7; margin-bottom: 20px;">
             ${formattedText}
         </div>
         ${boxHtml || ''}
@@ -669,26 +788,18 @@ export function buildFinalHtml(greeting, text, boxHtml = '', galleryHtml = '', r
 
 export function buildEmail(templateType, lang, data = {}) {
     const typeKey = templateType === 'New' ? 'TFPNew' : templateType;
-    const { subject, greeting, text, boxHtml } = getDefaultContent(typeKey, lang, data);
-    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
-    return { subject, html };
+    const { subject, greeting, text, boxHtml, plainText } = getDefaultContent(typeKey, lang, data);
+    const html = buildFinalHtml(greeting, escapeEmailHtml(text), boxHtml, '', '');
+    return { subject, text: plainText, html };
 }
 
-// ==============================================================================
-// 📬 EL. PAŠTO ADRESŲ IR TRANSAKCINĖS LOGIKOS KONFIGŪRACIJA (Pagal reikalavimus)
-// ==============================================================================
 export const EMAIL_CONFIG = {
-    // 1. Transakcinis / Sisteminis el. paštas (NO-REPLY)
-    // Naudojamas tik autentiškumo patvirtinimams: slaptažodžio atstatymui, el. pašto patvirtinimui, pakvietimams.
     system: {
         email: "info@dominikphotofficial.lt",
         from: "DP.PORTFOLIO Sistema <info@dominikphotofficial.lt>",
         replyTo: "info@dominikphotofficial.lt",
-        noReplyNote: "Šis el. laiškas yra išsiųstas automatiškai iš sisteminio adreso (NO-REPLY). Į šį laišką neatsakykite tiesiogiai."
+        noReplyNote: "Šis el. laiškas yra išsiųstas automatiškai iš sisteminio adreso."
     },
-    // 2. Pagrindinis / Pagalbos el. paštas
-    // Naudojamas visiems kitiems pranešimams: užsakymų patvirtinimams, sisteminėms užklausoms ir tiesioginiam bendravimui.
-    // Visi klientų atsakymai ir užklausos eina į šią dėžutę.
     general: {
         email: "info@dominikphotofficial.lt",
         from: "DP.PORTFOLIO <info@dominikphotofficial.lt>",
@@ -696,87 +807,45 @@ export const EMAIL_CONFIG = {
     }
 };
 
-// 💌 Naujo komandos nario / administratoriaus pakvietimo laiškas (Onboarding Flow)
 export function buildInvitationEmail({ name, email, role, loginUrl }) {
     const roleLabels = {
         superadmin: 'Super Administratorius',
-        manager: 'Vadybininkas / Asistentas',
-        photographer: 'Fotografas / Partneris',
+        manager: 'Vadybininkas',
+        photographer: 'Fotografas',
         accountant: 'Buhalteris'
     };
     const roleName = roleLabels[role] || role || 'Komandos narys';
-    const targetUrl = loginUrl || BRAND.websiteUrl + '/admin.html';
+    const targetUrl = loginUrl || `${BRAND.websiteUrl}/admin.html`;
+    const safeName = escapeEmailHtml(name || 'kolega');
+    const safeEmail = escapeEmailHtml(email || '');
 
-    const subject = `Kvietimas prisijungti prie DP.PORTFOLIO komandos sistemos`;
-    const greeting = `Sveiki, ${name}!`;
-    const text = `Džiaugiamės galėdami pranešti, kad Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo.`;
+    const subject = `Kvietimas prisijungti prie DP.PORTFOLIO valdymo sistemos`;
+    const greeting = `Sveiki, ${safeName}!`;
+    const bodyHtmlText = `Jums suteikta prieiga prie <strong>DP.PORTFOLIO</strong> valdymo skydo.`;
 
     const boxHtml = `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
             <tr>
                 <td style="padding: 24px;">
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
-                        Paskyros Duomenys & Suteikta Rolė
+                    <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Paskyros duomenys ir rolė
                     </div>
                     <p style="margin: 0 0 8px 0; font-size: 14px; color: #1A2B2B;">
-                        <strong>Prisijungimo el. paštas:</strong> <code style="background: #eef2f2; padding: 2px 6px; border-radius: 3px; font-weight: bold; color: #113939;">${email}</code><br>
-                        <strong>Suteiktos teisės / Rolė:</strong> <span style="display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; margin-top: 4px;">${roleName}</span>
+                        <strong>Prisijungimo el. paštas:</strong> <code style="background: #eef2f2; padding: 2px 6px; border-radius: 3px; font-weight: bold; color: #113939;">${safeEmail}</code><br>
+                        <strong>Suteikta rolė:</strong> <span style="display: inline-block; background: #eef5f4; color: #113939; padding: 2px 8px; border-radius: 3px; font-weight: bold; font-size: 12px; margin-top: 4px;">${escapeEmailHtml(roleName)}</span>
                     </p>
-                    <div style="border-top: 1px solid #E8ECEB; padding-top: 16px; margin-top: 16px;">
-                        <strong style="color: #113939; font-size: 14px;">Kaip pirmą kartą susikurti savo slaptažodį:</strong>
+                    <div style="border-top: 1px solid #E8ECEB; padding-top: 14px; margin-top: 14px;">
+                        <strong style="color: #113939; font-size: 14px;">Kaip prisijungti pirmą kartą:</strong>
                         <ol style="margin: 10px 0 0 0; padding-left: 20px; font-size: 13.5px; color: #4A5568; line-height: 1.6;">
-                            <li>Spustelėkite žemiau esantį mygtuką <strong>„Atidaryti Valdymo Skydą“</strong> arba atverkite nuorodą savo naršyklėje.</li>
-                            <li>Prisijungimo lange paspauskite mygtuką: <br><em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em>.</li>
-                            <li>Įveskite savo el. paštą <strong>${email}</strong> ir el. paštu gausite nuorodą savo asmeninio slaptažodžio susikūrimui.</li>
-                            <li>Susikūrę slaptažodį galėsite iškart saugiai prisijungti prie DP.PORTFOLIO sistemos.</li>
+                            <li>Atverkite valdymo skydą: <a href="${escapeEmailHtml(targetUrl)}" style="color: #113939;">${escapeEmailHtml(targetUrl)}</a>.</li>
+                            <li>Prisijunkite su savo Google paskyra arba pasirinkite slaptažodžio nustatymą per el. paštą <strong>${safeEmail}</strong>.</li>
                         </ol>
                     </div>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 24px auto 8px auto;">
-                        <tr>
-                            <td align="center" style="background-color: #113939; border-radius: 4px; box-shadow: 0 4px 15px rgba(17,57,57,0.18);">
-                                <a href="${targetUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
-                                    Atidaryti Valdymo Skydą &rarr;
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <div style="font-size: 12px; color: #718096; line-height: 1.5; background: #EDF2F7; padding: 10px 14px; border-radius: 4px; margin-top: 16px;">
-            ℹ️ ${EMAIL_CONFIG.system.noReplyNote} Kilus klausimams susisiekite su administratoriumi: <a href="mailto:${EMAIL_CONFIG.general.email}" style="color: #113939; font-weight: bold;">${EMAIL_CONFIG.general.email}</a>.
-        </div>
-    `;
-
-    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
-    return { subject, html };
-}
-
-// 🔑 Slaptažodžio priminimo / nustatymo pakartotinis pranešimas
-export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
-    const targetUrl = loginUrl || BRAND.websiteUrl + '/admin.html';
-    const subject = `DP.PORTFOLIO | Slaptažodžio nustatymo instrukcija`;
-    const greeting = `Sveiki, ${name || 'kolega'}!`;
-    const text = `Pagal Jūsų užklausą siunčiame instrukciją, kaip atstatyti arba susikurti savo slaptažodį prisijungimui prie DP.PORTFOLIO valdymo skydo.`;
-
-    const boxHtml = `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
-            <tr>
-                <td style="padding: 24px;">
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
-                        Slaptažodžio Atstatymo Žingsniai
-                    </div>
-                    <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #2D3748; line-height: 1.65;">
-                        <li>Atidarykite prisijungimo puslapį: <a href="${targetUrl}" target="_blank" style="color: #113939; font-weight: bold;">${targetUrl}</a></li>
-                        <li>Spustelėkite mygtuką <em>„Pamiršote ar neturite slaptažodžio? Siųsti nustatymo nuorodą“</em></li>
-                        <li>Įrašykite savo autorizuotą el. paštą: <strong>${email}</strong></li>
-                        <li>Patikrinkite savo pašto dėžutę ir paspauskite gautą saugią nuorodą naujam slaptažodžiui įvesti.</li>
-                    </ol>
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 22px auto 6px auto;">
                         <tr>
                             <td align="center" style="background-color: #113939; border-radius: 4px;">
-                                <a href="${targetUrl}" target="_blank" style="display: inline-block; padding: 13px 30px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
-                                    Eiti į Prisijungimo Langą &rarr;
+                                <a href="${escapeEmailHtml(targetUrl)}" target="_blank" style="display: inline-block; padding: 13px 30px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                    Atidaryti valdymo skydą &rarr;
                                 </a>
                             </td>
                         </tr>
@@ -784,42 +853,64 @@ export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
                 </td>
             </tr>
         </table>
-        <div style="font-size: 12px; color: #718096; line-height: 1.5; background: #EDF2F7; padding: 10px 14px; border-radius: 4px; margin-top: 16px;">
-            ℹ️ ${EMAIL_CONFIG.system.noReplyNote}
+        <div style="font-size: 12px; color: #607272; line-height: 1.5; background: #F4F6F5; padding: 10px 14px; border-radius: 4px; margin-top: 16px;">
+            ${EMAIL_CONFIG.system.noReplyNote} Kilus klausimams rašykite: <a href="mailto:${EMAIL_CONFIG.general.email}" style="color: #113939; font-weight: bold;">${EMAIL_CONFIG.general.email}</a>.
         </div>
     `;
 
-    const html = buildFinalHtml(greeting, text, boxHtml, '', '');
-    return { subject, html };
+    const html = buildFinalHtml(greeting, bodyHtmlText, boxHtml, '', '');
+    const text = `Sveiki, ${name || 'kolega'}!\n\nJums suteikta prieiga prie DP.PORTFOLIO valdymo skydo.\n- El. paštas: ${email}\n- Rolė: ${roleName}\n- Nuoroda: ${targetUrl}\n\nPrisijunkite su savo Google paskyra arba nustatykite slaptažodį prisijungimo lange.\n\n--\nDP.PORTFOLIO | ${EMAIL_CONFIG.general.email}`;
+    return { subject, text, html };
 }
 
-// ⭐ Švarus atsiliepimo kvietimo šablonas po fotosesijos (Post-Delivery Review Invitation)
-export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUrl, reviewUrl }) {
-    const targetReviewUrl = reviewUrl || `https://portfolio.dominikphotofficial.lt/review.html?name=${encodeURIComponent(clientName || '')}`;
-    const subject = `Kaip praėjo Jūsų fotosesija? Pasidalykite atsiliepimu | DP.PORTFOLIO`;
-    const greeting = `Sveiki, ${clientName || 'Kliente'}!`;
-    const text = `Nuoširdžiai dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionTitle ? ` („${sessionTitle}“)` : ''}. Tikimės, kad gautos nuotraukos džiugina Jus ir Jūsų artimuosius!
-
-Jūsų nuomonė ir įspūdžiai mums yra be galo svarbūs – jie padeda tobulėti ir leidžia kitiems būsimiems klientams bei modeliams sužinoti, kokios patirties galima tikėtis dirbant kartu.
-
-Būtume labai dėkingi, jei skirtumėte 1 minutę ir pasidalintumėte trumpu atsiliepimu apie fotosesijos atmosferą, bendravimą bei rezultatą:`;
+export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
+    const targetUrl = loginUrl || `${BRAND.websiteUrl}/admin.html`;
+    const subject = `DP.PORTFOLIO | Slaptažodžio nustatymo instrukcija`;
+    const greeting = `Sveiki, ${escapeEmailHtml(name || 'kolega')}!`;
+    const bodyHtmlText = `Siunčiame instrukciją, kaip atstatyti arba susikurti slaptažodį prisijungimui prie DP.PORTFOLIO valdymo skydo.`;
 
     const boxHtml = `
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
+            <tr>
+                <td style="padding: 24px;">
+                    <div style="font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Slaptažodžio atstatymo žingsniai
+                    </div>
+                    <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #2D3748; line-height: 1.65;">
+                        <li>Atidarykite prisijungimo puslapį: <a href="${escapeEmailHtml(targetUrl)}" target="_blank" style="color: #113939; font-weight: bold;">${escapeEmailHtml(targetUrl)}</a></li>
+                        <li>Spustelėkite „Pamiršote slaptažodį?“</li>
+                        <li>Įrašykite savo autorizuotą el. paštą: <strong>${escapeEmailHtml(email)}</strong></li>
+                        <li>Paspauskite el. paštu gautą nuorodą naujam slaptažodžiui įvesti.</li>
+                    </ol>
+                </td>
+            </tr>
+        </table>
+    `;
+
+    const html = buildFinalHtml(greeting, bodyHtmlText, boxHtml, '', '');
+    const text = `Sveiki, ${name || 'kolega'}!\n\nSlaptažodžio atstatymo žingsniai:\n1. Atidarykite: ${targetUrl}\n2. Pasirinkite slaptažodžio nustatymo nuorodą\n3. Įveskite el. paštą: ${email}\n4. Paspauskite gautą nuorodą.\n\n--\nDP.PORTFOLIO | ${EMAIL_CONFIG.general.email}`;
+    return { subject, text, html };
+}
+
+export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUrl, reviewUrl }) {
+    const targetReviewUrl = reviewUrl || `${BRAND.websiteUrl}/review.html?name=${encodeURIComponent(clientName || '')}`;
+    const subject = `Pasidalykite atsiliepimu apie fotosesiją | DP.PORTFOLIO`;
+    const greeting = `Sveiki, ${escapeEmailHtml(clientName || 'kliente')}!`;
+    const sessionPart = sessionTitle ? ` („${escapeEmailHtml(sessionTitle)}“)` : '';
+    const bodyHtmlText = `Dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionPart}.\n\nJūsų nuomonė padeda tobulėti ir kitiems klientams lengviau apsispręsti. Būtume labai dėkingi, jei skirtumėte minutę trumpam atsiliepimui:`;
+
+    const boxHtml = `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
             <tr>
                 <td style="padding: 24px; text-align: center;">
-                    <div style="font-size: 24px; color: #113939; margin-bottom: 8px;">★★★★★</div>
-                    <div style="font-family: 'Josefin Sans', Arial, sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
-                        Palikite Savo Atsiliepimą
+                    <div style="font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: #113939; font-weight: 700; margin-bottom: 12px;">
+                        Palikti atsiliepimą
                     </div>
-                    <p style="margin: 0 0 20px 0; font-size: 14px; color: #4A5568; line-height: 1.6;">
-                        Spustelėkite žemiau esantį mygtuką ir atverkite trumpą atsiliepimo formą:
-                    </p>
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto;">
                         <tr>
-                            <td align="center" style="background-color: #113939; border-radius: 4px; box-shadow: 0 4px 15px rgba(17,57,57,0.18);">
-                                <a href="${targetReviewUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: 'Josefin Sans', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
-                                    Palikti Atsiliepimą &rarr;
+                            <td align="center" style="background-color: #113939; border-radius: 4px;">
+                                <a href="${escapeEmailHtml(targetReviewUrl)}" target="_blank" style="display: inline-block; padding: 13px 30px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                                    Palikti atsiliepimą &rarr;
                                 </a>
                             </td>
                         </tr>
@@ -830,7 +921,7 @@ Būtume labai dėkingi, jei skirtumėte 1 minutę ir pasidalintumėte trumpu ats
     `;
 
     const galleryHtml = galleryUrl ? getGalleryHtml('lt', galleryUrl) : '';
-    const html = buildFinalHtml(greeting, text, boxHtml, galleryHtml, '');
-    return { subject, html };
+    const html = buildFinalHtml(greeting, bodyHtmlText, boxHtml, galleryHtml, '');
+    const text = `Sveiki, ${clientName || 'kliente'}!\n\nDėkojame už bendradarbiavimą su DP.PORTFOLIO${sessionTitle ? ` (${sessionTitle})` : ''}.\nJei turite minutę, palikite atsiliepimą čia: ${targetReviewUrl}${galleryUrl ? `\nJūsų galerija: ${galleryUrl}` : ''}\n\n--\nDP.PORTFOLIO | ${BRAND.email}`;
+    return { subject, text, html };
 }
-
