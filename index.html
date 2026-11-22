@@ -405,6 +405,26 @@
                 </a>
             </div>
         </section>
+
+        <!-- Atsiliepimai pagal kategorijas (Mokamos paslaugos ir TFP projektai) -->
+        <section id="reviews" class="reviews-section fade-in-up" style="display: none;">
+            <div class="reviews-header">
+                <h2>Klientų ir Modelių Atsiliepimai</h2>
+                <p>Tikri įspūdžiai po fotosesijų, vaizdo projektų ir kūrybinio bendradarbiavimo Kaune.</p>
+            </div>
+
+            <div class="reviews-filter-bar" role="tablist" aria-label="Atsiliepimų kategorijos">
+                <button type="button" class="review-filter-btn active" data-rev-filter="all">Visi atsiliepimai</button>
+                <button type="button" class="review-filter-btn" data-rev-filter="service">Mokamos paslaugos</button>
+                <button type="button" class="review-filter-btn" data-rev-filter="tfp">TFP projektai</button>
+            </div>
+
+            <div id="home-reviews-container"></div>
+
+            <div class="reviews-cta-row">
+                <a href="/review" class="btn-secondary">Palikti atsiliepimą &rarr;</a>
+            </div>
+        </section>
     </main>
 
     <footer class="footer-minimal">
@@ -468,6 +488,160 @@
         </button>
     </div>
 
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { subscribeReviewsVisibility, fetchReviewsList } from './reviews-manager.js';
+
+        const reviewsSection = document.getElementById('reviews');
+        const reviewsContainer = document.getElementById('home-reviews-container');
+        const filterButtons = document.querySelectorAll('[data-rev-filter]');
+
+        let showReviewsGlobal = true;
+        let currentCategoryFilter = 'all';
+        let activeReviewsList = [];
+
+        function escHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        function sanitizeLink(url) {
+            const raw = String(url || '').trim();
+            if (!raw) return '';
+            if (/^https?:\/\//i.test(raw)) return raw;
+            if (raw.startsWith('@')) return `https://instagram.com/${raw.slice(1)}`;
+            return '';
+        }
+
+        function renderCard(rev) {
+            const starsCount = Math.max(1, Math.min(5, parseInt(rev.rating, 10) || 5));
+            const stars = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+            const name = String(rev.clientName || 'Klientas').trim();
+            const initial = name.charAt(0).toUpperCase() || 'D';
+            const typeLabel = rev.type === 'tfp' ? 'TFP projektas' : 'Mokama paslauga';
+            const safeDate = escHtml(rev.date || '');
+            const tag = escHtml(rev.sessionTag || typeLabel);
+            const safeComment = escHtml(rev.comment || '');
+            const safeLink = sanitizeLink(rev.reviewLink);
+
+            return `
+                <article class="review-card">
+                    <div>
+                        <div class="review-top">
+                            <span class="review-stars" aria-label="${starsCount} iš 5 žvaigždučių">${stars}</span>
+                            <span class="review-badge">${typeLabel}${safeDate ? ` &middot; ${safeDate}` : ''}</span>
+                        </div>
+                        <p class="review-text" style="margin-top: var(--sp-2);">„${safeComment}“</p>
+                    </div>
+                    <div class="review-author-block">
+                        <div class="review-author-row">
+                            <div class="review-avatar" aria-hidden="true">${escHtml(initial)}</div>
+                            <div class="review-author-info">
+                                <span class="review-author-name">${escHtml(name)}</span>
+                                <span class="review-session-note">${tag}</span>
+                            </div>
+                        </div>
+                        ${safeLink ? `<a href="${escHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="review-link-badge">Profilis &rarr;</a>` : ''}
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderReviewsGrid() {
+            if (!reviewsSection || !reviewsContainer) return;
+
+            const approved = activeReviewsList
+                .filter(r => r && r.visible === true)
+                .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+
+            if (!showReviewsGlobal || approved.length === 0) {
+                reviewsSection.style.display = 'none';
+                return;
+            }
+
+            reviewsSection.style.display = 'block';
+            reviewsSection.classList.add('visible');
+
+            const serviceList = approved.filter(r => (r.type || 'service') !== 'tfp');
+            const tfpList = approved.filter(r => r.type === 'tfp');
+
+            if (currentCategoryFilter === 'service') {
+                reviewsContainer.innerHTML = serviceList.length
+                    ? `<div class="reviews-grid">${serviceList.map(renderCard).join('')}</div>`
+                    : `<p style="text-align:center; color: var(--text-muted); padding: var(--sp-4) 0;">Kol kas nėra paskelbtų mokamų paslaugų atsiliepimų.</p>`;
+                return;
+            }
+
+            if (currentCategoryFilter === 'tfp') {
+                reviewsContainer.innerHTML = tfpList.length
+                    ? `<div class="reviews-grid">${tfpList.map(renderCard).join('')}</div>`
+                    : `<p style="text-align:center; color: var(--text-muted); padding: var(--sp-4) 0;">Kol kas nėra paskelbtų TFP projektų atsiliepimų.</p>`;
+                return;
+            }
+
+            const blocks = [];
+            if (serviceList.length > 0) {
+                blocks.push(`
+                    <div class="reviews-category-group">
+                        <div class="reviews-category-head">
+                            <h3 class="reviews-category-title">Mokamų paslaugų atsiliepimai</h3>
+                            <span class="reviews-category-count">${serviceList.length} atsiliep.</span>
+                        </div>
+                        <div class="reviews-grid">${serviceList.map(renderCard).join('')}</div>
+                    </div>
+                `);
+            }
+            if (tfpList.length > 0) {
+                blocks.push(`
+                    <div class="reviews-category-group">
+                        <div class="reviews-category-head">
+                            <h3 class="reviews-category-title">TFP projektų įspūdžiai</h3>
+                            <span class="reviews-category-count">${tfpList.length} atsiliep.</span>
+                        </div>
+                        <div class="reviews-grid">${tfpList.map(renderCard).join('')}</div>
+                    </div>
+                `);
+            }
+            reviewsContainer.innerHTML = blocks.join('');
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategoryFilter = btn.getAttribute('data-rev-filter') || 'all';
+                renderReviewsGrid();
+            });
+        });
+
+        subscribeReviewsVisibility((visible) => {
+            showReviewsGlobal = visible !== false;
+            renderReviewsGrid();
+        });
+
+        fetchReviewsList().then(apiList => {
+            if (Array.isArray(apiList) && apiList.length > 0 && activeReviewsList.length === 0) {
+                activeReviewsList = apiList;
+                renderReviewsGrid();
+            }
+        });
+
+        try {
+            const q = query(collection(db, "reviews"), where("visible", "==", true));
+            onSnapshot(q, (snapshot) => {
+                const items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                activeReviewsList = items;
+                renderReviewsGrid();
+            }, (err) => {
+                console.warn("Reviews snapshot fallback to API:", err);
+            });
+        } catch (err) {
+            console.warn("Reviews listener init error:", err);
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

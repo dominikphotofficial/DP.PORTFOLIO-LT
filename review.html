@@ -106,6 +106,8 @@
                 </p>
             </div>
 
+            <div id="review-token-banner" style="display: none; margin-bottom: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); background: var(--bg-soft); font-size: var(--fs-sm); color: var(--text);"></div>
+
             <div id="review-success-panel" style="display: none; text-align: center; padding: var(--sp-4); border: 1px solid var(--border); border-radius: var(--radius);">
                 <h3 style="color: var(--accent); margin-bottom: var(--sp-2);">Nuoširdus Ačiū Už Jūsų Atsiliepimą!</h3>
                 <p style="color: var(--text-muted); margin-bottom: var(--sp-3);">
@@ -223,7 +225,7 @@
         })();
 
         import { db } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { collection, addDoc, doc, getDoc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
         const dateInput = document.getElementById('rev-date');
         if (dateInput) {
@@ -231,6 +233,22 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
+        const tokenParam = (urlParams.get('token') || '').trim();
+        const tokenBanner = document.getElementById('review-token-banner');
+        const form = document.getElementById('public-review-form');
+        const submitBtn = document.getElementById('submit-review-btn');
+        const successPanel = document.getElementById('review-success-panel');
+
+        let verifiedTokenId = '';
+        let verifiedTokenDoc = null;
+
+        function showTokenBanner(htmlContent, isWarning = false) {
+            if (!tokenBanner) return;
+            tokenBanner.style.display = 'block';
+            tokenBanner.style.borderLeftColor = isWarning ? '#b45309' : 'var(--accent)';
+            tokenBanner.innerHTML = htmlContent;
+        }
+
         if (urlParams.has('name')) {
             const nameEl = document.getElementById('rev-client-name');
             if (nameEl) nameEl.value = urlParams.get('name');
@@ -245,6 +263,47 @@
                 typeEl.value = urlParams.get('type');
             }
         }
+
+        async function resolveReviewToken() {
+            if (!tokenParam) return;
+            if (!/^[A-Za-z0-9_-]{8,128}$/.test(tokenParam)) {
+                showTokenBanner('Kvietimo nuoroda yra netinkamo formato. Vis tiek galite palikti atsiliepimą užpildę formą žemiau.', true);
+                return;
+            }
+            try {
+                const tokenSnap = await getDoc(doc(db, "review_tokens", tokenParam));
+                if (!tokenSnap.exists()) {
+                    showTokenBanner('Asmeninis kvietimo raktas nerastas arba pasenęs. Galite palikti atsiliepimą rankiniu būdu.', true);
+                    return;
+                }
+                const data = tokenSnap.data();
+                if (data.used === true) {
+                    showTokenBanner('Ačiū! Atsiliepimas pagal šį asmeninį kvietimą jau buvo sėkmingai pateiktas.');
+                    if (form) form.style.display = 'none';
+                    return;
+                }
+
+                verifiedTokenId = tokenParam;
+                verifiedTokenDoc = data;
+
+                const nameEl = document.getElementById('rev-client-name');
+                const typeEl = document.getElementById('rev-type');
+                const tagEl = document.getElementById('rev-tag');
+                if (nameEl && data.clientName) nameEl.value = data.clientName;
+                if (typeEl && (data.type === 'tfp' || data.type === 'service')) typeEl.value = data.type;
+                if (tagEl && data.sessionTag) tagEl.value = data.sessionTag;
+                if (dateInput && typeof data.sessionDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(data.sessionDate)) {
+                    dateInput.value = data.sessionDate;
+                }
+
+                const sessionDesc = data.sessionTag ? ` · ${data.sessionTag}` : '';
+                const typeLabel = data.type === 'tfp' ? 'TFP projektas' : 'Mokama paslauga';
+                showTokenBanner(`<strong>Patvirtintas kvietimas</strong> · ${typeLabel}${sessionDesc ? sessionDesc : ''}. Laukai užpildyti automatiškai.`);
+            } catch (err) {
+                console.warn('Review token lookup error:', err);
+            }
+        }
+        resolveReviewToken();
 
         let currentRating = 5;
         const starItems = document.querySelectorAll('.star-item');
@@ -280,10 +339,6 @@
             });
         });
 
-        const form = document.getElementById('public-review-form');
-        const submitBtn = document.getElementById('submit-review-btn');
-        const successPanel = document.getElementById('review-success-panel');
-
         form?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const clientName = document.getElementById('rev-client-name')?.value.trim();
@@ -310,11 +365,28 @@
                 status: 'pending',
                 visible: false,
                 createdAt: serverTimestamp(),
-                token: urlParams.get('token') || ''
+                token: verifiedTokenId || ''
             };
+            if (verifiedTokenDoc && verifiedTokenDoc.orderId) {
+                reviewPayload.orderId = String(verifiedTokenDoc.orderId);
+            }
 
             try {
-                await addDoc(collection(db, "reviews"), reviewPayload);
+                if (verifiedTokenId && verifiedTokenDoc && !verifiedTokenDoc.used) {
+                    const reviewRef = doc(collection(db, "reviews"));
+                    const tokenRef = doc(db, "review_tokens", verifiedTokenId);
+                    const batch = writeBatch(db);
+                    batch.set(reviewRef, reviewPayload);
+                    batch.update(tokenRef, {
+                        used: true,
+                        reviewId: reviewRef.id,
+                        usedAt: serverTimestamp()
+                    });
+                    await batch.commit();
+                } else {
+                    await addDoc(collection(db, "reviews"), reviewPayload);
+                }
+
                 try {
                     await fetch('/api/reviews', {
                         method: 'POST',
@@ -328,6 +400,7 @@
                 }
 
                 form.style.display = 'none';
+                if (tokenBanner) tokenBanner.style.display = 'none';
                 successPanel.style.display = 'block';
                 window.scrollTo({ top: successPanel.offsetTop - 100, behavior: 'smooth' });
             } catch(err) {

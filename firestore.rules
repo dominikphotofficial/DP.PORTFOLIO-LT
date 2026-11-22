@@ -69,7 +69,7 @@ service cloud.firestore {
     function isValidTFPRequest(data) {
       return data.keys().hasAll(['name', 'email', 'date_time', 'location', 'idea', 'status'])
         && data.keys().hasOnly([
-          'name', 'email', 'phone', 'instagram', 'social', 'socialProfile',
+          'name', 'email', 'phone', 'instagram', 'tiktok', 'social', 'socialProfile',
           'date_time', 'location', 'idea', 'photos', 'reference_photos',
           'extra_info', 'contractAgreed', 'adminNotes', 'language',
           'status', 'galleryUrl', 'contract_pdf_url', 'createdAt'
@@ -82,6 +82,7 @@ service cloud.firestore {
         && data.status is string && data.status in ['New', 'Pending', 'Confirmed', 'Rescheduled', 'Completed', 'Cancelled']
         && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
         && (!('instagram' in data) || (data.instagram is string && data.instagram.size() <= 150))
+        && (!('tiktok' in data) || (data.tiktok is string && data.tiktok.size() <= 150))
         && (!('social' in data) || (data.social is string && data.social.size() <= 150))
         && (!('socialProfile' in data) || (data.socialProfile is string && data.socialProfile.size() <= 200))
         && (!('extra_info' in data) || (data.extra_info is string && data.extra_info.size() <= 1500))
@@ -148,7 +149,7 @@ service cloud.firestore {
       return data.keys().hasAll(['clientName', 'comment', 'visible'])
         && data.keys().hasOnly([
           'clientName', 'type', 'sessionTag', 'rating', 'date',
-          'reviewLink', 'comment', 'status', 'visible', 'token', 'createdAt'
+          'reviewLink', 'comment', 'status', 'visible', 'orderId', 'token', 'createdAt'
         ])
         && data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 100
         && data.comment is string && data.comment.size() > 0 && data.comment.size() <= 2000
@@ -159,8 +160,30 @@ service cloud.firestore {
         && (!('date' in data) || (data.date is string && data.date.size() <= 30))
         && (!('reviewLink' in data) || (data.reviewLink is string && data.reviewLink.size() <= 500))
         && (!('status' in data) || (data.status is string && data.status in ['pending', 'published', 'hidden']))
+        && (!('orderId' in data) || (data.orderId is string && data.orderId.size() <= 128))
         && (!('token' in data) || (data.token is string && data.token.size() <= 120))
         && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidReviewToken(data) {
+      return data.keys().hasAll(['token', 'clientName', 'type', 'used'])
+        && data.keys().hasOnly([
+          'token', 'clientName', 'type', 'sessionTag', 'sessionDate',
+          'orderId', 'orderCollection', 'language', 'used', 'reviewId',
+          'createdAt', 'usedAt'
+        ])
+        && data.token is string && data.token.size() >= 8 && data.token.size() <= 128
+        && data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 100
+        && data.type is string && data.type in ['service', 'tfp']
+        && data.used is bool
+        && (!('sessionTag' in data) || (data.sessionTag is string && data.sessionTag.size() <= 150))
+        && (!('sessionDate' in data) || (data.sessionDate is string && data.sessionDate.size() <= 50))
+        && (!('orderId' in data) || (data.orderId is string && data.orderId.size() <= 128))
+        && (!('orderCollection' in data) || (data.orderCollection is string && data.orderCollection in ['service_requests', 'tfp_requests', 'manual']))
+        && (!('language' in data) || (data.language is string && data.language.size() <= 10))
+        && (!('reviewId' in data) || (data.reviewId is string && data.reviewId.size() <= 128))
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && (!('usedAt' in data) || data.usedAt is timestamp);
     }
 
     function isValidSetting(data) {
@@ -210,18 +233,19 @@ service cloud.firestore {
         && (!('replyTo' in data.message) || (data.message.replyTo is string && data.message.replyTo.size() <= 150))
         && (!('text' in data.message) || (data.message.text is string && data.message.text.size() <= 30000))
         && (!('html' in data.message) || (data.message.html is string && data.message.html.size() <= 120000))
-        && (!('attachments' in data.message) || (data.message.attachments is list && data.message.attachments.size() <= 5))
+        && (!('attachments' in data.message) || (data.message.attachments is list && data.message.attachments.size() <= 10))
         && (!('createdAt' in data) || data.createdAt is timestamp);
     }
 
     function isValidAdminTeamMember(data) {
       return data.keys().hasAll(['name', 'email', 'role'])
         && data.keys().hasOnly([
-          'name', 'email', 'role', 'permissions', 'customPermissions',
+          'name', 'email', 'uid', 'role', 'permissions', 'customPermissions',
           'active', 'status', 'lastInviteSentAt', 'lastLoginAt', 'updatedAt', 'createdAt'
         ])
         && data.name is string && data.name.size() > 0 && data.name.size() <= 100
         && data.email is string && data.email.size() > 3 && data.email.size() <= 120
+        && (!('uid' in data) || (data.uid is string && data.uid.size() <= 128))
         && data.role is string && data.role in ['superadmin', 'manager', 'photographer', 'accountant']
         && (!('permissions' in data) || (data.permissions is list && data.permissions.size() <= 15 && (data.permissions.size() == 0 || data.permissions[0] is string)))
         && (!('customPermissions' in data) || data.customPermissions is bool)
@@ -336,6 +360,35 @@ service cloud.firestore {
         && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
+    // 4b. Vienkartiniai atsiliepimu kvietimo tokenai (be jautriu asmens duomenu)
+    match /review_tokens/{tokenId} {
+      allow get: if isValidId(tokenId);
+      allow list: if isOwnerEmail() || hasPermission('Atsiliepimai') || hasPermission('Užsakymai');
+      allow create: if isValidId(tokenId)
+        && isTeamMember()
+        && (isOwnerEmail() || hasPermission('Atsiliepimai') || hasPermission('Užsakymai'))
+        && isValidReviewToken(incoming())
+        && incoming().token == tokenId
+        && incoming().used == false
+        && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
+      allow update: if isValidId(tokenId)
+        && isValidReviewToken(incoming())
+        && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
+        && (
+          isOwnerEmail() ||
+          (
+            existing().used == false
+            && incoming().used == true
+            && incoming().diff(existing()).affectedKeys().hasOnly(['used', 'usedAt', 'reviewId'])
+            && (!('usedAt' in incoming()) || incoming().usedAt == request.time)
+            && ('reviewId' in incoming())
+            && existsAfter(/databases/$(database)/documents/reviews/$(incoming().reviewId))
+          )
+        );
+      allow delete: if isValidId(tokenId)
+        && (isOwnerEmail() || hasPermission('Trinimas'));
+    }
+
     // 5. Viesi UI nustatymai (pvz., atsiliepimu sekcijos rodymas)
     match /settings/{settingId} {
       allow get: if isValidId(settingId) && (settingId == 'reviews' || isTeamMember());
@@ -394,14 +447,14 @@ service cloud.firestore {
         && isValidAdminTeamMember(incoming())
         && (
           isOwnerEmail() ||
-          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == request.auth.token.email.lower() && incoming().role != 'superadmin')
+          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == request.auth.token.email.lower() && incoming().role != 'superadmin' && (!('uid' in incoming()) || incoming().uid == request.auth.uid))
         );
       allow update: if isValidId(memberId)
         && isValidAdminTeamMember(incoming())
         && (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt)
         && (
           isOwnerEmail() ||
-          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == existing().email.lower() && incoming().role == existing().role && incoming().permissions == existing().permissions && incoming().active == existing().active && incoming().diff(existing()).affectedKeys().hasOnly(['lastLoginAt', 'name', 'status', 'updatedAt']))
+          (isVerifiedEmail() && request.auth.uid == memberId && incoming().email.lower() == existing().email.lower() && incoming().role == existing().role && incoming().permissions == existing().permissions && incoming().active == existing().active && incoming().diff(existing()).affectedKeys().hasOnly(['uid', 'lastLoginAt', 'name', 'status', 'updatedAt']))
         );
       allow delete: if isValidId(memberId) && (
         isOwnerEmail() ||

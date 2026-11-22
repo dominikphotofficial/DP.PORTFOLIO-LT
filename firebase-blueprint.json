@@ -9,6 +9,7 @@
         "email": { "type": "string", "format": "email", "maxLength": 120 },
         "phone": { "type": "string", "maxLength": 30 },
         "instagram": { "type": "string", "maxLength": 150 },
+        "tiktok": { "type": "string", "maxLength": 150 },
         "social": { "type": "string", "maxLength": 150 },
         "socialProfile": { "type": "string", "maxLength": 200 },
         "date_time": { "type": "string", "maxLength": 80 },
@@ -89,10 +90,31 @@
         "comment": { "type": "string", "maxLength": 2000 },
         "status": { "type": "string", "enum": ["pending", "published", "hidden"] },
         "visible": { "type": "boolean" },
+        "orderId": { "type": "string", "maxLength": 128 },
         "token": { "type": "string", "maxLength": 120 },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["clientName", "comment"]
+    },
+    "ReviewToken": {
+      "title": "Review Invitation Token",
+      "description": "One-time invitation token linking an emailed review request to an order or TFP session without storing PII",
+      "type": "object",
+      "properties": {
+        "token": { "type": "string", "maxLength": 128 },
+        "clientName": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["service", "tfp"] },
+        "sessionTag": { "type": "string", "maxLength": 150 },
+        "sessionDate": { "type": "string", "maxLength": 50 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderCollection": { "type": "string", "enum": ["service_requests", "tfp_requests", "manual"] },
+        "language": { "type": "string", "maxLength": 10 },
+        "used": { "type": "boolean" },
+        "reviewId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "usedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["token", "clientName", "type", "used"]
     },
     "Setting": {
       "title": "Setting",
@@ -153,6 +175,7 @@
       "properties": {
         "name": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "uid": { "type": "string", "maxLength": 128 },
         "role": { "type": "string", "enum": ["superadmin", "manager", "photographer", "accountant"] },
         "permissions": { "type": "array" },
         "customPermissions": { "type": "boolean" },
@@ -211,6 +234,10 @@
     "/reviews/{reviewId}": {
       "schema": "Review",
       "description": "Customer reviews and testimonials displayed on portfolio"
+    },
+    "/review_tokens/{tokenId}": {
+      "schema": "ReviewToken",
+      "description": "One-time invitation tokens linking emailed review requests to completed sessions"
     },
     "/settings/{settingId}": {
       "schema": "Setting",

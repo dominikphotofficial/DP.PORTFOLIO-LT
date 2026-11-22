@@ -732,10 +732,38 @@ export function getGalleryHtml(lang, url) {
     `;
 }
 
-export function getReceiptHtml(lang, url, fileName = 'Dokumentas.pdf') {
+export function getReceiptHtml(lang, urlOrLinks, fileName = 'Dokumentas.pdf') {
     const safeLang = texts[lang] ? lang : 'lt';
     const t = texts[safeLang].receipt;
-    const safeUrl = escapeEmailHtml(url || '');
+
+    let linksHtml = '';
+    if (Array.isArray(urlOrLinks) && urlOrLinks.length > 0) {
+        const itemsHtml = urlOrLinks.map(item => {
+            const u = escapeEmailHtml(item?.url || '');
+            const fn = escapeEmailHtml(item?.filename || 'Dokumentas');
+            if (!u) return '';
+            return `<div style="margin-bottom: 8px;"><a href="${u}" target="_blank" style="display: inline-block; padding: 10px 22px; background-color: #2A5C5C; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">Atsisiųsti: ${fn} &darr;</a></div>`;
+        }).filter(Boolean).join('');
+        linksHtml = itemsHtml || `<div style="display: inline-block; padding: 7px 14px; background: #F0F5F4; border: 1px solid #113939; border-radius: 4px; color: #113939; font-size: 12px; font-weight: 600;">Dokumentai pridėti prie šio el. laiško</div>`;
+    } else {
+        const safeUrl = escapeEmailHtml(typeof urlOrLinks === 'string' ? urlOrLinks : '');
+        linksHtml = safeUrl ? `
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+                <tr>
+                    <td align="center" style="background-color: #2A5C5C; border-radius: 4px;">
+                        <a href="${safeUrl}" target="_blank" style="display: inline-block; padding: 11px 26px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
+                            ${t.btn}
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        ` : `
+            <div style="display: inline-block; padding: 7px 14px; background: #F0F5F4; border: 1px solid #113939; border-radius: 4px; color: #113939; font-size: 12px; font-weight: 600;">
+                Dokumentas (-ai) pridėti prie šio el. laiško
+            </div>
+        `;
+    }
+
     const safeFile = escapeEmailHtml(fileName);
 
     return `
@@ -747,23 +775,9 @@ export function getReceiptHtml(lang, url, fileName = 'Dokumentas.pdf') {
                     </div>
                     <p style="margin: 0 0 14px 0; font-size: 13px; color: #607272; line-height: 1.6;">
                         ${t.desc}<br>
-                        <strong style="color: #113939;">Failas: ${safeFile}</strong>
+                        <strong style="color: #113939;">Failai: ${safeFile}</strong>
                     </p>
-                    ${safeUrl ? `
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-                        <tr>
-                            <td align="center" style="background-color: #2A5C5C; border-radius: 4px;">
-                                <a href="${safeUrl}" target="_blank" style="display: inline-block; padding: 11px 26px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #FFFFFF; text-decoration: none;">
-                                    ${t.btn}
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                    ` : `
-                    <div style="display: inline-block; padding: 7px 14px; background: #F0F5F4; border: 1px solid #113939; border-radius: 4px; color: #113939; font-size: 12px; font-weight: 600;">
-                        PDF dokumentas pridėtas prie šio el. laiško
-                    </div>
-                    `}
+                    ${linksHtml}
                 </td>
             </tr>
         </table>
@@ -892,12 +906,16 @@ export function buildPasswordResetInstructionEmail({ name, email, loginUrl }) {
     return { subject, text, html };
 }
 
-export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUrl, reviewUrl }) {
-    const targetReviewUrl = reviewUrl || `${BRAND.websiteUrl}/review.html?name=${encodeURIComponent(clientName || '')}`;
+export function buildReviewInvitationEmail({ clientName, sessionTitle, type, galleryUrl, reviewUrl, token }) {
+    const cleanType = type === 'tfp' ? 'tfp' : 'service';
+    const targetReviewUrl = reviewUrl || (token
+        ? `${BRAND.websiteUrl}/review?token=${encodeURIComponent(token)}`
+        : `${BRAND.websiteUrl}/review?name=${encodeURIComponent(clientName || '')}&type=${cleanType}`);
+    const projectNoun = cleanType === 'tfp' ? 'kūrybiniam TFP projektui' : 'fotosesijai';
     const subject = `Pasidalykite atsiliepimu apie fotosesiją | DP.PORTFOLIO`;
     const greeting = `Sveiki, ${escapeEmailHtml(clientName || 'kliente')}!`;
     const sessionPart = sessionTitle ? ` („${escapeEmailHtml(sessionTitle)}“)` : '';
-    const bodyHtmlText = `Dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo fotosesijai${sessionPart}.\n\nJūsų nuomonė padeda tobulėti ir kitiems klientams lengviau apsispręsti. Būtume labai dėkingi, jei skirtumėte minutę trumpam atsiliepimui:`;
+    const bodyHtmlText = `Dėkojame, kad pasirinkote <strong>DP.PORTFOLIO</strong> savo ${projectNoun}${sessionPart}.\n\nJūsų nuomonė padeda tobulėti ir kitiems klientams bei modeliams lengviau apsispręsti. Spustelėjus žemiau esantį mygtuką, jūsų sesijos duomenys bus atpažinti automatiškai:`;
 
     const boxHtml = `
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0; background-color: #FBF9F6; border: 1px solid #EAE6DF; border-left: 4px solid #113939; border-radius: 4px;">
@@ -922,6 +940,6 @@ export function buildReviewInvitationEmail({ clientName, sessionTitle, galleryUr
 
     const galleryHtml = galleryUrl ? getGalleryHtml('lt', galleryUrl) : '';
     const html = buildFinalHtml(greeting, bodyHtmlText, boxHtml, galleryHtml, '');
-    const text = `Sveiki, ${clientName || 'kliente'}!\n\nDėkojame už bendradarbiavimą su DP.PORTFOLIO${sessionTitle ? ` (${sessionTitle})` : ''}.\nJei turite minutę, palikite atsiliepimą čia: ${targetReviewUrl}${galleryUrl ? `\nJūsų galerija: ${galleryUrl}` : ''}\n\n--\nDP.PORTFOLIO | ${BRAND.email}`;
+    const text = `Sveiki, ${clientName || 'kliente'}!\n\nDėkojame už bendradarbiavimą su DP.PORTFOLIO${sessionTitle ? ` (${sessionTitle})` : ''}.\nJei turite minutę, palikite atsiliepimą per asmeninę nuorodą čia: ${targetReviewUrl}${galleryUrl ? `\nJūsų galerija: ${galleryUrl}` : ''}\n\n--\nDP.PORTFOLIO | ${BRAND.email}`;
     return { subject, text, html };
 }

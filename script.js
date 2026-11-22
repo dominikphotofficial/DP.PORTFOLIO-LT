@@ -766,3 +766,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Brevo Conversations Widget (only on public pages, excluded on admin panel)
+(function initBrevoConversationsWidget() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.location.pathname.includes('admin')) return;
+    if (window.BrevoConversationsID || document.getElementById('brevo-conversations-sdk')) return;
+
+    window.BrevoConversationsID = '6abf8822f1b78fd3650ba0d3';
+    window.BrevoConversations = window.BrevoConversations || function() {
+        (window.BrevoConversations.q = window.BrevoConversations.q || []).push(arguments);
+    };
+    const s = document.createElement('script');
+    s.id = 'brevo-conversations-sdk';
+    s.async = true;
+    s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+    if (document.head) document.head.appendChild(s);
+})();

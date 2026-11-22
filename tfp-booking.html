@@ -538,9 +538,15 @@
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <label class="input-label" for="tfp-instagram">Instagram / TikTok / Telegram *</label>
-                            <input type="text" id="tfp-instagram" name="instagram" class="form-control" placeholder="@jusu_profilis arba nuoroda" required>
+                        <div class="form-row-2">
+                            <div class="input-group">
+                                <label class="input-label" for="tfp-instagram">Instagram / Telegram *</label>
+                                <input type="text" id="tfp-instagram" name="instagram" class="form-control" placeholder="@jusu_profilis arba nuoroda" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="tfp-tiktok">TikTok slapyvardis *</label>
+                                <input type="text" id="tfp-tiktok" name="tiktok" class="form-control" placeholder="@jusu_tiktok" required>
+                            </div>
                         </div>
 
                         <div class="form-row-2">
@@ -888,13 +894,21 @@
                 submitBtn.innerHTML = `<span>Išsaugoma registracija...</span>`;
 
                 let socialVal = document.getElementById('tfp-instagram').value.trim();
+                let tiktokVal = document.getElementById('tfp-tiktok').value.trim();
+                if (!tiktokVal) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<span>Siųsti registraciją</span>`;
+                    document.getElementById('tfp-tiktok').focus();
+                    return;
+                }
                 let tgMatch = socialVal.match(/(?:tg|тг|telegram)[:\s]*@?([a-zA-Z0-9_]+)/i);
                 let socialLink = tgMatch ? `https://t.me/${tgMatch[1]}` : socialVal;
 
                 const requestData = {
                     name: document.getElementById('tfp-name').value.trim(),
                     email: document.getElementById('tfp-email').value.trim(),
-                    instagram: document.getElementById('tfp-instagram').value.trim(),
+                    instagram: socialVal,
+                    tiktok: tiktokVal,
                     socialProfile: socialLink,
                     date_time: document.getElementById('datetime-picker').value,
                     location: document.getElementById('tfp-location').value.trim(),
@@ -932,7 +946,8 @@
                     let tgMessage = `🔥 NAUJA TFP UŽKLAUSA (LT)!\n\n` +
                         `👤 Vardas: ${requestData.name}\n` +
                         `✉️ El. paštas: ${requestData.email}\n` +
-                        `📷 Socialinis tinklas: ${requestData.instagram}\n` +
+                        `📷 Instagram / Telegram: ${requestData.instagram}\n` +
+                        `🎵 TikTok: ${requestData.tiktok}\n` +
                         `📅 Data ir laikas: ${requestData.date_time}\n` +
                         `📍 Vieta: ${requestData.location}\n` +
                         `💡 Idėja: ${requestData.idea}\n` +

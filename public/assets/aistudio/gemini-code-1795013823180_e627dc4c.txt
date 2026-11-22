@@ -1,0 +1,40 @@
+Veik kaip vyresnysis Full-Stack programuotojas, UI/UX ir duomenų bazės architektas. Tavo užduotis – atlikti šiuos esminius svetainės, administravimo panelės ir logikos pataisymus bei naujų funkcijų įgyvendinimą:
+
+1. ADMIN PANELĖS MOBILUS KOMPAKTISKUMAS (RESPONSIVE UI):
+- Sutvarkyk admin panelės dizainą telefonams ir mažiems ekranams. 
+- Pašalink bet kokius horizontaliojo slinkimo (overflow) trūkumus, išcentruok elementus, sumažink per didelius tarpus, kad lentelės, formos ir mygtukai nebūtų sugrusti ar užlipę vienas ant kito. Naudok lanksčius CSS tinklelius (Flexbox/Grid), kad mobiliajame ekrane viskas būtų tvarkinga ir lengvai pasiekiama.
+
+2. KOMANDOS NARIŲ DUBLIAVIMO SUTVARKYMAS (GOOGLE AUTH):
+- Šiuo metu pakvietus narį sukuriama „pakviestas“ įrašas, o nariui prisijungus per Google, sistema sukuria antrą (naują) įrašą vietoj to, kad sujungtų su esamu.
+- Sutvarkyk autentifikacijos logiką: kai vartotojas jungiasi per Google, sistema PRIVALO patikrinti, ar jo el. paštas jau egzistuoja `admin_team` (arba `users`) kolekcijoje kaip pakviestas narys. 
+- Jei el. paštas sutampa, sistema turi atnaujinti esamą dokumentą (priskirti teisingą `uid`, pakeisti statusą iš „pakviestas“ į „aktyvus“), NEKURDAMA naujo dubliuoto įrašo.
+
+3. PDF GENERAVIMAS, KELI FAILAI IR ŠABLONŲ TEKSTO TAISYMAS:
+- PDF sutarčių ir dokumentų generavimo modulyje: padidink galimybę įkelti / pridėti **kelis failus** vienu metu (pvz., nuotraukų priedus prie sutarties ar kvitus), o ne tik vieną.
+- Sutvarkyk PDF šablono generavimo kodą (CSS/HTML stilius PDF viduje): pašalink teksto persidengimo (overlap) problemą, užtikrink teisingą `word-wrap`, `line-height` ir puslapio lūžius, kad visi sutarties punktai ir duomenys matytųsi idealiai.
+
+4. ATSILIEPIMŲ (REVIEWS) EL. PAŠTO SRAUTAS IR TOKENŲ SISTEMA:
+- Kai siunčiamas laiškas klientui dėl atsiliepimo, nuoroda el. pašte turi vesti tiesiai į: `https://portfolio.dominikphotofficial.lt/review?token=ČIA_UNIKALUS_TOKENAS` (sukurk unikalų `token` arba `reviewId`, susietą su konkrečiu užsakymu/sesija ir išsaugok jį Firestore).
+- Sukurk dedikuotą (arba dinamiškai užsikraunančią) atsiliepimo formos puslapį (`/review`), kuris nuskaito `token` iš URL, patikrina bazėje, identifikuoja klientą bei užsakymą ir automatiškai užpildo / parodytų jo informaciją formoje.
+- Klientui pateikus atsiliepimą, jis įrašomas į `reviews` kolekciją su nuoroda į paslaugos tipą (pvz., `tfp` arba mokama paslauga `service`).
+
+5. ATSILIEPIMŲ ATVAIZDAVIMAS PAGAL KATEGORIJAS INDEKSINIAME PUSLAPYJE (`index.html`):
+- Pagrindiniame puslapyje (`index.html`) atsiliepimai turi matytis viešai ir būti automatiškai filtruojami pagal kategorijas: TFP atsiliepimai atskirai nuo mokamų paslaugų (`service`) atsiliepimų (atskiromis kortelėmis arba skiltimis).
+
+6. BREVO CONVERSATIONS VALDIKLIO INTEGRAVIMAS:
+- Įterpk šį oficialų „Brevo Conversations“ skriptą į pagrindinį svetainės šabloną (HTML antraštę arba footerį), kad lankytojai svetainėje galėtų naudotis pokalbių valdikliu:
+```html
+<!-- Brevo Conversations {literal} -->
+<script>
+    (function(d, w, c) {
+        w.BrevoConversationsID = '6abf8822f1b78fd3650ba0d3';
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = '[https://conversations-widget.brevo.com/brevo-conversations.js](https://conversations-widget.brevo.com/brevo-conversations.js)';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'BrevoConversations');
+</script>
+<!-- /Brevo Conversations {/literal} -->

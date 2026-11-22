@@ -244,6 +244,10 @@ app.get(['/admin', '/admin/'], (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+app.get(['/review', '/review/'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'review.html'));
+});
+
 // 🖼️ Unified Album & Gallery Routes:
 // Direct redirects for bare album collections
 app.get(['/albums', '/albums/', '/album', '/album/'], (req, res) => {
