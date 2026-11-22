@@ -714,34 +714,7 @@
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
 
-        // TFP Reviews Loader
-        const defaultTfpReviews = [
-            {
-                clientName: "Gabija R.",
-                type: "tfp",
-                sessionTag: "Gatvės mada & Editorial (TFP)",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Dalyvavau kūrybiniame TFP projekte. Bendravimas nuo pat pirmos žinutės buvo profesionalus ir aiškus. Dominik turi puikią viziją, geba greitai nukreipti ir sukurti stiprius kadrus portfolio papildymui. Tikrai rekomenduoju!"
-            },
-            {
-                clientName: "Viktorija S.",
-                type: "tfp",
-                sessionTag: "Portretas gamtoje (TFP)",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Labai ačiū už bendradarbiavimą! Kūrybinis procesas buvo lengvas ir įdomus, nuotraukos išėjo labai gyvos, šiltų atspalvių ir švarios. Labai džiaugiuosi bendru rezultatu."
-            },
-            {
-                clientName: "Tomas K.",
-                type: "tfp",
-                sessionTag: "Urban & Automobilių estetika (TFP)",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Puikiai suderinome idėją per Instagram. Fotosesija Kaune praėjo labai greitai ir lengvai, o rezultatas pranoko lūkesčius. Dominik mato kadrą kitaip ir moka dirbti su šviesa."
-            }
-        ];
-
+        // TFP Reviews Loader (strictly from real Firestore / server records)
         function getInitials(name) {
             if (!name) return 'DP';
             const parts = name.trim().split(/\s+/);
@@ -753,6 +726,17 @@
             const container = document.getElementById('tfp-reviews-grid');
             if (!container) return;
             container.innerHTML = '';
+            if (!Array.isArray(list) || list.length === 0) {
+                container.innerHTML = `
+                    <div class="review-card fade-in-up" style="grid-column: 1 / -1; text-align: center; padding: 32px 24px;">
+                        <p class="review-text" style="margin-bottom: 14px;">TFP modelių atsiliepimų kol kas nėra. Jei jau fotografavomės kartu, palikite savo įspūdį.</p>
+                        <div>
+                            <a href="review.html" class="btn-secondary">Palikti atsiliepimą</a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
             list.forEach(rev => {
                 const card = document.createElement('div');
                 card.className = 'review-card fade-in-up';
@@ -797,10 +781,8 @@
 
         // Load reviews from file initially
         fetchReviewsList().then(list => {
-            if (list && list.length > 0) {
-                const tfpOnly = list.filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
-                renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
-            }
+            const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
+            renderTfpReviews(tfpOnly);
         });
 
         // Real-time Firestore sync
@@ -827,20 +809,20 @@
                 }
                 fetchReviewsList().then(list => {
                     const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
-                    renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+                    renderTfpReviews(tfpOnly);
                 });
             }, (err) => {
                 console.warn("Firestore reviews fallback to file:", err);
                 fetchReviewsList().then(list => {
                     const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
-                    renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+                    renderTfpReviews(tfpOnly);
                 });
             });
         } catch(e) {
             console.warn("Reviews init error:", e);
             fetchReviewsList().then(list => {
                 const tfpOnly = (list || []).filter(r => r.visible !== false && (r.type === 'tfp' || !r.type));
-                renderTfpReviews(tfpOnly.length > 0 ? tfpOnly : defaultTfpReviews);
+                renderTfpReviews(tfpOnly);
             });
         }
 

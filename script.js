@@ -756,26 +756,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    const tfpForm = document.getElementById('tfp-booking-form');
-    if (tfpForm) {
-        tfpForm.addEventListener('submit', function() {
-            if (window.trackFormSubmission) {
-                window.trackFormSubmission('tfp_booking', { form_name: 'TFP Booking Form' });
-            }
-            const submitBtn = tfpForm.querySelector('button');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Siunčiama...';
-            }
-            setTimeout(() => {
-                tfpForm.style.display = 'none';
-                const successDisplay = document.getElementById('success-display');
-                if (successDisplay) successDisplay.style.display = 'block';
-                window.scrollTo({ top: 200, behavior: 'smooth' });
-            }, 1000);
-        });
-    }
-
     // Generic form submission tracking
     document.querySelectorAll("form").forEach(form => {
         if (form.id === 'tfp-booking-form') return;

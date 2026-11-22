@@ -971,7 +971,7 @@
                 <p>Nuoširdūs įspūdžiai ir atsiliepimai po fotosesijų bei kūrybinių TFP projektų.</p>
                 <div style="margin-top: var(--sp-3);">
                     <a href="review.html" class="btn-secondary">
-                        ✍️ Palikti savo atsiliepimą
+                        Palikti savo atsiliepimą
                     </a>
                 </div>
             </div>
@@ -1247,50 +1247,7 @@
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
         import { buildEmail } from './email-templates.js';
 
-        // Load & Render Reviews
-        const initialReviews = [
-            {
-                clientName: "Karolina V.",
-                type: "service",
-                sessionTag: "Asmeninis portretas Kaune",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Labai džiaugiuosi rezultatu! Prieš fotosesiją šiek tiek jaudinausi, nes retai stoviu prieš objektyvą, tačiau Dominik sukūrė ramią, pasitikėjimą keliančią atmosferą. Spalvų tonavimas ir retušas – nepriekaištingi."
-            },
-            {
-                clientName: "Mantas & Sandra",
-                type: "service",
-                sessionTag: "Poros fotosesija Kauno senamiestyje",
-                rating: 5,
-                reviewLink: "https://portfolio.dominikphotofficial.lt",
-                comment: "Nuostabi patirtis. Viskas vyko labai natūraliai, be jokio dirbtinio pozavimo. Dominik puikiai pagavo tikras emocijas ir šviesą. Gavus privačią galeriją buvome sužavėti – kadrai atrodo stilingai ir jaukiai."
-            },
-            {
-                clientName: "Gabija R.",
-                type: "tfp",
-                sessionTag: "Gatvės mada & Editorial (TFP)",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Dalyvavau kūrybiniame TFP projekte. Bendravimas nuo pat pirmos žinutės buvo profesionalus ir aiškus. Dominik turi puikią viziją, geba greitai nukreipti ir sukurti stiprius kadrus portfolio papildymui. Tikrai rekomenduoju!"
-            },
-            {
-                clientName: "Deividas M.",
-                type: "service",
-                sessionTag: "Įvaizdžio & Verslo portretai",
-                rating: 5,
-                reviewLink: "https://portfolio.dominikphotofficial.lt/services.html",
-                comment: "Kreipiausi dėl verslo įvaizdžio nuotraukų LinkedIn ir interneto svetainei. Fotosesija praėjo greitai ir produktyviai, nuotraukos buvo atiduotos anksčiau sutarto termino. Kokybė viršijo lūkesčius."
-            },
-            {
-                clientName: "Viktorija S.",
-                type: "tfp",
-                sessionTag: "Portretas gamtoje (TFP)",
-                rating: 5,
-                reviewLink: "https://instagram.com/dominikphotofficial",
-                comment: "Labai ačiū už bendradarbiavimą! Kūrybinis procesas buvo lengvas ir įdomus, nuotraukos išėjo labai gyvos, šiltų atspalvių ir švarios. Labai džiaugiuosi bendru rezultatu."
-            }
-        ];
-
+        // Load & Render Reviews (strictly from real Firestore / server records)
         function getInitials(name) {
             if (!name) return 'DP';
             const parts = name.trim().split(/\s+/);
@@ -1302,6 +1259,18 @@
             const container = document.getElementById('reviews-grid');
             if (!container) return;
             container.innerHTML = '';
+
+            if (!Array.isArray(reviewsList) || reviewsList.length === 0) {
+                container.innerHTML = `
+                    <div class="review-card fade-in-up" style="grid-column: 1 / -1; text-align: center; padding: 32px 24px;">
+                        <p class="review-text" style="margin-bottom: 14px;">Klientų atsiliepimų dar nėra arba jie šiuo metu pildomi. Jei jau bendradarbiavome, pasidalinkite savo patirtimi.</p>
+                        <div>
+                            <a href="review.html" class="btn-secondary">Palikti atsiliepimą</a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
 
             reviewsList.forEach(rev => {
                 const card = document.createElement('div');
@@ -1388,20 +1357,20 @@
                     }
                 }
                 fetchReviewsList().then(list => {
-                    const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                    const approved = (list || []).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
                     renderReviews(approved);
                 });
             }, (err) => {
                 console.warn("Firestore reviews fallback to file:", err);
                 fetchReviewsList().then(list => {
-                    const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                    const approved = (list || []).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
                     renderReviews(approved);
                 });
             });
         } catch (e) {
             console.warn("Reviews init error:", e);
             fetchReviewsList().then(list => {
-                const approved = (list && list.length > 0 ? list : initialReviews).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
+                const approved = (list || []).filter(r => r.status === 'published' || (r.status === undefined && r.visible !== false));
                 renderReviews(approved);
             });
         }
