@@ -106,7 +106,12 @@
                 </p>
             </div>
 
-            <div id="review-token-banner" style="display: none; margin-bottom: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); background: var(--bg-soft); font-size: var(--fs-sm); color: var(--text);"></div>
+            <div id="review-token-banner" style="display: none; margin-bottom: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); background: var(--bg-soft); font-size: var(--fs-sm); color: var(--text); line-height: 1.55;"></div>
+
+            <div id="review-locked-actions" style="display: none; text-align: center; padding: var(--sp-3) 0; gap: var(--sp-2); justify-content: center; flex-wrap: wrap;">
+                <a href="services.html" class="btn-primary">Paslaugos ir Užsakymas</a>
+                <a href="index.html" class="btn-secondary">Grįžti į Portfolio</a>
+            </div>
 
             <div id="review-success-panel" style="display: none; text-align: center; padding: var(--sp-4); border: 1px solid var(--border); border-radius: var(--radius);">
                 <h3 style="color: var(--accent); margin-bottom: var(--sp-2);">Nuoširdus Ačiū Už Jūsų Atsiliepimą!</h3>
@@ -119,7 +124,7 @@
                 </div>
             </div>
 
-            <form id="public-review-form">
+            <form id="public-review-form" style="display: none;">
                 <div style="margin-bottom: var(--sp-3);">
                     <label class="form-label" for="rev-client-name">Jūsų Vardas (arba Inicialai) *</label>
                     <input type="text" id="rev-client-name" class="form-input-control" placeholder="pvz. Karolina V. arba Mantas" required autocomplete="name">
@@ -225,7 +230,7 @@
         })();
 
         import { db } from './firebase-config.js';
-        import { collection, addDoc, doc, getDoc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { collection, doc, getDoc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
         const dateInput = document.getElementById('rev-date');
         if (dateInput) {
@@ -235,6 +240,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const tokenParam = (urlParams.get('token') || '').trim();
         const tokenBanner = document.getElementById('review-token-banner');
+        const lockedActions = document.getElementById('review-locked-actions');
         const form = document.getElementById('public-review-form');
         const submitBtn = document.getElementById('submit-review-btn');
         const successPanel = document.getElementById('review-success-panel');
@@ -249,37 +255,42 @@
             tokenBanner.innerHTML = htmlContent;
         }
 
-        if (urlParams.has('name')) {
-            const nameEl = document.getElementById('rev-client-name');
-            if (nameEl) nameEl.value = urlParams.get('name');
-        }
-        if (urlParams.has('album') || urlParams.has('title')) {
-            const tagEl = document.getElementById('rev-tag');
-            if (tagEl) tagEl.value = urlParams.get('album') || urlParams.get('title');
-        }
-        if (urlParams.has('type')) {
-            const typeEl = document.getElementById('rev-type');
-            if (typeEl && (urlParams.get('type') === 'tfp' || urlParams.get('type') === 'service')) {
-                typeEl.value = urlParams.get('type');
-            }
+        function lockReviewForm(bannerHtml, isWarning = true) {
+            if (form) form.style.display = 'none';
+            if (lockedActions) lockedActions.style.display = 'flex';
+            showTokenBanner(bannerHtml, isWarning);
         }
 
         async function resolveReviewToken() {
-            if (!tokenParam) return;
+            if (!tokenParam) {
+                lockReviewForm(
+                    '<strong>Tik pagal asmeninį kvietimą</strong><br>Atsiliepimą gali pateikti tik klientai ir modeliai, po fotosesijos gavę asmeninę kvietimo nuorodą el. paštu.',
+                    true
+                );
+                return;
+            }
             if (!/^[A-Za-z0-9_-]{8,128}$/.test(tokenParam)) {
-                showTokenBanner('Kvietimo nuoroda yra netinkamo formato. Vis tiek galite palikti atsiliepimą užpildę formą žemiau.', true);
+                lockReviewForm(
+                    '<strong>Neteisinga kvietimo nuoroda</strong><br>Kvietimo raktas yra netinkamo formato. Prašome atidaryti nuorodą tiesiai iš gauto el. laiško.',
+                    true
+                );
                 return;
             }
             try {
                 const tokenSnap = await getDoc(doc(db, "review_tokens", tokenParam));
                 if (!tokenSnap.exists()) {
-                    showTokenBanner('Asmeninis kvietimo raktas nerastas arba pasenęs. Galite palikti atsiliepimą rankiniu būdu.', true);
+                    lockReviewForm(
+                        '<strong>Kvietimas nerastas</strong><br>Ši atsiliepimo nuoroda negalioja arba buvo pašalinta. Atsiliepimus gali pateikti tik pakviesti klientai.',
+                        true
+                    );
                     return;
                 }
                 const data = tokenSnap.data();
                 if (data.used === true) {
-                    showTokenBanner('Ačiū! Atsiliepimas pagal šį asmeninį kvietimą jau buvo sėkmingai pateiktas.');
-                    if (form) form.style.display = 'none';
+                    lockReviewForm(
+                        '<strong>Atsiliepimas jau pateiktas</strong><br>Ačiū! Atsiliepimas pagal šį asmeninį kvietimą jau buvo sėkmingai išsaugotas.',
+                        false
+                    );
                     return;
                 }
 
@@ -298,9 +309,15 @@
 
                 const sessionDesc = data.sessionTag ? ` · ${data.sessionTag}` : '';
                 const typeLabel = data.type === 'tfp' ? 'TFP projektas' : 'Mokama paslauga';
-                showTokenBanner(`<strong>Patvirtintas kvietimas</strong> · ${typeLabel}${sessionDesc ? sessionDesc : ''}. Laukai užpildyti automatiškai.`);
+                showTokenBanner(`<strong>Patvirtintas asmeninis kvietimas</strong> · ${typeLabel}${sessionDesc ? sessionDesc : ''}. Laukai užpildyti automatiškai.`);
+                if (lockedActions) lockedActions.style.display = 'none';
+                if (form) form.style.display = 'block';
             } catch (err) {
                 console.warn('Review token lookup error:', err);
+                lockReviewForm(
+                    '<strong>Nepavyko patikrinti kvietimo</strong><br>Patikrinkite interneto ryšį ir atidarykite gautą asmeninę nuorodą iš naujo.',
+                    true
+                );
             }
         }
         resolveReviewToken();
@@ -351,6 +368,14 @@
 
             if (!clientName || !comment) return;
 
+            if (!verifiedTokenId || !verifiedTokenDoc || verifiedTokenDoc.used === true) {
+                lockReviewForm(
+                    '<strong>Reikalingas galiojantis asmeninis kvietimas</strong><br>Atsiliepimą galima pateikti tik per vienkartinę asmeninę nuorodą, atsiųstą el. paštu.',
+                    true
+                );
+                return;
+            }
+
             submitBtn.disabled = true;
             submitBtn.innerText = 'Siunčiama...';
 
@@ -365,33 +390,33 @@
                 status: 'pending',
                 visible: false,
                 createdAt: serverTimestamp(),
-                token: verifiedTokenId || ''
+                token: verifiedTokenId
             };
             if (verifiedTokenDoc && verifiedTokenDoc.orderId) {
                 reviewPayload.orderId = String(verifiedTokenDoc.orderId);
             }
 
             try {
-                if (verifiedTokenId && verifiedTokenDoc && !verifiedTokenDoc.used) {
-                    const reviewRef = doc(collection(db, "reviews"));
-                    const tokenRef = doc(db, "review_tokens", verifiedTokenId);
-                    const batch = writeBatch(db);
-                    batch.set(reviewRef, reviewPayload);
-                    batch.update(tokenRef, {
-                        used: true,
-                        reviewId: reviewRef.id,
-                        usedAt: serverTimestamp()
-                    });
-                    await batch.commit();
-                } else {
-                    await addDoc(collection(db, "reviews"), reviewPayload);
-                }
+                const reviewRef = doc(collection(db, "reviews"));
+                const tokenRef = doc(db, "review_tokens", verifiedTokenId);
+                const batch = writeBatch(db);
+                batch.set(reviewRef, reviewPayload);
+                batch.update(tokenRef, {
+                    used: true,
+                    reviewId: reviewRef.id,
+                    usedAt: serverTimestamp()
+                });
+                await batch.commit();
 
                 try {
                     await fetch('/api/reviews', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(reviewPayload)
+                        body: JSON.stringify({
+                            ...reviewPayload,
+                            id: reviewRef.id,
+                            token: verifiedTokenId
+                        })
                     });
                 } catch(apiErr) {}
 

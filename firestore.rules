@@ -340,14 +340,23 @@ service cloud.firestore {
         && (isOwnerEmail() || hasPermission('Trinimas'));
     }
 
-    // 4. Klientu atsiliepimai (viesai matomi tik patvirtinti)
+    // 4. Klientu atsiliepimai (viesai matomi tik patvirtinti; pateikimas tik su galiojanciu pakvietimo raktu arba admin)
     match /reviews/{reviewId} {
       allow create: if isValidId(reviewId)
         && isValidReview(incoming())
         && (
           isOwnerEmail() ||
           hasPermission('Atsiliepimai') ||
-          (incoming().visible == false && (!('status' in incoming()) || incoming().status == 'pending'))
+          (
+            incoming().visible == false
+            && (!('status' in incoming()) || incoming().status == 'pending')
+            && ('token' in incoming())
+            && isValidId(incoming().token)
+            && exists(/databases/$(database)/documents/review_tokens/$(incoming().token))
+            && get(/databases/$(database)/documents/review_tokens/$(incoming().token)).data.used == false
+            && getAfter(/databases/$(database)/documents/review_tokens/$(incoming().token)).data.used == true
+            && getAfter(/databases/$(database)/documents/review_tokens/$(incoming().token)).data.reviewId == reviewId
+          )
         )
         && (!('createdAt' in incoming()) || incoming().createdAt == request.time);
       allow get: if isValidId(reviewId) && (existing().visible == true || isTeamMember());
@@ -382,7 +391,9 @@ service cloud.firestore {
             && incoming().diff(existing()).affectedKeys().hasOnly(['used', 'usedAt', 'reviewId'])
             && (!('usedAt' in incoming()) || incoming().usedAt == request.time)
             && ('reviewId' in incoming())
+            && isValidId(incoming().reviewId)
             && existsAfter(/databases/$(database)/documents/reviews/$(incoming().reviewId))
+            && getAfter(/databases/$(database)/documents/reviews/$(incoming().reviewId)).data.token == tokenId
           )
         );
       allow delete: if isValidId(tokenId)

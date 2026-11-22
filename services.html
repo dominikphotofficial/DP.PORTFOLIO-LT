@@ -969,11 +969,9 @@
                 <span class="section-tag">Atsiliepimai</span>
                 <h2>Klientų &amp; Modelių Atsiliepimai</h2>
                 <p>Nuoširdūs įspūdžiai ir atsiliepimai po fotosesijų bei kūrybinių TFP projektų.</p>
-                <div style="margin-top: var(--sp-3);">
-                    <a href="review.html" class="btn-secondary">
-                        Palikti savo atsiliepimą
-                    </a>
-                </div>
+                <p style="font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--sp-2);">
+                    Atsiliepimus gali pateikti tik paslaugas užsakę klientai ar modeliai pagal asmeninį kvietimą el. paštu.
+                </p>
             </div>
 
             <div class="reviews-filter-bar">
@@ -1263,10 +1261,7 @@
             if (!Array.isArray(reviewsList) || reviewsList.length === 0) {
                 container.innerHTML = `
                     <div class="review-card fade-in-up" style="grid-column: 1 / -1; text-align: center; padding: 32px 24px;">
-                        <p class="review-text" style="margin-bottom: 14px;">Klientų atsiliepimų dar nėra arba jie šiuo metu pildomi. Jei jau bendradarbiavome, pasidalinkite savo patirtimi.</p>
-                        <div>
-                            <a href="review.html" class="btn-secondary">Palikti atsiliepimą</a>
-                        </div>
+                        <p class="review-text" style="margin: 0;">Klientų atsiliepimai šiuo metu pildomi. Nuoroda atsiliepimui palikti išsiunčiama klientams asmeniškai el. paštu po fotosesijos.</p>
                     </div>
                 `;
                 return;

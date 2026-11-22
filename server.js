@@ -139,17 +139,85 @@ app.get('/api/reviews', (req, res) => {
     res.json(reviews);
 });
 
-app.post('/api/reviews', (req, res) => {
+const FIREBASE_CONFIG_FILE = path.join(__dirname, 'firebase-applet-config.json');
+const firebaseAppletConfig = readJsonFile(FIREBASE_CONFIG_FILE, {});
+
+async function verifyFirebaseIdToken(req) {
+    const authHeader = req.headers.authorization || '';
+    const match = authHeader.match(/^Bearer\s+(.+)$/i);
+    if (!match || !firebaseAppletConfig.apiKey) return null;
+    try {
+        const resp = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(firebaseAppletConfig.apiKey)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken: match[1].trim() })
+        });
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        const user = data?.users?.[0];
+        if (!user || !user.emailVerified) return null;
+        return user;
+    } catch {
+        return null;
+    }
+}
+
+async function verifyRedeemedReviewToken(token, expectedReviewId) {
+    if (!token || !/^[A-Za-z0-9_-]{8,128}$/.test(token)) return false;
+    if (!firebaseAppletConfig.projectId || !firebaseAppletConfig.firestoreDatabaseId) return false;
+    try {
+        const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(firebaseAppletConfig.projectId)}/databases/${encodeURIComponent(firebaseAppletConfig.firestoreDatabaseId)}/documents/review_tokens/${encodeURIComponent(token)}`;
+        const resp = await fetch(url);
+        if (!resp.ok) return false;
+        const docData = await resp.json();
+        const fields = docData?.fields || {};
+        const storedToken = fields.token?.stringValue || '';
+        const storedReviewId = fields.reviewId?.stringValue || '';
+        const isUsed = fields.used?.booleanValue === true;
+        if (storedToken !== token || !isUsed) return false;
+        if (expectedReviewId && storedReviewId && storedReviewId !== expectedReviewId) return false;
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+app.post('/api/reviews', async (req, res) => {
+    const body = req.body || {};
+    const adminUser = await verifyFirebaseIdToken(req);
+    const token = String(body.token || '').trim();
+    const reviewId = String(body.id || '').trim();
+
+    let isTokenValid = false;
+    if (!adminUser) {
+        isTokenValid = await verifyRedeemedReviewToken(token, reviewId);
+        if (!isTokenValid) {
+            return res.status(403).json({
+                success: false,
+                error: 'Atsiliepimus gali pateikti tik klientai su galiojančiu asmeniniu kvietimu.'
+            });
+        }
+    }
+
     const reviews = readJsonFile(REVIEWS_FILE, []);
+    if (!adminUser && reviews.some(r => (token && r.token === token) || (reviewId && r.id === reviewId))) {
+        return res.status(409).json({
+            success: false,
+            error: 'Atsiliepimas pagal šį kvietimą jau pateiktas.'
+        });
+    }
+
     const newReview = {
-        id: 'rev_' + Date.now(),
-        clientName: req.body.clientName || 'Klientas',
-        type: req.body.type || 'service',
-        sessionTag: req.body.sessionTag || '',
-        rating: Number(req.body.rating) || 5,
-        reviewLink: req.body.reviewLink || '',
-        comment: req.body.comment || '',
-        visible: req.body.visible !== false,
+        id: reviewId || ('rev_' + Date.now()),
+        clientName: body.clientName || 'Klientas',
+        type: body.type === 'tfp' ? 'tfp' : 'service',
+        sessionTag: body.sessionTag || '',
+        rating: Math.max(1, Math.min(5, Number(body.rating) || 5)),
+        reviewLink: body.reviewLink || '',
+        comment: body.comment || '',
+        status: adminUser ? (body.status || 'published') : 'pending',
+        visible: adminUser ? (body.visible !== false) : false,
+        token: token || '',
         createdAt: new Date().toISOString()
     };
     reviews.unshift(newReview);

@@ -4,12 +4,21 @@
 import { db, auth } from './firebase-config.js';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
-function requireAdminAuth() {
+async function requireAdminAuth() {
     const user = auth?.currentUser;
     if (!user || user.isAnonymous) {
         throw new Error('Reikalinga administratoriaus autorizacija.');
     }
     return user;
+}
+
+async function getAdminAuthHeaders() {
+    const user = await requireAdminAuth();
+    const idToken = await user.getIdToken();
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`
+    };
 }
 
 // 1. Visibility (Rodymui / Nerodymui)
@@ -27,12 +36,12 @@ export async function getReviewsVisibility() {
 }
 
 export async function setReviewsVisibility(showReviews) {
-    requireAdminAuth();
+    const headers = await getAdminAuthHeaders();
     let savedToFile = false;
     try {
         const res = await fetch('/api/reviews-visibility', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify({ showReviews: Boolean(showReviews) })
         });
         if (res.ok) savedToFile = true;
@@ -89,12 +98,12 @@ export async function fetchReviewsList() {
 }
 
 export async function createNewReview(reviewData) {
-    requireAdminAuth();
+    const headers = await getAdminAuthHeaders();
     let fileResult = null;
     try {
         const res = await fetch('/api/reviews', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify(reviewData)
         });
         if (res.ok) {
@@ -126,12 +135,12 @@ export async function createNewReview(reviewData) {
 }
 
 export async function toggleReviewItem(id, nextVisible) {
-    requireAdminAuth();
+    const headers = await getAdminAuthHeaders();
     let apiOk = false;
     try {
         const res = await fetch(`/api/reviews/${id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify({ visible: Boolean(nextVisible) })
         });
         if (res.ok) apiOk = true;
@@ -153,10 +162,10 @@ export async function toggleReviewItem(id, nextVisible) {
 }
 
 export async function deleteReviewItem(id) {
-    requireAdminAuth();
+    const headers = await getAdminAuthHeaders();
     let apiOk = false;
     try {
-        const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE', headers });
         if (res.ok) apiOk = true;
     } catch (e) {
         console.warn("API delete error:", e);
