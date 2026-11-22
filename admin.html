@@ -704,7 +704,6 @@
             .admin-container { padding: var(--sp-3) 12px var(--sp-5); }
             .admin-header-bar { padding: var(--sp-3); flex-direction: column; align-items: stretch; }
             .admin-header-bar > div:last-child { width: 100%; justify-content: space-between; }
-            #role-preview-container { width: 100%; justify-content: space-between; }
             #auth-section { width: calc(100% - 24px); margin: var(--sp-4) auto; padding: var(--sp-4) var(--sp-3); }
             .dashboard-stats { grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); }
             .stat-box { padding: var(--sp-3); }
@@ -1071,15 +1070,6 @@
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <div id="role-preview-container" style="display: none; align-items: center; gap: 6px; background: #FAFBFB; padding: 4px 10px; border-radius: var(--radius); border: 1px solid var(--border);">
-                    <label for="role-preview-select" style="font-size: 0.78rem; font-weight: 600; color: #113939; margin: 0; white-space: nowrap;">Peržiūra kaip:</label>
-                    <select id="role-preview-select" class="admin-select" style="padding: 4px 8px; font-size: 0.78rem; height: auto; margin: 0; background: #fff;" onchange="previewAsRole(this.value)">
-                        <option value="superadmin">Super Admin (Savininkas)</option>
-                        <option value="manager">Vadybininkas</option>
-                        <option value="photographer">Fotografas</option>
-                        <option value="accountant">Buhalteris</option>
-                    </select>
-                </div>
                 <button type="button" class="admin-btn-outline" onclick="toggleDiagnosticsModal()">
                     Diagnostika
                 </button>
@@ -2737,7 +2727,6 @@
             currentAdminSession = session;
             const displayEl = document.getElementById('admin-user-display');
             const badgeEl = document.getElementById('admin-role-display-badge');
-            const previewContainer = document.getElementById('role-preview-container');
             
             if (displayEl) displayEl.innerText = session.name || session.email;
             
@@ -2747,14 +2736,6 @@
             const isAccountant = (role === 'accountant');
             const isPhotographer = (role === 'photographer');
             const isManager = (role === 'manager');
-
-            // Only actual owner (Dominik) gets the role preview switch dropdown
-            const isRealOwner = (session.email && isOwnerAccount(session.email));
-            if (previewContainer) {
-                previewContainer.style.display = isRealOwner ? 'inline-flex' : 'none';
-                const select = document.getElementById('role-preview-select');
-                if (select) select.value = role;
-            }
 
             if (badgeEl) {
                 badgeEl.className = 'role-badge';
@@ -2843,36 +2824,6 @@
                 else if (canSeeContacts) switchTab('contacts');
             }
         }
-
-        // Preview admin panel as different roles (Super Admin simulation)
-        window.previewAsRole = (role) => {
-            if (!currentAdminSession) return;
-            const originalEmail = currentAdminSession.email || ADMIN_EMAIL;
-            const originalName = currentAdminSession.name || "Dominik Šuškevič";
-            
-            let mockSession = {
-                email: originalEmail,
-                name: originalName,
-                role: role,
-                permissions: []
-            };
-
-            if (role === 'superadmin') {
-                mockSession.permissions = ['all', 'Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'VMI Suvestinė', 'Google Sheets', 'Trinimas'];
-                showToast("Perjungta į Savininko rodinį (Rodomos visos funkcijos)");
-            } else if (role === 'accountant') {
-                mockSession.permissions = ['VMI Suvestinė', 'Google Sheets'];
-                showToast("Perjungta į Buhalterio rodinį (Rodoma TIK VMI, finansai ir kvitai)");
-            } else if (role === 'photographer') {
-                mockSession.permissions = ['Užsakymai'];
-                showToast("Perjungta į Fotografo rodinį (Rodomos TIK fotosesijos ir grafikas)");
-            } else if (role === 'manager') {
-                mockSession.permissions = ['Užsakymai', 'El. laiškai', 'Kontaktai', 'Atsiliepimai', 'Google Sheets'];
-                showToast("Perjungta į Vadybininko rodinį (Užsakymai, klientai, laiškai, Sheets)");
-            }
-
-            applyUserRole(mockSession);
-        };
 
         // Automatiškai pažymėti atitinkamas teisių varneles kuriant/redaguojant komandos narį
         window.updateRolePresetPermissions = (role) => {
