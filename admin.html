@@ -4968,16 +4968,22 @@
             crypto.getRandomValues(randBytes);
             const token = Array.from(randBytes, b => alphabet[b % alphabet.length]).join('');
 
+            const safeClientName = (String(clientName || 'Klientas').trim() || 'Klientas').slice(0, 100);
+            const safeSessionTag = String(sessionTag || '').trim().slice(0, 150);
+            const safeLanguage = String(item.language || 'lt').trim().slice(0, 10) || 'lt';
+
             try {
                 await setDoc(doc(db, 'review_tokens', token), {
+                    token: token,
                     type: isTfp ? 'tfp' : 'service',
-                    orderId: orderId,
-                    clientName: clientName,
-                    sessionTag: sessionTag,
-                    sessionDate: sessionDate,
+                    orderId: String(orderId).slice(0, 128),
+                    orderCollection: collectionName,
+                    clientName: safeClientName,
+                    sessionTag: safeSessionTag,
+                    sessionDate: String(sessionDate).slice(0, 50),
+                    language: safeLanguage,
                     used: false,
                     reviewId: '',
-                    createdBy: auth.currentUser.uid,
                     createdAt: serverTimestamp()
                 });
 

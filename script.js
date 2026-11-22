@@ -767,6 +767,247 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// Auto-scrolling responsive carousel for Reviews sections (mobile swipe + desktop multi-card)
+(function initReviewsCarousels() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+    const AUTO_SCROLL_INTERVAL_MS = 4200;
+    const INTERACTION_PAUSE_MS = 6000;
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const carouselStates = new WeakMap();
+
+    function getVisibleCards(grid) {
+        return Array.from(grid.children).filter(el => {
+            if (!el.classList || !el.classList.contains('review-card')) return false;
+            return el.style.display !== 'none';
+        });
+    }
+
+    function setupGridCarousel(grid) {
+        if (!grid) return;
+
+        let state = carouselStates.get(grid);
+        if (!state) {
+            const controls = document.createElement('div');
+            controls.className = 'reviews-carousel-controls';
+            controls.innerHTML = `
+                <div class="reviews-carousel-arrows">
+                    <button type="button" class="reviews-nav-btn" data-dir="prev" aria-label="Ankstesnis atsiliepimas">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button type="button" class="reviews-nav-btn" data-dir="next" aria-label="Kitas atsiliepimas">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+                <div class="reviews-dots" role="tablist" aria-label="Atsiliepimų puslapiai"></div>
+            `;
+            grid.insertAdjacentElement('afterend', controls);
+
+            state = {
+                grid,
+                controls,
+                dotsContainer: controls.querySelector('.reviews-dots'),
+                timerId: null,
+                pausedUntil: 0,
+                isHovered: false,
+                isInView: true,
+                currentIndex: 0,
+                scrollRaf: null
+            };
+            carouselStates.set(grid, state);
+
+            const markUserInteraction = () => {
+                state.pausedUntil = Date.now() + INTERACTION_PAUSE_MS;
+            };
+
+            const scrollToCard = (index, smooth = true) => {
+                const cards = getVisibleCards(grid);
+                if (cards.length === 0) return;
+                const safeIdx = ((index % cards.length) + cards.length) % cards.length;
+                const target = cards[safeIdx];
+                if (!target) return;
+                state.currentIndex = safeIdx;
+                const gridRect = grid.getBoundingClientRect();
+                const targetRect = target.getBoundingClientRect();
+                const targetLeft = Math.max(0, grid.scrollLeft + (targetRect.left - gridRect.left));
+                grid.scrollTo({
+                    left: targetLeft,
+                    behavior: smooth ? 'smooth' : 'auto'
+                });
+                syncDots();
+            };
+
+            const syncDots = () => {
+                const dots = state.dotsContainer.querySelectorAll('.reviews-dot');
+                dots.forEach((dot, idx) => {
+                    const isActive = idx === state.currentIndex;
+                    dot.classList.toggle('active', isActive);
+                    dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                });
+            };
+
+            state.scrollToCard = scrollToCard;
+            state.syncDots = syncDots;
+
+            controls.querySelector('[data-dir="prev"]')?.addEventListener('click', () => {
+                markUserInteraction();
+                scrollToCard(state.currentIndex - 1);
+            });
+            controls.querySelector('[data-dir="next"]')?.addEventListener('click', () => {
+                markUserInteraction();
+                scrollToCard(state.currentIndex + 1);
+            });
+
+            grid.addEventListener('pointerenter', () => { state.isHovered = true; });
+            grid.addEventListener('pointerleave', () => { state.isHovered = false; });
+            grid.addEventListener('touchstart', markUserInteraction, { passive: true });
+            grid.addEventListener('wheel', markUserInteraction, { passive: true });
+            grid.addEventListener('focusin', markUserInteraction);
+
+            grid.addEventListener('scroll', () => {
+                if (state.scrollRaf) cancelAnimationFrame(state.scrollRaf);
+                state.scrollRaf = requestAnimationFrame(() => {
+                    const cards = getVisibleCards(grid);
+                    if (cards.length === 0) return;
+                    const gridRect = grid.getBoundingClientRect();
+                    let closestIdx = 0;
+                    let minDiff = Infinity;
+                    cards.forEach((card, idx) => {
+                        const diff = Math.abs(card.getBoundingClientRect().left - gridRect.left);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestIdx = idx;
+                        }
+                    });
+                    if (closestIdx !== state.currentIndex) {
+                        state.currentIndex = closestIdx;
+                        syncDots();
+                    }
+                });
+            }, { passive: true });
+
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        state.isInView = entry.isIntersecting;
+                    });
+                }, { threshold: 0.15 });
+                io.observe(grid);
+            }
+
+            if (!prefersReducedMotion) {
+                state.timerId = window.setInterval(() => {
+                    if (!document.body.contains(grid)) {
+                        window.clearInterval(state.timerId);
+                        return;
+                    }
+                    if (document.hidden || !state.isInView || state.isHovered || Date.now() < state.pausedUntil) {
+                        return;
+                    }
+                    const cards = getVisibleCards(grid);
+                    if (cards.length <= 1) return;
+                    if (grid.scrollWidth <= grid.clientWidth + 8) return;
+
+                    const atEnd = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 14;
+                    if (atEnd) {
+                        scrollToCard(0);
+                    } else {
+                        scrollToCard(state.currentIndex + 1);
+                    }
+                }, AUTO_SCROLL_INTERVAL_MS);
+            }
+        }
+
+        // Refresh class flags, dots, and controls visibility for current cards
+        const cards = getVisibleCards(grid);
+        grid.classList.add('reviews-carousel-ready');
+        grid.classList.toggle('reviews-single', cards.length <= 1);
+        grid.classList.toggle('reviews-desktop-carousel', cards.length > 3);
+
+        state.currentIndex = 0;
+        grid.scrollLeft = 0;
+
+        state.dotsContainer.innerHTML = '';
+        cards.forEach((_, idx) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'reviews-dot' + (idx === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Peržiūrėti atsiliepimą ${idx + 1}`);
+            dot.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+            dot.addEventListener('click', () => {
+                state.pausedUntil = Date.now() + INTERACTION_PAUSE_MS;
+                state.scrollToCard(idx);
+            });
+            state.dotsContainer.appendChild(dot);
+        });
+
+        const updateControlsVisibility = () => {
+            const visibleCards = getVisibleCards(grid);
+            const hasOverflow = visibleCards.length > 1 && grid.scrollWidth > grid.clientWidth + 8;
+            state.controls.classList.toggle('is-visible', hasOverflow);
+        };
+
+        requestAnimationFrame(updateControlsVisibility);
+        window.setTimeout(updateControlsVisibility, 120);
+    }
+
+    function scanAndSetupAll() {
+        document.querySelectorAll('.reviews-grid').forEach(setupGridCarousel);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scanAndSetupAll);
+    } else {
+        scanAndSetupAll();
+    }
+
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.reviews-grid').forEach(grid => {
+            const state = carouselStates.get(grid);
+            if (!state) return;
+            const visibleCards = getVisibleCards(grid);
+            const hasOverflow = visibleCards.length > 1 && grid.scrollWidth > grid.clientWidth + 8;
+            state.controls.classList.toggle('is-visible', hasOverflow);
+        });
+    });
+
+    // Watch dynamic renders and category filter toggles in Reviews sections
+    const observeReviewsContainers = () => {
+        const observer = new MutationObserver((mutations) => {
+            let needsRescan = false;
+            for (const m of mutations) {
+                if (m.type === 'childList') {
+                    needsRescan = true;
+                    break;
+                }
+                if (m.type === 'attributes' && m.target && m.target.classList && m.target.classList.contains('review-card')) {
+                    const grid = m.target.closest('.reviews-grid');
+                    if (grid) setupGridCarousel(grid);
+                }
+            }
+            if (needsRescan) scanAndSetupAll();
+        });
+
+        ['reviews', 'tfp-reviews-section'].forEach(secId => {
+            const el = document.getElementById(secId);
+            if (el) {
+                observer.observe(el, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['style']
+                });
+            }
+        });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', observeReviewsContainers);
+    } else {
+        observeReviewsContainers();
+    }
+})();
+
 // Brevo Conversations Widget (only on public pages, excluded on admin panel)
 (function initBrevoConversationsWidget() {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
